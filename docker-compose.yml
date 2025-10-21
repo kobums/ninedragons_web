@@ -1,0 +1,19 @@
+services:
+  web:
+    image: kobums/ninedragons_web:${VERSION:-latest}
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+    container_name: ninedragons_web
+    ports:
+      - '9003:9003'
+    restart: unless-stopped
+    networks:
+      - ninedragons-network
+
+networks:
+  ninedragons-network:
+    driver: bridge

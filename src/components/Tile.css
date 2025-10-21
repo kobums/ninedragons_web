@@ -1,0 +1,72 @@
+.tile {
+  width: 60px;
+  height: 80px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 3px solid #999;
+  user-select: none;
+}
+
+/* 홀수는 흰색 배경 */
+.tile.odd {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+}
+
+/* 짝수는 검정색 배경 */
+.tile.even {
+  background: linear-gradient(145deg, #333333, #1a1a1a);
+}
+
+/* Blue 플레이어는 파란색 테두리 */
+.tile.blue {
+  border-color: #4a90e2;
+  border-width: 4px;
+}
+
+/* Red 플레이어는 빨간색 테두리 */
+.tile.red {
+  border-color: #e74c3c;
+  border-width: 4px;
+}
+
+.tile:hover:not(.disabled):not(.played) {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tile.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tile.played {
+  background: #666;
+  border-color: #333;
+  cursor: default;
+}
+
+.tile-number {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+/* 홀수 타일의 숫자는 검은색 */
+.tile.odd .tile-number {
+  color: #333;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* 짝수 타일의 숫자는 흰색 */
+.tile.even .tile-number {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.tile.played .tile-number {
+  display: none;
+}

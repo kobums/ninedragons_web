@@ -1,0 +1,321 @@
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.game-over-modal {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.game-over-title {
+  margin: 0 0 30px 0;
+  font-size: 36px;
+  color: #333;
+}
+
+.final-score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.final-score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 40px;
+  border-radius: 15px;
+  min-width: 120px;
+  transition: all 0.3s ease;
+}
+
+.final-score-item.blue {
+  background: linear-gradient(145deg, #4a90e2, #357abd);
+  color: white;
+}
+
+.final-score-item.red {
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.final-score-item.winner {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+  border: 4px solid gold;
+  transform: scale(1.1);
+}
+
+.final-score .color-label {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.final-score .score-value {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.score-divider {
+  font-size: 48px;
+  color: #666;
+  font-weight: bold;
+}
+
+.result-message {
+  margin-bottom: 30px;
+}
+
+.result-message h2 {
+  margin: 0 0 10px 0;
+  font-size: 32px;
+}
+
+.result-message p {
+  margin: 0;
+  font-size: 18px;
+  color: #666;
+}
+
+.result-message.win h2 {
+  color: #27ae60;
+}
+
+.result-message.lose h2 {
+  color: #e74c3c;
+}
+
+.result-message.draw h2 {
+  color: #f39c12;
+}
+
+.round-history-section {
+  margin: 30px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 15px;
+}
+
+.history-title {
+  margin: 0 0 20px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.round-history-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.history-round {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.history-round:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.history-round-number {
+  font-size: 14px;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.history-tiles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.history-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 8px;
+  min-width: 60px;
+  transition: all 0.3s;
+}
+
+.history-tile.blue {
+  background: rgba(74, 144, 226, 0.1);
+  border: 2px solid #4a90e2;
+}
+
+.history-tile.red {
+  background: rgba(231, 76, 60, 0.1);
+  border: 2px solid #e74c3c;
+}
+
+.history-tile.winner-tile {
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  border-width: 3px;
+  transform: scale(1.05);
+}
+
+.tile-number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.white-circle {
+  font-size: 24px;
+  color: white;
+  text-shadow: 0 0 2px #333, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 1px 1px 0 #333;
+}
+
+.black-circle {
+  font-size: 24px;
+  color: #333;
+}
+
+.no-tile {
+  font-size: 20px;
+  color: #ccc;
+}
+
+.vs-divider {
+  font-size: 12px;
+  color: #999;
+  font-weight: bold;
+}
+
+.history-winner-badge {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.history-winner-badge.blue {
+  background: #4a90e2;
+  color: white;
+}
+
+.history-winner-badge.red {
+  background: #e74c3c;
+  color: white;
+}
+
+.history-winner-badge.draw {
+  background: #95a5a6;
+  color: white;
+}
+
+.play-again-btn {
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.play-again-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 600px) {
+  .game-over-modal {
+    padding: 30px 20px;
+  }
+
+  .game-over-title {
+    font-size: 28px;
+  }
+
+  .final-score {
+    gap: 20px;
+  }
+
+  .final-score-item {
+    padding: 15px 30px;
+    min-width: 100px;
+  }
+
+  .final-score .score-value {
+    font-size: 36px;
+  }
+
+  .result-message h2 {
+    font-size: 24px;
+  }
+
+  .round-history-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .history-round {
+    padding: 10px;
+  }
+
+  .history-tile {
+    min-width: 50px;
+    padding: 8px;
+  }
+
+  .tile-number {
+    font-size: 16px;
+  }
+
+  .white-circle,
+  .black-circle {
+    font-size: 20px;
+  }
+}

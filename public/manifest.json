@@ -1,0 +1,17 @@
+{
+  "name": "구룡투",
+  "short_name": "구룡투",
+  "description": "구룡투 웹 애플리케이션",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
