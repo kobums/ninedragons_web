@@ -42,7 +42,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
     return Array.from({ length: 9 }, (_, index) => {
       const roundNum = index + 1;
-      const roundData = gameState.roundHistory.find((r) => r.round === roundNum);
+      const roundData = gameState.roundHistory.find(
+        (r) => r.round === roundNum
+      );
       const isCurrentRound = roundNum === gameState.currentRound;
 
       // 현재 라운드이고 히스토리에 없는 경우만 currentRoundTiles 사용
@@ -72,18 +74,30 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         <div key={roundNum} className="round-status-item">
           <div className="round-number">R{roundNum}</div>
           <div className="round-tiles-pair">
-            <div className={`round-tile-indicator blue ${!blueTile ? 'empty' : ''} ${isPlaying && blueTile ? 'current' : ''}`}>
+            <div
+              className={`round-tile-indicator blue ${
+                !blueTile ? 'empty' : ''
+              } ${isPlaying && blueTile ? 'current' : ''}`}
+            >
               {blueTile ? (
-                <span className={blueTile % 2 === 1 ? 'white-tile' : 'black-tile'}>
+                <span
+                  className={blueTile % 2 === 1 ? 'white-tile' : 'black-tile'}
+                >
                   {blueTile % 2 === 1 ? '○' : '●'}
                 </span>
               ) : (
                 <span className="empty-slot">-</span>
               )}
             </div>
-            <div className={`round-tile-indicator red ${!redTile ? 'empty' : ''} ${isPlaying && redTile ? 'current' : ''}`}>
+            <div
+              className={`round-tile-indicator red ${!redTile ? 'empty' : ''} ${
+                isPlaying && redTile ? 'current' : ''
+              }`}
+            >
               {redTile ? (
-                <span className={redTile % 2 === 1 ? 'white-tile' : 'black-tile'}>
+                <span
+                  className={redTile % 2 === 1 ? 'white-tile' : 'black-tile'}
+                >
                   {redTile % 2 === 1 ? '○' : '●'}
                 </span>
               ) : (
@@ -94,9 +108,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           {roundData && roundData.winner && (
             <div className={`round-winner-bar ${roundData.winner}`}></div>
           )}
-          {roundData && !roundData.winner && roundData.blueTile && roundData.redTile && (
-            <div className="round-winner-bar draw"></div>
-          )}
+          {roundData &&
+            !roundData.winner &&
+            roundData.blueTile &&
+            roundData.redTile && <div className="round-winner-bar draw"></div>}
         </div>
       );
     });
@@ -106,7 +121,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const opponentColor = gameState.yourColor === 'blue' ? 'red' : 'blue';
     const allTiles = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const opponentAvailableTiles = allTiles.filter(
-      tile => !gameState.opponentUsedTiles.includes(tile)
+      (tile) => !gameState.opponentUsedTiles.includes(tile)
     );
 
     // 패를 색상 패턴으로만 표시 (순서를 섞어서)
@@ -119,7 +134,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         const hashB = (b * seed.length + gameState.currentRound) % 10;
         return hashA - hashB;
       });
-    }, [opponentAvailableTiles.join(','), gameState.gameId, gameState.currentRound]);
+    }, [
+      opponentAvailableTiles.join(','),
+      gameState.gameId,
+      gameState.currentRound,
+      gameState.opponentUsedTiles.length,
+    ]);
 
     return (
       <div className="opponent-tiles-display">
@@ -132,7 +152,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             return (
               <div
                 key={`${tile}-${index}`}
-                className={`opponent-tile ${opponentColor} ${isOdd ? 'odd' : 'even'}`}
+                className={`opponent-tile ${opponentColor} ${
+                  isOdd ? 'odd' : 'even'
+                }`}
               />
             );
           })}
@@ -149,8 +171,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         </div>
       </div>
 
-      {gameState.isGameStarted && renderOpponentTiles()}
-
       <div className="round-status-board">
         <div className="round-status-header">
           <div className="player-label blue">
@@ -162,16 +182,26 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         </div>
         <div className="round-status-grid">{renderRoundStatus()}</div>
         <div className="score-summary">
-          <div className={`score-item blue ${gameState.yourColor === 'blue' ? 'my-score' : ''}`}>
+          <div
+            className={`score-item blue ${
+              gameState.yourColor === 'blue' ? 'my-score' : ''
+            }`}
+          >
             <span className="score-label">파랑</span>
             <span className="score-value">{gameState.blueWins}승</span>
           </div>
-          <div className={`score-item red ${gameState.yourColor === 'red' ? 'my-score' : ''}`}>
+          <div
+            className={`score-item red ${
+              gameState.yourColor === 'red' ? 'my-score' : ''
+            }`}
+          >
             <span className="score-label">빨강</span>
             <span className="score-value">{gameState.redWins}승</span>
           </div>
         </div>
       </div>
+
+      {gameState.isGameStarted && renderOpponentTiles()}
 
       <div className="turn-indicator">
         {isMyTurn ? (
@@ -185,9 +215,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
       {gameState.yourColor && (
         <div className="player-info">
-          당신은 <span className={`color-badge ${gameState.yourColor}`}>
+          당신은{' '}
+          <span className={`color-badge ${gameState.yourColor}`}>
             {gameState.yourColor === 'blue' ? '파랑' : '빨강'}
-          </span> 플레이어입니다
+          </span>{' '}
+          플레이어입니다
         </div>
       )}
     </div>

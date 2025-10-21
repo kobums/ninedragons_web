@@ -81,11 +81,19 @@ export const useGameState = (lastMessage: Message | null) => {
             ? tilePayload.round
             : prev.currentRound;
 
+          // 상대방이 낸 패라면 즉시 opponentUsedTiles 업데이트
+          const isOpponentTile = tilePayload.color !== prev.yourColor;
+          const newOpponentUsedTiles = isOpponentTile
+            ? [...prev.opponentUsedTiles, tilePayload.tile]
+            : prev.opponentUsedTiles;
+
           console.log('Current round tiles after tile_played:', {
             before: prev.currentRoundTiles,
             after: newCurrentRoundTiles,
             currentRound: syncedRound,
             serverRound: tilePayload.round,
+            isOpponentTile,
+            opponentUsedTiles: newOpponentUsedTiles,
           });
 
           return {
@@ -93,6 +101,7 @@ export const useGameState = (lastMessage: Message | null) => {
             currentRound: syncedRound,
             currentPlayer: tilePayload.nextPlayer,
             currentRoundTiles: newCurrentRoundTiles,
+            opponentUsedTiles: newOpponentUsedTiles,
           };
         });
         break;
@@ -107,11 +116,6 @@ export const useGameState = (lastMessage: Message | null) => {
             currentRoundTiles: prev.currentRoundTiles,
             historyLength: prev.roundHistory.length,
           });
-
-          // 상대방이 사용한 타일 확인
-          const opponentTile = prev.yourColor === 'blue'
-            ? roundPayload.redTile
-            : roundPayload.blueTile;
 
           // 라운드 히스토리 추가 (중복 체크)
           const historyExists = prev.roundHistory.some(h => h.round === roundPayload.round);
@@ -135,6 +139,7 @@ export const useGameState = (lastMessage: Message | null) => {
             newHistory: newRoundHistory,
           });
 
+          // opponentUsedTiles는 tile_played에서 이미 업데이트되었으므로 그대로 유지
           const newState = {
             ...prev,
             currentRound: roundPayload.round + 1,
@@ -142,9 +147,6 @@ export const useGameState = (lastMessage: Message | null) => {
             redWins: roundPayload.redWins,
             lastRoundResult: roundPayload,
             currentPlayer: roundPayload.nextPlayer,
-            opponentUsedTiles: historyExists
-              ? prev.opponentUsedTiles
-              : [...prev.opponentUsedTiles, opponentTile],
             roundHistory: updatedHistory,
             currentRoundTiles: {}, // 다음 라운드를 위해 초기화
           };
