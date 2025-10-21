@@ -70,3 +70,36 @@
 .tile.played .tile-number {
   display: none;
 }
+
+@media (max-width: 768px) {
+  .tile {
+    width: 55px;
+    height: 75px;
+  }
+
+  .tile-number {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tile {
+    width: 50px;
+    height: 68px;
+    border-width: 3px;
+    border-radius: 6px;
+  }
+
+  .tile.blue,
+  .tile.red {
+    border-width: 3px;
+  }
+
+  .tile-number {
+    font-size: 24px;
+  }
+
+  .tile:hover:not(.disabled):not(.played) {
+    transform: translateY(-3px);
+  }
+}

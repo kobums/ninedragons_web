@@ -172,11 +172,88 @@
     padding: 30px 20px;
   }
 
+  .waiting-content h1,
   .join-content h1 {
     font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .game-description {
+    font-size: 15px;
   }
 
   .color-buttons {
     flex-direction: column;
+  }
+
+  .game-rules {
+    padding: 15px;
+  }
+
+  .game-rules h3 {
+    font-size: 16px;
+  }
+
+  .game-rules li {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .waiting-room {
+    padding: 10px;
+  }
+
+  .waiting-content,
+  .join-content {
+    padding: 25px 15px;
+  }
+
+  .waiting-content h1,
+  .join-content h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .game-description {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group input {
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .color-btn {
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .join-btn {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .game-rules {
+    padding: 12px;
+  }
+
+  .game-rules h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .game-rules li {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .waiting-text {
+    font-size: 16px;
   }
 }

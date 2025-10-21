@@ -8,8 +8,8 @@ import type { PlayerColor } from './types/game';
 import './App.css';
 
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-// const WS_URL = `${protocol}//ninedragonsapi.gowoobro.com/ws`;
-const WS_URL = `${protocol}//localhost:8003/ws`;
+const WS_URL = `${protocol}//ninedragonsapi.gowoobro.com/ws`;
+// const WS_URL = `${protocol}//localhost:8003/ws`;
 
 function App() {
   const { isConnected, lastMessage, sendMessage } = useWebSocket(WS_URL);

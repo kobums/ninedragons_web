@@ -273,27 +273,37 @@
 @media (max-width: 600px) {
   .game-over-modal {
     padding: 30px 20px;
+    width: 95%;
   }
 
   .game-over-title {
     font-size: 28px;
+    margin-bottom: 20px;
   }
 
   .final-score {
-    gap: 20px;
+    gap: 15px;
   }
 
   .final-score-item {
-    padding: 15px 30px;
-    min-width: 100px;
+    padding: 15px 25px;
+    min-width: 90px;
   }
 
   .final-score .score-value {
     font-size: 36px;
   }
 
+  .score-divider {
+    font-size: 36px;
+  }
+
   .result-message h2 {
     font-size: 24px;
+  }
+
+  .result-message p {
+    font-size: 16px;
   }
 
   .round-history-grid {
@@ -317,5 +327,102 @@
   .white-circle,
   .black-circle {
     font-size: 20px;
+  }
+
+  .history-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-over-modal {
+    padding: 20px 15px;
+    width: 98%;
+  }
+
+  .game-over-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .final-score {
+    gap: 10px;
+    margin-bottom: 25px;
+  }
+
+  .final-score-item {
+    padding: 12px 20px;
+    min-width: 80px;
+  }
+
+  .final-score .color-label {
+    font-size: 13px;
+  }
+
+  .final-score .score-value {
+    font-size: 32px;
+  }
+
+  .score-divider {
+    font-size: 32px;
+  }
+
+  .result-message {
+    margin-bottom: 20px;
+  }
+
+  .result-message h2 {
+    font-size: 20px;
+  }
+
+  .result-message p {
+    font-size: 14px;
+  }
+
+  .round-history-section {
+    padding: 15px;
+    margin: 20px 0;
+  }
+
+  .history-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .round-history-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .history-round {
+    padding: 12px;
+  }
+
+  .history-round-number {
+    font-size: 13px;
+  }
+
+  .history-tiles {
+    gap: 8px;
+  }
+
+  .history-tile {
+    min-width: 55px;
+    padding: 8px;
+  }
+
+  .tile-number {
+    font-size: 15px;
+  }
+
+  .white-circle,
+  .black-circle {
+    font-size: 18px;
+  }
+
+  .play-again-btn {
+    padding: 12px 30px;
+    font-size: 16px;
   }
 }
