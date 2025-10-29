@@ -28,7 +28,11 @@ export function NCGameOver({
   return (
     <div className="nc-game-over">
       <div className="nc-game-over-container">
-        <div className={`nc-result-banner ${isDraw ? 'draw' : isWinner ? 'win' : 'lose'}`}>
+        <div
+          className={`nc-result-banner ${
+            isDraw ? 'draw' : isWinner ? 'win' : 'lose'
+          }`}
+        >
           {isDraw ? (
             <>
               <h1 className="nc-result-title">무승부!</h1>
@@ -48,14 +52,26 @@ export function NCGameOver({
         </div>
 
         <div className="nc-final-score">
-          <div className={`nc-final-team ${yourTeam === 'team1' ? 'your-team' : ''}`}>
+          <div
+            className={`nc-final-team ${
+              yourTeam === 'team1' ? 'your-team' : ''
+            }`}
+          >
             <span className="nc-final-team-label">{team1Name || '블루'}</span>
-            <span className="nc-final-team-score team1-color">{team1Score}</span>
+            <span className="nc-final-team-score team1-color">
+              {team1Score}
+            </span>
           </div>
           <div className="nc-final-separator">:</div>
-          <div className={`nc-final-team ${yourTeam === 'team2' ? 'your-team' : ''}`}>
+          <div
+            className={`nc-final-team ${
+              yourTeam === 'team2' ? 'your-team' : ''
+            }`}
+          >
             <span className="nc-final-team-label">{team2Name || '빨강'}</span>
-            <span className="nc-final-team-score team2-color">{team2Score}</span>
+            <span className="nc-final-team-score team2-color">
+              {team2Score}
+            </span>
           </div>
         </div>
 
@@ -77,7 +93,7 @@ export function NCGameOver({
             <div className="nc-stat-item">
               <span className="nc-stat-label">무승부</span>
               <span className="nc-stat-value">
-                {roundHistory.filter(r => r.winner === '').length}
+                {roundHistory.filter((r) => r.winner === '').length}
               </span>
             </div>
           </div>
@@ -91,15 +107,33 @@ export function NCGameOver({
                 <div className="nc-summary-round">R{round.round}</div>
                 <div className="nc-summary-details">
                   <div className="nc-summary-team team1-color">
-                    {team1Name || '블루'}: {round.team1Hidden ? '히든 (???)' : `${round.team1Block1} + ${round.team1Block2} = ${round.team1Total}`}
+                    {team1Name || '블루'}:{' '}
+                    {`${round.team1Block1} + ${round.team1Block2} = ${
+                      round.team1Total
+                    }${round.team1Hidden ? ' (히든)' : ''}`}
                   </div>
                   <div className="nc-summary-vs">VS</div>
                   <div className="nc-summary-team team2-color">
-                    {team2Name || '빨강'}: {round.team2Hidden ? '히든 (???)' : `${round.team2Block1} + ${round.team2Block2} = ${round.team2Total}`}
+                    {team2Name || '빨강'}:{' '}
+                    {`${round.team2Block1} + ${round.team2Block2} = ${
+                      round.team2Total
+                    }${round.team2Hidden ? ' (히든)' : ''}`}
                   </div>
                 </div>
-                <div className={`nc-summary-winner ${round.winner === 'team1' ? 'team1-color' : round.winner === 'team2' ? 'team2-color' : ''}`}>
-                  {round.winner ? (round.winner === 'team1' ? `${team1Name || '블루'} 승` : `${team2Name || '빨강'} 승`) : '무승부'}
+                <div
+                  className={`nc-summary-winner ${
+                    round.winner === 'team1'
+                      ? 'team1-color'
+                      : round.winner === 'team2'
+                      ? 'team2-color'
+                      : 'draw-color'
+                  }`}
+                >
+                  {round.winner
+                    ? round.winner === 'team1'
+                      ? `${team1Name || '블루'} 승`
+                      : `${team2Name || '빨강'} 승`
+                    : '무승부'}
                 </div>
               </div>
             ))}

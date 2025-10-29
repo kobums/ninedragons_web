@@ -204,13 +204,21 @@ export function NCGameBoard({
                   <div className="nc-history-blocks">
                     <div className="nc-history-team">
                       <span className="team1-color">
-                        {gameState.team1Name || '블루'}: {round.team1Hidden ? '???' : `${round.team1Block1} + ${round.team1Block2} = ${round.team1Total}`}
+                        {gameState.team1Name || '블루'}: {
+                          round.team1Hidden && gameState.yourTeam !== 'team1'
+                            ? '???'
+                            : `${round.team1Block1} + ${round.team1Block2} = ${round.team1Total}${round.team1Hidden ? ' (히든)' : ''}`
+                        }
                       </span>
                     </div>
                     <div className="nc-history-vs">VS</div>
                     <div className="nc-history-team">
                       <span className="team2-color">
-                        {gameState.team2Name || '빨강'}: {round.team2Hidden ? '???' : `${round.team2Block1} + ${round.team2Block2} = ${round.team2Total}`}
+                        {gameState.team2Name || '빨강'}: {
+                          round.team2Hidden && gameState.yourTeam !== 'team2'
+                            ? '???'
+                            : `${round.team2Block1} + ${round.team2Block2} = ${round.team2Total}${round.team2Hidden ? ' (히든)' : ''}`
+                        }
                       </span>
                     </div>
                   </div>

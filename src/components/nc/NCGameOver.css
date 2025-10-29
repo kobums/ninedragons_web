@@ -92,6 +92,10 @@
   color: #ef4444;
 }
 
+.draw-color {
+  color: #888888;
+}
+
 .nc-final-separator {
   font-size: 4rem;
   font-weight: 700;
