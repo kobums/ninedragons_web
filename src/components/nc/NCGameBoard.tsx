@@ -97,12 +97,12 @@ export function NCGameBoard({
 
           <div className="nc-score-board">
             <div className={`nc-team-score ${gameState.yourTeam === 'team1' ? 'your-team' : ''}`}>
-              <span className="nc-team-label">팀 1</span>
+              <span className="nc-team-label">블루</span>
               <span className="nc-score team1-color">{gameState.team1Score}</span>
             </div>
             <div className="nc-score-separator">:</div>
             <div className={`nc-team-score ${gameState.yourTeam === 'team2' ? 'your-team' : ''}`}>
-              <span className="nc-team-label">팀 2</span>
+              <span className="nc-team-label">빨강</span>
               <span className="nc-score team2-color">{gameState.team2Score}</span>
             </div>
           </div>
@@ -204,18 +204,18 @@ export function NCGameBoard({
                   <div className="nc-history-blocks">
                     <div className="nc-history-team">
                       <span className="team1-color">
-                        팀1: {round.team1Hidden ? '???' : `${round.team1Block1} + ${round.team1Block2} = ${round.team1Total}`}
+                        블루: {round.team1Hidden ? '???' : `${round.team1Block1} + ${round.team1Block2} = ${round.team1Total}`}
                       </span>
                     </div>
                     <div className="nc-history-vs">VS</div>
                     <div className="nc-history-team">
                       <span className="team2-color">
-                        팀2: {round.team2Hidden ? '???' : `${round.team2Block1} + ${round.team2Block2} = ${round.team2Total}`}
+                        빨강: {round.team2Hidden ? '???' : `${round.team2Block1} + ${round.team2Block2} = ${round.team2Total}`}
                       </span>
                     </div>
                   </div>
                   <div className={`nc-history-winner ${getTeamColorClass(round.winner)}`}>
-                    {round.winner ? `${round.winner === 'team1' ? '팀 1' : '팀 2'} 승리` : '무승부'}
+                    {round.winner ? `${round.winner === 'team1' ? '블루' : '빨강'} 승리` : '무승부'}
                   </div>
                 </div>
               ))}

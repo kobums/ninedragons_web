@@ -8,9 +8,15 @@ interface NCWaitingRoomProps {
   hasJoined: boolean;
 }
 
-export function NCWaitingRoom({ onJoinGame, isWaiting, hasJoined }: NCWaitingRoomProps) {
+export function NCWaitingRoom({
+  onJoinGame,
+  isWaiting,
+  hasJoined,
+}: NCWaitingRoomProps) {
   const [playerName, setPlayerName] = useState('');
-  const [selectedTeam, setSelectedTeam] = useState<TeamColor | undefined>(undefined);
+  const [selectedTeam, setSelectedTeam] = useState<TeamColor | undefined>(
+    undefined
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,21 +47,33 @@ export function NCWaitingRoom({ onJoinGame, isWaiting, hasJoined }: NCWaitingRoo
             </div>
 
             <div className="nc-form-group">
-              <label>팀 선택 (선택사항)</label>
+              <label>색상 선택 (선택사항)</label>
               <div className="nc-team-buttons">
                 <button
                   type="button"
-                  className={`nc-team-button team1 ${selectedTeam === 'team1' ? 'selected' : ''}`}
-                  onClick={() => setSelectedTeam(selectedTeam === 'team1' ? undefined : 'team1')}
+                  className={`nc-team-button team1 ${
+                    selectedTeam === 'team1' ? 'selected' : ''
+                  }`}
+                  onClick={() =>
+                    setSelectedTeam(
+                      selectedTeam === 'team1' ? undefined : 'team1'
+                    )
+                  }
                 >
-                  팀 1
+                  블루
                 </button>
                 <button
                   type="button"
-                  className={`nc-team-button team2 ${selectedTeam === 'team2' ? 'selected' : ''}`}
-                  onClick={() => setSelectedTeam(selectedTeam === 'team2' ? undefined : 'team2')}
+                  className={`nc-team-button team2 ${
+                    selectedTeam === 'team2' ? 'selected' : ''
+                  }`}
+                  onClick={() =>
+                    setSelectedTeam(
+                      selectedTeam === 'team2' ? undefined : 'team2'
+                    )
+                  }
                 >
-                  팀 2
+                  레드
                 </button>
               </div>
               <small className="nc-team-hint">

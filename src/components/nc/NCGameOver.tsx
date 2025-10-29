@@ -45,12 +45,12 @@ export function NCGameOver({
 
         <div className="nc-final-score">
           <div className={`nc-final-team ${yourTeam === 'team1' ? 'your-team' : ''}`}>
-            <span className="nc-final-team-label">팀 1</span>
+            <span className="nc-final-team-label">블루</span>
             <span className="nc-final-team-score team1-color">{team1Score}</span>
           </div>
           <div className="nc-final-separator">:</div>
           <div className={`nc-final-team ${yourTeam === 'team2' ? 'your-team' : ''}`}>
-            <span className="nc-final-team-label">팀 2</span>
+            <span className="nc-final-team-label">빨강</span>
             <span className="nc-final-team-score team2-color">{team2Score}</span>
           </div>
         </div>
@@ -63,11 +63,11 @@ export function NCGameOver({
               <span className="nc-stat-value">{roundHistory.length}</span>
             </div>
             <div className="nc-stat-item">
-              <span className="nc-stat-label">팀 1 승리</span>
+              <span className="nc-stat-label">블루 승리</span>
               <span className="nc-stat-value team1-color">{team1Score}</span>
             </div>
             <div className="nc-stat-item">
-              <span className="nc-stat-label">팀 2 승리</span>
+              <span className="nc-stat-label">빨강 승리</span>
               <span className="nc-stat-value team2-color">{team2Score}</span>
             </div>
             <div className="nc-stat-item">
@@ -87,15 +87,15 @@ export function NCGameOver({
                 <div className="nc-summary-round">R{round.round}</div>
                 <div className="nc-summary-details">
                   <div className="nc-summary-team team1-color">
-                    팀 1: {round.team1Hidden ? '히든 (???)' : `${round.team1Block1} + ${round.team1Block2} = ${round.team1Total}`}
+                    블루: {round.team1Hidden ? '히든 (???)' : `${round.team1Block1} + ${round.team1Block2} = ${round.team1Total}`}
                   </div>
                   <div className="nc-summary-vs">VS</div>
                   <div className="nc-summary-team team2-color">
-                    팀 2: {round.team2Hidden ? '히든 (???)' : `${round.team2Block1} + ${round.team2Block2} = ${round.team2Total}`}
+                    빨강: {round.team2Hidden ? '히든 (???)' : `${round.team2Block1} + ${round.team2Block2} = ${round.team2Total}`}
                   </div>
                 </div>
                 <div className={`nc-summary-winner ${round.winner === 'team1' ? 'team1-color' : round.winner === 'team2' ? 'team2-color' : ''}`}>
-                  {round.winner ? (round.winner === 'team1' ? '팀 1 승' : '팀 2 승') : '무승부'}
+                  {round.winner ? (round.winner === 'team1' ? '블루 승' : '빨강 승') : '무승부'}
                 </div>
               </div>
             ))}
