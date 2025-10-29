@@ -1,0 +1,99 @@
+.game-selection {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.game-selection-container {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.game-selection-title {
+  text-align: center;
+  color: white;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.game-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.game-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.game-card.ninedragons {
+  border-top: 5px solid #3b82f6;
+}
+
+.game-card.ninedragons:hover {
+  background: linear-gradient(to bottom, #eff6ff 0%, white 100%);
+}
+
+.game-card.numberchange {
+  border-top: 5px solid #f59e0b;
+}
+
+.game-card.numberchange:hover {
+  background: linear-gradient(to bottom, #fffbeb 0%, white 100%);
+}
+
+.game-card-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.game-description {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.game-info {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.game-info span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .game-selection-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .game-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .game-card-content h2 {
+    font-size: 1.5rem;
+  }
+}

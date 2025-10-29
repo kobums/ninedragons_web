@@ -1,0 +1,584 @@
+.nc-game-board {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.nc-game-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nc-game-header {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nc-round-info {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.nc-round-label {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-right: 0.5rem;
+}
+
+.nc-round-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.nc-score-board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.nc-team-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.nc-team-score.your-team {
+  background: #fef3c7;
+  border: 2px solid #f59e0b;
+}
+
+.nc-team-label {
+  font-size: 1rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.nc-score {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.team1-color {
+  color: #3b82f6;
+}
+
+.team2-color {
+  color: #ef4444;
+}
+
+.nc-score-separator {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+.nc-turn-indicator {
+  text-align: center;
+}
+
+.nc-your-turn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.nc-opponent-turn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: #e5e7eb;
+  color: #6b7280;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.nc-blocks-section {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nc-blocks-section h3 {
+  color: #374151;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.nc-blocks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 1rem;
+}
+
+.nc-block {
+  aspect-ratio: 1;
+  background: white;
+  border: 3px solid #e5e7eb;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.nc-block:hover:not(.disabled) {
+  transform: translateY(-5px);
+  border-color: #f59e0b;
+  box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+}
+
+.nc-block.selected-1 {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border-color: #3b82f6;
+  transform: scale(1.1);
+}
+
+.nc-block.selected-2 {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border-color: #8b5cf6;
+  transform: scale(1.1);
+}
+
+.nc-block.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nc-selection-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: white;
+  color: #374151;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: 2px solid currentColor;
+}
+
+.nc-selected-blocks {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nc-selected-blocks h3 {
+  color: #374151;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.nc-selected-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.nc-selected-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nc-selected-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.nc-selected-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.nc-selected-total {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f59e0b;
+  background: #fef3c7;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.nc-selected-plus,
+.nc-selected-equals {
+  font-size: 2rem;
+  color: #9ca3af;
+  font-weight: 700;
+}
+
+.nc-submit-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.nc-submit-button {
+  flex: 1;
+  padding: 1.25rem;
+  border: none;
+  border-radius: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nc-submit-button.normal {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.nc-submit-button.normal:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+}
+
+.nc-submit-button.hidden {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.nc-submit-button.hidden:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+}
+
+.nc-submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nc-hidden-status {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nc-hidden-item {
+  font-weight: 600;
+  color: #10b981;
+}
+
+.nc-hidden-item.used {
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.nc-history {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nc-history h3 {
+  color: #374151;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.nc-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nc-history-item {
+  border: 2px solid #f3f4f6;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s;
+}
+
+.nc-history-item:hover {
+  background: #fafafa;
+  border-color: #f59e0b;
+}
+
+.nc-history-round {
+  font-weight: 700;
+  color: #f59e0b;
+  min-width: 50px;
+}
+
+.nc-history-blocks {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.nc-history-team {
+  flex: 1;
+  font-weight: 600;
+}
+
+.nc-history-vs {
+  color: #9ca3af;
+  font-weight: 700;
+}
+
+.nc-history-winner {
+  font-weight: 700;
+  min-width: 100px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .nc-game-header {
+    padding: 1.5rem;
+  }
+
+  .nc-round-number {
+    font-size: 1.5rem;
+  }
+
+  .nc-score-board {
+    gap: 1rem;
+  }
+
+  .nc-team-score {
+    padding: 0.75rem 1rem;
+  }
+
+  .nc-score {
+    font-size: 2rem;
+  }
+
+  .nc-blocks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .nc-block {
+    font-size: 1.5rem;
+  }
+
+  .nc-submit-section {
+    flex-direction: column;
+  }
+
+  .nc-hidden-status {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .nc-history-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nc-history-blocks {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .nc-history-winner {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* 히든 찬스 알림 오버레이 */
+.nc-hidden-notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.nc-hidden-notification {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+.nc-hidden-notification h2 {
+  color: #f59e0b;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.nc-hidden-notification p {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.nc-hidden-notification button {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nc-hidden-notification button:hover {
+  background: #d97706;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.nc-hidden-notification button:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 히든 블록 선택 UI */
+.nc-hidden-block-choices {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.nc-hidden-choice {
+  flex: 1;
+  max-width: 200px;
+  padding: 2rem;
+  background: #f3f4f6;
+  border: 3px solid #e5e7eb;
+  border-radius: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nc-hidden-choice:hover {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.nc-hidden-choice.selected {
+  background: #f59e0b;
+  border-color: #d97706;
+  color: white;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+}
+
+.nc-confirm-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f59e0b;
+  color: white;
+}
+
+.nc-confirm-button:hover:not(:disabled) {
+  background: #d97706;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.nc-confirm-button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

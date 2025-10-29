@@ -1,0 +1,216 @@
+.nc-waiting-room {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  padding: 20px;
+}
+
+.nc-waiting-container {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.nc-title {
+  font-size: 3rem;
+  text-align: center;
+  color: #f59e0b;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nc-subtitle {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.nc-join-form {
+  margin-bottom: 2rem;
+}
+
+.nc-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.nc-form-group label {
+  display: block;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.nc-form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.nc-form-group input:focus {
+  outline: none;
+  border-color: #f59e0b;
+}
+
+.nc-team-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.nc-team-button {
+  padding: 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nc-team-button.team1 {
+  color: #3b82f6;
+}
+
+.nc-team-button.team1:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.nc-team-button.team1.selected {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.nc-team-button.team2 {
+  color: #ef4444;
+}
+
+.nc-team-button.team2:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.nc-team-button.team2.selected {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.nc-team-hint {
+  display: block;
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.nc-join-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nc-join-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+}
+
+.nc-waiting-message {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.nc-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #f3f4f6;
+  border-top-color: #f59e0b;
+  border-radius: 50%;
+  animation: nc-spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+@keyframes nc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.nc-waiting-message p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.nc-waiting-message small {
+  color: #9ca3af;
+}
+
+.nc-game-rules {
+  border-top: 2px solid #f3f4f6;
+  padding-top: 1.5rem;
+}
+
+.nc-game-rules h3 {
+  font-size: 1.3rem;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.nc-game-rules ul {
+  list-style: none;
+  padding: 0;
+}
+
+.nc-game-rules li {
+  padding: 0.5rem 0;
+  color: #6b7280;
+  line-height: 1.6;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.nc-game-rules li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #f59e0b;
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .nc-waiting-container {
+    padding: 2rem;
+  }
+
+  .nc-title {
+    font-size: 2rem;
+  }
+
+  .nc-subtitle {
+    font-size: 1rem;
+  }
+
+  .nc-team-buttons {
+    grid-template-columns: 1fr;
+  }
+}
