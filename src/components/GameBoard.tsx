@@ -174,10 +174,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       <div className="round-status-board">
         <div className="round-status-header">
           <div className="player-label blue">
-            파랑 {gameState.yourColor === 'blue' ? '(나)' : ''}
+            {gameState.blueName || '파랑'} {gameState.yourColor === 'blue' ? '(나)' : ''}
           </div>
           <div className="player-label red">
-            빨강 {gameState.yourColor === 'red' ? '(나)' : ''}
+            {gameState.redName || '빨강'} {gameState.yourColor === 'red' ? '(나)' : ''}
           </div>
         </div>
         <div className="round-status-grid">{renderRoundStatus()}</div>
@@ -187,7 +187,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               gameState.yourColor === 'blue' ? 'my-score' : ''
             }`}
           >
-            <span className="score-label">파랑</span>
+            <span className="score-label">{gameState.blueName || '파랑'}</span>
             <span className="score-value">{gameState.blueWins}승</span>
           </div>
           <div
@@ -195,7 +195,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               gameState.yourColor === 'red' ? 'my-score' : ''
             }`}
           >
-            <span className="score-label">빨강</span>
+            <span className="score-label">{gameState.redName || '빨강'}</span>
             <span className="score-value">{gameState.redWins}승</span>
           </div>
         </div>

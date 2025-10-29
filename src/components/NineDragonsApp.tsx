@@ -102,6 +102,8 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
           winner={gameState.winner}
           blueWins={gameState.blueWins}
           redWins={gameState.redWins}
+          blueName={gameState.blueName}
+          redName={gameState.redName}
           yourColor={gameState.yourColor}
           roundHistory={gameState.roundHistory}
           onPlayAgain={handlePlayAgain}

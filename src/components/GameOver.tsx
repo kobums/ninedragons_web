@@ -6,6 +6,8 @@ interface GameOverProps {
   winner: PlayerColor | '';
   blueWins: number;
   redWins: number;
+  blueName: string;
+  redName: string;
   yourColor: PlayerColor | null;
   roundHistory: RoundHistory[];
   onPlayAgain: () => void;
@@ -15,6 +17,8 @@ export const GameOver: React.FC<GameOverProps> = ({
   winner,
   blueWins,
   redWins,
+  blueName,
+  redName,
   yourColor,
   roundHistory,
   onPlayAgain,
@@ -59,7 +63,7 @@ export const GameOver: React.FC<GameOverProps> = ({
           </div>
           {roundData?.winner && (
             <div className={`history-winner-badge ${roundData.winner}`}>
-              {roundData.winner === 'blue' ? '파랑 승' : '빨강 승'}
+              {roundData.winner === 'blue' ? `${blueName || '파랑'} 승` : `${redName || '빨강'} 승`}
             </div>
           )}
           {roundData && !roundData.winner && roundData.blueTile && roundData.redTile && (
@@ -77,12 +81,12 @@ export const GameOver: React.FC<GameOverProps> = ({
 
         <div className="final-score">
           <div className={`final-score-item blue ${winner === 'blue' ? 'winner' : ''}`}>
-            <span className="color-label">파랑</span>
+            <span className="color-label">{blueName || '파랑'}</span>
             <span className="score-value">{blueWins}</span>
           </div>
           <div className="score-divider">:</div>
           <div className={`final-score-item red ${winner === 'red' ? 'winner' : ''}`}>
-            <span className="color-label">빨강</span>
+            <span className="color-label">{redName || '빨강'}</span>
             <span className="score-value">{redWins}</span>
           </div>
         </div>

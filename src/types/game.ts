@@ -45,6 +45,8 @@ export interface GameOverPayload {
 export interface GameStartPayload {
   firstPlayer: PlayerColor;
   yourColor: PlayerColor;
+  blueName: string;
+  redName: string;
 }
 
 export interface ErrorPayload {
@@ -74,6 +76,8 @@ export interface GameState {
   currentRound: number;
   blueWins: number;
   redWins: number;
+  blueName: string; // 블루 플레이어 이름
+  redName: string; // 레드 플레이어 이름
   availableTiles: number[];
   usedTiles: number[];
   opponentUsedTiles: number[]; // 상대방이 사용한 타일 히스토리

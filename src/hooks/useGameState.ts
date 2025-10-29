@@ -16,6 +16,8 @@ const initialGameState: GameState = {
   currentRound: 1,
   blueWins: 0,
   redWins: 0,
+  blueName: '',
+  redName: '',
   availableTiles: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   usedTiles: [],
   opponentUsedTiles: [],
@@ -66,6 +68,8 @@ export const useGameState = (lastMessage: Message | null) => {
           isWaiting: false,
           currentPlayer: startPayload.firstPlayer,
           yourColor: startPayload.yourColor,
+          blueName: startPayload.blueName || '',
+          redName: startPayload.redName || '',
         }));
         break;
 

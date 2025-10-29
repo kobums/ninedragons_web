@@ -16,12 +16,10 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
           >
             <div className="game-card-content">
               <h2>구룡투</h2>
-              <p className="game-description">
-                전략적 타일 배치 게임
-              </p>
+              <p className="game-description">전략적 타일 배치 게임</p>
               <div className="game-info">
                 <span>👥 2인</span>
-                <span>⏱️ 10-15분</span>
+                <span>⏱️ 5분</span>
               </div>
             </div>
           </div>
@@ -32,12 +30,10 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
           >
             <div className="game-card-content">
               <h2>넘버체인지</h2>
-              <p className="game-description">
-                숫자 블록 합계 대결 게임
-              </p>
+              <p className="game-description">숫자 블록 합계 대결 게임</p>
               <div className="game-info">
                 <span>👥 2인</span>
-                <span>⏱️ 15-20분</span>
+                <span>⏱️ 5-10분</span>
               </div>
             </div>
           </div>
