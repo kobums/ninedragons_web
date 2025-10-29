@@ -4,6 +4,7 @@ export type NCMessageType =
   | 'nc_join_game'
   | 'nc_game_start'
   | 'nc_submit_blocks'
+  | 'nc_select_block'
   | 'nc_round_result'
   | 'nc_game_over'
   | 'nc_error'

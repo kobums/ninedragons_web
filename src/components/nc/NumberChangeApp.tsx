@@ -97,15 +97,28 @@ export function NumberChangeApp() {
   };
 
   const handleConfirmHiddenSelection = () => {
+    const choice = gameState.selectedBlockChoice;
+    if (choice === null) return;
+
     confirmHiddenSelection();
 
-    // 블록 선택 완료 후 자동으로 제출
-    const pendingUseHidden = getPendingSubmitUseHidden();
-    if (pendingUseHidden !== null) {
-      // 약간의 딜레이 후 제출 (UI 업데이트 후)
-      setTimeout(() => {
-        handleSubmit(pendingUseHidden);
-      }, 100);
+    // 이미 제출한 상태라면 블록 선택만 서버로 전송
+    if (gameState.hasSubmitted) {
+      console.log('[NumberChange] Sending block selection:', choice);
+      sendMessage({
+        type: 'nc_select_block',
+        payload: {
+          selectedBlockChoice: choice,
+        },
+      });
+    } else {
+      // 아직 제출하지 않은 상태라면 제출
+      const pendingUseHidden = getPendingSubmitUseHidden();
+      if (pendingUseHidden !== null) {
+        setTimeout(() => {
+          handleSubmit(pendingUseHidden);
+        }, 100);
+      }
     }
   };
 

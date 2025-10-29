@@ -329,11 +329,16 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
   };
 
   const dismissHiddenNotification = () => {
-    setGameState((prev) => ({
-      ...prev,
-      opponentUsedHiddenNotification: false,
-      // 블록 선택 UI는 유지
-    }));
+    setGameState((prev) => {
+      // 이미 제출한 상태라면 알림 확인 후 바로 블록 선택 UI 표시
+      const shouldShowBlockSelection = prev.hasSubmitted;
+
+      return {
+        ...prev,
+        opponentUsedHiddenNotification: false,
+        showHiddenBlockSelection: shouldShowBlockSelection,
+      };
+    });
   };
 
   const showHiddenBlockSelector = () => {
