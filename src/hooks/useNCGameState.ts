@@ -15,6 +15,8 @@ const initialGameState: NCGameState = {
   currentRound: 1,
   team1Score: 0,
   team2Score: 0,
+  team1Name: '',
+  team2Name: '',
   availableBlocks: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7], // 1~7 두 세트
   usedBlocks: [],
   opponentAvailableBlocks: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7],
@@ -67,12 +69,15 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
       case 'nc_game_start':
         const startPayload = lastMessage.payload as NCGameStartPayload;
         console.log('[NumberChange] Game starting:', startPayload);
+        console.log('[NumberChange] Player names - Team1:', startPayload.team1Name, 'Team2:', startPayload.team2Name);
         setGameState((prev) => ({
           ...prev,
           isGameStarted: true,
           isWaiting: false,
           currentTeam: startPayload.firstTeam,
           yourTeam: startPayload.yourTeam,
+          team1Name: startPayload.team1Name || '',
+          team2Name: startPayload.team2Name || '',
         }));
         break;
 

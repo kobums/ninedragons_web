@@ -57,6 +57,8 @@ export interface NCGameOverPayload {
 export interface NCGameStartPayload {
   yourTeam: TeamColor;
   firstTeam: TeamColor;
+  team1Name: string;
+  team2Name: string;
 }
 
 export interface NCErrorPayload {
@@ -82,6 +84,8 @@ export interface NCGameState {
   currentRound: number;
   team1Score: number;
   team2Score: number;
+  team1Name: string; // 팀1 플레이어 이름
+  team2Name: string; // 팀2 플레이어 이름
   availableBlocks: number[]; // 내 팀의 사용 가능한 블록
   usedBlocks: number[]; // 내 팀이 사용한 블록
   opponentAvailableBlocks: number[]; // 추정되는 상대 팀 블록 (공개된 정보 기반)

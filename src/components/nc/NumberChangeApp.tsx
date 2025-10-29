@@ -163,6 +163,8 @@ export function NumberChangeApp() {
           winner={gameState.winner}
           team1Score={gameState.team1Score}
           team2Score={gameState.team2Score}
+          team1Name={gameState.team1Name}
+          team2Name={gameState.team2Name}
           yourTeam={gameState.yourTeam}
           roundHistory={gameState.roundHistory}
           onPlayAgain={handlePlayAgain}
