@@ -10,7 +10,6 @@ interface NCWaitingRoomProps {
 
 export function NCWaitingRoom({
   onJoinGame,
-  isWaiting,
   hasJoined,
 }: NCWaitingRoomProps) {
   const [playerName, setPlayerName] = useState('');

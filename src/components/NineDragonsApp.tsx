@@ -7,8 +7,8 @@ import { GameOver } from './GameOver';
 import type { PlayerColor } from '../types/game';
 
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-// const WS_URL = `${protocol}//ninedragonsapi.gowoobro.com/ws`;
-const WS_URL = `${protocol}//localhost:8003/ws`;
+const WS_URL = `${protocol}//ninedragonsapi.gowoobro.com/ws`;
+// const WS_URL = `${protocol}//localhost:8003/ws`;
 
 interface NineDragonsAppProps {
   onBack: () => void;

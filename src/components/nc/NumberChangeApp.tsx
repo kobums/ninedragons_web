@@ -7,8 +7,8 @@ import { NCGameOver } from './NCGameOver';
 import type { TeamColor } from '../../types/numberchange';
 
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-// const WS_URL = `${protocol}//ninedragonsapi.gowoobro.com/ws/numberchange`;
-const WS_URL = `${protocol}//localhost:8003/ws/numberchange`;
+const WS_URL = `${protocol}//ninedragonsapi.gowoobro.com/ws/numberchange`;
+// const WS_URL = `${protocol}//localhost:8003/ws/numberchange`;
 
 export function NumberChangeApp() {
   const { isConnected, lastMessage, sendMessage } = useNCWebSocket(WS_URL);
@@ -16,7 +16,6 @@ export function NumberChangeApp() {
     gameState,
     selectBlock,
     resetGame,
-    isMyTurn,
     canSubmit,
     getSelectedBlocks,
     markAsSubmitted,
@@ -162,7 +161,6 @@ export function NumberChangeApp() {
           gameState={gameState}
           onSelectBlock={handleSelectBlock}
           onSubmit={handleSubmit}
-          isMyTurn={isMyTurn()}
           canSubmit={canSubmit()}
           getSelectedBlocks={getSelectedBlocks}
           onDismissHiddenNotification={handleDismissHiddenNotification}

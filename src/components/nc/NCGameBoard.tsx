@@ -5,7 +5,6 @@ interface NCGameBoardProps {
   gameState: NCGameState;
   onSelectBlock: (blockIndex: number) => void;
   onSubmit: (useHidden: boolean) => void;
-  isMyTurn: boolean;
   canSubmit: boolean;
   getSelectedBlocks: () => { block1: number; block2: number } | null;
   onDismissHiddenNotification: () => void;
@@ -17,14 +16,14 @@ export function NCGameBoard({
   gameState,
   onSelectBlock,
   onSubmit,
-  isMyTurn,
   canSubmit,
   getSelectedBlocks,
   onDismissHiddenNotification,
   onSelectHiddenBlock,
   onConfirmHiddenSelection,
 }: NCGameBoardProps) {
-  const getTeamColorClass = (team: TeamColor) => {
+  const getTeamColorClass = (team: TeamColor | '') => {
+    if (!team) return '';
     return team === 'team1' ? 'team1-color' : 'team2-color';
   };
 
