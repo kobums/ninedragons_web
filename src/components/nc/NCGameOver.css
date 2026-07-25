@@ -127,6 +127,10 @@
   gap: var(--space-sm);
 }
 
+/* Ink is set on the container, not on .nc-stat-value — the value span
+   also carries .team1-color/.team2-color, and a colour declaration on
+   .nc-stat-value would tie on specificity and win by source order,
+   silently flattening the team colour coding. */
 .nc-stat-item {
   display: flex;
   flex-direction: column;
@@ -135,6 +139,7 @@
   padding: var(--space-md);
   background: var(--color-surface-card);
   border-radius: var(--radius-md);
+  color: var(--color-ink);
 }
 
 .nc-stat-label {
@@ -150,7 +155,6 @@
   font-weight: var(--weight-display);
   letter-spacing: var(--tracking-display-sm);
   line-height: 1;
-  color: var(--color-ink);
 }
 
 /* ---------- Round summary ---------- */
