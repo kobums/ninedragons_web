@@ -96,12 +96,12 @@ export const GameOver: React.FC<GameOverProps> = ({
             <h2>무승부!</h2>
           ) : isWinner ? (
             <>
-              <h2>🎉 승리! 🎉</h2>
+              <h2>승리!</h2>
               <p>축하합니다! 당신이 이겼습니다!</p>
             </>
           ) : (
             <>
-              <h2>😢 패배</h2>
+              <h2>패배</h2>
               <p>다음에는 더 잘할 수 있을 거예요!</p>
             </>
           )}
