@@ -6,9 +6,14 @@ import { NCGameBoard } from './NCGameBoard';
 import { NCGameOver } from './NCGameOver';
 import type { TeamColor } from '../../types/numberchange';
 
-const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-const WS_URL = `${protocol}//ninedragonsapi.gowoobro.com/ws/numberchange`;
-// const WS_URL = `${protocol}//localhost:8003/ws/numberchange`;
+// 로컬 개발 시에는 로컬 서버, 그 외에는 배포 서버(wss 고정)로 접속
+// 배포 도메인은 http(80)로 붙으면 301 리다이렉트라 WebSocket 핸드셰이크가 실패한다
+const isLocalHost =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1';
+const WS_URL = isLocalHost
+  ? 'ws://localhost:8003/ws/numberchange'
+  : 'wss://ninedragonsapi.gowoobro.com/ws/numberchange';
 
 export function NumberChangeApp() {
   const { isConnected, lastMessage, sendMessage } = useNCWebSocket(WS_URL);
