@@ -1,445 +1,399 @@
+/* =============================================================
+   구룡투 board
+   Scoped to .game-board — .game-info / .score-value / .tile-number
+   are also used by other components in this global stylesheet.
+   ============================================================= */
+
 .game-board {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* ---------- Round heading ---------- */
+
+.game-board .game-info {
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.game-board .round-info h2 {
+  font-size: var(--text-display-md);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-ink);
+}
+
+/* ---------- Opponent hand ---------- */
+
+.game-board .opponent-tiles-display {
+  background: var(--color-surface-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.game-board .opponent-tiles-label {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--space-sm);
+  text-align: center;
+}
+
+.game-board .opponent-tiles-grid {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.game-board .opponent-tile {
+  width: 26px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 2px solid;
+}
+
+.game-board .opponent-tile.odd {
+  background: var(--color-canvas);
+}
+
+.game-board .opponent-tile.even {
+  background: var(--color-surface-dark);
+}
+
+.game-board .opponent-tile.blue {
+  border-color: var(--color-team-blue);
+}
+
+.game-board .opponent-tile.red {
+  border-color: var(--color-team-red);
+}
+
+/* ---------- Round status board ---------- */
+
+.game-board .round-status-board {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.game-board .round-status-header {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.game-board .player-label {
+  flex: 1;
+  text-align: center;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  color: var(--color-on-primary);
+}
+
+.game-board .player-label.blue {
+  background: var(--color-team-blue);
+}
+
+.game-board .player-label.red {
+  background: var(--color-team-red);
+}
+
+.game-board .round-status-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.game-board .round-status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xxs);
+}
+
+.game-board .round-number {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  color: var(--color-muted-soft);
+}
+
+.game-board .round-tiles-pair {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+  width: 100%;
+}
+
+.game-board .round-tile-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  font-size: 20px;
+  line-height: 1;
+  border: 1px solid;
+}
+
+.game-board .round-tile-indicator.blue {
+  background: var(--color-team-blue-tint);
+  border-color: var(--color-team-blue);
+}
+
+.game-board .round-tile-indicator.red {
+  background: var(--color-team-red-tint);
+  border-color: var(--color-team-red);
+}
+
+.game-board .round-tile-indicator.empty {
+  background: var(--color-surface-soft);
+  border-color: var(--color-hairline);
+}
+
+/* The live round is marked with the coral ring, not gold. */
+.game-board .round-tile-indicator.current {
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+  border-color: var(--color-primary);
+  animation: game-board-round-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes game-board-round-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px var(--color-primary-ring);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--color-primary-ring);
+  }
+}
+
+.game-board .white-tile,
+.game-board .black-tile {
+  color: var(--color-ink);
+}
+
+.game-board .empty-slot {
+  color: var(--color-muted-soft);
+  font-size: var(--text-body-sm);
+}
+
+.game-board .round-winner-bar {
+  width: 100%;
+  height: 3px;
+  border-radius: var(--radius-pill);
+}
+
+.game-board .round-winner-bar.blue {
+  background: var(--color-team-blue);
+}
+
+.game-board .round-winner-bar.red {
+  background: var(--color-team-red);
+}
+
+.game-board .round-winner-bar.draw {
+  background: var(--color-team-draw);
+}
+
+/* ---------- Score ---------- */
+
+.game-board .score-summary {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-hairline-soft);
+}
+
+.game-board .score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xxs);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+}
+
+.game-board .score-item.blue {
+  color: var(--color-team-blue);
+}
+
+.game-board .score-item.red {
+  color: var(--color-team-red);
+}
+
+.game-board .score-item.my-score {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+}
+
+.game-board .score-label {
+  font-size: var(--text-caption);
+  font-weight: 500;
+}
+
+.game-board .score-value {
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display-sm);
+  line-height: 1;
+}
+
+/* ---------- Turn indicator ---------- */
+
+.game-board .turn-indicator {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+}
+
+.game-board .my-turn,
+.game-board .opponent-turn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  font-weight: 500;
+}
+
+.game-board .my-turn::before,
+.game-board .opponent-turn::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+
+.game-board .my-turn {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.game-board .my-turn::before {
+  animation: game-board-turn-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes game-board-turn-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.game-board .opponent-turn {
+  background: var(--color-surface-card);
+  color: var(--color-muted);
+}
+
+/* ---------- Hand ---------- */
+
+.game-board .tiles-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-sm);
+  justify-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+/* ---------- Player identity ---------- */
+
+.game-board .player-info {
+  text-align: center;
+  font-size: var(--text-body-sm);
+  color: var(--color-muted);
+  padding: var(--space-md);
+  background: var(--color-surface-card);
+  border-radius: var(--radius-lg);
+}
+
+.game-board .color-badge {
+  display: inline-block;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-pill);
+  color: var(--color-on-primary);
+}
+
+.game-board .color-badge.blue {
+  background: var(--color-team-blue);
+}
+
+.game-board .color-badge.red {
+  background: var(--color-team-red);
 }
 
 @media (max-width: 768px) {
   .game-board {
     max-width: 100%;
-    padding: 8px;
+    padding: var(--space-md) var(--space-sm);
+  }
+
+  .game-board .round-status-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .game-board .round-tile-indicator {
+    height: 30px;
+    font-size: 18px;
+  }
+
+  .game-board .tiles-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xs);
+  }
+
+  .game-board .score-summary {
+    gap: var(--space-sm);
   }
 }
 
 @media (max-width: 480px) {
   .game-board {
-    padding: 5px;
-  }
-}
-
-.game-info {
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.round-info h2 {
-  margin: 0 0 20px 0;
-  font-size: 28px;
-  color: #333;
-}
-
-@media (max-width: 480px) {
-  .round-info h2 {
-    font-size: 22px;
-    margin: 0 0 12px 0;
-  }
-}
-
-.opponent-tiles-display {
-  background: #fff;
-  padding: 15px 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 480px) {
-  .opponent-tiles-display {
-    padding: 10px 12px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-  }
-}
-
-.opponent-tiles-label {
-  font-size: 14px;
-  font-weight: bold;
-  color: #666;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.opponent-tiles-grid {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.opponent-tile {
-  width: 30px;
-  height: 40px;
-  border-radius: 6px;
-  border: 3px solid;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-@media (max-width: 480px) {
-  .opponent-tile {
-    width: 24px;
-    height: 32px;
-    border-width: 2px;
-    border-radius: 4px;
-  }
-}
-
-.opponent-tile.odd {
-  background: linear-gradient(145deg, #ffffff, #f0f0f0);
-}
-
-.opponent-tile.even {
-  background: linear-gradient(145deg, #333333, #1a1a1a);
-}
-
-.opponent-tile.blue {
-  border-color: #4a90e2;
-}
-
-.opponent-tile.red {
-  border-color: #e74c3c;
-}
-
-.round-status-board {
-  background: #fff;
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 480px) {
-  .round-status-board {
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-  }
-}
-
-.round-status-header {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 15px;
-  gap: 10px;
-}
-
-.player-label {
-  flex: 1;
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
-  padding: 8px;
-  border-radius: 8px;
-}
-
-.player-label.blue {
-  background: linear-gradient(145deg, #4a90e2, #357abd);
-  color: white;
-}
-
-.player-label.red {
-  background: linear-gradient(145deg, #e74c3c, #c0392b);
-  color: white;
-}
-
-.round-status-grid {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.round-status-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-
-.round-number {
-  font-size: 12px;
-  font-weight: bold;
-  color: #666;
-  margin-bottom: 3px;
-}
-
-.round-tiles-pair {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 100%;
-}
-
-.round-tile-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 35px;
-  border-radius: 6px;
-  font-size: 24px;
-  font-weight: bold;
-  border: 2px solid;
-}
-
-.round-tile-indicator.blue {
-  background: rgba(74, 144, 226, 0.1);
-  border-color: #4a90e2;
-}
-
-.round-tile-indicator.red {
-  background: rgba(231, 76, 60, 0.1);
-  border-color: #e74c3c;
-}
-
-.round-tile-indicator.empty {
-  background: #f0f0f0;
-  border-color: #ddd;
-}
-
-.round-tile-indicator.current {
-  animation: pulse-border 1.5s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-@keyframes pulse-border {
-  0%, 100% {
-    border-width: 2px;
-  }
-  50% {
-    border-width: 3px;
-  }
-}
-
-.white-tile {
-  color: #333;
-}
-
-.black-tile {
-  color: #000;
-}
-
-.empty-slot {
-  color: #ccc;
-  font-size: 18px;
-}
-
-.round-winner-bar {
-  width: 100%;
-  height: 4px;
-  border-radius: 2px;
-  margin-top: 2px;
-}
-
-.round-winner-bar.blue {
-  background: #4a90e2;
-}
-
-.round-winner-bar.red {
-  background: #e74c3c;
-}
-
-.round-winner-bar.draw {
-  background: #95a5a6;
-}
-
-.score-summary {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding-top: 15px;
-  border-top: 2px solid #e0e0e0;
-}
-
-.score-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.score-item.blue {
-  color: #4a90e2;
-}
-
-.score-item.red {
-  color: #e74c3c;
-}
-
-.score-item.my-score {
-  background: linear-gradient(145deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
-  border: 2px solid gold;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-}
-
-.score-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.score-value {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.turn-indicator {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-@media (max-width: 480px) {
-  .turn-indicator {
-    font-size: 16px;
-    margin-bottom: 15px;
-  }
-}
-
-.my-turn {
-  color: #27ae60;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-.opponent-turn {
-  color: #95a5a6;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.tiles-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
-  justify-items: center;
-  margin-bottom: 30px;
-}
-
-.player-info {
-  text-align: center;
-  font-size: 18px;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 10px;
-}
-
-.color-badge {
-  font-weight: bold;
-  padding: 5px 15px;
-  border-radius: 5px;
-  color: white;
-}
-
-.color-badge.blue {
-  background: linear-gradient(145deg, #4a90e2, #357abd);
-}
-
-.color-badge.red {
-  background: linear-gradient(145deg, #e74c3c, #c0392b);
-}
-
-@media (max-width: 768px) {
-  .round-status-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    padding: var(--space-sm);
   }
 
-  .round-tile-indicator {
+  .game-board .round-status-board {
+    padding: var(--space-md);
+  }
+
+  .game-board .round-status-grid {
+    gap: var(--space-xxs);
+  }
+
+  .game-board .round-tile-indicator {
+    height: 26px;
+    font-size: 15px;
+  }
+
+  .game-board .score-item {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .game-board .opponent-tiles-display {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .game-board .opponent-tile {
+    width: 22px;
     height: 30px;
-    font-size: 20px;
-  }
-
-  .round-number {
-    font-size: 10px;
-  }
-
-  .player-label {
-    font-size: 14px;
-    padding: 6px;
-  }
-
-  .score-value {
-    font-size: 24px;
-  }
-
-  .score-summary {
-    gap: 20px;
-  }
-
-  .tiles-container {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .round-status-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-  }
-
-  .round-tile-indicator {
-    height: 25px;
-    font-size: 16px;
-    border-width: 1.5px;
-  }
-
-  .round-number {
-    font-size: 9px;
-    margin-bottom: 2px;
-  }
-
-  .player-label {
-    font-size: 12px;
-    padding: 5px;
-  }
-
-  .score-summary {
-    gap: 15px;
-    padding-top: 10px;
-  }
-
-  .score-item {
-    padding: 8px 12px;
-  }
-
-  .score-label {
-    font-size: 11px;
-  }
-
-  .score-value {
-    font-size: 20px;
-  }
-
-  .tiles-container {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 15px;
-  }
-
-  .player-info {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .empty-slot {
-    font-size: 14px;
-  }
-
-  .round-tiles-pair {
-    gap: 3px;
-  }
-
-  .round-winner-bar {
-    height: 3px;
   }
 }

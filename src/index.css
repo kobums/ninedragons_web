@@ -1,66 +1,154 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+@import './styles/tokens.css';
+
+/* =============================================================
+   Reset + element baseline
+   ============================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background-color: var(--color-canvas);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-md);
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  line-height: 1.55;
+  color: var(--color-body);
+  background-color: var(--color-canvas);
+  /* Cormorant defaults to old-style figures, which wander off the
+     baseline — unacceptable in a game built entirely on numerals. */
+  font-variant-numeric: lining-nums;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
+#root {
   min-height: 100vh;
 }
 
+/* ---------- Display type ----------
+   Serif display, weight 500 (Cormorant substitute), negative tracking.
+   The serif/sans split is the brand voice — never swap a headline to sans. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  color: var(--color-ink);
+}
+
 h1 {
-  font-size: 3.2em;
+  font-size: var(--text-display-xl);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display-xl);
+}
+
+h2 {
+  font-size: var(--text-display-lg);
   line-height: 1.1;
+  letter-spacing: var(--tracking-display-lg);
+}
+
+h3 {
+  font-size: var(--text-display-sm);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-display-sm);
+}
+
+/* Labels and UI titles stay humanist sans. */
+h4,
+h5,
+h6,
+label,
+legend {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--color-ink);
+  line-height: 1.4;
+}
+
+p {
+  line-height: 1.55;
+}
+
+a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a:active {
+  color: var(--color-primary-active);
+  text-decoration: underline;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  border: none;
+  background: none;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+ul,
+ol {
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-primary-ring);
+  color: var(--color-ink);
+}
+
+/* ---------- Shared team-identity utilities ----------
+   Used by both 넘버체인지 screens; defined once here so the two
+   component stylesheets don't redeclare (and fight over) them. */
+.team1-color {
+  color: var(--color-team-blue);
+}
+
+.team2-color {
+  color: var(--color-team-red);
+}
+
+.draw-color {
+  color: var(--color-team-draw);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

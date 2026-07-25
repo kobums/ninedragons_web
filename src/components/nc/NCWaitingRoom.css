@@ -1,150 +1,169 @@
+/* =============================================================
+   넘버체인지 — waiting / join screen
+   ============================================================= */
+
 .nc-waiting-room {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  padding: 20px;
+  background: var(--color-canvas);
+  padding: var(--space-xxl) var(--space-lg);
 }
 
 .nc-waiting-container {
-  background: white;
-  border-radius: 20px;
-  padding: 3rem;
-  max-width: 600px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  max-width: 560px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .nc-title {
-  font-size: 3rem;
+  font-size: var(--text-display-lg);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-display-lg);
   text-align: center;
-  color: #f59e0b;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
 }
 
 .nc-subtitle {
   text-align: center;
-  color: #6b7280;
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
+  color: var(--color-muted);
+  font-size: var(--text-body-md);
+  margin-bottom: var(--space-xl);
 }
 
+/* ---------- Form ---------- */
+
 .nc-join-form {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl);
 }
 
 .nc-form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg);
 }
 
 .nc-form-group label {
   display: block;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
 }
 
 .nc-form-group input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
+  height: var(--control-height);
+  padding: 10px 14px;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-md);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nc-form-group input::placeholder {
+  color: var(--color-muted-soft);
 }
 
 .nc-form-group input:focus {
   outline: none;
-  border-color: #f59e0b;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
 }
 
 .nc-team-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
 }
 
 .nc-team-button {
-  padding: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  background: white;
-  font-size: 1.1rem;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  height: var(--control-height);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  font-size: var(--text-button);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.nc-team-button::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: currentColor;
 }
 
 .nc-team-button.team1 {
-  color: #3b82f6;
-}
-
-.nc-team-button.team1:hover {
-  background: #eff6ff;
-  border-color: #3b82f6;
+  color: var(--color-team-blue);
 }
 
 .nc-team-button.team1.selected {
-  background: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
+  background: var(--color-team-blue);
+  border-color: var(--color-team-blue);
+  color: var(--color-on-primary);
 }
 
 .nc-team-button.team2 {
-  color: #ef4444;
-}
-
-.nc-team-button.team2:hover {
-  background: #fef2f2;
-  border-color: #ef4444;
+  color: var(--color-team-red);
 }
 
 .nc-team-button.team2.selected {
-  background: #ef4444;
-  color: white;
-  border-color: #ef4444;
+  background: var(--color-team-red);
+  border-color: var(--color-team-red);
+  color: var(--color-on-primary);
 }
 
 .nc-team-hint {
   display: block;
-  color: #9ca3af;
-  font-size: 0.85rem;
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
 }
 
 .nc-join-button {
   width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.2rem;
-  font-weight: 600;
+  height: 48px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--text-title-sm);
+  font-weight: 500;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: background-color 0.15s ease;
 }
 
-.nc-join-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+.nc-join-button:active {
+  background: var(--color-primary-active);
 }
+
+/* ---------- Waiting ---------- */
 
 .nc-waiting-message {
   text-align: center;
-  padding: 2rem 0;
+  padding: var(--space-xl) 0;
 }
 
 .nc-spinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid #f3f4f6;
-  border-top-color: #f59e0b;
-  border-radius: 50%;
-  animation: nc-spin 1s linear infinite;
-  margin: 0 auto 1.5rem;
+  width: 44px;
+  height: 44px;
+  border: 3px solid var(--color-hairline);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  animation: nc-spin 0.9s linear infinite;
+  margin: 0 auto var(--space-md);
 }
 
 @keyframes nc-spin {
@@ -154,25 +173,33 @@
 }
 
 .nc-waiting-message p {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-title-md);
+  font-weight: 500;
+  color: var(--color-ink);
+  margin-bottom: var(--space-xxs);
 }
 
 .nc-waiting-message small {
-  color: #9ca3af;
+  font-size: var(--text-body-sm);
+  color: var(--color-muted);
 }
 
+/* ---------- Rules ---------- */
+
 .nc-game-rules {
-  border-top: 2px solid #f3f4f6;
-  padding-top: 1.5rem;
+  background: var(--color-surface-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
 }
 
 .nc-game-rules h3 {
-  font-size: 1.3rem;
-  color: #374151;
-  margin-bottom: 1rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--space-sm);
 }
 
 .nc-game-rules ul {
@@ -181,36 +208,43 @@
 }
 
 .nc-game-rules li {
-  padding: 0.5rem 0;
-  color: #6b7280;
-  line-height: 1.6;
-  padding-left: 1.5rem;
   position: relative;
+  padding: 0 0 0 var(--space-md);
+  margin-bottom: var(--space-xs);
+  font-size: var(--text-body-sm);
+  color: var(--color-body);
+  line-height: 1.55;
+}
+
+.nc-game-rules li:last-child {
+  margin-bottom: 0;
 }
 
 .nc-game-rules li::before {
-  content: '•';
+  content: '';
   position: absolute;
   left: 0;
-  color: #f59e0b;
-  font-size: 1.5rem;
-  line-height: 1.4;
+  top: 0.6em;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
 }
 
 @media (max-width: 768px) {
+  .nc-waiting-room {
+    padding: var(--space-lg) var(--space-md);
+  }
+
   .nc-waiting-container {
-    padding: 2rem;
-  }
-
-  .nc-title {
-    font-size: 2rem;
-  }
-
-  .nc-subtitle {
-    font-size: 1rem;
+    padding: var(--space-lg);
   }
 
   .nc-team-buttons {
     grid-template-columns: 1fr;
+  }
+
+  .nc-game-rules {
+    padding: var(--space-md);
   }
 }

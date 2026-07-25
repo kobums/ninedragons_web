@@ -47,7 +47,7 @@ export function NCGameBoard({
       {gameState.opponentUsedHiddenNotification && (
         <div className="nc-hidden-notification-overlay" onClick={onDismissHiddenNotification}>
           <div className="nc-hidden-notification" onClick={(e) => e.stopPropagation()}>
-            <h2>⚠️ 상대방이 히든 찬스를 사용했습니다!</h2>
+            <h2>상대방이 히든 찬스를 사용했습니다</h2>
             <p>상대방의 블록 중 하나를 선택할 수 있습니다.</p>
             <button onClick={onDismissHiddenNotification}>확인</button>
           </div>

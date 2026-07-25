@@ -1,99 +1,194 @@
+/* =============================================================
+   Game selection — cream canvas hero + alternating card surfaces
+   All rules are scoped to .game-selection: the stylesheets in this
+   app are global, so unscoped names (.game-description, .game-info)
+   leak across components.
+   ============================================================= */
+
 .game-selection {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  background: var(--color-canvas);
+  padding: var(--space-section) var(--space-lg);
 }
 
-.game-selection-container {
+.game-selection .game-selection-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 820px;
 }
 
-.game-selection-title {
+/* ---------- Header ---------- */
+
+.game-selection .game-selection-header {
   text-align: center;
-  color: white;
-  font-size: 3rem;
-  margin-bottom: 3rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: var(--space-xxl);
 }
 
-.game-cards {
+.game-selection .game-selection-eyebrow {
+  display: block;
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--space-md);
+}
+
+.game-selection .game-selection-title {
+  font-size: var(--text-display-xl);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display-xl);
+  color: var(--color-ink);
+}
+
+.game-selection .game-selection-lead {
+  margin-top: var(--space-sm);
+  font-size: var(--text-title-md);
+  color: var(--color-muted);
+}
+
+/* ---------- Cards ---------- */
+
+.game-selection .game-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 0 1rem;
+  gap: var(--space-lg);
 }
 
-.game-card {
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
+.game-selection .game-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid transparent;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.game-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+/* Cream card and dark product card alternate — the cream-to-dark
+   contrast is the system's pacing mechanism. */
+.game-selection .game-card.ninedragons {
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
 }
 
-.game-card.ninedragons {
-  border-top: 5px solid #3b82f6;
+.game-selection .game-card.ninedragons:hover {
+  background: var(--color-surface-dark-elevated);
 }
 
-.game-card.ninedragons:hover {
-  background: linear-gradient(to bottom, #eff6ff 0%, white 100%);
+.game-selection .game-card.ninedragons:active {
+  background: var(--color-surface-dark-soft);
 }
 
-.game-card.numberchange {
-  border-top: 5px solid #f59e0b;
+.game-selection .game-card.numberchange {
+  background: var(--color-surface-card);
+  border-color: var(--color-hairline);
+  color: var(--color-ink);
 }
 
-.game-card.numberchange:hover {
-  background: linear-gradient(to bottom, #fffbeb 0%, white 100%);
+.game-selection .game-card.numberchange:hover {
+  background: var(--color-surface-cream-strong);
 }
 
-.game-card-content h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #1f2937;
+.game-selection .game-card.numberchange:active {
+  background: var(--color-surface-cream-strong);
+  border-color: var(--color-primary);
 }
 
-.game-description {
-  font-size: 1.1rem;
-  color: #6b7280;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
+.game-selection .game-card-tag {
+  display: inline-block;
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  padding: var(--space-xxs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-md);
 }
 
-.game-info {
+.game-selection .game-card.ninedragons .game-card-tag {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.game-selection .game-card.numberchange .game-card-tag {
+  background: var(--color-canvas);
+  color: var(--color-muted);
+}
+
+.game-selection .game-card-content h2 {
+  font-size: var(--text-display-md);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-display-md);
+  margin-bottom: var(--space-xs);
+}
+
+.game-selection .game-card.ninedragons .game-card-content h2 {
+  color: var(--color-on-dark);
+}
+
+.game-selection .game-description {
+  font-size: var(--text-body-md);
+  margin-bottom: var(--space-lg);
+}
+
+.game-selection .game-card.ninedragons .game-description {
+  color: var(--color-on-dark-soft);
+}
+
+.game-selection .game-card.numberchange .game-description {
+  color: var(--color-body);
+}
+
+.game-selection .game-meta {
   display: flex;
-  gap: 1.5rem;
-  font-size: 0.9rem;
-  color: #9ca3af;
+  gap: var(--space-md);
+  font-size: var(--text-caption);
+  font-weight: 500;
 }
 
-.game-info span {
+.game-selection .game-card.ninedragons .game-meta {
+  color: var(--color-on-dark-soft);
+}
+
+.game-selection .game-card.numberchange .game-meta {
+  color: var(--color-muted);
+}
+
+.game-selection .game-meta span {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--space-xxs);
+}
+
+.game-selection .game-meta span + span::before {
+  content: '';
+  width: 3px;
+  height: 3px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  opacity: 0.5;
+  margin-right: var(--space-sm);
 }
 
 @media (max-width: 768px) {
-  .game-selection-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+  .game-selection {
+    padding: var(--space-xxl) var(--space-md);
   }
 
-  .game-cards {
+  .game-selection .game-cards {
     grid-template-columns: 1fr;
+    gap: var(--space-md);
   }
 
-  .game-card-content h2 {
-    font-size: 1.5rem;
+  .game-selection .game-card {
+    padding: var(--space-lg);
+  }
+
+  .game-selection .game-selection-header {
+    margin-bottom: var(--space-xl);
   }
 }

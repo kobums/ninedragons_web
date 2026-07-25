@@ -1,287 +1,275 @@
+/* =============================================================
+   넘버체인지 — game over
+   Result banner uses the system's three surface modes as the
+   outcome signal: coral callout (win), dark (lose), cream (draw).
+   ============================================================= */
+
 .nc-game-over {
   min-height: 100vh;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  padding: 20px;
-  overflow-y: auto;
+  background: var(--color-canvas);
+  padding: var(--space-xl) var(--space-lg);
 }
 
 .nc-game-over-container {
-  max-width: 900px;
+  max-width: 860px;
   margin: 0 auto;
 }
 
+/* ---------- Result banner ---------- */
+
 .nc-result-banner {
-  background: white;
-  border-radius: 20px;
-  padding: 3rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xxl) var(--space-xl);
   text-align: center;
-  margin-bottom: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin-bottom: var(--space-md);
 }
 
 .nc-result-banner.win {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .nc-result-banner.lose {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
 }
 
 .nc-result-banner.draw {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
+  background: var(--color-surface-card);
+  color: var(--color-ink);
 }
 
 .nc-result-title {
-  font-size: 3.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 800;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: var(--text-display-lg);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-display-lg);
+  color: inherit;
+  margin-bottom: var(--space-xxs);
 }
 
 .nc-result-subtitle {
-  font-size: 1.5rem;
-  opacity: 0.9;
+  font-size: var(--text-title-md);
+  opacity: 0.8;
 }
 
+/* ---------- Card shell ---------- */
+
+.nc-final-score,
+.nc-game-stats,
+.nc-round-summary {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.nc-game-stats h3,
+.nc-round-summary h3 {
+  font-family: var(--font-sans);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--space-md);
+}
+
+/* ---------- Final score ---------- */
+
 .nc-final-score {
-  background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: var(--space-lg);
 }
 
 .nc-final-team {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1.5rem 2.5rem;
-  border-radius: 15px;
-  transition: all 0.3s;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
 }
 
 .nc-final-team.your-team {
-  background: #fef3c7;
-  border: 3px solid #f59e0b;
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
 }
 
 .nc-final-team-label {
-  font-size: 1.2rem;
-  color: #6b7280;
-  font-weight: 600;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--color-muted);
 }
 
 .nc-final-team-score {
-  font-size: 4rem;
-  font-weight: 800;
-}
-
-.team1-color {
-  color: #3b82f6;
-}
-
-.team2-color {
-  color: #ef4444;
-}
-
-.draw-color {
-  color: #888888;
+  font-family: var(--font-display);
+  font-size: var(--text-display-lg);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display-lg);
+  line-height: 1;
 }
 
 .nc-final-separator {
-  font-size: 4rem;
-  font-weight: 700;
-  color: #9ca3af;
+  font-family: var(--font-display);
+  font-size: var(--text-display-md);
+  color: var(--color-muted-soft);
 }
 
-.nc-game-stats {
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.nc-game-stats h3 {
-  color: #374151;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-}
+/* ---------- Stats ---------- */
 
 .nc-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-sm);
 }
 
+/* Ink is set on the container, not on .nc-stat-value — the value span
+   also carries .team1-color/.team2-color, and a colour declaration on
+   .nc-stat-value would tie on specificity and win by source order,
+   silently flattening the team colour coding. */
 .nc-stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  background: #f9fafb;
-  border-radius: 10px;
+  gap: var(--space-xxs);
+  padding: var(--space-md);
+  background: var(--color-surface-card);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
 }
 
 .nc-stat-label {
-  font-size: 0.9rem;
-  color: #6b7280;
-  font-weight: 600;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--color-muted);
+  text-align: center;
 }
 
 .nc-stat-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #374151;
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display-sm);
+  line-height: 1;
 }
 
-.nc-round-summary {
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.nc-round-summary h3 {
-  color: #374151;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-}
+/* ---------- Round summary ---------- */
 
 .nc-summary-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-xs);
   max-height: 400px;
   overflow-y: auto;
-  padding-right: 0.5rem;
+  padding-right: var(--space-xxs);
 }
 
 .nc-summary-list::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .nc-summary-list::-webkit-scrollbar-track {
-  background: #f3f4f6;
-  border-radius: 4px;
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-pill);
 }
 
 .nc-summary-list::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 4px;
-}
-
-.nc-summary-list::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: var(--color-hairline);
+  border-radius: var(--radius-pill);
 }
 
 .nc-summary-item {
-  border: 2px solid #f3f4f6;
-  border-radius: 10px;
-  padding: 1rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
   display: flex;
   align-items: center;
-  gap: 1rem;
-  transition: all 0.3s;
-}
-
-.nc-summary-item:hover {
-  background: #fafafa;
-  border-color: #f59e0b;
+  gap: var(--space-md);
 }
 
 .nc-summary-round {
-  font-weight: 700;
-  color: #f59e0b;
-  font-size: 1.1rem;
-  min-width: 50px;
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  color: var(--color-muted-soft);
+  min-width: 34px;
 }
 
 .nc-summary-details {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
+  gap: var(--space-sm);
+  font-size: var(--text-body-sm);
 }
 
 .nc-summary-team {
   flex: 1;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .nc-summary-vs {
-  color: #9ca3af;
-  font-weight: 700;
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  color: var(--color-muted-soft);
 }
 
 .nc-summary-winner {
-  font-weight: 700;
-  min-width: 80px;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  min-width: 84px;
   text-align: right;
 }
+
+/* ---------- CTA ---------- */
 
 .nc-game-over-actions {
   display: flex;
   justify-content: center;
+  padding-top: var(--space-xs);
 }
 
 .nc-play-again-button {
-  padding: 1.25rem 3rem;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  font-size: 1.3rem;
-  font-weight: 700;
+  height: 48px;
+  padding: 0 var(--space-xxl);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--text-title-sm);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  transition: background-color 0.15s ease;
 }
 
-.nc-play-again-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+.nc-play-again-button:active {
+  background: var(--color-primary-active);
 }
 
 @media (max-width: 768px) {
+  .nc-game-over {
+    padding: var(--space-md) var(--space-sm);
+  }
+
   .nc-result-banner {
-    padding: 2rem;
+    padding: var(--space-xl) var(--space-lg);
   }
 
-  .nc-result-title {
-    font-size: 2.5rem;
-  }
-
-  .nc-result-subtitle {
-    font-size: 1.2rem;
+  .nc-final-score,
+  .nc-game-stats,
+  .nc-round-summary {
+    padding: var(--space-md);
   }
 
   .nc-final-score {
-    gap: 1.5rem;
-    padding: 1.5rem;
+    gap: var(--space-sm);
   }
 
   .nc-final-team {
-    padding: 1rem 1.5rem;
-  }
-
-  .nc-final-team-score {
-    font-size: 3rem;
-  }
-
-  .nc-final-separator {
-    font-size: 3rem;
+    padding: var(--space-sm) var(--space-md);
   }
 
   .nc-stats-grid {
@@ -291,21 +279,18 @@
   .nc-summary-item {
     flex-direction: column;
     align-items: flex-start;
+    gap: var(--space-xs);
   }
 
   .nc-summary-details {
     flex-direction: column;
-    gap: 0.5rem;
+    align-items: flex-start;
+    gap: var(--space-xxs);
     width: 100%;
   }
 
   .nc-summary-winner {
     width: 100%;
     text-align: left;
-  }
-
-  .nc-play-again-button {
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
   }
 }
