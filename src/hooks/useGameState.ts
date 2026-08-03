@@ -3,12 +3,16 @@ import type {
   GameState,
   Message,
   GameStartPayload,
+  GameStatePayload,
   RoundResultPayload,
   GameOverPayload,
   ErrorPayload,
   TilePlayedPayload,
   RoundHistory,
 } from '../types/game';
+import { ND_SESSION_KEY, clearSessionId, saveSessionId } from '../utils/session';
+
+const ALL_TILES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const initialGameState: GameState = {
   gameId: null,
@@ -30,6 +34,7 @@ const initialGameState: GameState = {
   winner: '',
   error: null,
   isWaiting: false,
+  opponentDisconnected: false,
 };
 
 export const useGameState = (lastMessage: Message | null) => {
@@ -43,6 +48,9 @@ export const useGameState = (lastMessage: Message | null) => {
     switch (lastMessage.type) {
       case 'player_joined':
         console.log('Player joined:', lastMessage.payload);
+        if (lastMessage.payload.sessionId) {
+          saveSessionId(ND_SESSION_KEY, lastMessage.payload.sessionId);
+        }
         setGameState((prev) => ({
           ...prev,
           gameId: lastMessage.payload.gameId,
@@ -166,10 +174,79 @@ export const useGameState = (lastMessage: Message | null) => {
         });
         break;
 
+      case 'game_state': {
+        // 재접속 성공: 서버 스냅샷으로 전체 상태 복원
+        const statePayload = lastMessage.payload as GameStatePayload;
+        console.log('========== GAME_STATE (rejoin) received ==========');
+        console.log('Payload:', statePayload);
+
+        const yourUsed =
+          statePayload.yourColor === 'blue'
+            ? statePayload.blueUsedTiles
+            : statePayload.redUsedTiles;
+        const opponentUsed =
+          statePayload.yourColor === 'blue'
+            ? statePayload.redUsedTiles
+            : statePayload.blueUsedTiles;
+
+        const currentRoundTiles: { blue?: number; red?: number } = {};
+        if (statePayload.blueRoundTile !== null) {
+          currentRoundTiles.blue = statePayload.blueRoundTile;
+        }
+        if (statePayload.redRoundTile !== null) {
+          currentRoundTiles.red = statePayload.redRoundTile;
+        }
+
+        setGameState({
+          ...initialGameState,
+          gameId: statePayload.gameId,
+          yourColor: statePayload.yourColor,
+          currentRound: statePayload.currentRound,
+          blueWins: statePayload.blueWins,
+          redWins: statePayload.redWins,
+          blueName: statePayload.blueName,
+          redName: statePayload.redName,
+          currentPlayer: statePayload.currentPlayer,
+          usedTiles: yourUsed ?? [],
+          availableTiles: ALL_TILES.filter((t) => !(yourUsed ?? []).includes(t)),
+          opponentUsedTiles: opponentUsed ?? [],
+          roundHistory: statePayload.roundHistory ?? [],
+          currentRoundTiles,
+          isGameStarted: true,
+          isWaiting: false,
+          opponentDisconnected: !statePayload.opponentConnected,
+        });
+        break;
+      }
+
+      case 'opponent_disconnected':
+        console.log('Opponent disconnected:', lastMessage.payload);
+        setGameState((prev) => ({
+          ...prev,
+          opponentDisconnected: true,
+        }));
+        break;
+
+      case 'opponent_reconnected':
+        console.log('Opponent reconnected');
+        setGameState((prev) => ({
+          ...prev,
+          opponentDisconnected: false,
+        }));
+        break;
+
+      case 'session_expired':
+        // 복구할 게임이 없음: 세션을 비우고 로비로
+        console.log('Session expired, back to lobby');
+        clearSessionId(ND_SESSION_KEY);
+        setGameState(initialGameState);
+        break;
+
       case 'game_over':
         const overPayload = lastMessage.payload as GameOverPayload;
         console.log('========== GAME_OVER received ==========');
         console.log('Payload:', overPayload);
+        clearSessionId(ND_SESSION_KEY);
         setGameState((prev) => {
           console.log('Round history at game over:', {
             historyLength: prev.roundHistory.length,
@@ -213,6 +290,7 @@ export const useGameState = (lastMessage: Message | null) => {
   };
 
   const resetGame = () => {
+    clearSessionId(ND_SESSION_KEY);
     setGameState(initialGameState);
   };
 

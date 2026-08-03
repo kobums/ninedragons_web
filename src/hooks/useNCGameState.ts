@@ -3,11 +3,13 @@ import type {
   NCGameState,
   NCMessage,
   NCGameStartPayload,
+  NCGameStatePayload,
   NCRoundResultPayload,
   NCGameOverPayload,
   NCErrorPayload,
   NCRoundHistory,
 } from '../types/numberchange';
+import { NC_SESSION_KEY, clearSessionId, saveSessionId } from '../utils/session';
 
 const initialGameState: NCGameState = {
   gameId: null,
@@ -37,6 +39,7 @@ const initialGameState: NCGameState = {
   showHiddenBlockSelection: false,
   selectedBlockChoice: null,
   pendingSubmitUseHidden: null,
+  opponentDisconnected: false,
 };
 
 export const useNCGameState = (lastMessage: NCMessage | null) => {
@@ -50,6 +53,9 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
     switch (lastMessage.type) {
       case 'nc_player_joined':
         console.log('[NumberChange] Player joined:', lastMessage.payload);
+        if (lastMessage.payload.sessionId) {
+          saveSessionId(NC_SESSION_KEY, lastMessage.payload.sessionId);
+        }
         setGameState((prev) => ({
           ...prev,
           gameId: lastMessage.payload.gameId,
@@ -197,10 +203,82 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
         });
         break;
 
+      case 'nc_game_state': {
+        // 재접속 성공: 서버 스냅샷으로 전체 상태 복원
+        const statePayload = lastMessage.payload as NCGameStatePayload;
+        console.log('[NumberChange] ========== GAME_STATE (rejoin) received ==========');
+        console.log('[NumberChange] Payload:', statePayload);
+
+        const history = statePayload.roundHistory ?? [];
+
+        // usedBlocks는 라운드 결과 처리와 동일한 규칙으로 히스토리에서 재구성
+        const usedBlocks = history.flatMap((h) => {
+          const myBlocks =
+            statePayload.yourTeam === 'team1'
+              ? [h.team1Block1, h.team1Block2]
+              : [h.team2Block1, h.team2Block2];
+          const largerBlock = Math.max(...myBlocks);
+          return myBlocks.filter((b) => b !== largerBlock);
+        });
+
+        setGameState({
+          ...initialGameState,
+          gameId: statePayload.gameId,
+          yourTeam: statePayload.yourTeam,
+          currentRound: statePayload.currentRound,
+          team1Score: statePayload.team1Score,
+          team2Score: statePayload.team2Score,
+          team1Name: statePayload.team1Name,
+          team2Name: statePayload.team2Name,
+          currentTeam: statePayload.currentTeam,
+          availableBlocks: statePayload.yourBlocks ?? [],
+          usedBlocks,
+          opponentAvailableBlocks: statePayload.opponentBlocks ?? [],
+          roundHistory: history,
+          isGameStarted: true,
+          isWaiting: false,
+          hasUsedHidden: statePayload.yourUsedHidden,
+          opponentHasUsedHidden: statePayload.opponentUsedHidden,
+          hasSubmitted: statePayload.youSubmitted,
+          opponentUsedHiddenThisRound: statePayload.opponentUsedHiddenThisRound,
+          // 상대가 이번 라운드 히든을 썼는데 아직 블록을 고르지 않았다면 선택 UI 복원
+          showHiddenBlockSelection:
+            statePayload.opponentUsedHiddenThisRound &&
+            statePayload.youSubmitted &&
+            !statePayload.yourBlockChoiceMade,
+          opponentDisconnected: !statePayload.opponentConnected,
+        });
+        break;
+      }
+
+      case 'nc_opponent_disconnected':
+        console.log('[NumberChange] Opponent disconnected:', lastMessage.payload);
+        setGameState((prev) => ({
+          ...prev,
+          opponentDisconnected: true,
+        }));
+        break;
+
+      case 'nc_opponent_reconnected':
+        console.log('[NumberChange] Opponent reconnected');
+        setGameState((prev) => ({
+          ...prev,
+          opponentDisconnected: false,
+        }));
+        break;
+
+      case 'nc_session_expired':
+        // 복구할 게임이 없음: 세션을 비우고 로비로
+        console.log('[NumberChange] Session expired, back to lobby');
+        clearSessionId(NC_SESSION_KEY);
+        setGameState(initialGameState);
+        break;
+
       case 'nc_game_over':
         const overPayload = lastMessage.payload as NCGameOverPayload;
         console.log('[NumberChange] ========== GAME_OVER received ==========');
         console.log('[NumberChange] Payload:', overPayload);
+        clearSessionId(NC_SESSION_KEY);
         setGameState((prev) => ({
           ...prev,
           isGameOver: true,
@@ -271,6 +349,7 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
   };
 
   const resetGame = () => {
+    clearSessionId(NC_SESSION_KEY);
     setGameState(initialGameState);
   };
 

@@ -10,7 +10,12 @@ export type MessageType =
   | 'timeout'
   | 'error'
   | 'player_joined'
-  | 'waiting_player';
+  | 'waiting_player'
+  | 'rejoin_game'
+  | 'game_state'
+  | 'opponent_disconnected'
+  | 'opponent_reconnected'
+  | 'session_expired';
 
 export interface Message {
   type: MessageType;
@@ -70,6 +75,33 @@ export interface RoundHistory {
   winner: PlayerColor | '';
 }
 
+export interface RejoinGamePayload {
+  sessionId: string;
+}
+
+export interface OpponentDisconnectedPayload {
+  message: string;
+  graceSeconds: number;
+}
+
+// 재접속 시 서버가 내려주는 게임 전체 상태
+export interface GameStatePayload {
+  gameId: string;
+  yourColor: PlayerColor;
+  currentRound: number;
+  blueWins: number;
+  redWins: number;
+  blueName: string;
+  redName: string;
+  currentPlayer: PlayerColor;
+  blueUsedTiles: number[];
+  redUsedTiles: number[];
+  blueRoundTile: number | null;
+  redRoundTile: number | null;
+  roundHistory: RoundHistory[] | null;
+  opponentConnected: boolean;
+}
+
 export interface GameState {
   gameId: string | null;
   yourColor: PlayerColor | null;
@@ -90,4 +122,5 @@ export interface GameState {
   winner: PlayerColor | '';
   error: string | null;
   isWaiting: boolean;
+  opponentDisconnected: boolean; // 상대방이 재접속 대기 중인지
 }

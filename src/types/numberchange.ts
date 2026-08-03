@@ -10,7 +10,12 @@ export type NCMessageType =
   | 'nc_error'
   | 'nc_player_joined'
   | 'nc_waiting_player'
-  | 'nc_use_hidden';
+  | 'nc_use_hidden'
+  | 'nc_rejoin_game'
+  | 'nc_game_state'
+  | 'nc_opponent_disconnected'
+  | 'nc_opponent_reconnected'
+  | 'nc_session_expired';
 
 export interface NCMessage {
   type: NCMessageType;
@@ -79,6 +84,37 @@ export interface NCRoundHistory {
   team2Hidden: boolean;
 }
 
+export interface NCRejoinGamePayload {
+  sessionId: string;
+}
+
+export interface NCOpponentDisconnectedPayload {
+  message: string;
+  graceSeconds: number;
+}
+
+// 재접속 시 서버가 내려주는 게임 전체 상태
+export interface NCGameStatePayload {
+  gameId: string;
+  yourTeam: TeamColor;
+  currentRound: number;
+  team1Score: number;
+  team2Score: number;
+  team1Name: string;
+  team2Name: string;
+  currentTeam: TeamColor;
+  yourBlocks: number[];
+  opponentBlocks: number[];
+  roundHistory: NCRoundHistory[] | null;
+  yourUsedHidden: boolean;
+  opponentUsedHidden: boolean;
+  youSubmitted: boolean;
+  opponentSubmitted: boolean;
+  opponentUsedHiddenThisRound: boolean;
+  yourBlockChoiceMade: boolean;
+  opponentConnected: boolean;
+}
+
 export interface NCGameState {
   gameId: string | null;
   yourTeam: TeamColor | null;
@@ -107,4 +143,5 @@ export interface NCGameState {
   showHiddenBlockSelection: boolean; // 히든 사용 시 블록 선택 UI 표시 여부
   selectedBlockChoice: number | null; // 히든 사용 시 선택 (1: 블록1, 2: 블록2)
   pendingSubmitUseHidden: boolean | null; // 제출 대기 중인 히든 옵션
+  opponentDisconnected: boolean; // 상대방이 재접속 대기 중인지
 }
