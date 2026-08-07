@@ -1,0 +1,36 @@
+.dv-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #201a2e 0%, #14101f 100%);
+  padding: 24px;
+}
+
+.dv-game-over-container {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+
+.dv-over-title {
+  margin: 0;
+  color: #f6c344;
+  font-size: 34px;
+}
+
+.dv-over-winner {
+  margin: 0;
+  color: #f4f1ea;
+  font-size: 16px;
+}
+
+.dv-over-board {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}

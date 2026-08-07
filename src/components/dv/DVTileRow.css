@@ -1,0 +1,133 @@
+.dv-tile-row {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.dv-tile-row.current {
+  border-color: #f6c344;
+}
+
+.dv-tile-row.eliminated {
+  opacity: 0.45;
+}
+
+.dv-tile-row-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.dv-player-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #f4f1ea;
+}
+
+.dv-turn-badge,
+.dv-out-badge,
+.dv-offline-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.dv-turn-badge {
+  background: #f6c344;
+  color: #2b2113;
+}
+
+.dv-out-badge {
+  background: #7a2f2f;
+  color: #ffdede;
+}
+
+.dv-offline-badge {
+  background: #6b6b6b;
+  color: #f0f0f0;
+}
+
+.dv-tiles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dv-tile-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dv-tile {
+  width: 44px;
+  height: 62px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-size: 22px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  padding: 0;
+}
+
+.dv-tile.black {
+  background: #1d1d22;
+  color: #f4f1ea;
+  border-color: #3a3a42;
+}
+
+.dv-tile.white {
+  background: #f4f1ea;
+  color: #1d1d22;
+  border-color: #d8d2c4;
+}
+
+/* 공개된 타일은 눕힌 느낌으로 구분 */
+.dv-tile.revealed {
+  transform: rotate(-6deg) translateY(4px);
+  opacity: 0.85;
+  box-shadow: none;
+}
+
+.dv-tile.hidden {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+.dv-tile.clickable {
+  cursor: pointer;
+}
+
+.dv-tile.clickable:hover {
+  transform: translateY(-4px);
+}
+
+.dv-tile.selected {
+  border-color: #f6c344;
+  transform: translateY(-6px);
+}
+
+.dv-insert-slot {
+  width: 26px;
+  height: 62px;
+  border-radius: 8px;
+  border: 2px dashed #f6c344;
+  background: rgba(246, 195, 68, 0.12);
+  color: #f6c344;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dv-insert-slot:hover {
+  background: rgba(246, 195, 68, 0.3);
+}
