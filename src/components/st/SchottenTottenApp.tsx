@@ -85,16 +85,27 @@ export function SchottenTottenApp({ onBack }: SchottenTottenAppProps) {
           onPlayCard={(handIndex, stoneIndex) =>
             sendMessage({ type: 'st_play_card', payload: { handIndex, stoneIndex } })
           }
+          onPlayRuse={(payload) =>
+            sendMessage({ type: 'st_play_ruse', payload })
+          }
           onClaimStone={(stoneIndex) =>
             sendMessage({ type: 'st_claim_stone', payload: { stoneIndex } })
           }
           onEndTurn={() => sendMessage({ type: 'st_end_turn' })}
+          onDraw={(deck) => sendMessage({ type: 'st_draw', payload: { deck } })}
+          onPass={() => sendMessage({ type: 'st_pass' })}
+          onRecruiterDraw={(deck) =>
+            sendMessage({ type: 'st_recruiter_draw', payload: { deck } })
+          }
+          onRecruiterReturn={(handIndex) =>
+            sendMessage({ type: 'st_recruiter_return', payload: { handIndex } })
+          }
         />
       ) : (
         <STWaitingRoom
           hasJoined={hasJoined}
-          onJoinGame={(playerName) =>
-            sendMessage({ type: 'st_join_game', payload: { playerName } })
+          onJoinGame={(playerName, mode) =>
+            sendMessage({ type: 'st_join_game', payload: { playerName, mode } })
           }
           onBack={onBack}
         />

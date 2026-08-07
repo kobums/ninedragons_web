@@ -1,19 +1,21 @@
 import { useState } from 'react';
+import type { STMode } from '../../types/schottentotten';
 import './STWaitingRoom.css';
 
 interface STWaitingRoomProps {
   hasJoined: boolean;
-  onJoinGame: (playerName: string) => void;
+  onJoinGame: (playerName: string, mode: STMode) => void;
   onBack: () => void;
 }
 
 export function STWaitingRoom({ hasJoined, onJoinGame, onBack }: STWaitingRoomProps) {
   const [playerName, setPlayerName] = useState('');
+  const [mode, setMode] = useState<STMode>('basic');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (playerName.trim()) {
-      onJoinGame(playerName.trim());
+      onJoinGame(playerName.trim(), mode);
     }
   };
 
@@ -37,6 +39,29 @@ export function STWaitingRoom({ hasJoined, onJoinGame, onBack }: STWaitingRoomPr
                 maxLength={20}
                 required
               />
+            </div>
+
+            <div className="st-form-group">
+              <label>게임 모드</label>
+              <div className="st-mode-buttons">
+                <button
+                  type="button"
+                  className={`st-mode-button${mode === 'basic' ? ' selected' : ''}`}
+                  onClick={() => setMode('basic')}
+                >
+                  기본
+                  <small>클랜 카드 54장</small>
+                </button>
+                <button
+                  type="button"
+                  className={`st-mode-button${mode === 'tactic' ? ' selected' : ''}`}
+                  onClick={() => setMode('tactic')}
+                >
+                  전술 카드
+                  <small>특수 카드 10장 추가</small>
+                </button>
+              </div>
+              <small className="st-mode-hint">같은 모드를 고른 상대와 매칭됩니다</small>
             </div>
 
             <button type="submit" className="st-join-button">
