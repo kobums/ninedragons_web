@@ -72,7 +72,7 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
         <DVGameBoard
           game={game}
           toasts={toasts}
-          onDraw={() => sendMessage({ type: 'dv_draw_tile' })}
+          onDraw={(color) => sendMessage({ type: 'dv_draw_tile', payload: { color } })}
           onGuess={(targetSeat, tileIndex, value) =>
             sendMessage({ type: 'dv_guess', payload: { targetSeat, tileIndex, value } })
           }

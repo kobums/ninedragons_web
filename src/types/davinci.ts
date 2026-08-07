@@ -79,6 +79,8 @@ export interface DVGameState {
   phase: DVPhase;
   currentSeat: number;
   deckCount: number;
+  deckBlackCount: number;
+  deckWhiteCount: number;
   playerCount: number;
   pendingJokerSeats?: number[];
   yourPendingJokers?: DVTileView[];

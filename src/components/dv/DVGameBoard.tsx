@@ -8,7 +8,7 @@ import './DVGameBoard.css';
 interface DVGameBoardProps {
   game: DVGameState;
   toasts: DVToast[];
-  onDraw: () => void;
+  onDraw: (color: 'black' | 'white') => void;
   onGuess: (targetSeat: number, tileIndex: number, value: number) => void;
   onContinue: (cont: boolean) => void;
   onPlaceJoker: (tileId: number, position: number) => void;
@@ -118,10 +118,25 @@ export function DVGameBoard({
       </div>
 
       <div className="dv-center">
-        <div className="dv-deck">
-          <div className="dv-deck-pile">{game.deckCount}</div>
-          <span className="dv-deck-label">남은 타일</span>
-        </div>
+        {(['black', 'white'] as const).map((color) => {
+          const count = color === 'black' ? game.deckBlackCount : game.deckWhiteCount;
+          const drawable = game.phase === 'draw' && myTurn && count > 0;
+          return (
+            <div key={color} className="dv-deck">
+              <button
+                type="button"
+                className={`dv-deck-pile ${color} ${drawable ? 'drawable' : ''}`}
+                disabled={!drawable}
+                onClick={() => onDraw(color)}
+              >
+                {count}
+              </button>
+              <span className="dv-deck-label">
+                {color === 'black' ? '검은 타일' : '흰 타일'}
+              </span>
+            </div>
+          );
+        })}
         {game.drawnTile && (
           <div className="dv-drawn">
             <DVTile tile={game.drawnTile} />
@@ -159,7 +174,6 @@ export function DVGameBoard({
         guessValue={guessValue}
         onPickValue={setGuessValue}
         onConfirmGuess={handleConfirmGuess}
-        onDraw={onDraw}
         onContinue={onContinue}
       />
     </div>

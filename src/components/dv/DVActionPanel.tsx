@@ -9,7 +9,6 @@ interface DVActionPanelProps {
   guessValue: number | null;
   onPickValue: (value: number) => void;
   onConfirmGuess: () => void;
-  onDraw: () => void;
   onContinue: (cont: boolean) => void;
 }
 
@@ -24,7 +23,6 @@ export function DVActionPanel({
   guessValue,
   onPickValue,
   onConfirmGuess,
-  onDraw,
   onContinue,
 }: DVActionPanelProps) {
   // 초기 조커 배치 단계
@@ -53,9 +51,9 @@ export function DVActionPanel({
     case 'draw':
       return (
         <div className="dv-action-panel">
-          <button type="button" className="dv-primary-button" onClick={onDraw}>
-            더미에서 타일 뽑기 ({game.deckCount}장 남음)
-          </button>
+          <p className="dv-action-hint">
+            뽑을 타일의 색을 선택하세요 — 검은 더미 또는 흰 더미를 누르면 됩니다
+          </p>
         </div>
       );
 

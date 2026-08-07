@@ -70,14 +70,40 @@
   width: 44px;
   height: 62px;
   border-radius: 8px;
-  background: repeating-linear-gradient(135deg, #2c2640, #2c2640 6px, #241f36 6px, #241f36 12px);
-  border: 2px solid #4a4363;
-  color: #d8d2e8;
   font-weight: 800;
   font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  cursor: default;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.dv-deck-pile.black {
+  background: #1d1d22;
+  border: 2px solid #3a3a42;
+  color: #f4f1ea;
+}
+
+.dv-deck-pile.white {
+  background: #f4f1ea;
+  border: 2px solid #d8d2c4;
+  color: #1d1d22;
+}
+
+.dv-deck-pile:disabled {
+  opacity: 0.5;
+}
+
+.dv-deck-pile.drawable {
+  cursor: pointer;
+  border-color: #f6c344;
+  box-shadow: 0 3px 10px rgba(246, 195, 68, 0.25);
+}
+
+.dv-deck-pile.drawable:hover {
+  transform: translateY(-4px);
 }
 
 .dv-deck-label {
