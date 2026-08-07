@@ -1,0 +1,314 @@
+/* =============================================================
+   Schotten Totten board — 9 lanes on the cream canvas.
+   All rules scoped to .st-board (stylesheets are global).
+   ============================================================= */
+
+.st-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: var(--color-canvas);
+  padding: var(--space-md);
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---------- 플레이어 바 ---------- */
+
+.st-board .st-player-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline-soft);
+}
+
+.st-board .st-player-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.st-board .st-player-name {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.st-board .st-player-meta,
+.st-board .st-player-stones {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.st-board .st-turn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-hairline);
+  flex-shrink: 0;
+}
+
+.st-board .st-turn-dot.active {
+  background: var(--color-primary);
+}
+
+/* ---------- 레인 ---------- */
+
+.st-board .st-lanes {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: var(--space-xxs);
+  flex: 1;
+  align-content: center;
+}
+
+.st-board .st-lane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xxs);
+  padding: var(--space-xxs);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: default;
+}
+
+.st-board .st-lane.playable {
+  cursor: pointer;
+  border-color: var(--color-primary-ring);
+  background: var(--color-primary-tint);
+}
+
+.st-board .st-lane.playable:hover {
+  border-color: var(--color-primary);
+}
+
+.st-board .st-lane.claimable {
+  cursor: pointer;
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  animation: st-claim-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes st-claim-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--color-primary-ring);
+  }
+  50% {
+    box-shadow: 0 0 0 4px var(--color-primary-ring);
+  }
+}
+
+.st-board .st-lane.flash {
+  background: var(--color-primary-tint);
+}
+
+/* 카드 열: 상대는 돌 쪽으로, 나는 돌에서 아래로 쌓인다 */
+.st-board .st-lane-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 96px;
+  justify-content: flex-end;
+}
+
+.st-board .st-lane-cards.st-lane-you {
+  justify-content: flex-start;
+}
+
+/* ---------- 돌 ---------- */
+
+.st-board .st-stone {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-cream-strong);
+  border: 1px solid var(--color-hairline);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+.st-board .st-lane.claimable .st-stone {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 10px;
+}
+
+.st-board .st-stone.owned-you {
+  background: var(--color-primary);
+  border-color: var(--color-primary-active);
+  color: var(--color-on-primary);
+  transform: translateY(10px);
+}
+
+.st-board .st-stone.owned-opp {
+  background: var(--color-surface-dark);
+  border-color: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  transform: translateY(-10px);
+}
+
+/* ---------- 클랜 카드 ---------- */
+
+.st-board .st-card {
+  width: 30px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xs);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  color: var(--color-on-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+.st-board .st-card.st-card-small {
+  width: 100%;
+  max-width: 30px;
+  height: 28px;
+  font-size: var(--text-body-sm);
+}
+
+.st-board .st-clan-0 {
+  background: var(--st-clan-0);
+}
+.st-board .st-clan-1 {
+  background: var(--st-clan-1);
+}
+.st-board .st-clan-2 {
+  background: var(--st-clan-2);
+}
+.st-board .st-clan-3 {
+  background: var(--st-clan-3);
+}
+.st-board .st-clan-4 {
+  background: var(--st-clan-4);
+}
+.st-board .st-clan-5 {
+  background: var(--st-clan-5);
+}
+
+/* ---------- 상태 안내 ---------- */
+
+.st-board .st-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: var(--control-height);
+}
+
+.st-board .st-status-text {
+  font-size: var(--text-body-sm);
+  color: var(--color-body);
+  text-align: center;
+}
+
+.st-board .st-end-turn-button {
+  height: 32px;
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  font-size: var(--text-button);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.st-board .st-end-turn-button:hover {
+  background: var(--color-primary-tint);
+}
+
+/* ---------- 손패 ---------- */
+
+.st-board .st-hand {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-md);
+}
+
+.st-board .st-hand-slot {
+  padding: var(--space-xxs);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.st-board .st-hand-slot:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.st-board .st-hand-slot:not(:disabled):hover {
+  transform: translateY(-4px);
+}
+
+.st-board .st-hand-slot.selected {
+  border-color: var(--color-primary);
+  transform: translateY(-8px);
+}
+
+.st-board .st-hand-slot .st-card {
+  width: 40px;
+  height: 56px;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 480px) {
+  .st-board {
+    padding: var(--space-xs);
+    gap: var(--space-xs);
+  }
+
+  .st-board .st-card {
+    font-size: var(--text-caption);
+  }
+
+  .st-board .st-card.st-card-small {
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .st-board .st-lane-cards {
+    min-height: 82px;
+  }
+
+  .st-board .st-stone {
+    max-width: 34px;
+    font-size: 11px;
+  }
+
+  .st-board .st-lane.claimable .st-stone {
+    font-size: 9px;
+  }
+
+  .st-board .st-hand-slot .st-card {
+    width: 34px;
+    height: 48px;
+  }
+}

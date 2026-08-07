@@ -1,0 +1,172 @@
+/* =============================================================
+   Schotten Totten waiting room — cream hero + rules card.
+   All rules scoped to .st-waiting-room.
+   ============================================================= */
+
+.st-waiting-room {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.st-waiting-room .st-waiting-container {
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.st-waiting-room .st-eyebrow {
+  display: block;
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.st-waiting-room .st-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-lg);
+  letter-spacing: var(--tracking-display-lg);
+  color: var(--color-ink);
+}
+
+.st-waiting-room .st-subtitle {
+  margin-top: var(--space-xs);
+  font-size: var(--text-body-md);
+  color: var(--color-muted);
+  margin-bottom: var(--space-xl);
+}
+
+/* ---------- 참가 폼 ---------- */
+
+.st-waiting-room .st-join-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  text-align: left;
+}
+
+.st-waiting-room .st-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.st-waiting-room .st-form-group label {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-body-strong);
+}
+
+.st-waiting-room .st-form-group input {
+  height: var(--control-height);
+  padding: 0 var(--space-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-soft);
+  font-size: var(--text-body-md);
+  color: var(--color-ink);
+}
+
+.st-waiting-room .st-form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.st-waiting-room .st-join-button {
+  height: var(--control-height);
+  border-radius: var(--radius-pill);
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.st-waiting-room .st-join-button:hover {
+  background: var(--color-primary-active);
+}
+
+.st-waiting-room .st-back-button {
+  height: var(--control-height);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+.st-waiting-room .st-back-button:hover {
+  border-color: var(--color-muted);
+  color: var(--color-body);
+}
+
+/* ---------- 대기 중 ---------- */
+
+.st-waiting-room .st-waiting-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) 0;
+  color: var(--color-body);
+}
+
+.st-waiting-room .st-waiting-message small {
+  color: var(--color-muted);
+}
+
+.st-waiting-room .st-spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  border: 3px solid var(--color-hairline);
+  border-top-color: var(--color-primary);
+  animation: st-spin 0.9s linear infinite;
+}
+
+@keyframes st-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- 규칙 ---------- */
+
+.st-waiting-room .st-game-rules {
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  text-align: left;
+}
+
+.st-waiting-room .st-game-rules h3 {
+  font-size: var(--text-title-sm);
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+
+.st-waiting-room .st-game-rules ul {
+  margin: 0;
+  padding-left: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.st-waiting-room .st-game-rules li {
+  font-size: var(--text-body-sm);
+  color: var(--color-body);
+  line-height: 1.5;
+}
