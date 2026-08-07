@@ -14,12 +14,17 @@ interface DVLobbyProps {
 
 export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProps) {
   const [playerName, setPlayerName] = useState('');
+  // 연타로 join 이 두 번 나가는 것을 막는다. 서버에도 가드가 있지만
+  // 버튼을 잠가 두 번째 클릭 자체가 나가지 않게 한다.
+  const [joining, setJoining] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (playerName.trim()) {
-      onJoin(playerName.trim());
-    }
+    if (joining || !playerName.trim()) return;
+    setJoining(true);
+    onJoin(playerName.trim());
+    // 응답이 늦거나 실패해도 다시 시도할 수 있게 잠깐만 잠근다
+    setTimeout(() => setJoining(false), 2000);
   };
 
   return (
@@ -42,8 +47,8 @@ export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProp
                 required
               />
             </div>
-            <button type="submit" className="dv-primary-button">
-              입장하기
+            <button type="submit" className="dv-primary-button" disabled={joining}>
+              {joining ? '입장 중...' : '입장하기'}
             </button>
             <button type="button" className="dv-ghost-button" onClick={onBack}>
               게임 선택으로
