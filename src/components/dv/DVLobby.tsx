@@ -83,7 +83,10 @@ export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProp
                 {lobby.canStart ? '게임 시작' : '2명 이상 모여야 합니다'}
               </button>
             ) : (
-              <p className="dv-lobby-hint">호스트가 시작하기를 기다리는 중...</p>
+              <p className="dv-lobby-hint">
+                👑 {lobby.players.find((p) => p.seat === lobby.hostSeat)?.name ?? '호스트'}
+                님이 시작 버튼을 누르면 게임이 시작됩니다
+              </p>
             )}
 
             <button type="button" className="dv-ghost-button" onClick={onLeave}>
