@@ -9,6 +9,7 @@ interface DVGameBoardProps {
   game: DVGameState;
   toasts: DVToast[];
   onDraw: (color: 'black' | 'white') => void;
+  onTakeInitial: (color: 'black' | 'white') => void;
   onGuess: (targetSeat: number, tileIndex: number, value: number) => void;
   onContinue: (cont: boolean) => void;
   onPlaceJoker: (tileId: number, position: number) => void;
@@ -49,6 +50,7 @@ export function DVGameBoard({
   game,
   toasts,
   onDraw,
+  onTakeInitial,
   onGuess,
   onContinue,
   onPlaceJoker,
@@ -68,7 +70,9 @@ export function DVGameBoard({
 
   const me = game.players.find((p) => p.seat === game.yourSeat);
   const opponents = game.players.filter((p) => p.seat !== game.yourSeat);
-  const myTurn = game.currentSeat === game.yourSeat && game.phase !== 'joker_setup';
+  // 셋업 단계(시작 타일·조커 배치)는 턴 개념이 없다
+  const setupPhase = game.phase === 'initial_draw' || game.phase === 'joker_setup';
+  const myTurn = game.currentSeat === game.yourSeat && !setupPhase;
 
   const guessMode = game.phase === 'guess' && myTurn;
   const myPendingJoker = game.yourPendingJokers?.[0];
@@ -107,7 +111,7 @@ export function DVGameBoard({
             key={p.seat}
             player={p}
             isYou={false}
-            isCurrent={game.currentSeat === p.seat && game.phase !== 'joker_setup'}
+            isCurrent={game.currentSeat === p.seat && !setupPhase}
             selectable={guessMode && !p.eliminated}
             selectedIndex={selectedTarget?.seat === p.seat ? selectedTarget.tileIndex : null}
             onSelectTile={(tileIndex) => {
@@ -120,14 +124,17 @@ export function DVGameBoard({
       <div className="dv-center">
         {(['black', 'white'] as const).map((color) => {
           const count = color === 'black' ? game.deckBlackCount : game.deckWhiteCount;
-          const drawable = game.phase === 'draw' && myTurn && count > 0;
+          const initialMode =
+            game.phase === 'initial_draw' && (me?.initialRemaining ?? 0) > 0;
+          const drawable =
+            count > 0 && (initialMode || (game.phase === 'draw' && myTurn));
           return (
             <div key={color} className="dv-deck">
               <button
                 type="button"
                 className={`dv-deck-pile ${color} ${drawable ? 'drawable' : ''}`}
                 disabled={!drawable}
-                onClick={() => onDraw(color)}
+                onClick={() => (initialMode ? onTakeInitial(color) : onDraw(color))}
               >
                 {count}
               </button>

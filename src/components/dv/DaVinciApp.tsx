@@ -73,6 +73,9 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
           game={game}
           toasts={toasts}
           onDraw={(color) => sendMessage({ type: 'dv_draw_tile', payload: { color } })}
+          onTakeInitial={(color) =>
+            sendMessage({ type: 'dv_take_initial', payload: { color } })
+          }
           onGuess={(targetSeat, tileIndex, value) =>
             sendMessage({ type: 'dv_guess', payload: { targetSeat, tileIndex, value } })
           }

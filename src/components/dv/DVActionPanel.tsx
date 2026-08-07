@@ -25,6 +25,21 @@ export function DVActionPanel({
   onConfirmGuess,
   onContinue,
 }: DVActionPanelProps) {
+  // 시작 타일 가져오기 단계 (전원 동시)
+  if (game.phase === 'initial_draw') {
+    const myRemaining =
+      game.players.find((p) => p.seat === game.yourSeat)?.initialRemaining ?? 0;
+    return (
+      <div className="dv-action-panel">
+        <p className="dv-action-hint">
+          {myRemaining > 0
+            ? `시작 타일 ${myRemaining}장을 가져오세요 — 검은/흰 더미를 눌러 원하는 색을 고르세요`
+            : '다른 플레이어가 시작 타일을 가져가는 중...'}
+        </p>
+      </div>
+    );
+  }
+
   // 초기 조커 배치 단계
   if (game.phase === 'joker_setup') {
     const myPending = (game.yourPendingJokers?.length ?? 0) > 0;

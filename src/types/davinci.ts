@@ -4,6 +4,7 @@ export type DVTileColor = 'black' | 'white';
 
 export type DVPhase =
   | 'lobby'
+  | 'initial_draw'
   | 'joker_setup'
   | 'draw'
   | 'guess'
@@ -19,6 +20,7 @@ export type DVMessageType =
   | 'dv_start_game'
   | 'dv_rejoin_game'
   | 'dv_place_joker'
+  | 'dv_take_initial'
   | 'dv_draw_tile'
   | 'dv_guess'
   | 'dv_continue_choice'
@@ -55,6 +57,8 @@ export interface DVPlayerView {
   name: string;
   connected: boolean;
   eliminated: boolean;
+  // initial_draw 단계에서 아직 가져오지 않은 시작 타일 수
+  initialRemaining?: number;
   tiles: DVTileView[];
 }
 
