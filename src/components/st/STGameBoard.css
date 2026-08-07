@@ -1,5 +1,7 @@
 /* =============================================================
-   Schotten Totten board — 9 lanes on the cream canvas.
+   Schotten Totten board — 9 lanes stacked vertically so the
+   border reads top-to-bottom on a phone held in portrait.
+   Each lane row: opponent cards | stone | my cards.
    All rules scoped to .st-board (stylesheets are global).
    ============================================================= */
 
@@ -10,7 +12,7 @@
   gap: var(--space-sm);
   background: var(--color-canvas);
   padding: var(--space-md);
-  max-width: 720px;
+  max-width: 480px;
   margin: 0 auto;
   width: 100%;
 }
@@ -62,21 +64,22 @@
   background: var(--color-primary);
 }
 
-/* ---------- 레인 ---------- */
+/* ---------- 레인 (세로 스택) ---------- */
 
 .st-board .st-lanes {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: var(--space-xxs);
   flex: 1;
-  align-content: center;
 }
 
 .st-board .st-lane {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--space-xxs);
+  justify-content: center;
+  gap: var(--space-xs);
   padding: var(--space-xxs);
   border-radius: var(--radius-sm);
   background: transparent;
@@ -115,12 +118,14 @@
   background: var(--color-primary-tint);
 }
 
-/* 카드 열: 상대는 돌 쪽으로, 나는 돌에서 아래로 쌓인다 */
+/* 카드 줄: 상대는 돌 왼쪽에서 돌 쪽으로, 나는 돌 오른쪽에서
+   바깥으로 쌓인다. 양쪽 폭을 같게 잡아 돌이 항상 가운데 온다. */
 .st-board .st-lane-cards {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-height: 96px;
+  flex-direction: row;
+  gap: 3px;
+  width: 112px;
+  flex-shrink: 0;
   justify-content: flex-end;
 }
 
@@ -131,9 +136,8 @@
 /* ---------- 돌 ---------- */
 
 .st-board .st-stone {
-  width: 100%;
-  aspect-ratio: 1;
-  max-width: 44px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,14 +161,14 @@
   background: var(--color-primary);
   border-color: var(--color-primary-active);
   color: var(--color-on-primary);
-  transform: translateY(10px);
+  transform: translateX(10px);
 }
 
 .st-board .st-stone.owned-opp {
   background: var(--color-surface-dark);
   border-color: var(--color-surface-dark);
   color: var(--color-on-dark);
-  transform: translateY(-10px);
+  transform: translateX(-10px);
 }
 
 /* ---------- 클랜 카드 ---------- */
@@ -183,9 +187,8 @@
 }
 
 .st-board .st-card.st-card-small {
-  width: 100%;
-  max-width: 30px;
-  height: 28px;
+  width: 28px;
+  height: 38px;
   font-size: var(--text-body-sm);
 }
 
@@ -290,16 +293,18 @@
   }
 
   .st-board .st-card.st-card-small {
-    height: 24px;
+    width: 25px;
+    height: 34px;
     font-size: 12px;
   }
 
   .st-board .st-lane-cards {
-    min-height: 82px;
+    width: 92px;
   }
 
   .st-board .st-stone {
-    max-width: 34px;
+    width: 34px;
+    height: 34px;
     font-size: 11px;
   }
 
