@@ -43,10 +43,11 @@ export interface DVMessage {
 // 조커 추리·값 표기용
 export const DV_JOKER_VALUE = -1;
 
-// 서버가 마스킹해 보낸 타일 뷰. 남의 비공개 타일은 value/joker 가 없다.
+// 서버가 마스킹해 보낸 타일 뷰. 남의 비공개 타일은 value/joker 가 없고,
+// 셋업 중에는 color 도 없다 (중립 뒷면으로 표시).
 export interface DVTileView {
   id: number;
-  color: DVTileColor;
+  color?: DVTileColor;
   value?: number;
   joker?: boolean;
   revealed: boolean;
@@ -86,7 +87,6 @@ export interface DVGameState {
   deckBlackCount: number;
   deckWhiteCount: number;
   playerCount: number;
-  pendingJokerSeats?: number[];
   yourPendingJokers?: DVTileView[];
   drawnTile?: DVTileView;
   players: DVPlayerView[];
@@ -95,7 +95,6 @@ export interface DVGameState {
 export interface DVEvent {
   kind:
     | 'game_started'
-    | 'joker_placed'
     | 'tile_drawn'
     | 'guess_made'
     | 'turn_stopped'

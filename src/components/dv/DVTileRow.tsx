@@ -33,7 +33,7 @@ export function DVTile({
 }) {
   const classes = [
     'dv-tile',
-    tile.color,
+    tile.color ?? 'unknown', // 셋업 중 상대 타일은 색도 감춘 중립 뒷면
     tile.revealed ? 'revealed' : 'hidden',
     clickable ? 'clickable' : '',
     selected ? 'selected' : '',

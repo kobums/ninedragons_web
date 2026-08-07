@@ -91,6 +91,13 @@
   border-color: #d8d2c4;
 }
 
+/* 셋업 중 색까지 감춘 중립 뒷면 */
+.dv-tile.unknown {
+  background: repeating-linear-gradient(135deg, #3a3444, #3a3444 6px, #322c3c 6px, #322c3c 12px);
+  border-color: #555062;
+  color: transparent;
+}
+
 /* 공개된 타일은 눕힌 느낌으로 구분 */
 .dv-tile.revealed {
   transform: rotate(-6deg) translateY(4px);

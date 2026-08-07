@@ -24,8 +24,6 @@ function toastText(event: DVEvent, game: DVGameState): string {
   switch (event.kind) {
     case 'game_started':
       return `게임 시작! ${name(event.seat)}님부터 시작합니다`;
-    case 'joker_placed':
-      return `${name(event.seat)}님이 조커를 배치했습니다`;
     case 'tile_drawn':
       return `${name(event.seat)}님이 ${event.color === 'black' ? '검은' : '흰'} 타일을 뽑았습니다`;
     case 'guess_made': {
