@@ -98,6 +98,20 @@
   border-color: var(--color-primary);
 }
 
+/* 다빈치 코드: 어두운 카드 (크림-다크 교차 리듬 유지) */
+.game-selection .game-card.davinci {
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+}
+
+.game-selection .game-card.davinci:hover {
+  background: var(--color-surface-dark-elevated);
+}
+
+.game-selection .game-card.davinci:active {
+  background: var(--color-surface-dark-soft);
+}
+
 .game-selection .game-card-tag {
   display: inline-block;
   font-size: var(--text-caption-uppercase);
@@ -117,6 +131,11 @@
 .game-selection .game-card.numberchange .game-card-tag {
   background: var(--color-canvas);
   color: var(--color-muted);
+}
+
+.game-selection .game-card.davinci .game-card-tag {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .game-selection .game-card-content h2 {

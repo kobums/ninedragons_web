@@ -1,7 +1,7 @@
 import './GameSelection.css';
 
 interface GameSelectionProps {
-  onSelectGame: (game: 'ninedragons' | 'numberchange') => void;
+  onSelectGame: (game: 'ninedragons' | 'numberchange' | 'davinci') => void;
 }
 
 export function GameSelection({ onSelectGame }: GameSelectionProps) {
@@ -9,7 +9,7 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
     <div className="game-selection">
       <div className="game-selection-container">
         <header className="game-selection-header">
-          <span className="game-selection-eyebrow">두 사람을 위한 보드게임</span>
+          <span className="game-selection-eyebrow">친구와 함께하는 보드게임</span>
           <h1 className="game-selection-title">게임 선택</h1>
           <p className="game-selection-lead">
             함께 플레이할 게임을 골라주세요.
@@ -45,6 +45,22 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
               <div className="game-meta">
                 <span>2인</span>
                 <span>5-10분</span>
+              </div>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            className="game-card davinci"
+            onClick={() => onSelectGame('davinci')}
+          >
+            <div className="game-card-content">
+              <span className="game-card-tag">추리 · 심리전</span>
+              <h2>다빈치 코드</h2>
+              <p className="game-description">숫자 타일 추리 게임</p>
+              <div className="game-meta">
+                <span>2~4인</span>
+                <span>10-15분</span>
               </div>
             </div>
           </button>

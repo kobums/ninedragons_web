@@ -1,0 +1,144 @@
+.dv-lobby {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #201a2e 0%, #14101f 100%);
+  padding: 24px;
+}
+
+.dv-lobby-container {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.dv-title {
+  margin: 0 0 4px;
+  font-size: 32px;
+  color: #f4f1ea;
+}
+
+.dv-subtitle {
+  margin: 0 0 24px;
+  color: #b6aed0;
+  font-size: 14px;
+}
+
+.dv-join-form,
+.dv-waiting {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dv-form-group {
+  text-align: left;
+}
+
+.dv-form-group label {
+  display: block;
+  color: #d8d2e8;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.dv-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.25);
+  color: #f4f1ea;
+  font-size: 16px;
+}
+
+.dv-primary-button {
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: #f6c344;
+  color: #2b2113;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dv-primary-button:disabled {
+  background: #5a5468;
+  color: #a49dbb;
+  cursor: not-allowed;
+}
+
+.dv-ghost-button {
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: transparent;
+  color: #d8d2e8;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dv-player-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dv-player-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #f4f1ea;
+  font-weight: 600;
+}
+
+.dv-player-item.empty {
+  color: #7a7391;
+  font-weight: 400;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  background: transparent;
+  justify-content: center;
+}
+
+.dv-player-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dv-crown {
+  font-size: 14px;
+}
+
+.dv-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.dv-dot.on {
+  background: #58d68d;
+}
+
+.dv-dot.off {
+  background: #888;
+}
+
+.dv-lobby-hint {
+  margin: 0;
+  color: #b6aed0;
+  font-size: 13px;
+}
