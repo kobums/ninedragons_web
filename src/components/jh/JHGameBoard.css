@@ -1,0 +1,516 @@
+/* =============================================================
+   Jekyll vs Hyde board — identity track + trick table + hand.
+   All rules scoped to .jh-board (stylesheets are global).
+   ============================================================= */
+
+.jh-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: var(--color-canvas);
+  padding: var(--space-md);
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---------- 플레이어 바 ---------- */
+
+.jh-board .jh-player-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline-soft);
+}
+
+.jh-board .jh-player-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.jh-board .jh-player-name {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jh-board .jh-player-meta {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.jh-board .jh-turn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-hairline);
+  flex-shrink: 0;
+}
+
+.jh-board .jh-turn-dot.active {
+  background: var(--color-primary);
+}
+
+.jh-board .jh-role-chip {
+  padding: 1px var(--space-xs);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--color-on-primary);
+  flex-shrink: 0;
+}
+
+.jh-board .jh-role-jekyll {
+  background: var(--jh-jekyll);
+}
+
+.jh-board .jh-role-hyde {
+  background: var(--jh-hyde);
+}
+
+/* ---------- 정체성 트랙 ---------- */
+
+.jh-board .jh-track-section {
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+}
+
+.jh-board .jh-track-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+}
+
+.jh-board .jh-round-label {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.jh-board .jh-track-caption {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+.jh-board .jh-track {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 3px;
+}
+
+.jh-board .jh-track-cell {
+  aspect-ratio: 1;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jh-board .jh-track-cell.jekyll-home,
+.jh-board .jh-track-cell.jekyll-zone {
+  background: var(--jh-jekyll-tint);
+  border-color: var(--jh-jekyll);
+}
+
+.jh-board .jh-track-cell.hyde-zone {
+  background: var(--jh-hyde-tint);
+  border-color: var(--jh-hyde);
+}
+
+.jh-board .jh-track-cell.hyde-home {
+  background: var(--jh-hyde);
+}
+
+.jh-board .jh-track-cell.has-marker {
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.jh-board .jh-marker {
+  width: 60%;
+  height: 60%;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+.jh-board .jh-track-ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-xxs);
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+/* ---------- 색 서열 ---------- */
+
+.jh-board .jh-rank-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline-soft);
+  flex-wrap: wrap;
+}
+
+.jh-board .jh-rank-title {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.jh-board .jh-rank-empty {
+  font-size: var(--text-caption);
+  color: var(--color-muted-soft);
+}
+
+.jh-board .jh-rank-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  flex-wrap: wrap;
+}
+
+.jh-board .jh-rank-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xxs);
+}
+
+.jh-board .jh-rank-lt {
+  font-size: var(--text-caption);
+  color: var(--color-muted-soft);
+}
+
+.jh-board .jh-rank-chip,
+.jh-board .jh-declared-badge {
+  padding: 1px var(--space-xs);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--color-on-primary);
+}
+
+.jh-board .jh-chip-pride {
+  background: var(--jh-pride);
+}
+
+.jh-board .jh-chip-wrath {
+  background: var(--jh-wrath);
+}
+
+.jh-board .jh-chip-greed {
+  background: var(--jh-greed);
+}
+
+.jh-board .jh-chip-potion {
+  background: var(--jh-potion);
+}
+
+/* ---------- 트릭 테이블 ---------- */
+
+.jh-board .jh-table {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xl);
+  padding: var(--space-sm) 0;
+  flex: 1;
+  align-items: center;
+}
+
+.jh-board .jh-table-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 84px;
+}
+
+.jh-board .jh-slot-label {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.jh-board .jh-card-placeholder {
+  width: 64px;
+  height: 88px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--color-hairline);
+  background: var(--color-surface-soft);
+}
+
+/* ---------- 카드 ---------- */
+
+.jh-board .jh-card {
+  width: 64px;
+  height: 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: var(--radius-sm);
+  color: var(--color-on-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+.jh-board .jh-suit-pride {
+  background: var(--jh-pride);
+}
+
+.jh-board .jh-suit-wrath {
+  background: var(--jh-wrath);
+}
+
+.jh-board .jh-suit-greed {
+  background: var(--jh-greed);
+}
+
+.jh-board .jh-suit-potion {
+  background: var(--color-surface-cream-strong);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+}
+
+.jh-board .jh-card-value {
+  font-size: var(--text-title-md);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.jh-board .jh-card-suit {
+  font-size: var(--text-caption);
+  opacity: 0.85;
+}
+
+.jh-board .jh-card.jh-card-small {
+  width: 26px;
+  height: 36px;
+  gap: 0;
+}
+
+.jh-board .jh-card.jh-card-small .jh-card-value {
+  font-size: var(--text-body-sm);
+}
+
+.jh-board .jh-card.jh-card-small .jh-card-suit {
+  display: none;
+}
+
+.jh-board .jh-card.jh-card-faded {
+  opacity: 0.45;
+}
+
+/* ---------- 이벤트 배너 / 상태 ---------- */
+
+.jh-board .jh-event-banner {
+  text-align: center;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-ring);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.jh-board .jh-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: var(--control-height);
+  flex-wrap: wrap;
+}
+
+.jh-board .jh-status-text {
+  font-size: var(--text-body-sm);
+  color: var(--color-body);
+  text-align: center;
+}
+
+.jh-board .jh-confirm-button {
+  height: 32px;
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-pill);
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.jh-board .jh-confirm-button:hover:not(:disabled) {
+  background: var(--color-primary-active);
+}
+
+.jh-board .jh-confirm-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted);
+  cursor: default;
+}
+
+/* ---------- 색 선언 ---------- */
+
+.jh-board .jh-declare-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.jh-board .jh-declare-button {
+  height: var(--control-height);
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-pill);
+  border: none;
+  font-size: var(--text-button);
+  font-weight: 600;
+  color: var(--color-on-primary);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.jh-board .jh-declare-button:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------- 트릭 더미 ---------- */
+
+.jh-board .jh-tricks-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.jh-board .jh-tricks-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 40px;
+}
+
+.jh-board .jh-tricks-label {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  white-space: nowrap;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.jh-board .jh-tricks-list {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.jh-board .jh-trick-pair {
+  display: flex;
+  gap: 2px;
+}
+
+.jh-board .jh-trick-steal-button {
+  padding: var(--space-xxs);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-primary);
+  background: var(--color-primary-tint);
+  cursor: pointer;
+  animation: jh-steal-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes jh-steal-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--color-primary-ring);
+  }
+  50% {
+    box-shadow: 0 0 0 4px var(--color-primary-ring);
+  }
+}
+
+/* ---------- 손패 ---------- */
+
+.jh-board .jh-hand {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xxs);
+  padding-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.jh-board .jh-hand-slot {
+  padding: var(--space-xxs);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.jh-board .jh-hand-slot:disabled {
+  cursor: default;
+}
+
+.jh-board .jh-hand-slot:not(:disabled):hover {
+  transform: translateY(-4px);
+}
+
+.jh-board .jh-hand-slot.selected {
+  border-color: var(--color-primary);
+  transform: translateY(-8px);
+}
+
+.jh-board .jh-hand-slot .jh-card {
+  width: 48px;
+  height: 68px;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 480px) {
+  .jh-board {
+    padding: var(--space-xs);
+    gap: var(--space-xs);
+  }
+
+  .jh-board .jh-table {
+    gap: var(--space-lg);
+  }
+
+  .jh-board .jh-card,
+  .jh-board .jh-card-placeholder {
+    width: 52px;
+    height: 72px;
+  }
+
+  .jh-board .jh-hand-slot .jh-card {
+    width: 40px;
+    height: 58px;
+  }
+
+  .jh-board .jh-hand-slot .jh-card .jh-card-suit {
+    display: none;
+  }
+
+  .jh-board .jh-tricks-label {
+    width: 60px;
+  }
+}

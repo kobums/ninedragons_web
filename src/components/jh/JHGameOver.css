@@ -1,0 +1,93 @@
+/* =============================================================
+   Jekyll vs Hyde game over — scoped to .jh-game-over.
+   ============================================================= */
+
+.jh-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.jh-game-over .jh-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.jh-game-over .jh-game-over-eyebrow {
+  display: block;
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.jh-game-over .jh-game-over-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-lg);
+  letter-spacing: var(--tracking-display-lg);
+  color: var(--color-ink);
+}
+
+.jh-game-over .jh-game-over-title.win {
+  color: var(--color-primary);
+}
+
+.jh-game-over .jh-game-over-reason {
+  margin-top: var(--space-sm);
+  font-size: var(--text-body-md);
+  color: var(--color-body);
+}
+
+.jh-game-over .jh-round-table {
+  width: 100%;
+  margin: var(--space-xl) 0;
+  border-collapse: collapse;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+}
+
+.jh-game-over .jh-round-table th,
+.jh-game-over .jh-round-table td {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-body-sm);
+  border-bottom: 1px solid var(--color-hairline-soft);
+}
+
+.jh-game-over .jh-round-table th {
+  font-weight: 600;
+  color: var(--color-muted);
+  background: var(--color-surface-soft);
+}
+
+.jh-game-over .jh-round-table td {
+  color: var(--color-ink);
+}
+
+.jh-game-over .jh-round-table tr:last-child td {
+  border-bottom: none;
+}
+
+.jh-game-over .jh-play-again-button {
+  height: var(--control-height);
+  padding: 0 var(--space-xl);
+  border-radius: var(--radius-pill);
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.jh-game-over .jh-play-again-button:hover {
+  background: var(--color-primary-active);
+}
