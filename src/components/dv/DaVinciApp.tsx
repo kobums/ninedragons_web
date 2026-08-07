@@ -5,6 +5,7 @@ import { DVLobby } from './DVLobby';
 import { DVGameBoard } from './DVGameBoard';
 import { DVGameOver } from './DVGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { GameInfoButton } from '../GameInfoButton';
 import { DV_SESSION_KEY, getSessionId } from '../../utils/session';
 
 // 로컬 개발 시에는 로컬 서버, 그 외에는 배포 서버(wss 고정)로 접속
@@ -61,6 +62,7 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
         opponentDisconnected={someoneDisconnected}
         isGameActive={Boolean(game) && !gameOver}
       />
+      <GameInfoButton game="davinci" />
 
       {gameOver ? (
         <DVGameOver

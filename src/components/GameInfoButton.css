@@ -1,0 +1,101 @@
+.game-info-fab {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 900;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  color: #f4f1ea;
+  font-size: 16px;
+  font-weight: 800;
+  font-style: italic;
+  font-family: Georgia, serif;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-info-fab:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.game-info-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(10, 8, 16, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.game-info-modal {
+  width: 100%;
+  max-width: 440px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background: #201a2e;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.game-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-info-header h2 {
+  margin: 0;
+  font-size: 17px;
+  color: #f6c344;
+}
+
+.game-info-close {
+  border: none;
+  background: none;
+  color: #b6aed0;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.game-info-body {
+  overflow-y: auto;
+  padding: 14px 18px 20px;
+}
+
+.game-info-body h3 {
+  margin: 14px 0 6px;
+  font-size: 13px;
+  color: #f6c344;
+}
+
+.game-info-body section:first-child h3 {
+  margin-top: 0;
+}
+
+.game-info-body ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.game-info-body li {
+  color: #e6e1f2;
+  font-size: 13.5px;
+  line-height: 1.55;
+}

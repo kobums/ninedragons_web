@@ -5,6 +5,7 @@ import { NCWaitingRoom } from './NCWaitingRoom';
 import { NCGameBoard } from './NCGameBoard';
 import { NCGameOver } from './NCGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { GameInfoButton } from '../GameInfoButton';
 import type { TeamColor } from '../../types/numberchange';
 import { NC_SESSION_KEY, getSessionId } from '../../utils/session';
 
@@ -170,6 +171,7 @@ export function NumberChangeApp() {
         opponentDisconnected={gameState.opponentDisconnected}
         isGameActive={gameState.isGameStarted && !gameState.isGameOver}
       />
+      <GameInfoButton game="numberchange" />
 
       {!gameState.isGameStarted && (
         <NCWaitingRoom

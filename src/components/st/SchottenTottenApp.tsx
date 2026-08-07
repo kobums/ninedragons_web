@@ -5,6 +5,7 @@ import { STWaitingRoom } from './STWaitingRoom';
 import { STGameBoard } from './STGameBoard';
 import { STGameOver } from './STGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { GameInfoButton } from '../GameInfoButton';
 import { ST_SESSION_KEY, getSessionId } from '../../utils/session';
 
 // 로컬 개발 시에는 로컬 서버, 그 외에는 배포 서버(wss 고정)로 접속
@@ -69,6 +70,7 @@ export function SchottenTottenApp({ onBack }: SchottenTottenAppProps) {
         opponentDisconnected={opponentDisconnected}
         isGameActive={Boolean(game) && !gameOver}
       />
+      <GameInfoButton game="schottentotten" />
 
       {gameOver ? (
         <STGameOver

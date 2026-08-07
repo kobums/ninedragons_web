@@ -5,6 +5,7 @@ import { JHWaitingRoom } from './JHWaitingRoom';
 import { JHGameBoard } from './JHGameBoard';
 import { JHGameOver } from './JHGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { GameInfoButton } from '../GameInfoButton';
 import { JH_SESSION_KEY, getSessionId } from '../../utils/session';
 
 // 로컬 개발 시에는 로컬 서버, 그 외에는 배포 서버(wss 고정)로 접속
@@ -69,6 +70,7 @@ export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
         opponentDisconnected={opponentDisconnected}
         isGameActive={Boolean(game) && !gameOver}
       />
+      <GameInfoButton game="jekyllhyde" />
 
       {gameOver ? (
         <JHGameOver

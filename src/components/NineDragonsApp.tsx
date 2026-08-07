@@ -5,6 +5,7 @@ import { WaitingRoom } from './WaitingRoom';
 import { GameBoard } from './GameBoard';
 import { GameOver } from './GameOver';
 import { ConnectionBanner } from './ConnectionBanner';
+import { GameInfoButton } from './GameInfoButton';
 import type { PlayerColor } from '../types/game';
 import { ND_SESSION_KEY, getSessionId } from '../utils/session';
 
@@ -103,6 +104,7 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
         opponentDisconnected={gameState.opponentDisconnected}
         isGameActive={gameState.isGameStarted && !gameState.isGameOver}
       />
+      <GameInfoButton game="ninedragons" />
 
       {!gameState.isGameStarted && (
         <WaitingRoom
