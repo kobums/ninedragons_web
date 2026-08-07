@@ -1,14 +1,7 @@
-import './GameSelection.css';
+import './GameSelection.css'
 
 interface GameSelectionProps {
-  onSelectGame: (
-    game:
-      | 'ninedragons'
-      | 'numberchange'
-      | 'davinci'
-      | 'schottentotten'
-      | 'jekyllhyde',
-  ) => void;
+  onSelectGame: (game: 'ninedragons' | 'numberchange' | 'davinci' | 'schottentotten' | 'jekyllhyde') => void
 }
 
 export function GameSelection({ onSelectGame }: GameSelectionProps) {
@@ -16,19 +9,13 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
     <div className="game-selection">
       <div className="game-selection-container">
         <header className="game-selection-header">
-          <span className="game-selection-eyebrow">친구와 함께하는 보드게임</span>
+          <span className="game-selection-eyebrow">두 사람을 위한 보드게임</span>
           <h1 className="game-selection-title">게임 선택</h1>
-          <p className="game-selection-lead">
-            함께 플레이할 게임을 골라주세요.
-          </p>
+          <p className="game-selection-lead">함께 플레이할 게임을 골라주세요.</p>
         </header>
 
         <div className="game-cards">
-          <button
-            type="button"
-            className="game-card ninedragons"
-            onClick={() => onSelectGame('ninedragons')}
-          >
+          <button type="button" className="game-card ninedragons" onClick={() => onSelectGame('ninedragons')}>
             <div className="game-card-content">
               <span className="game-card-tag">전략 · 심리전</span>
               <h2>구룡투</h2>
@@ -40,11 +27,7 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
             </div>
           </button>
 
-          <button
-            type="button"
-            className="game-card numberchange"
-            onClick={() => onSelectGame('numberchange')}
-          >
+          <button type="button" className="game-card numberchange" onClick={() => onSelectGame('numberchange')}>
             <div className="game-card-content">
               <span className="game-card-tag">계산 · 교환</span>
               <h2>넘버체인지</h2>
@@ -56,11 +39,7 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
             </div>
           </button>
 
-          <button
-            type="button"
-            className="game-card davinci"
-            onClick={() => onSelectGame('davinci')}
-          >
+          <button type="button" className="game-card davinci" onClick={() => onSelectGame('davinci')}>
             <div className="game-card-content">
               <span className="game-card-tag">추리 · 심리전</span>
               <h2>다빈치 코드</h2>
@@ -72,11 +51,7 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
             </div>
           </button>
 
-          <button
-            type="button"
-            className="game-card schottentotten"
-            onClick={() => onSelectGame('schottentotten')}
-          >
+          <button type="button" className="game-card schottentotten" onClick={() => onSelectGame('schottentotten')}>
             <div className="game-card-content">
               <span className="game-card-tag">전략 · 족보</span>
               <h2>쇼텐토텐</h2>
@@ -88,11 +63,7 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
             </div>
           </button>
 
-          <button
-            type="button"
-            className="game-card jekyllhyde"
-            onClick={() => onSelectGame('jekyllhyde')}
-          >
+          <button type="button" className="game-card jekyllhyde" onClick={() => onSelectGame('jekyllhyde')}>
             <div className="game-card-content">
               <span className="game-card-tag">트릭테이킹 · 심리전</span>
               <h2>지킬 앤 하이드</h2>
@@ -106,5 +77,5 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
