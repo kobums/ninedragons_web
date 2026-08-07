@@ -1,7 +1,14 @@
 import './GameSelection.css';
 
 interface GameSelectionProps {
-  onSelectGame: (game: 'ninedragons' | 'numberchange' | 'davinci') => void;
+  onSelectGame: (
+    game:
+      | 'ninedragons'
+      | 'numberchange'
+      | 'davinci'
+      | 'schottentotten'
+      | 'jekyllhyde',
+  ) => void;
 }
 
 export function GameSelection({ onSelectGame }: GameSelectionProps) {
@@ -61,6 +68,38 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
               <div className="game-meta">
                 <span>2~4인</span>
                 <span>10-15분</span>
+              </div>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            className="game-card schottentotten"
+            onClick={() => onSelectGame('schottentotten')}
+          >
+            <div className="game-card-content">
+              <span className="game-card-tag">전략 · 족보</span>
+              <h2>쇼텐토텐</h2>
+              <p className="game-description">국경석을 둔 카드 진형 대결</p>
+              <div className="game-meta">
+                <span>2인</span>
+                <span>15-20분</span>
+              </div>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            className="game-card jekyllhyde"
+            onClick={() => onSelectGame('jekyllhyde')}
+          >
+            <div className="game-card-content">
+              <span className="game-card-tag">트릭테이킹 · 심리전</span>
+              <h2>지킬 앤 하이드</h2>
+              <p className="game-description">인격을 건 카드 트릭 대결</p>
+              <div className="game-meta">
+                <span>2인</span>
+                <span>15-20분</span>
               </div>
             </div>
           </button>

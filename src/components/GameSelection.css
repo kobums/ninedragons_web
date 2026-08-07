@@ -112,6 +112,36 @@
   background: var(--color-surface-dark-soft);
 }
 
+/* 쇼텐토텐: 크림 카드 (크림-다크 교차 리듬 유지) */
+.game-selection .game-card.schottentotten {
+  background: var(--color-surface-card);
+  border-color: var(--color-hairline);
+  color: var(--color-ink);
+}
+
+.game-selection .game-card.schottentotten:hover {
+  background: var(--color-surface-cream-strong);
+}
+
+.game-selection .game-card.schottentotten:active {
+  background: var(--color-surface-cream-strong);
+  border-color: var(--color-primary);
+}
+
+/* 지킬 앤 하이드: 어두운 카드 (크림-다크 교차 리듬 유지) */
+.game-selection .game-card.jekyllhyde {
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+}
+
+.game-selection .game-card.jekyllhyde:hover {
+  background: var(--color-surface-dark-elevated);
+}
+
+.game-selection .game-card.jekyllhyde:active {
+  background: var(--color-surface-dark-soft);
+}
+
 .game-selection .game-card-tag {
   display: inline-block;
   font-size: var(--text-caption-uppercase);
@@ -128,7 +158,8 @@
   color: var(--color-on-primary);
 }
 
-.game-selection .game-card.numberchange .game-card-tag {
+.game-selection .game-card.numberchange .game-card-tag,
+.game-selection .game-card.schottentotten .game-card-tag {
   background: var(--color-canvas);
   color: var(--color-muted);
 }
@@ -160,7 +191,8 @@
   color: var(--color-on-dark-soft);
 }
 
-.game-selection .game-card.numberchange .game-description {
+.game-selection .game-card.numberchange .game-description,
+.game-selection .game-card.schottentotten .game-description {
   color: var(--color-body);
 }
 
@@ -176,7 +208,8 @@
   color: var(--color-on-dark-soft);
 }
 
-.game-selection .game-card.numberchange .game-meta {
+.game-selection .game-card.numberchange .game-meta,
+.game-selection .game-card.schottentotten .game-meta {
   color: var(--color-muted);
 }
 

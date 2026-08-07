@@ -53,6 +53,30 @@
   --color-team-red-tint: rgba(198, 69, 69, 0.1);
   --color-team-draw: #8e8b82;
 
+  /* ---------- Schotten Totten clan colors ----------
+     Six clan suits. Same desaturation rule as the team pair above:
+     they identify cards on the cream canvas without competing with
+     the coral CTA. Never used for CTAs or surfaces. */
+  --st-clan-0: #c64545; /* red */
+  --st-clan-1: #4a6d9c; /* blue */
+  --st-clan-2: #5b9e6f; /* green */
+  --st-clan-3: #cf9c2e; /* gold */
+  --st-clan-4: #7c5cad; /* purple */
+  --st-clan-5: #4fa39a; /* teal */
+
+  /* ---------- Jekyll vs Hyde suit colors ----------
+     Three evil suits + colorless potion. Same desaturation rule as
+     the clan colors above; the potion is a pale neutral so it reads
+     as "no color" next to the three suits. */
+  --jh-pride: #7c5cad; /* 오만 purple */
+  --jh-wrath: #c64545; /* 분노 red */
+  --jh-greed: #5b9e6f; /* 탐욕 green */
+  --jh-potion: #8e8b82; /* 물약 neutral */
+  --jh-jekyll: #4a6d9c; /* 지킬 진영 (team blue) */
+  --jh-hyde: #6d4177; /* 하이드 진영 dark plum */
+  --jh-jekyll-tint: rgba(74, 109, 156, 0.12);
+  --jh-hyde-tint: rgba(109, 65, 119, 0.12);
+
   /* Warm scrim — never pure black over the cream canvas. */
   --scrim: rgba(20, 20, 19, 0.6);
 

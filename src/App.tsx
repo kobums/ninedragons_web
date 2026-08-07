@@ -3,14 +3,21 @@ import { GameSelection } from './components/GameSelection';
 import { NineDragonsApp } from './components/NineDragonsApp';
 import { NumberChangeApp } from './components/nc/NumberChangeApp';
 import { DaVinciApp } from './components/dv/DaVinciApp';
+import { SchottenTottenApp } from './components/st/SchottenTottenApp';
+import { JekyllHydeApp } from './components/jh/JekyllHydeApp';
 import './App.css';
 
-function App() {
-  const [selectedGame, setSelectedGame] = useState<
-    'ninedragons' | 'numberchange' | 'davinci' | null
-  >(null);
+type GameId =
+  | 'ninedragons'
+  | 'numberchange'
+  | 'davinci'
+  | 'schottentotten'
+  | 'jekyllhyde';
 
-  const handleSelectGame = (game: 'ninedragons' | 'numberchange' | 'davinci') => {
+function App() {
+  const [selectedGame, setSelectedGame] = useState<GameId | null>(null);
+
+  const handleSelectGame = (game: GameId) => {
     setSelectedGame(game);
   };
 
@@ -28,6 +35,14 @@ function App() {
 
   if (selectedGame === 'davinci') {
     return <DaVinciApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'schottentotten') {
+    return <SchottenTottenApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'jekyllhyde') {
+    return <JekyllHydeApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;

@@ -5,6 +5,8 @@
 export const ND_SESSION_KEY = 'ninedragons_session_id';
 export const NC_SESSION_KEY = 'numberchange_session_id';
 export const DV_SESSION_KEY = 'davinci_session_id';
+export const ST_SESSION_KEY = 'schottentotten_session_id';
+export const JH_SESSION_KEY = 'jekyllhyde_session_id';
 
 export const getSessionId = (key: string): string | null => {
   try {
