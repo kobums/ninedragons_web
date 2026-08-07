@@ -164,7 +164,8 @@
   color: var(--color-muted);
 }
 
-.game-selection .game-card.davinci .game-card-tag {
+.game-selection .game-card.davinci .game-card-tag,
+.game-selection .game-card.jekyllhyde .game-card-tag {
   background: var(--color-primary);
   color: var(--color-on-primary);
 }
@@ -177,7 +178,8 @@
 }
 
 .game-selection .game-card.ninedragons .game-card-content h2,
-.game-selection .game-card.davinci .game-card-content h2 {
+.game-selection .game-card.davinci .game-card-content h2,
+.game-selection .game-card.jekyllhyde .game-card-content h2 {
   color: var(--color-on-dark);
 }
 
@@ -187,7 +189,8 @@
 }
 
 .game-selection .game-card.ninedragons .game-description,
-.game-selection .game-card.davinci .game-description {
+.game-selection .game-card.davinci .game-description,
+.game-selection .game-card.jekyllhyde .game-description {
   color: var(--color-on-dark-soft);
 }
 
@@ -204,7 +207,8 @@
 }
 
 .game-selection .game-card.ninedragons .game-meta,
-.game-selection .game-card.davinci .game-meta {
+.game-selection .game-card.davinci .game-meta,
+.game-selection .game-card.jekyllhyde .game-meta {
   color: var(--color-on-dark-soft);
 }
 
