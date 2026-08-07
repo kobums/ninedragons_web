@@ -145,7 +145,8 @@
   margin-bottom: var(--space-xs);
 }
 
-.game-selection .game-card.ninedragons .game-card-content h2 {
+.game-selection .game-card.ninedragons .game-card-content h2,
+.game-selection .game-card.davinci .game-card-content h2 {
   color: var(--color-on-dark);
 }
 
@@ -154,7 +155,8 @@
   margin-bottom: var(--space-lg);
 }
 
-.game-selection .game-card.ninedragons .game-description {
+.game-selection .game-card.ninedragons .game-description,
+.game-selection .game-card.davinci .game-description {
   color: var(--color-on-dark-soft);
 }
 
@@ -169,7 +171,8 @@
   font-weight: 500;
 }
 
-.game-selection .game-card.ninedragons .game-meta {
+.game-selection .game-card.ninedragons .game-meta,
+.game-selection .game-card.davinci .game-meta {
   color: var(--color-on-dark-soft);
 }
 
