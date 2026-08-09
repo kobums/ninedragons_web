@@ -1,29 +1,25 @@
 import { useEffect } from 'react';
-import { useWebSocket } from '../hooks/useWebSocket';
+import { useReconnectingWebSocket } from '../hooks/useReconnectingWebSocket';
+import { GAMES } from '../config/games';
+import { buildWsUrl } from '../utils/ws';
 import { useGameState } from '../hooks/useGameState';
 import { WaitingRoom } from './WaitingRoom';
 import { GameBoard } from './GameBoard';
 import { GameOver } from './GameOver';
 import { ConnectionBanner } from './ConnectionBanner';
+import { ConnectingScreen } from './ConnectingScreen';
 import { GameInfoButton } from './GameInfoButton';
-import type { PlayerColor } from '../types/game';
+import type { Message, PlayerColor } from '../types/game';
 import { ND_SESSION_KEY, getSessionId } from '../utils/session';
 
-// 로컬 개발 시에는 로컬 서버, 그 외에는 배포 서버(wss 고정)로 접속
-// 배포 도메인은 http(80)로 붙으면 301 리다이렉트라 WebSocket 핸드셰이크가 실패한다
-const isLocalHost =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1';
-const WS_URL = isLocalHost
-  ? 'ws://localhost:8003/ws'
-  : 'wss://ninedragonsapi.gowoobro.com/ws';
 
 interface NineDragonsAppProps {
   onBack: () => void;
 }
 
 export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
-  const { isConnected, lastMessage, sendMessage } = useWebSocket(WS_URL, {
+  const { isConnected, lastMessage, sendMessage } = useReconnectingWebSocket<Message>(buildWsUrl(GAMES.ninedragons.wsPath), {
+    logPrefix: GAMES.ninedragons.logPrefix,
     onOpen: () => {
       // 진행 중이던 게임이 있으면 세션 ID로 복귀를 시도한다
       const sessionId = getSessionId(ND_SESSION_KEY);
@@ -84,11 +80,7 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
   // 게임 시작 전에만 전체 화면 연결 대기 표시
   // 게임 중 끊김은 화면을 유지한 채 배너로 알리고 자동 재접속을 기다린다
   if (!isConnected && !gameState.isGameStarted) {
-    return (
-      <div className="app">
-        <div className="connecting">서버에 연결 중...</div>
-      </div>
-    );
+    return <ConnectingScreen />;
   }
 
   console.log('[NineDragons] Rendering decision:', {

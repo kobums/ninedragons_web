@@ -1,27 +1,25 @@
 import { useEffect } from 'react';
-import { useJHWebSocket } from '../../hooks/useJHWebSocket';
+import { useReconnectingWebSocket } from '../../hooks/useReconnectingWebSocket';
+import { GAMES } from '../../config/games';
+import { buildWsUrl } from '../../utils/ws';
 import { useJHGameState } from '../../hooks/useJHGameState';
 import { JHWaitingRoom } from './JHWaitingRoom';
 import { JHGameBoard } from './JHGameBoard';
 import { JHGameOver } from './JHGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
+import type { JHMessage } from '../../types/jekyllhyde';
 import { JH_SESSION_KEY, getSessionId } from '../../utils/session';
 
-// 로컬 개발 시에는 로컬 서버, 그 외에는 배포 서버(wss 고정)로 접속
-const isLocalHost =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1';
-const WS_URL = isLocalHost
-  ? 'ws://localhost:8003/ws/jekyllhyde'
-  : 'wss://ninedragonsapi.gowoobro.com/ws/jekyllhyde';
 
 interface JekyllHydeAppProps {
   onBack: () => void;
 }
 
 export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
-  const { isConnected, lastMessage, sendMessage } = useJHWebSocket(WS_URL, {
+  const { isConnected, lastMessage, sendMessage } = useReconnectingWebSocket<JHMessage>(buildWsUrl(GAMES.jekyllhyde.wsPath), {
+    logPrefix: GAMES.jekyllhyde.logPrefix,
     onOpen: () => {
       // 진행 중이던 게임이 있으면 세션 ID로 복귀를 시도한다
       const sessionId = getSessionId(JH_SESSION_KEY);
@@ -56,11 +54,7 @@ export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
 
   // 게임 시작 전에만 전체 화면 연결 대기 표시
   if (!isConnected && !game) {
-    return (
-      <div className="app">
-        <div className="connecting">서버에 연결 중...</div>
-      </div>
-    );
+    return <ConnectingScreen />;
   }
 
   return (
