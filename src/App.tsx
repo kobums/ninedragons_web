@@ -5,14 +5,8 @@ import { NumberChangeApp } from './components/nc/NumberChangeApp';
 import { DaVinciApp } from './components/dv/DaVinciApp';
 import { SchottenTottenApp } from './components/st/SchottenTottenApp';
 import { JekyllHydeApp } from './components/jh/JekyllHydeApp';
+import type { GameId } from './config/games';
 import './App.css';
-
-type GameId =
-  | 'ninedragons'
-  | 'numberchange'
-  | 'davinci'
-  | 'schottentotten'
-  | 'jekyllhyde';
 
 function App() {
   const [selectedGame, setSelectedGame] = useState<GameId | null>(null);
