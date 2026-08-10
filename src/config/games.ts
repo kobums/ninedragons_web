@@ -7,7 +7,8 @@ export type GameId =
   | 'numberchange'
   | 'davinci'
   | 'schottentotten'
-  | 'jekyllhyde';
+  | 'jekyllhyde'
+  | 'geister';
 
 export interface RuleSection {
   heading?: string;
@@ -205,6 +206,42 @@ export const GAMES: Record<GameId, GameMeta> = {
         items: [
           '라운드가 끝나면 트릭 수 차이만큼 마커가 하이드 쪽으로 갑니다.',
           '마커가 하이드 홈에 도달하면 하이드 승리, 3라운드를 버티면 지킬 승리입니다.',
+        ],
+      },
+    ],
+  },
+  geister: {
+    title: '가이스터',
+    tag: '심리전 · 기물',
+    description: '유령 정체를 숨긴 탈출 대결',
+    players: '2인',
+    duration: '10-15분',
+    cardTheme: 'cream',
+    wsPath: '/ws/geister',
+    logPrefix: '[Geister] WebSocket',
+    sessionKey: 'geister_session_id',
+    rules: [
+      {
+        heading: '준비',
+        items: [
+          '6×6 보드에서 각자 유령 8개(좋은 유령 4 + 나쁜 유령 4)로 시작합니다.',
+          '자기 쪽 뒷 2줄 가운데 8칸에 좋은 유령의 위치를 비밀리에 정합니다. 상대는 내 유령의 정체를 모릅니다.',
+        ],
+      },
+      {
+        heading: '진행',
+        items: [
+          '내 차례에 유령 하나를 상하좌우 한 칸 움직입니다.',
+          '상대 유령 칸으로 이동하면 잡습니다. 잡힌 유령의 색은 양쪽 모두에게 공개됩니다.',
+          '내 좋은 유령이 상대편 모서리(탈출구)에 있으면, 다음 내 차례에 보드 밖으로 탈출시킬 수 있습니다. 상대는 그 사이 잡을 기회가 있습니다.',
+        ],
+      },
+      {
+        heading: '승리 (셋 중 하나)',
+        items: [
+          '내 좋은 유령 1개가 탈출한다.',
+          '상대의 좋은 유령 4개를 모두 잡는다.',
+          '내 나쁜 유령 4개를 상대가 모두 잡는다 — 일부러 잡히게 유도하는 것도 전략입니다.',
         ],
       },
     ],

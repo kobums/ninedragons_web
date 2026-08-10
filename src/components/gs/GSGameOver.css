@@ -1,0 +1,100 @@
+.gs-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: 24px;
+}
+
+.gs-game-over .gs-over-container {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gs-game-over .gs-over-title {
+  margin: 0;
+  font-size: 32px;
+  color: var(--color-ink);
+}
+
+.gs-game-over .gs-over-reason {
+  margin: 0;
+  color: var(--color-body);
+  font-size: 15px;
+}
+
+.gs-game-over .gs-over-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gs-game-over .gs-over-side {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gs-game-over .gs-over-side-label {
+  font-size: 13px;
+  color: var(--color-muted);
+  width: 36px;
+  text-align: left;
+}
+
+.gs-game-over .gs-over-ghosts {
+  display: flex;
+  gap: 6px;
+  font-size: 22px;
+}
+
+.gs-game-over .gs-over-ghost {
+  position: relative;
+  line-height: 1;
+}
+
+.gs-game-over .gs-over-ghost::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.gs-game-over .gs-over-ghost.good::after {
+  background: var(--color-team-blue);
+}
+
+.gs-game-over .gs-over-ghost.evil::after {
+  background: var(--color-team-red);
+}
+
+.gs-game-over .gs-over-ghost.captured {
+  filter: grayscale(1) opacity(0.45);
+}
+
+.gs-game-over .gs-over-ghost.escaped {
+  filter: drop-shadow(0 0 4px var(--color-team-blue));
+}
+
+.gs-game-over .gs-action-button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}

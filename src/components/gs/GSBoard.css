@@ -1,0 +1,158 @@
+.gs-board-page {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: 56px 16px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.gs-board-page .gs-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1;
+  background: var(--color-surface-cream-strong);
+  border: 1px solid var(--color-hairline);
+  border-radius: 12px;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.gs-board-page .gs-cell {
+  position: relative;
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: 8px;
+  background: var(--color-surface-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: clamp(18px, 6vw, 30px);
+  transition: background-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.gs-board-page .gs-cell.exit {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+  border-style: dashed;
+}
+
+.gs-board-page .gs-cell.selected {
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+.gs-board-page .gs-cell.target {
+  background: var(--color-primary-tint);
+  box-shadow: inset 0 0 0 2px var(--color-primary-ring);
+}
+
+.gs-board-page .gs-cell.flash {
+  animation: gs-flash 0.8s ease;
+}
+
+@keyframes gs-flash {
+  0% {
+    background: var(--color-primary-tint);
+  }
+  100% {
+    background: var(--color-surface-card);
+  }
+}
+
+/* 유령: 내 것은 정체 색(파랑/빨강) 배지, 상대 것은 무채색 */
+.gs-board-page .gs-ghost {
+  line-height: 1;
+  filter: grayscale(1) opacity(0.75);
+}
+
+.gs-board-page .gs-ghost.mine {
+  filter: none;
+}
+
+.gs-board-page .gs-ghost.mine::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-canvas);
+}
+
+.gs-board-page .gs-ghost.mine.good::after {
+  background: var(--color-team-blue);
+}
+
+.gs-board-page .gs-ghost.mine.evil::after {
+  background: var(--color-team-red);
+}
+
+/* 배치 단계에서 아직 안 고른 내 유령: 회색 점 */
+.gs-board-page .gs-ghost.mine.unset::after {
+  background: var(--color-hairline);
+}
+
+.gs-board-page .gs-tray {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 26px;
+}
+
+.gs-board-page .gs-tray-label {
+  font-size: 12px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.gs-board-page .gs-tray-ghosts {
+  display: flex;
+  gap: 5px;
+}
+
+.gs-board-page .gs-mini-ghost {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.gs-board-page .gs-mini-ghost.good {
+  background: var(--color-team-blue);
+}
+
+.gs-board-page .gs-mini-ghost.evil {
+  background: var(--color-team-red);
+}
+
+.gs-board-page .gs-status {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.gs-board-page .gs-action-button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gs-board-page .gs-action-button:disabled {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
+}

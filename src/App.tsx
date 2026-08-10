@@ -5,6 +5,7 @@ import { NumberChangeApp } from './components/nc/NumberChangeApp';
 import { DaVinciApp } from './components/dv/DaVinciApp';
 import { SchottenTottenApp } from './components/st/SchottenTottenApp';
 import { JekyllHydeApp } from './components/jh/JekyllHydeApp';
+import { GeisterApp } from './components/gs/GeisterApp';
 import type { GameId } from './config/games';
 import './App.css';
 
@@ -37,6 +38,10 @@ function App() {
 
   if (selectedGame === 'jekyllhyde') {
     return <JekyllHydeApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'geister') {
+    return <GeisterApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;
