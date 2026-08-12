@@ -6,6 +6,7 @@ import { DaVinciApp } from './components/dv/DaVinciApp';
 import { SchottenTottenApp } from './components/st/SchottenTottenApp';
 import { JekyllHydeApp } from './components/jh/JekyllHydeApp';
 import { GeisterApp } from './components/gs/GeisterApp';
+import { QuoridorApp } from './components/qd/QuoridorApp';
 import type { GameId } from './config/games';
 import './App.css';
 
@@ -42,6 +43,10 @@ function App() {
 
   if (selectedGame === 'geister') {
     return <GeisterApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'quoridor') {
+    return <QuoridorApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;

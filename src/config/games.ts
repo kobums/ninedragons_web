@@ -8,7 +8,8 @@ export type GameId =
   | 'davinci'
   | 'schottentotten'
   | 'jekyllhyde'
-  | 'geister';
+  | 'geister'
+  | 'quoridor';
 
 export interface RuleSection {
   heading?: string;
@@ -243,6 +244,38 @@ export const GAMES: Record<GameId, GameMeta> = {
           '상대의 좋은 유령 4개를 모두 잡는다.',
           '내 나쁜 유령 4개를 상대가 모두 잡는다 — 일부러 잡히게 유도하는 것도 전략입니다.',
         ],
+      },
+    ],
+  },
+  quoridor: {
+    title: '쿼리도',
+    tag: '전략 · 길막기',
+    description: '벽으로 길을 막는 경주 대결',
+    players: '2인',
+    duration: '10-20분',
+    cardTheme: 'dark',
+    wsPath: '/ws/quoridor',
+    logPrefix: '[Quoridor] WebSocket',
+    sessionKey: 'quoridor_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '9×9 보드에서 각자 폰 1개와 벽 10개로 시작합니다.',
+          '내 차례에 폰을 상하좌우 한 칸 움직이거나, 벽 하나를 놓습니다.',
+          '폰이 서로 마주 보면 뛰어넘습니다. 뒤가 벽이나 보드 끝이면 대각선으로 돌아갑니다.',
+        ],
+      },
+      {
+        heading: '벽',
+        items: [
+          '벽은 칸 사이 홈에 두 칸 길이로 놓이며, 다른 벽과 겹치거나 교차할 수 없습니다.',
+          '어느 쪽이든 목표 줄까지 가는 길을 완전히 막는 벽은 놓을 수 없습니다.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: ['상대편 맨 끝 줄의 아무 칸에 먼저 도착하면 승리합니다.'],
       },
     ],
   },
