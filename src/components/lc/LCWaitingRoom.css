@@ -1,0 +1,107 @@
+.lc-waiting-room {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: 24px;
+}
+
+.lc-waiting-room .lc-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.lc-waiting-room .lc-title {
+  margin: 0 0 4px;
+  font-size: 32px;
+  color: var(--color-ink);
+}
+
+.lc-waiting-room .lc-subtitle {
+  margin: 0 0 24px;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.lc-waiting-room .lc-join-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lc-waiting-room .lc-form-group {
+  text-align: left;
+}
+
+.lc-waiting-room .lc-form-group label {
+  display: block;
+  color: var(--color-body);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.lc-waiting-room .lc-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: 16px;
+}
+
+.lc-waiting-room .lc-join-button {
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lc-waiting-room .lc-join-button:disabled {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+.lc-waiting-room .lc-back-button {
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-body);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.lc-waiting-room .lc-waiting-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-body);
+}
+
+.lc-waiting-room .lc-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-hairline);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: lc-spin 0.9s linear infinite;
+}
+
+@keyframes lc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

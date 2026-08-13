@@ -1,0 +1,258 @@
+.lc-board-page {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: 52px 12px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.lc-board-page .lc-player-bar {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--color-body);
+  min-height: 24px;
+}
+
+.lc-board-page .lc-player-name {
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.lc-board-page .lc-score {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.lc-board-page .lc-hand-count {
+  color: var(--color-muted);
+}
+
+/* ==================== 탐험대 ==================== */
+
+.lc-board-page .lc-exped-row {
+  width: 100%;
+  max-width: 480px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.lc-board-page .lc-exped {
+  min-height: 96px;
+  border: 1px dashed var(--color-hairline);
+  border-radius: 10px;
+  background: var(--color-surface-soft);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: default;
+}
+
+.lc-board-page .lc-exped.playable {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  cursor: pointer;
+}
+
+.lc-board-page .lc-exped-score {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-muted);
+  min-height: 13px;
+}
+
+.lc-board-page .lc-exped-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+}
+
+.lc-board-page .lc-exped-cards .lc-chip:not(:first-child) {
+  margin-top: -6px;
+}
+
+/* ==================== 카드 칩 ==================== */
+
+.lc-board-page .lc-chip {
+  width: 26px;
+  height: 34px;
+  border-radius: 5px;
+  border: 1.5px solid var(--color-canvas);
+  color: var(--color-on-primary);
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lc-board-page .lc-chip.preview {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.lc-board-page .lc-chip.lc-red,
+.lc-board-page .lc-hand-card.lc-red {
+  background: var(--lc-red);
+}
+
+.lc-board-page .lc-chip.lc-green,
+.lc-board-page .lc-hand-card.lc-green {
+  background: var(--lc-green);
+}
+
+.lc-board-page .lc-chip.lc-blue,
+.lc-board-page .lc-hand-card.lc-blue {
+  background: var(--lc-blue);
+}
+
+.lc-board-page .lc-chip.lc-white,
+.lc-board-page .lc-hand-card.lc-white {
+  background: var(--lc-white);
+}
+
+.lc-board-page .lc-chip.lc-yellow,
+.lc-board-page .lc-hand-card.lc-yellow {
+  background: var(--lc-yellow);
+}
+
+/* ==================== 중앙: 덱 + 버림 더미 ==================== */
+
+.lc-board-page .lc-middle {
+  width: 100%;
+  max-width: 480px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  align-items: stretch;
+}
+
+.lc-board-page .lc-deck {
+  border: 1px solid var(--color-hairline);
+  border-radius: 10px;
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 0;
+  cursor: default;
+}
+
+.lc-board-page .lc-deck-count {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.lc-board-page .lc-deck-label {
+  font-size: 11px;
+  color: var(--color-on-dark-soft);
+}
+
+.lc-board-page .lc-discard {
+  position: relative;
+  border: 1px dashed var(--color-hairline);
+  border-radius: 10px;
+  background: var(--color-surface-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  cursor: default;
+}
+
+.lc-board-page .lc-discard-empty {
+  font-size: 11px;
+  color: var(--color-muted-soft);
+}
+
+.lc-board-page .lc-discard-count {
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  font-size: 10px;
+  color: var(--color-muted);
+}
+
+.lc-board-page .lc-discard.discardable {
+  border-color: var(--color-warning);
+  background: var(--color-primary-tint);
+  cursor: pointer;
+}
+
+.lc-board-page .lc-deck.drawable,
+.lc-board-page .lc-discard.drawable {
+  border: 2px solid var(--color-primary);
+  cursor: pointer;
+}
+
+/* ==================== 손패 ==================== */
+
+.lc-board-page .lc-hand {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 56px;
+}
+
+.lc-board-page .lc-hand-card {
+  width: 38px;
+  height: 52px;
+  border-radius: 8px;
+  border: 2px solid var(--color-canvas);
+  color: var(--color-on-primary);
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.lc-board-page .lc-hand-card.selected {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.lc-board-page .lc-hand-card.pending {
+  opacity: 0.4;
+}
+
+/* ==================== 상태 ==================== */
+
+.lc-board-page .lc-status {
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.lc-board-page .lc-event {
+  color: var(--color-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.lc-board-page .lc-cancel-button {
+  padding: 4px 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-body);
+  font-size: 12px;
+  cursor: pointer;
+}

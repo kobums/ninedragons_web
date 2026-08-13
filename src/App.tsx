@@ -8,6 +8,7 @@ import { JekyllHydeApp } from './components/jh/JekyllHydeApp';
 import { GeisterApp } from './components/gs/GeisterApp';
 import { QuoridorApp } from './components/qd/QuoridorApp';
 import { OnitamaApp } from './components/ot/OnitamaApp';
+import { LostCitiesApp } from './components/lc/LostCitiesApp';
 import type { GameId } from './config/games';
 import './App.css';
 
@@ -52,6 +53,10 @@ function App() {
 
   if (selectedGame === 'onitama') {
     return <OnitamaApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'lostcities') {
+    return <LostCitiesApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;

@@ -10,7 +10,8 @@ export type GameId =
   | 'jekyllhyde'
   | 'geister'
   | 'quoridor'
-  | 'onitama';
+  | 'onitama'
+  | 'lostcities';
 
 export interface RuleSection {
   heading?: string;
@@ -313,6 +314,44 @@ export const GAMES: Record<GameId, GameMeta> = {
           '상대 마스터를 잡는다 (돌의 길).',
           '내 마스터가 상대 사원(뒷줄 중앙 칸)에 도달한다 (개울의 길).',
         ],
+      },
+    ],
+  },
+  lostcities: {
+    title: '로스트 시티',
+    tag: '카드 · 탐험',
+    description: '탐험대에 카드를 쌓는 수집 대결',
+    players: '2인',
+    duration: '15-20분',
+    cardTheme: 'dark',
+    wsPath: '/ws/lostcities',
+    logPrefix: '[LostCities] WebSocket',
+    sessionKey: 'lostcities_session_id',
+    rules: [
+      {
+        heading: '준비',
+        items: [
+          '탐험지 5색 × 12장(투자 3 + 숫자 2~10) = 60장. 각자 8장으로 시작합니다.',
+        ],
+      },
+      {
+        heading: '내 차례 (놓거나 버리고 → 뽑기)',
+        items: [
+          '손의 카드 한 장을 같은 색 내 탐험대에 놓거나, 그 색 버림 더미에 버립니다.',
+          '탐험대에는 오름차순으로만 놓을 수 있습니다. 투자(×) 카드는 숫자를 놓기 전에만 가능합니다.',
+          '그다음 덱이나 아무 버림 더미 맨 위에서 한 장 뽑습니다. 방금 버린 카드는 바로 가져올 수 없습니다.',
+        ],
+      },
+      {
+        heading: '점수',
+        items: [
+          '시작한 탐험대마다 (숫자 합 − 20) × (1 + 투자 카드 수) 점. 시작 자체가 빚입니다!',
+          '카드 8장 이상인 탐험대는 +20점 보너스.',
+        ],
+      },
+      {
+        heading: '종료',
+        items: ['덱의 마지막 카드를 뽑는 순간 게임이 끝나고, 총점이 높은 쪽이 승리합니다.'],
       },
     ],
   },

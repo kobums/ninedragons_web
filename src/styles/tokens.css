@@ -72,6 +72,15 @@
   --jh-wrath: #c64545; /* 분노 red */
   --jh-greed: #5b9e6f; /* 탐욕 green */
   --jh-potion: #8e8b82; /* 물약 neutral */
+
+  /* ---------- Lost Cities expedition colors ----------
+     원작의 5색 탐험지. 클랜 색과 같은 저채도 규칙이며,
+     white 는 크림 배경 위에서 "무색"으로 읽히는 웜 그레이. */
+  --lc-red: #c64545;
+  --lc-green: #5b9e6f;
+  --lc-blue: #4a6d9c;
+  --lc-white: #8e8b82;
+  --lc-yellow: #cf9c2e;
   --jh-jekyll: #4a6d9c; /* 지킬 진영 (team blue) */
   --jh-hyde: #6d4177; /* 하이드 진영 dark plum */
   --jh-jekyll-tint: rgba(74, 109, 156, 0.12);

@@ -1,0 +1,67 @@
+.lc-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: 24px;
+}
+
+.lc-game-over .lc-over-container {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lc-game-over .lc-over-title {
+  margin: 0;
+  font-size: 32px;
+  color: var(--color-ink);
+}
+
+.lc-game-over .lc-over-reason {
+  margin: 0;
+  color: var(--color-body);
+  font-size: 15px;
+}
+
+.lc-game-over .lc-over-scores {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+}
+
+.lc-game-over .lc-over-score {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lc-game-over .lc-over-score-label {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.lc-game-over .lc-over-score-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-ink);
+}
+
+.lc-game-over .lc-action-button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
