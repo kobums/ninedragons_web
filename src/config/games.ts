@@ -9,7 +9,8 @@ export type GameId =
   | 'schottentotten'
   | 'jekyllhyde'
   | 'geister'
-  | 'quoridor';
+  | 'quoridor'
+  | 'onitama';
 
 export interface RuleSection {
   heading?: string;
@@ -276,6 +277,42 @@ export const GAMES: Record<GameId, GameMeta> = {
       {
         heading: '승리',
         items: ['상대편 맨 끝 줄의 아무 칸에 먼저 도착하면 승리합니다.'],
+      },
+    ],
+  },
+  onitama: {
+    title: '오니타마',
+    tag: '전략 · 무술 카드',
+    description: '이동 카드가 순환하는 기물 대결',
+    players: '2인',
+    duration: '5-15분',
+    cardTheme: 'cream',
+    wsPath: '/ws/onitama',
+    logPrefix: '[Onitama] WebSocket',
+    sessionKey: 'onitama_session_id',
+    rules: [
+      {
+        heading: '준비',
+        items: [
+          '5×5 보드에서 각자 마스터 1개(★)와 제자 4개로 시작합니다.',
+          '이동 카드 16종 중 5장만 사용합니다 — 각자 2장, 나머지 1장은 대기 카드.',
+        ],
+      },
+      {
+        heading: '진행',
+        items: [
+          '내 차례에 손의 카드 한 장을 골라, 그 카드에 그려진 방향으로 내 기물 하나를 움직입니다.',
+          '상대 기물 칸으로 이동하면 잡습니다. 내 기물 위로는 못 갑니다.',
+          '쓴 카드는 대기 카드와 교환됩니다 — 내가 쓴 카드는 곧 상대 손에 들어갑니다.',
+          '둘 수 있는 수가 하나도 없으면 카드 한 장만 교환하고 차례를 넘깁니다.',
+        ],
+      },
+      {
+        heading: '승리 (둘 중 하나)',
+        items: [
+          '상대 마스터를 잡는다 (돌의 길).',
+          '내 마스터가 상대 사원(뒷줄 중앙 칸)에 도달한다 (개울의 길).',
+        ],
       },
     ],
   },

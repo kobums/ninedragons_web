@@ -1,0 +1,107 @@
+.ot-waiting-room {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: 24px;
+}
+
+.ot-waiting-room .ot-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.ot-waiting-room .ot-title {
+  margin: 0 0 4px;
+  font-size: 32px;
+  color: var(--color-ink);
+}
+
+.ot-waiting-room .ot-subtitle {
+  margin: 0 0 24px;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.ot-waiting-room .ot-join-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ot-waiting-room .ot-form-group {
+  text-align: left;
+}
+
+.ot-waiting-room .ot-form-group label {
+  display: block;
+  color: var(--color-body);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.ot-waiting-room .ot-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: 16px;
+}
+
+.ot-waiting-room .ot-join-button {
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ot-waiting-room .ot-join-button:disabled {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+.ot-waiting-room .ot-back-button {
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-body);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.ot-waiting-room .ot-waiting-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-body);
+}
+
+.ot-waiting-room .ot-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-hairline);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: ot-spin 0.9s linear infinite;
+}
+
+@keyframes ot-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

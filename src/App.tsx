@@ -7,6 +7,7 @@ import { SchottenTottenApp } from './components/st/SchottenTottenApp';
 import { JekyllHydeApp } from './components/jh/JekyllHydeApp';
 import { GeisterApp } from './components/gs/GeisterApp';
 import { QuoridorApp } from './components/qd/QuoridorApp';
+import { OnitamaApp } from './components/ot/OnitamaApp';
 import type { GameId } from './config/games';
 import './App.css';
 
@@ -47,6 +48,10 @@ function App() {
 
   if (selectedGame === 'quoridor') {
     return <QuoridorApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'onitama') {
+    return <OnitamaApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;

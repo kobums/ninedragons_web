@@ -1,0 +1,201 @@
+.ot-board-page {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: 52px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.ot-board-page .ot-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 1;
+  background: var(--color-surface-cream-strong);
+  border: 1px solid var(--color-hairline);
+  border-radius: 12px;
+  padding: 6px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.ot-board-page .ot-mid {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+  justify-content: center;
+}
+
+.ot-board-page .ot-cell {
+  position: relative;
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: 8px;
+  background: var(--color-surface-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.ot-board-page .ot-cell.temple {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+  border-style: dashed;
+}
+
+.ot-board-page .ot-cell.from {
+  box-shadow: inset 0 0 0 2px var(--color-primary-ring);
+}
+
+.ot-board-page .ot-cell.selected {
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+.ot-board-page .ot-cell.target {
+  background: var(--color-primary-tint);
+  box-shadow: inset 0 0 0 2px var(--color-primary-ring);
+}
+
+.ot-board-page .ot-cell.flash {
+  animation: ot-flash 0.8s ease;
+}
+
+@keyframes ot-flash {
+  0% {
+    background: var(--color-primary-tint);
+  }
+  100% {
+    background: var(--color-surface-card);
+  }
+}
+
+.ot-board-page .ot-piece {
+  width: 62%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid var(--color-canvas);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-primary);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ot-board-page .ot-piece.south {
+  background: var(--color-team-blue);
+}
+
+.ot-board-page .ot-piece.north {
+  background: var(--color-team-red);
+}
+
+/* ==================== 카드 ==================== */
+
+.ot-board-page .ot-hand {
+  display: flex;
+  gap: 10px;
+  min-height: 96px;
+}
+
+.ot-board-page .ot-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 10px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 10px;
+  background: var(--color-surface-card);
+  cursor: default;
+}
+
+.ot-board-page .ot-card.clickable {
+  cursor: pointer;
+}
+
+.ot-board-page .ot-card.selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.ot-board-page .ot-card.rotated .ot-card-grid {
+  transform: rotate(180deg);
+}
+
+.ot-board-page .ot-card.waiting {
+  opacity: 0.85;
+}
+
+.ot-board-page .ot-card-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.ot-board-page .ot-card-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 11px);
+  grid-template-rows: repeat(5, 11px);
+  gap: 1px;
+}
+
+.ot-board-page .ot-card-cell {
+  background: var(--color-canvas);
+  border-radius: 2px;
+}
+
+.ot-board-page .ot-card-cell.center {
+  background: var(--color-ink);
+}
+
+.ot-board-page .ot-card-cell.mark {
+  background: var(--color-primary);
+}
+
+.ot-board-page .ot-waiting-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ot-board-page .ot-waiting-label {
+  font-size: 11px;
+  color: var(--color-muted);
+}
+
+.ot-board-page .ot-status {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.ot-board-page .ot-action-button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ot-board-page .ot-action-button:disabled {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
