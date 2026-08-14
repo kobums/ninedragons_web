@@ -11,7 +11,8 @@ export type GameId =
   | 'geister'
   | 'quoridor'
   | 'onitama'
-  | 'lostcities';
+  | 'lostcities'
+  | 'cantstop';
 
 export interface RuleSection {
   heading?: string;
@@ -352,6 +353,41 @@ export const GAMES: Record<GameId, GameMeta> = {
       {
         heading: '종료',
         items: ['덱의 마지막 카드를 뽑는 순간 게임이 끝나고, 총점이 높은 쪽이 승리합니다.'],
+      },
+    ],
+  },
+  cantstop: {
+    title: '캔트 스톱',
+    tag: '주사위 · 운시험',
+    description: '멈출 타이밍을 겨루는 등반 대결',
+    players: '2인',
+    duration: '15-20분',
+    cardTheme: 'cream',
+    wsPath: '/ws/cantstop',
+    logPrefix: '[CantStop] WebSocket',
+    sessionKey: 'cantstop_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '2~12 합계 컬럼 11개를 오릅니다. 가운데(7)가 가장 길고 양끝(2·12)이 가장 짧습니다.',
+          '내 차례에 주사위 4개를 굴려 두 개씩 두 쌍으로 나누고, 그 합의 컬럼을 한 칸씩 오릅니다.',
+          '한 턴에 임시 마커는 3개까지 — 이미 3개를 쓴 뒤에는 그 컬럼들만 오를 수 있습니다.',
+        ],
+      },
+      {
+        heading: '멈출 것인가, 굴릴 것인가',
+        items: [
+          '굴릴 때마다 선택: 더 굴려 더 오르거나, 멈춰서 지금까지의 전진을 확정합니다.',
+          '굴렸는데 쓸 수 있는 조합이 없으면 버스트 — 이번 턴의 전진을 전부 잃습니다.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: [
+          '멈출 때 꼭대기에 닿은 컬럼은 완등 — 양쪽 모두에게 닫힙니다.',
+          '컬럼 3개를 먼저 완등하면 승리합니다.',
+        ],
       },
     ],
   },

@@ -9,6 +9,7 @@ import { GeisterApp } from './components/gs/GeisterApp';
 import { QuoridorApp } from './components/qd/QuoridorApp';
 import { OnitamaApp } from './components/ot/OnitamaApp';
 import { LostCitiesApp } from './components/lc/LostCitiesApp';
+import { CantStopApp } from './components/cs/CantStopApp';
 import type { GameId } from './config/games';
 import './App.css';
 
@@ -57,6 +58,10 @@ function App() {
 
   if (selectedGame === 'lostcities') {
     return <LostCitiesApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'cantstop') {
+    return <CantStopApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;

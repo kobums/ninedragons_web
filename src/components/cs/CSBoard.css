@@ -1,0 +1,202 @@
+.cs-board-page {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: 52px 12px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.cs-board-page .cs-score-bar {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-body);
+}
+
+.cs-board-page .cs-score-side.mine {
+  color: var(--color-team-blue);
+}
+
+/* ==================== 산 모양 트랙 ==================== */
+
+.cs-board-page .cs-mountain {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--color-surface-cream-strong);
+  border: 1px solid var(--color-hairline);
+  border-radius: 12px;
+  padding: 10px 8px 6px;
+  box-sizing: border-box;
+}
+
+.cs-board-page .cs-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  max-width: 38px;
+}
+
+.cs-board-page .cs-col-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.cs-board-page .cs-step {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: 6px;
+  background: var(--color-surface-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cs-board-page .cs-step.top {
+  border-color: var(--color-primary);
+  border-style: dashed;
+  background: var(--color-primary-tint);
+}
+
+.cs-board-page .cs-col-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--color-body);
+}
+
+/* 완등된 컬럼 */
+.cs-board-page .cs-col.claimed-mine .cs-step {
+  background: var(--color-team-blue-tint);
+  border-color: var(--color-team-blue);
+}
+
+.cs-board-page .cs-col.claimed-opp .cs-step {
+  background: var(--color-team-red-tint);
+  border-color: var(--color-team-red);
+}
+
+.cs-board-page .cs-col.claimed-mine .cs-col-label {
+  color: var(--color-team-blue);
+}
+
+.cs-board-page .cs-col.claimed-opp .cs-col-label {
+  color: var(--color-team-red);
+}
+
+/* ==================== 마커 ==================== */
+
+.cs-board-page .cs-marker {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* 확정 마커: 작은 점 (아래쪽) */
+.cs-board-page .cs-marker.banked {
+  width: 42%;
+  height: 42%;
+}
+
+.cs-board-page .cs-marker.banked.mine {
+  background: var(--color-team-blue);
+  left: 10%;
+  bottom: 10%;
+}
+
+.cs-board-page .cs-marker.banked.opp {
+  background: var(--color-team-red);
+  right: 10%;
+  bottom: 10%;
+}
+
+/* 임시 마커: 현재 턴 진영 색의 링 */
+.cs-board-page .cs-marker.temp {
+  width: 66%;
+  height: 66%;
+  background: var(--color-canvas);
+  z-index: 2;
+}
+
+.cs-board-page .cs-marker.temp.mine {
+  border: 3px solid var(--color-team-blue);
+}
+
+.cs-board-page .cs-marker.temp.opp {
+  border: 3px solid var(--color-team-red);
+}
+
+/* ==================== 주사위 · 선택지 ==================== */
+
+.cs-board-page .cs-dice {
+  display: flex;
+  gap: 8px;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--color-ink);
+  min-height: 44px;
+}
+
+.cs-board-page .cs-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cs-board-page .cs-option-button {
+  padding: 10px 18px;
+  border: 1px solid var(--color-primary);
+  border-radius: 10px;
+  background: var(--color-primary-tint);
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cs-board-page .cs-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cs-board-page .cs-action-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cs-board-page .cs-action-button.stop {
+  background: var(--color-surface-dark);
+}
+
+.cs-board-page .cs-status {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.cs-board-page .cs-status.bust {
+  color: var(--color-error);
+}
