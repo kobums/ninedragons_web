@@ -15,7 +15,9 @@ export type NCMessageType =
   | 'nc_game_state'
   | 'nc_opponent_disconnected'
   | 'nc_opponent_reconnected'
-  | 'nc_session_expired';
+  | 'nc_session_expired'
+  | 'nc_rematch'
+  | 'nc_rematch_offer';
 
 export interface NCMessage {
   type: NCMessageType;
@@ -25,6 +27,7 @@ export interface NCMessage {
 export interface NCJoinGamePayload {
   playerName: string;
   team?: TeamColor;
+  vsBot?: boolean; // true 면 즉시 봇("연습봇")과 매칭
 }
 
 export interface NCSubmitBlocksPayload {
@@ -144,4 +147,5 @@ export interface NCGameState {
   selectedBlockChoice: number | null; // 히든 사용 시 선택 (1: 블록1, 2: 블록2)
   pendingSubmitUseHidden: boolean | null; // 제출 대기 중인 히든 옵션
   opponentDisconnected: boolean; // 상대방이 재접속 대기 중인지
+  rematchOffered: boolean; // 상대가 재대결을 신청했는지
 }

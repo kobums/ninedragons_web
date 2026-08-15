@@ -55,6 +55,13 @@
   cursor: not-allowed;
 }
 
+/* 재대결 가능 시간 카운트다운 문구 */
+.cs-game-over .cs-rematch-countdown {
+  margin: -6px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
 .cs-game-over .cs-secondary-button {
   padding: 11px 28px;
   border: 1px solid var(--color-hairline);

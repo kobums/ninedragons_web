@@ -35,6 +35,7 @@ const initialGameState: GameState = {
   error: null,
   isWaiting: false,
   opponentDisconnected: false,
+  rematchOffered: false,
 };
 
 export const useGameState = (lastMessage: Message | null) => {
@@ -70,8 +71,12 @@ export const useGameState = (lastMessage: Message | null) => {
       case 'game_start':
         const startPayload = lastMessage.payload as GameStartPayload;
         console.log('Game starting:', startPayload);
+        // 재대결 시에도 같은 메시지로 새 게임이 시작되므로
+        // 이전 게임의 누적 상태(라운드/타일/승수/gameOver)를 초기값으로 리셋한다.
+        // 처음 매칭에서는 어차피 모두 초기값이라 동작이 같다.
         setGameState((prev) => ({
-          ...prev,
+          ...initialGameState,
+          gameId: prev.gameId,
           isGameStarted: true,
           isWaiting: false,
           currentPlayer: startPayload.firstPlayer,
@@ -239,7 +244,11 @@ export const useGameState = (lastMessage: Message | null) => {
         // 복구할 게임이 없음: 세션을 비우고 로비로
         console.log('Session expired, back to lobby');
         clearSessionId(ND_SESSION_KEY);
-        setGameState(initialGameState);
+        setGameState((prev) => {
+          // 게임 종료(재대결 창 만료) 화면은 유지한다 — 세션 만료는 정리 신호일 뿐
+          if (prev.isGameOver) return prev;
+          return initialGameState;
+        });
         break;
 
       case 'game_over':
@@ -260,6 +269,15 @@ export const useGameState = (lastMessage: Message | null) => {
             redWins: overPayload.redWins,
           };
         });
+        break;
+
+      case 'rematch_offer':
+        // 상대가 재대결을 신청함 — 게임 종료 화면에 표시
+        console.log('Rematch offered by opponent');
+        setGameState((prev) => ({
+          ...prev,
+          rematchOffered: true,
+        }));
         break;
 
       case 'error':

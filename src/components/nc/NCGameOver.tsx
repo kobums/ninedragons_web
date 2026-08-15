@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useRematchCountdown } from '../../hooks/useRematchCountdown';
 import type { TeamColor, NCRoundHistory } from '../../types/numberchange';
 import './NCGameOver.css';
 
@@ -10,6 +12,8 @@ interface NCGameOverProps {
   yourTeam: TeamColor | null;
   roundHistory: NCRoundHistory[];
   onPlayAgain: () => void;
+  rematchOffered: boolean;
+  onRematch: () => void;
 }
 
 export function NCGameOver({
@@ -21,7 +25,13 @@ export function NCGameOver({
   yourTeam,
   roundHistory,
   onPlayAgain,
+  rematchOffered,
+  onRematch,
 }: NCGameOverProps) {
+  const [requested, setRequested] = useState(false);
+  // 서버의 재대결 창(60초)에 맞춘 남은 시간
+  const { secondsLeft, expired } = useRematchCountdown();
+
   const isWinner = winner === yourTeam;
   const isDraw = winner === '';
 
@@ -141,8 +151,32 @@ export function NCGameOver({
         </div>
 
         <div className="nc-game-over-actions">
-          <button className="nc-play-again-button" onClick={onPlayAgain}>
-            다시 하기
+          {rematchOffered && !requested && !expired && (
+            <p className="nc-rematch-offer">상대가 재대결을 원합니다!</p>
+          )}
+          <button
+            className="nc-play-again-button"
+            disabled={requested || expired}
+            onClick={() => {
+              setRequested(true);
+              onRematch();
+            }}
+          >
+            {expired
+              ? '재대결 시간 만료'
+              : requested
+                ? '상대 수락 대기 중...'
+                : rematchOffered
+                  ? '🔁 재대결 수락'
+                  : '🔁 재대결 신청'}
+          </button>
+          {!expired && (
+            <p className="nc-rematch-countdown">
+              재대결 가능 시간 {secondsLeft}초
+            </p>
+          )}
+          <button className="nc-secondary-button" onClick={onPlayAgain}>
+            새 게임 찾기
           </button>
         </div>
       </div>

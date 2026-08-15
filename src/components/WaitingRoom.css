@@ -183,6 +183,25 @@
   cursor: not-allowed;
 }
 
+/* 혼자 연습 (봇 대전) 버튼 — QDWaitingRoom 의 qd-bot-button 과 동일한 톤 */
+.waiting-room .bot-btn {
+  width: 100%;
+  height: var(--control-height);
+  margin-top: var(--space-sm);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+  color: var(--color-primary-active);
+  font-size: var(--text-button);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.waiting-room .bot-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ---------- Rules ---------- */
 
 .waiting-room .game-rules {

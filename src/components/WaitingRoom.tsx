@@ -3,7 +3,7 @@ import type { PlayerColor } from '../types/game';
 import './WaitingRoom.css';
 
 interface WaitingRoomProps {
-  onJoinGame: (playerName: string, color?: PlayerColor) => void;
+  onJoinGame: (playerName: string, color?: PlayerColor, vsBot?: boolean) => void;
   isWaiting: boolean;
   hasJoined?: boolean;
 }
@@ -15,11 +15,22 @@ export const WaitingRoom: React.FC<WaitingRoomProps> = ({
 }) => {
   const [playerName, setPlayerName] = useState('');
   const [selectedColor, setSelectedColor] = useState<PlayerColor | ''>('');
+  // 연타로 join 이 두 번 나가는 것을 막는다 (서버 가드와 이중 방어)
+  const [joining, setJoining] = useState(false);
+
+  const join = (vsBot: boolean) => {
+    if (joining) return;
+    // 봇전은 이름이 비어 있으면 기본 이름으로 바로 시작한다
+    const name = playerName.trim() || (vsBot ? '나' : '');
+    if (!name) return;
+    setJoining(true);
+    // 선택한 색(또는 미선택)은 봇전에서도 그대로 서버로 보낸다
+    onJoinGame(name, selectedColor || undefined, vsBot);
+    setTimeout(() => setJoining(false), 2000);
+  };
 
   const handleJoin = () => {
-    if (playerName.trim()) {
-      onJoinGame(playerName, selectedColor || undefined);
-    }
+    join(false);
   };
 
   // 이미 참가했고 대기 중인 경우에만 대기 화면 표시
@@ -87,9 +98,16 @@ export const WaitingRoom: React.FC<WaitingRoomProps> = ({
           <button
             className="join-btn"
             onClick={handleJoin}
-            disabled={!playerName.trim()}
+            disabled={!playerName.trim() || joining}
           >
             게임 참가
+          </button>
+          <button
+            className="bot-btn"
+            disabled={joining}
+            onClick={() => join(true)}
+          >
+            🤖 혼자 연습 (봇 대전)
           </button>
         </div>
 

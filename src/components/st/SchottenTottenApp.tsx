@@ -35,6 +35,7 @@ export function SchottenTottenApp({ onBack }: SchottenTottenAppProps) {
     gameOver,
     error,
     opponentDisconnected,
+    rematchOffered,
     lastEvent,
     clearError,
     reset,
@@ -71,6 +72,8 @@ export function SchottenTottenApp({ onBack }: SchottenTottenAppProps) {
           result={gameOver}
           yourSide={game?.yourSide ?? null}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={rematchOffered}
+          onRematch={() => sendMessage({ type: 'st_rematch' })}
         />
       ) : game ? (
         <STGameBoard

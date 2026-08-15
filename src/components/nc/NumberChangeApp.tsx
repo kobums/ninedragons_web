@@ -51,13 +51,14 @@ export function NumberChangeApp() {
     });
   }, [gameState]);
 
-  const handleJoinGame = (playerName: string, team?: TeamColor) => {
-    console.log('[NumberChange] Joining game with:', playerName, team);
+  const handleJoinGame = (playerName: string, team?: TeamColor, vsBot?: boolean) => {
+    console.log('[NumberChange] Joining game with:', playerName, team, { vsBot });
     sendMessage({
       type: 'nc_join_game',
       payload: {
         playerName,
         team,
+        vsBot,
       },
     });
   };
@@ -196,6 +197,8 @@ export function NumberChangeApp() {
           yourTeam={gameState.yourTeam}
           roundHistory={gameState.roundHistory}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={gameState.rematchOffered}
+          onRematch={() => sendMessage({ type: 'nc_rematch' })}
         />
       )}
     </div>

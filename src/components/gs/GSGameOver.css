@@ -111,6 +111,13 @@
   cursor: not-allowed;
 }
 
+/* 재대결 가능 시간 카운트다운 문구 */
+.gs-game-over .gs-rematch-countdown {
+  margin: -6px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
 .gs-game-over .gs-secondary-button {
   padding: 11px 28px;
   border: 1px solid var(--color-hairline);

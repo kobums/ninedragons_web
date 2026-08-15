@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useRematchCountdown } from '../../hooks/useRematchCountdown';
 import type { JHGameOver as JHGameOverResult, JHRole } from '../../types/jekyllhyde';
 import './JHGameOver.css';
 
@@ -5,6 +7,8 @@ interface JHGameOverProps {
   result: JHGameOverResult;
   yourRole: JHRole | null;
   onPlayAgain: () => void;
+  rematchOffered: boolean;
+  onRematch: () => void;
 }
 
 const REASON_LABELS: Record<JHGameOverResult['reason'], string> = {
@@ -13,7 +17,17 @@ const REASON_LABELS: Record<JHGameOverResult['reason'], string> = {
   forfeit: '상대 몰수',
 };
 
-export function JHGameOver({ result, yourRole, onPlayAgain }: JHGameOverProps) {
+export function JHGameOver({
+  result,
+  yourRole,
+  onPlayAgain,
+  rematchOffered,
+  onRematch,
+}: JHGameOverProps) {
+  const [requested, setRequested] = useState(false);
+  // 서버의 재대결 창(60초)에 맞춘 남은 시간
+  const { secondsLeft, expired } = useRematchCountdown();
+
   const youWon = yourRole !== null && result.winner === yourRole;
   const winnerName =
     result.winner === 'jekyll' ? result.jekyllName : result.hydeName;
@@ -51,8 +65,31 @@ export function JHGameOver({ result, yourRole, onPlayAgain }: JHGameOverProps) {
           </tbody>
         </table>
 
-        <button type="button" className="jh-play-again-button" onClick={onPlayAgain}>
-          다시 하기
+        {rematchOffered && !requested && !expired && (
+          <p className="jh-rematch-offer">상대가 재대결을 원합니다!</p>
+        )}
+        <button
+          type="button"
+          className="jh-action-button"
+          disabled={requested || expired}
+          onClick={() => {
+            setRequested(true);
+            onRematch();
+          }}
+        >
+          {expired
+            ? '재대결 시간 만료'
+            : requested
+              ? '상대 수락 대기 중...'
+              : rematchOffered
+                ? '🔁 재대결 수락'
+                : '🔁 재대결 신청'}
+        </button>
+        {!expired && (
+          <p className="jh-rematch-countdown">재대결 가능 시간 {secondsLeft}초</p>
+        )}
+        <button type="button" className="jh-secondary-button" onClick={onPlayAgain}>
+          새 게임 찾기
         </button>
       </div>
     </div>

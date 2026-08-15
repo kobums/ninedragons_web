@@ -42,13 +42,14 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
     });
   }, [gameState]);
 
-  const handleJoinGame = (playerName: string, color?: PlayerColor) => {
-    console.log('[NineDragons] Joining game with:', playerName, color);
+  const handleJoinGame = (playerName: string, color?: PlayerColor, vsBot?: boolean) => {
+    console.log('[NineDragons] Joining game with:', playerName, color, { vsBot });
     sendMessage({
       type: 'join_game',
       payload: {
         playerName,
         color,
+        vsBot,
       },
     });
   };
@@ -124,6 +125,8 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
           yourColor={gameState.yourColor}
           roundHistory={gameState.roundHistory}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={gameState.rematchOffered}
+          onRematch={() => sendMessage({ type: 'rematch' })}
         />
       )}
     </div>

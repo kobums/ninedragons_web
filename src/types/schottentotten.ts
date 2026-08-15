@@ -37,6 +37,7 @@ export type STMessageType =
   | 'st_pass'
   | 'st_recruiter_draw'
   | 'st_recruiter_return'
+  | 'st_rematch'
   // 서버 → 클라
   | 'st_player_joined'
   | 'st_waiting_player'
@@ -44,6 +45,7 @@ export type STMessageType =
   | 'st_game_state'
   | 'st_event'
   | 'st_game_over'
+  | 'st_rematch_offer'
   | 'st_opponent_disconnected'
   | 'st_opponent_reconnected'
   | 'st_session_expired'

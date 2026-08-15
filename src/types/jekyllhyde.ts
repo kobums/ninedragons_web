@@ -23,6 +23,7 @@ export type JHMessageType =
   | 'jh_declare_suit'
   | 'jh_steal_trick'
   | 'jh_greed_cards'
+  | 'jh_rematch'
   // 서버 → 클라
   | 'jh_player_joined'
   | 'jh_waiting_player'
@@ -30,6 +31,7 @@ export type JHMessageType =
   | 'jh_game_state'
   | 'jh_event'
   | 'jh_game_over'
+  | 'jh_rematch_offer'
   | 'jh_opponent_disconnected'
   | 'jh_opponent_reconnected'
   | 'jh_session_expired'

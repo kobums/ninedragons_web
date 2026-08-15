@@ -229,8 +229,37 @@
 
 .nc-game-over-actions {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
   padding-top: var(--space-xs);
+}
+
+/* 상대의 재대결 제안 문구 */
+.nc-rematch-offer {
+  margin: 0;
+  color: var(--color-primary-active);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+}
+
+/* 재대결 가능 시간 카운트다운 문구 */
+.nc-rematch-countdown {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* 새 게임 찾기 보조 버튼 */
+.nc-secondary-button {
+  height: 44px;
+  padding: 0 var(--space-xl);
+  background: transparent;
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
 }
 
 .nc-play-again-button {
@@ -245,8 +274,14 @@
   transition: background-color 0.15s ease;
 }
 
-.nc-play-again-button:active {
+.nc-play-again-button:active:not(:disabled) {
   background: var(--color-primary-active);
+}
+
+.nc-play-again-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted);
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

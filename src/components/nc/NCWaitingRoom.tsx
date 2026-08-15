@@ -3,7 +3,7 @@ import type { TeamColor } from '../../types/numberchange';
 import './NCWaitingRoom.css';
 
 interface NCWaitingRoomProps {
-  onJoinGame: (playerName: string, team?: TeamColor) => void;
+  onJoinGame: (playerName: string, team?: TeamColor, vsBot?: boolean) => void;
   isWaiting: boolean;
   hasJoined: boolean;
 }
@@ -16,12 +16,23 @@ export function NCWaitingRoom({
   const [selectedTeam, setSelectedTeam] = useState<TeamColor | undefined>(
     undefined
   );
+  // 연타로 join 이 두 번 나가는 것을 막는다 (서버 가드와 이중 방어)
+  const [joining, setJoining] = useState(false);
+
+  const join = (vsBot: boolean) => {
+    if (joining) return;
+    // 봇전은 이름이 비어 있으면 기본 이름으로 바로 시작한다
+    const name = playerName.trim() || (vsBot ? '나' : '');
+    if (!name) return;
+    setJoining(true);
+    // 선택한 팀(또는 미선택)은 봇전에서도 그대로 서버로 보낸다
+    onJoinGame(name, selectedTeam, vsBot);
+    setTimeout(() => setJoining(false), 2000);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (playerName.trim()) {
-      onJoinGame(playerName, selectedTeam);
-    }
+    join(false);
   };
 
   return (
@@ -80,8 +91,16 @@ export function NCWaitingRoom({
               </small>
             </div>
 
-            <button type="submit" className="nc-join-button">
-              게임 참가
+            <button type="submit" className="nc-join-button" disabled={joining}>
+              {joining ? '입장 중...' : '게임 참가'}
+            </button>
+            <button
+              type="button"
+              className="nc-bot-button"
+              disabled={joining}
+              onClick={() => join(true)}
+            >
+              🤖 혼자 연습 (봇 대전)
             </button>
           </form>
         ) : (

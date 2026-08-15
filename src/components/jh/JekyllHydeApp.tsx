@@ -35,6 +35,7 @@ export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
     gameOver,
     error,
     opponentDisconnected,
+    rematchOffered,
     lastEvent,
     clearError,
     reset,
@@ -71,6 +72,8 @@ export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
           result={gameOver}
           yourRole={game?.yourRole ?? null}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={rematchOffered}
+          onRematch={() => sendMessage({ type: 'jh_rematch' })}
         />
       ) : game ? (
         <JHGameBoard

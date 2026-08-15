@@ -40,6 +40,7 @@ const initialGameState: NCGameState = {
   selectedBlockChoice: null,
   pendingSubmitUseHidden: null,
   opponentDisconnected: false,
+  rematchOffered: false,
 };
 
 export const useNCGameState = (lastMessage: NCMessage | null) => {
@@ -76,8 +77,12 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
         const startPayload = lastMessage.payload as NCGameStartPayload;
         console.log('[NumberChange] Game starting:', startPayload);
         console.log('[NumberChange] Player names - Team1:', startPayload.team1Name, 'Team2:', startPayload.team2Name);
+        // 재대결 시에도 같은 메시지로 새 게임이 시작되므로
+        // 이전 게임의 누적 상태(블록/점수/히든/gameOver)를 초기값으로 리셋한다.
+        // 처음 매칭에서는 어차피 모두 초기값이라 동작이 같다.
         setGameState((prev) => ({
-          ...prev,
+          ...initialGameState,
+          gameId: prev.gameId,
           isGameStarted: true,
           isWaiting: false,
           currentTeam: startPayload.firstTeam,
@@ -271,7 +276,11 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
         // 복구할 게임이 없음: 세션을 비우고 로비로
         console.log('[NumberChange] Session expired, back to lobby');
         clearSessionId(NC_SESSION_KEY);
-        setGameState(initialGameState);
+        setGameState((prev) => {
+          // 게임 종료(재대결 창 만료) 화면은 유지한다 — 세션 만료는 정리 신호일 뿐
+          if (prev.isGameOver) return prev;
+          return initialGameState;
+        });
         break;
 
       case 'nc_game_over':
@@ -295,6 +304,15 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
           opponentUsedHiddenNotification: true,
           opponentUsedHiddenThisRound: true, // 이번 라운드에 히든 사용됨
           // 블록 선택 UI는 제출 후에 표시
+        }));
+        break;
+
+      case 'nc_rematch_offer':
+        // 상대가 재대결을 신청함 — 게임 종료 화면에 표시
+        console.log('[NumberChange] Rematch offered by opponent');
+        setGameState((prev) => ({
+          ...prev,
+          rematchOffered: true,
         }));
         break;
 

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRematchCountdown } from '../hooks/useRematchCountdown';
 import type { PlayerColor, RoundHistory } from '../types/game';
 import './GameOver.css';
 
@@ -11,6 +12,8 @@ interface GameOverProps {
   yourColor: PlayerColor | null;
   roundHistory: RoundHistory[];
   onPlayAgain: () => void;
+  rematchOffered: boolean;
+  onRematch: () => void;
 }
 
 export const GameOver: React.FC<GameOverProps> = ({
@@ -22,7 +25,13 @@ export const GameOver: React.FC<GameOverProps> = ({
   yourColor,
   roundHistory,
   onPlayAgain,
+  rematchOffered,
+  onRematch,
 }) => {
+  const [requested, setRequested] = useState(false);
+  // 서버의 재대결 창(60초)에 맞춘 남은 시간
+  const { secondsLeft, expired } = useRematchCountdown();
+
   const isWinner = winner === yourColor;
   const isDraw = winner === '';
 
@@ -114,8 +123,30 @@ export const GameOver: React.FC<GameOverProps> = ({
           </div>
         </div>
 
-        <button className="play-again-btn" onClick={onPlayAgain}>
-          다시 플레이
+        {rematchOffered && !requested && !expired && (
+          <p className="rematch-offer">상대가 재대결을 원합니다!</p>
+        )}
+        <button
+          className="play-again-btn"
+          disabled={requested || expired}
+          onClick={() => {
+            setRequested(true);
+            onRematch();
+          }}
+        >
+          {expired
+            ? '재대결 시간 만료'
+            : requested
+              ? '상대 수락 대기 중...'
+              : rematchOffered
+                ? '🔁 재대결 수락'
+                : '🔁 재대결 신청'}
+        </button>
+        {!expired && (
+          <p className="rematch-countdown">재대결 가능 시간 {secondsLeft}초</p>
+        )}
+        <button className="secondary-btn" onClick={onPlayAgain}>
+          새 게임 찾기
         </button>
       </div>
     </div>

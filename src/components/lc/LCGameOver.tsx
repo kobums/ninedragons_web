@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRematchCountdown } from '../../hooks/useRematchCountdown';
 import type { LCGameOver as LCGameOverPayload, LCSide } from '../../types/lostcities';
 import './LCGameOver.css';
 
@@ -18,6 +19,8 @@ export function LCGameOver({
   onRematch,
 }: LCGameOverProps) {
   const [requested, setRequested] = useState(false);
+  // 서버의 재대결 창(60초)에 맞춘 남은 시간
+  const { secondsLeft, expired } = useRematchCountdown();
 
   const isTie = result.winner === '';
   const youWon = !isTie && yourSide !== null && result.winner === yourSide;
@@ -49,20 +52,29 @@ export function LCGameOver({
           </div>
         </div>
 
-        {rematchOffered && !requested && (
+        {rematchOffered && !requested && !expired && (
           <p className="lc-rematch-offer">상대가 재대결을 원합니다!</p>
         )}
         <button
           type="button"
           className="lc-action-button"
-          disabled={requested}
+          disabled={requested || expired}
           onClick={() => {
             setRequested(true);
             onRematch();
           }}
         >
-          {requested ? '상대 수락 대기 중...' : rematchOffered ? '🔁 재대결 수락' : '🔁 재대결 신청'}
+          {expired
+            ? '재대결 시간 만료'
+            : requested
+              ? '상대 수락 대기 중...'
+              : rematchOffered
+                ? '🔁 재대결 수락'
+                : '🔁 재대결 신청'}
         </button>
+        {!expired && (
+          <p className="lc-rematch-countdown">재대결 가능 시간 {secondsLeft}초</p>
+        )}
         <button type="button" className="lc-secondary-button" onClick={onPlayAgain}>
           새 게임 찾기
         </button>

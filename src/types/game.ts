@@ -15,7 +15,9 @@ export type MessageType =
   | 'game_state'
   | 'opponent_disconnected'
   | 'opponent_reconnected'
-  | 'session_expired';
+  | 'session_expired'
+  | 'rematch'
+  | 'rematch_offer';
 
 export interface Message {
   type: MessageType;
@@ -25,6 +27,7 @@ export interface Message {
 export interface JoinGamePayload {
   playerName: string;
   color?: PlayerColor;
+  vsBot?: boolean; // true 면 즉시 봇("연습봇")과 매칭
 }
 
 export interface PlayTilePayload {
@@ -123,4 +126,5 @@ export interface GameState {
   error: string | null;
   isWaiting: boolean;
   opponentDisconnected: boolean; // 상대방이 재접속 대기 중인지
+  rematchOffered: boolean; // 상대가 재대결을 신청했는지
 }

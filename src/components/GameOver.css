@@ -294,8 +294,42 @@
   transition: background-color 0.15s ease;
 }
 
-.game-over-overlay .play-again-btn:active {
+.game-over-overlay .play-again-btn:active:not(:disabled) {
   background: var(--color-primary-active);
+}
+
+.game-over-overlay .play-again-btn:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+/* 상대의 재대결 제안 문구 */
+.game-over-overlay .rematch-offer {
+  margin: 0 0 var(--space-xs);
+  color: var(--color-primary-active);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+}
+
+/* 재대결 가능 시간 카운트다운 문구 */
+.game-over-overlay .rematch-countdown {
+  margin: var(--space-xs) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* 새 게임 찾기 보조 버튼 */
+.game-over-overlay .secondary-btn {
+  margin-top: var(--space-sm);
+  padding: 0 var(--space-xl);
+  height: 44px;
+  background: transparent;
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
