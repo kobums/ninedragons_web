@@ -7,7 +7,7 @@
 }
 
 .dv-tile-row.current {
-  border-color: #f6c344;
+  border-color: var(--dv-gold);
 }
 
 .dv-tile-row.eliminated {
@@ -24,7 +24,7 @@
 .dv-player-name {
   font-weight: 700;
   font-size: 14px;
-  color: #f4f1ea;
+  color: var(--dv-ink);
 }
 
 .dv-turn-badge,
@@ -37,8 +37,8 @@
 }
 
 .dv-turn-badge {
-  background: #f6c344;
-  color: #2b2113;
+  background: var(--dv-gold);
+  color: var(--dv-on-gold);
 }
 
 .dv-out-badge {
@@ -80,20 +80,20 @@
 }
 
 .dv-tile.black {
-  background: #1d1d22;
-  color: #f4f1ea;
-  border-color: #3a3a42;
+  background: var(--dv-tile-black);
+  color: var(--dv-ink);
+  border-color: var(--dv-tile-black-border);
 }
 
 .dv-tile.white {
-  background: #f4f1ea;
-  color: #1d1d22;
-  border-color: #d8d2c4;
+  background: var(--dv-ink);
+  color: var(--dv-tile-black);
+  border-color: var(--dv-tile-white-border);
 }
 
 /* 셋업 중 색까지 감춘 중립 뒷면 */
 .dv-tile.unknown {
-  background: repeating-linear-gradient(135deg, #3a3444, #3a3444 6px, #322c3c 6px, #322c3c 12px);
+  background: repeating-linear-gradient(135deg, #3a3444, #3a3444 6px, var(--dv-surface-soft) 6px, var(--dv-surface-soft) 12px);
   border-color: #555062;
   color: transparent;
 }
@@ -118,7 +118,7 @@
 }
 
 .dv-tile.selected {
-  border-color: #f6c344;
+  border-color: var(--dv-gold);
   transform: translateY(-6px);
 }
 
@@ -126,9 +126,9 @@
   width: 26px;
   height: 62px;
   border-radius: 8px;
-  border: 2px dashed #f6c344;
+  border: 2px dashed var(--dv-gold);
   background: rgba(246, 195, 68, 0.12);
-  color: #f6c344;
+  color: var(--dv-gold);
   font-size: 18px;
   font-weight: 800;
   cursor: pointer;

@@ -1,6 +1,6 @@
 .dv-board {
   min-height: 100vh;
-  background: linear-gradient(160deg, #201a2e 0%, #14101f 100%);
+  background: linear-gradient(160deg, var(--dv-surface) 0%, var(--dv-canvas) 100%);
   padding: 20px 16px 28px;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@
 .dv-toast {
   background: rgba(20, 16, 31, 0.92);
   border: 1px solid rgba(246, 195, 68, 0.4);
-  color: #f4f1ea;
+  color: var(--dv-ink);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 13px;
@@ -81,15 +81,15 @@
 }
 
 .dv-deck-pile.black {
-  background: #1d1d22;
-  border: 2px solid #3a3a42;
-  color: #f4f1ea;
+  background: var(--dv-tile-black);
+  border: 2px solid var(--dv-tile-black-border);
+  color: var(--dv-ink);
 }
 
 .dv-deck-pile.white {
-  background: #f4f1ea;
-  border: 2px solid #d8d2c4;
-  color: #1d1d22;
+  background: var(--dv-ink);
+  border: 2px solid var(--dv-tile-white-border);
+  color: var(--dv-tile-black);
 }
 
 .dv-deck-pile:disabled {
@@ -98,7 +98,7 @@
 
 .dv-deck-pile.drawable {
   cursor: pointer;
-  border-color: #f6c344;
+  border-color: var(--dv-gold);
   box-shadow: 0 3px 10px rgba(246, 195, 68, 0.25);
 }
 
@@ -107,7 +107,7 @@
 }
 
 .dv-deck-label {
-  color: #b6aed0;
+  color: var(--dv-muted);
   font-size: 11px;
 }
 

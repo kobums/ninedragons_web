@@ -11,7 +11,7 @@
 
 .dv-action-hint {
   margin: 0;
-  color: #f4f1ea;
+  color: var(--dv-ink);
   font-size: 15px;
   font-weight: 600;
   text-align: center;
@@ -19,7 +19,7 @@
 
 .dv-action-sub {
   margin: 0;
-  color: #b6aed0;
+  color: var(--dv-muted);
   font-size: 12px;
 }
 
@@ -36,16 +36,16 @@
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(0, 0, 0, 0.25);
-  color: #f4f1ea;
+  color: var(--dv-ink);
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
 }
 
 .dv-pad-button.picked {
-  background: #f6c344;
-  color: #2b2113;
-  border-color: #f6c344;
+  background: var(--dv-gold);
+  color: var(--dv-on-gold);
+  border-color: var(--dv-gold);
 }
 
 .dv-pad-button.joker {
