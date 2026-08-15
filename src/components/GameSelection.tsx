@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react'
 import { GAME_IDS, GAMES } from '../config/games'
 import type { GameId } from '../config/games'
 import { StatsBar } from './StatsBar'
+import { buildLobbyUrl } from '../utils/ws'
 import './GameSelection.css'
 
 interface GameSelectionProps {
@@ -8,6 +10,26 @@ interface GameSelectionProps {
 }
 
 export function GameSelection({ onSelectGame }: GameSelectionProps) {
+  // 상대를 기다리는 사람이 있는 게임 — 15초마다 갱신 (실패하면 조용히 무시)
+  const [waiting, setWaiting] = useState<string[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    const load = () =>
+      fetch(buildLobbyUrl())
+        .then((res) => (res.ok ? res.json() : null))
+        .then((json) => {
+          if (!cancelled && json) setWaiting(json.waiting ?? [])
+        })
+        .catch(() => {})
+    load()
+    const timer = setInterval(load, 15000)
+    return () => {
+      cancelled = true
+      clearInterval(timer)
+    }
+  }, [])
+
   return (
     <div className="game-selection">
       <div className="game-selection-container">
@@ -28,6 +50,9 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
                 onClick={() => onSelectGame(id)}
               >
                 <div className="game-card-content">
+                  {waiting.includes(id) && (
+                    <span className="game-card-waiting">👤 상대 대기 중!</span>
+                  )}
                   <span className="game-card-tag">{game.tag}</span>
                   <h2>{game.title}</h2>
                   <p className="game-description">{game.description}</p>

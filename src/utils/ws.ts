@@ -15,3 +15,9 @@ export const buildStatsUrl = (): string =>
   isLocalHost
     ? 'http://localhost:8003/stats'
     : 'https://ninedragonsapi.gowoobro.com/stats';
+
+// 대기 현황 API 주소
+export const buildLobbyUrl = (): string =>
+  isLocalHost
+    ? 'http://localhost:8003/lobby'
+    : 'https://ninedragonsapi.gowoobro.com/lobby';
