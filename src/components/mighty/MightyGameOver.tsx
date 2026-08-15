@@ -4,23 +4,24 @@ import './MightyGameOver.css';
 
 interface MightyGameOverProps {
   result: MTResult;
-  // 내가 주공팀이었는지 (내 이름 기준 판정용). 모르면 null.
-  yourName: string | null;
+  // 내 좌석 (승패 타이틀 판정용 — 이름은 중복될 수 있어 좌석으로 판정). 모르면 null.
+  yourSeat: number | null;
   onFindNewGame: () => void;
 }
 
 // 단판 승부 결과 오버레이. 재대결 없음 — "새 게임 찾기"만 제공한다.
 export function MightyGameOver({
   result,
-  yourName,
+  yourSeat,
   onFindNewGame,
 }: MightyGameOverProps) {
   const onDeclarerTeam =
-    yourName !== null && result.declarerTeam.includes(yourName);
-  const youWon = yourName !== null && (onDeclarerTeam ? result.win : !result.win);
+    yourSeat !== null &&
+    (yourSeat === result.contract.declarer || yourSeat === result.friendSeat);
+  const youWon = yourSeat !== null && (onDeclarerTeam ? result.win : !result.win);
 
   const title =
-    yourName === null
+    yourSeat === null
       ? result.win
         ? '공약 성공!'
         : '공약 실패'

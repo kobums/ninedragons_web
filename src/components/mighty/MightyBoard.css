@@ -396,6 +396,18 @@
   }
 
   .mt-trick-name {
-    max-width: 48px;
+    /* 280px(폴드 접힘)에서 중앙 컬럼이 ~70px까지 줄어든다 —
+       이름이 카드 폭을 넘지 않게 카드 기준으로 잘라낸다 */
+    max-width: 34px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 중앙 트릭이 컬럼보다 넓어져도 좌석 패널을 밀지 않게 격리 */
+  .mt-trick {
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 }

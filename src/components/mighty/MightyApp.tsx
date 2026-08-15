@@ -48,8 +48,7 @@ export function MightyApp({ onBack }: MightyAppProps) {
   const inGame = game !== null && game.phase !== 'waiting';
   // mt_game_over 페이로드가 우선, 마지막 스냅샷의 result 는 보조
   const result = gameOver ?? game?.result ?? null;
-  const yourName =
-    game?.players.find((p) => p.seat === game.yourSeat)?.name ?? null;
+  const yourSeat = game !== null && game.yourSeat >= 0 ? game.yourSeat : null;
 
   // 게임 시작 전에만 전체 화면 연결 대기 표시
   if (!isConnected && !inGame) {
@@ -69,7 +68,7 @@ export function MightyApp({ onBack }: MightyAppProps) {
       {result ? (
         <MightyGameOver
           result={result}
-          yourName={yourName}
+          yourSeat={yourSeat}
           onFindNewGame={handleFindNewGame}
         />
       ) : inGame && game ? (

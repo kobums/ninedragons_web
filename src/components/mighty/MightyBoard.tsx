@@ -11,8 +11,11 @@ import type {
 import type { MTToast } from '../../hooks/useMightyGameState';
 import {
   BID_SUIT_LABEL,
+  SUIT_SYMBOL,
   jokerCallCard,
   legalPlays,
+  rankLabel,
+  rankOf,
   suitOf,
 } from './mightyRules';
 import { MightyCard } from './MightyCard';
@@ -203,7 +206,13 @@ export function MightyBoard({
     const f = game.friend;
     if (!f || !f.type) return null;
     if (f.revealed && f.seat >= 0) return `프렌드 ${nameOf(f.seat)}`;
-    if (f.type === 'card' && f.card) return `프렌드 ${f.card === 'JK' ? 'JK' : f.card}`;
+    // 공개됐는데 좌석이 없으면 실질 노프렌드 (첫 트릭을 주공이 직접 이긴 경우 등)
+    if (f.revealed && f.seat < 0) return '노프렌드';
+    if (f.type === 'card' && f.card) {
+      const s = suitOf(f.card);
+      const label = s ? `${SUIT_SYMBOL[s]}${rankLabel(rankOf(f.card))}` : 'JK';
+      return `프렌드 ${label}`;
+    }
     if (f.type === 'first_trick') return '프렌드 첫 트릭 승자';
     if (f.type === 'none') return '노프렌드';
     return null;
