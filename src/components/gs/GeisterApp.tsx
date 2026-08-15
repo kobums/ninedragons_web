@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useReconnectingWebSocket } from '../../hooks/useReconnectingWebSocket';
 import { GAMES } from '../../config/games';
 import { buildWsUrl } from '../../utils/ws';
@@ -9,6 +8,7 @@ import { GSGameOver } from './GSGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
+import { ErrorToast } from '../ErrorToast';
 import type { GSCell, GSMessage } from '../../types/geister';
 import { getSessionId } from '../../utils/session';
 
@@ -43,13 +43,6 @@ export function GeisterApp({ onBack }: GeisterAppProps) {
     reset,
   } = useGSGameState(lastMessage);
 
-  useEffect(() => {
-    if (error) {
-      alert(error);
-      clearError();
-    }
-  }, [error, clearError]);
-
   const handlePlayAgain = () => {
     reset();
     window.location.reload();
@@ -67,6 +60,7 @@ export function GeisterApp({ onBack }: GeisterAppProps) {
         opponentDisconnected={opponentDisconnected}
         isGameActive={Boolean(game) && !gameOver}
       />
+      <ErrorToast error={error} onClear={clearError} />
       <GameInfoButton game="geister" />
 
       {gameOver ? (
