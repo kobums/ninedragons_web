@@ -85,8 +85,8 @@ export function CantStopApp({ onBack }: CantStopAppProps) {
       ) : (
         <CSWaitingRoom
           hasJoined={hasJoined}
-          onJoinGame={(playerName: string) =>
-            sendMessage({ type: 'cs_join_game', payload: { playerName } })
+          onJoinGame={(playerName: string, vsBot?: boolean) =>
+            sendMessage({ type: 'cs_join_game', payload: { playerName, vsBot } })
           }
           onBack={onBack}
         />

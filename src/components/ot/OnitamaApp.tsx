@@ -86,8 +86,8 @@ export function OnitamaApp({ onBack }: OnitamaAppProps) {
       ) : (
         <OTWaitingRoom
           hasJoined={hasJoined}
-          onJoinGame={(playerName: string) =>
-            sendMessage({ type: 'ot_join_game', payload: { playerName } })
+          onJoinGame={(playerName: string, vsBot?: boolean) =>
+            sendMessage({ type: 'ot_join_game', payload: { playerName, vsBot } })
           }
           onBack={onBack}
         />

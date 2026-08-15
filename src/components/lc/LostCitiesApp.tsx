@@ -85,8 +85,8 @@ export function LostCitiesApp({ onBack }: LostCitiesAppProps) {
       ) : (
         <LCWaitingRoom
           hasJoined={hasJoined}
-          onJoinGame={(playerName: string) =>
-            sendMessage({ type: 'lc_join_game', payload: { playerName } })
+          onJoinGame={(playerName: string, vsBot?: boolean) =>
+            sendMessage({ type: 'lc_join_game', payload: { playerName, vsBot } })
           }
           onBack={onBack}
         />
