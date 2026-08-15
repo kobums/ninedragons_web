@@ -1,5 +1,6 @@
 import { GAME_IDS, GAMES } from '../config/games'
 import type { GameId } from '../config/games'
+import { StatsBar } from './StatsBar'
 import './GameSelection.css'
 
 interface GameSelectionProps {
@@ -39,6 +40,8 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
             )
           })}
         </div>
+
+        <StatsBar />
       </div>
     </div>
   )

@@ -9,3 +9,9 @@ export const buildWsUrl = (path: string): string =>
   isLocalHost
     ? `ws://localhost:8003${path}`
     : `wss://ninedragonsapi.gowoobro.com${path}`;
+
+// 전적 API 주소 — API 도메인의 location / 가 백엔드를 프록시한다
+export const buildStatsUrl = (): string =>
+  isLocalHost
+    ? 'http://localhost:8003/stats'
+    : 'https://ninedragonsapi.gowoobro.com/stats';

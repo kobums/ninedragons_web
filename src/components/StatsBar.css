@@ -1,0 +1,14 @@
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 16px;
+  margin-top: 28px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.stats-bar .stats-total {
+  font-weight: 700;
+  color: var(--color-body);
+}
