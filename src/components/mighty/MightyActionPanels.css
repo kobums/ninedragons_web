@@ -1,0 +1,180 @@
+/* 마이티 하단 액션 패널 (입찰·키티·프렌드·조커 선택) */
+
+.mt-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-md);
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+}
+
+.mt-panel-title {
+  margin: 0;
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  text-align: center;
+}
+
+.mt-panel-hint {
+  margin: 0;
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+.mt-panel-warning {
+  margin: 0;
+  color: var(--color-accent-amber);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  text-align: center;
+}
+
+.mt-suit-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.mt-suit-button {
+  min-width: 44px;
+  height: 40px;
+  padding: 0 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-on-dark);
+  font-size: var(--text-title-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mt-suit-button.wide {
+  font-size: var(--text-body-sm);
+}
+
+.mt-suit-button.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.mt-suit-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ♦♥ 는 카드와 같은 빨강 계열 — 다크 배경 대비 위해 살짝 밝게 */
+.mt-suit-red {
+  color: #e06c6c;
+}
+
+.mt-bid-stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.mt-step-button {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-on-dark);
+  font-size: var(--text-title-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mt-step-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.mt-bid-value {
+  min-width: 90px;
+  text-align: center;
+  color: var(--color-on-dark);
+  font-size: var(--text-title-lg);
+  font-weight: 800;
+}
+
+.mt-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.mt-action-button {
+  padding: 11px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: var(--color-on-dark);
+  font-size: var(--text-button);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mt-action-button.primary {
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.mt-action-button.primary:active:not(:disabled) {
+  background: var(--color-primary-active);
+}
+
+.mt-action-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mt-rank-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.mt-rank-button {
+  min-width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mt-rank-button.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.mt-friend-card-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.mt-friend-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

@@ -1,0 +1,401 @@
+/* 마이티 보드 — 내 좌석은 항상 아래, 상대 4명은 반원 배치.
+   position n = (seat - yourSeat + 5) % 5:
+   1 왼아래 / 2 왼위 / 3 오른위 / 4 오른아래 */
+
+.mt-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    160deg,
+    var(--color-surface-dark-elevated) 0%,
+    var(--color-surface-dark) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.mt-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.mt-toast {
+  background: rgba(20, 20, 19, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: mt-toast-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes mt-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 상단 상태 바 ---------- */
+
+.mt-status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.mt-chip {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--color-on-dark);
+}
+
+.mt-chip.accent {
+  border-color: var(--color-accent-amber);
+  color: var(--color-accent-amber);
+}
+
+.mt-chip.teal {
+  border-color: var(--color-accent-teal);
+  color: var(--color-accent-teal);
+}
+
+.mt-chip.warn {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: var(--color-on-primary);
+  animation: mt-pulse 1s ease infinite;
+}
+
+@keyframes mt-pulse {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* ---------- 테이블 (좌석 반원 + 중앙) ---------- */
+
+.mt-table {
+  flex: 1;
+  display: grid;
+  grid-template-areas:
+    's2 center s3'
+    's1 center s4';
+  grid-template-columns: minmax(108px, 1fr) minmax(0, 2.2fr) minmax(108px, 1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.mt-seat-pos-1 {
+  grid-area: s1;
+}
+.mt-seat-pos-2 {
+  grid-area: s2;
+}
+.mt-seat-pos-3 {
+  grid-area: s3;
+}
+.mt-seat-pos-4 {
+  grid-area: s4;
+}
+
+.mt-seat {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mt-seat.turn {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.mt-seat.dim {
+  opacity: 0.45;
+}
+
+.mt-seat-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+}
+
+.mt-seat-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mt-seat-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: var(--text-caption-uppercase);
+  color: var(--color-on-dark-soft);
+}
+
+.mt-seat-offline {
+  font-size: var(--text-caption-uppercase);
+  color: var(--color-warning);
+}
+
+/* 프렌드 공개 배지 — 등장 시 팝 연출 */
+.mt-friend-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-teal);
+  color: var(--color-surface-dark);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  animation: mt-badge-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes mt-badge-pop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.mt-pass-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 700;
+}
+
+/* ---------- 중앙 ---------- */
+
+.mt-center {
+  grid-area: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.mt-center-info {
+  text-align: center;
+}
+
+.mt-center-line {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 700;
+}
+
+.mt-center-sub {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+}
+
+/* 트릭 5칸 — 좌석과 같은 반원 방향으로 배치 */
+.mt-trick {
+  display: grid;
+  grid-template-areas:
+    't2 t3'
+    't1 t4'
+    't0 t0';
+  gap: 6px;
+  justify-items: center;
+  align-items: center;
+}
+
+.mt-trick-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.mt-trick-slot.slot-0 {
+  grid-area: t0;
+}
+.mt-trick-slot.slot-1 {
+  grid-area: t1;
+}
+.mt-trick-slot.slot-2 {
+  grid-area: t2;
+}
+.mt-trick-slot.slot-3 {
+  grid-area: t3;
+}
+.mt-trick-slot.slot-4 {
+  grid-area: t4;
+}
+
+.mt-trick-name {
+  font-size: var(--text-caption-uppercase);
+  color: var(--color-on-dark-soft);
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mt-trick-empty {
+  width: 32px;
+  height: 45px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+}
+
+.mt-last-trick {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  padding: 4px 8px;
+}
+
+.mt-last-trick-label {
+  font-size: var(--text-caption-uppercase);
+  color: var(--color-on-dark-soft);
+}
+
+.mt-last-trick-cards {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.mt-last-trick-cards .mt-card {
+  width: 24px;
+  height: 34px;
+  font-size: 10px;
+}
+
+/* ---------- 내 영역 ---------- */
+
+.mt-my-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.mt-my-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-body-sm);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+}
+
+.mt-my-info.turn {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.mt-seat-stats-inline {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+}
+
+/* 손패 — 문양 그룹 사이 간격, 모바일에선 줄바꿈으로 10~13장 모두 탭 가능 */
+.mt-hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  row-gap: 10px;
+  max-width: 720px;
+  padding: 4px 0 8px;
+}
+
+.mt-hand-slot.suit-break {
+  margin-left: 10px;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 480px) {
+  .mt-board {
+    padding: var(--space-xs);
+  }
+
+  .mt-table {
+    grid-template-columns: minmax(88px, 1fr) minmax(0, 1.6fr) minmax(88px, 1fr);
+  }
+
+  .mt-seat {
+    padding: 6px;
+  }
+
+  .mt-seat-name {
+    font-size: var(--text-caption);
+  }
+
+  .mt-seat-stats {
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .mt-card-md {
+    width: 38px;
+    height: 54px;
+    font-size: 14px;
+  }
+
+  .mt-hand {
+    gap: 3px;
+    row-gap: 8px;
+  }
+
+  .mt-hand-slot.suit-break {
+    margin-left: 6px;
+  }
+
+  .mt-trick-name {
+    max-width: 48px;
+  }
+}

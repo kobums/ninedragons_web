@@ -1,0 +1,91 @@
+/* 마이티 결과 오버레이 */
+
+.mt-game-over {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+}
+
+.mt-game-over-container {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface-dark-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-modal);
+}
+
+.mt-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-on-dark);
+}
+
+.mt-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 700;
+}
+
+.mt-over-verdict.win {
+  color: var(--color-success);
+}
+
+.mt-over-verdict.lose {
+  color: var(--color-error);
+}
+
+.mt-over-teams {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+
+.mt-over-team {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm);
+}
+
+.mt-over-team.winner {
+  border-color: var(--color-accent-amber);
+}
+
+.mt-over-team h2 {
+  margin: 0 0 4px;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark-soft);
+}
+
+.mt-over-names {
+  margin: 0 0 6px;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.mt-over-points {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+}
+
+.mt-over-points strong {
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
