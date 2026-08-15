@@ -1,0 +1,638 @@
+.tc-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 860px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* ---------- 이벤트 토스트 피드 ---------- */
+
+.tc-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 480px);
+  pointer-events: none;
+}
+
+.tc-toast {
+  background: var(--color-surface-dark);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs) 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  animation: tc-toast-in 0.2s ease;
+}
+
+@keyframes tc-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 점수 헤더 ---------- */
+
+.tc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.tc-score {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  font-size: var(--text-body-sm);
+  color: var(--color-body);
+}
+
+.tc-score strong {
+  font-size: var(--text-title-md);
+  color: var(--color-ink);
+}
+
+.tc-score.team02 {
+  border-left: 4px solid var(--color-team-blue);
+}
+
+.tc-score.team13 {
+  border-left: 4px solid var(--color-team-red);
+}
+
+.tc-score.mine {
+  background: var(--color-surface-card);
+}
+
+.tc-score-label {
+  font-weight: 700;
+}
+
+.tc-score.team02 .tc-score-label {
+  color: var(--color-team-blue);
+}
+
+.tc-score.team13 .tc-score-label {
+  color: var(--color-team-red);
+}
+
+.tc-header-mid {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tc-wish-chip {
+  background: var(--tc-special-tint);
+  border: 1px solid var(--tc-special);
+  color: var(--tc-special);
+  border-radius: var(--radius-pill);
+  padding: 2px var(--space-xs);
+  font-weight: 700;
+}
+
+/* ---------- 테이블 배치 ---------- */
+
+.tc-table {
+  display: grid;
+  grid-template-areas:
+    '. top .'
+    'left center right'
+    '. bottom .';
+  grid-template-columns: minmax(84px, 1fr) minmax(0, 2.4fr) minmax(84px, 1fr);
+  gap: var(--space-xs);
+  align-items: center;
+  flex: 1;
+}
+
+.tc-pos-top {
+  grid-area: top;
+  display: flex;
+  justify-content: center;
+}
+
+.tc-pos-left {
+  grid-area: left;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tc-pos-center {
+  grid-area: center;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  border: 1px dashed var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xs);
+  background: var(--color-surface-soft);
+}
+
+.tc-pos-right {
+  grid-area: right;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tc-pos-bottom {
+  grid-area: bottom;
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- 좌석 명패 ---------- */
+
+.tc-plate {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-top-width: 3px;
+  min-width: 84px;
+  max-width: 180px;
+}
+
+.tc-plate.team02 {
+  border-top-color: var(--color-team-blue);
+}
+
+.tc-plate.team13 {
+  border-top-color: var(--color-team-red);
+}
+
+.tc-plate.turn {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.tc-plate.offline {
+  opacity: 0.45;
+}
+
+.tc-plate-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tc-plate-you {
+  color: var(--color-muted);
+  font-weight: 400;
+  font-size: var(--text-caption);
+}
+
+.tc-plate-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tc-plate-count {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+.tc-badge {
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  padding: 1px 7px;
+}
+
+.tc-badge-tichu {
+  background: var(--color-primary-tint);
+  color: var(--color-primary-active);
+  border: 1px solid var(--color-primary);
+}
+
+.tc-badge-grand {
+  background: var(--tc-special-tint);
+  color: var(--tc-special);
+  border: 1px solid var(--tc-special);
+}
+
+.tc-badge-out {
+  background: var(--color-surface-cream-strong);
+  color: var(--color-body-strong);
+  border: 1px solid var(--color-hairline);
+}
+
+.tc-badge-offline {
+  background: var(--color-surface-soft);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+}
+
+.tc-badge-dragon {
+  background: var(--color-surface-soft);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+}
+
+/* ---------- 트릭 영역 ---------- */
+
+.tc-center-note {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  text-align: center;
+  padding: 0 var(--space-xs);
+}
+
+.tc-trick {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  align-items: center;
+}
+
+.tc-trick-play {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  opacity: 0.62;
+}
+
+.tc-trick-play.last {
+  opacity: 1;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+.tc-trick-meta {
+  font-size: 11px;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.tc-trick-play.last .tc-trick-meta {
+  color: var(--color-body-strong);
+}
+
+.tc-trick-cards {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- 교환 패널 ---------- */
+
+.tc-exchange-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+}
+
+.tc-exchange-slots {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+}
+
+.tc-exchange-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.tc-exchange-target {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-body);
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tc-exchange-empty {
+  width: 34px;
+  height: 48px;
+  border: 1px dashed var(--color-hairline);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted-soft);
+  box-sizing: border-box;
+}
+
+/* ---------- 손패 ---------- */
+
+.tc-hand-area {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-sm);
+}
+
+.tc-hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.tc-out-note {
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+  padding: var(--space-md);
+}
+
+/* ---------- 액션 바 ---------- */
+
+.tc-action-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tc-turn-note {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+.tc-action-buttons {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.tc-primary-button {
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tc-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.tc-pass-button {
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  font-size: var(--text-button);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tc-pass-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tc-tichu-button {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--tc-special);
+  border-radius: var(--radius-md);
+  background: var(--tc-special-tint);
+  color: var(--tc-special);
+  font-size: var(--text-button);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- 소원 선택 ---------- */
+
+.tc-wish-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.tc-wish-label {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--tc-special);
+}
+
+.tc-wish-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  max-width: 420px;
+}
+
+.tc-wish-option {
+  min-width: 34px;
+  padding: 5px 7px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tc-wish-option.active {
+  background: var(--tc-special);
+  border-color: var(--tc-special);
+  color: var(--color-on-primary);
+}
+
+/* ---------- 오버레이 ---------- */
+
+.tc-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: var(--space-md);
+}
+
+.tc-overlay-panel {
+  width: 100%;
+  max-width: 440px;
+  max-height: 86vh;
+  overflow-y: auto;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  box-shadow: var(--shadow-modal);
+  box-sizing: border-box;
+}
+
+.tc-overlay-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+}
+
+.tc-overlay-desc {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--color-body);
+}
+
+.tc-overlay-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tc-overlay-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- 핸드 정산 ---------- */
+
+.tc-result-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.tc-result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-left-width: 4px;
+  font-size: var(--text-body-sm);
+  color: var(--color-body);
+}
+
+.tc-result-row.team02 {
+  border-left-color: var(--color-team-blue);
+}
+
+.tc-result-row.team13 {
+  border-left-color: var(--color-team-red);
+}
+
+.tc-result-row.mine {
+  background: var(--color-surface-card);
+  font-weight: 700;
+}
+
+.tc-result-delta {
+  font-weight: 700;
+  color: var(--color-primary-active);
+}
+
+.tc-result-row strong {
+  font-size: var(--text-title-sm);
+  color: var(--color-ink);
+}
+
+.tc-result-detail {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  white-space: pre-line;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 480px) {
+  .tc-board {
+    padding: var(--space-sm) var(--space-xs) var(--space-md);
+  }
+
+  .tc-table {
+    grid-template-columns: minmax(72px, 1fr) minmax(0, 1.8fr) minmax(72px, 1fr);
+  }
+
+  .tc-plate {
+    min-width: 68px;
+    padding: 6px var(--space-xs);
+  }
+
+  .tc-pos-center {
+    min-height: 120px;
+  }
+
+  /* 14장이 두 줄로 랩핑되어 전부 선택 가능해야 한다 */
+  .tc-hand {
+    gap: 5px;
+  }
+
+  .tc-exchange-slots {
+    gap: var(--space-sm);
+  }
+}

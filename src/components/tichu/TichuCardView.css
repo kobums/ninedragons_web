@@ -1,0 +1,118 @@
+.tc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  transition: transform 0.12s ease, border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.tc-card-md {
+  width: 52px;
+  height: 74px;
+}
+
+.tc-card-sm {
+  width: 34px;
+  height: 48px;
+}
+
+.tc-card.clickable {
+  cursor: pointer;
+}
+
+.tc-card.clickable:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tc-card.selected {
+  transform: translateY(-10px);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring), var(--shadow-subtle);
+}
+
+.tc-card-rank {
+  font-size: var(--text-title-md);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.tc-card-sm .tc-card-rank {
+  font-size: var(--text-body-sm);
+}
+
+.tc-card-suit {
+  font-size: var(--text-body-sm);
+  line-height: 1;
+}
+
+.tc-card-sm .tc-card-suit {
+  font-size: 11px;
+}
+
+/* 문양 색 — 토큰만 사용 */
+.tc-suit-G .tc-card-rank,
+.tc-suit-G .tc-card-suit {
+  color: var(--tc-jade);
+}
+
+.tc-suit-B .tc-card-rank,
+.tc-suit-B .tc-card-suit {
+  color: var(--tc-sword);
+}
+
+.tc-suit-U .tc-card-rank,
+.tc-suit-U .tc-card-suit {
+  color: var(--tc-pagoda);
+}
+
+.tc-suit-R .tc-card-rank,
+.tc-suit-R .tc-card-suit {
+  color: var(--tc-star);
+}
+
+/* 특수 카드 */
+.tc-card-special {
+  background: var(--tc-special-tint);
+  border-color: var(--tc-special);
+}
+
+.tc-card-glyph {
+  font-size: var(--text-title-lg);
+  line-height: 1;
+}
+
+.tc-card-sm .tc-card-glyph {
+  font-size: var(--text-body-md);
+}
+
+.tc-card-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--tc-special);
+  line-height: 1;
+}
+
+.tc-card-sm .tc-card-name {
+  font-size: 9px;
+}
+
+@media (max-width: 480px) {
+  .tc-card-md {
+    width: 44px;
+    height: 62px;
+  }
+
+  .tc-card-md .tc-card-rank {
+    font-size: var(--text-body-md);
+  }
+}
