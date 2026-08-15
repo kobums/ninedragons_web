@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { GSGameOver as GSGameOverPayload, GSSide } from '../../types/geister';
 import './GSGameOver.css';
 
@@ -11,9 +12,19 @@ interface GSGameOverProps {
   result: GSGameOverPayload;
   yourSide: GSSide | null;
   onPlayAgain: () => void;
+  rematchOffered: boolean;
+  onRematch: () => void;
 }
 
-export function GSGameOver({ result, yourSide, onPlayAgain }: GSGameOverProps) {
+export function GSGameOver({
+  result,
+  yourSide,
+  onPlayAgain,
+  rematchOffered,
+  onRematch,
+}: GSGameOverProps) {
+  const [requested, setRequested] = useState(false);
+
   const youWon = yourSide !== null && result.winner === yourSide;
 
   return (
@@ -53,8 +64,22 @@ export function GSGameOver({ result, yourSide, onPlayAgain }: GSGameOverProps) {
           ))}
         </div>
 
-        <button type="button" className="gs-action-button" onClick={onPlayAgain}>
-          다시 하기
+        {rematchOffered && !requested && (
+          <p className="gs-rematch-offer">상대가 재대결을 원합니다!</p>
+        )}
+        <button
+          type="button"
+          className="gs-action-button"
+          disabled={requested}
+          onClick={() => {
+            setRequested(true);
+            onRematch();
+          }}
+        >
+          {requested ? '상대 수락 대기 중...' : rematchOffered ? '🔁 재대결 수락' : '🔁 재대결 신청'}
+        </button>
+        <button type="button" className="gs-secondary-button" onClick={onPlayAgain}>
+          새 게임 찾기
         </button>
       </div>
     </div>

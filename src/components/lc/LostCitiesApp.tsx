@@ -37,6 +37,7 @@ export function LostCitiesApp({ onBack }: LostCitiesAppProps) {
     gameOver,
     error,
     opponentDisconnected,
+    rematchOffered,
     lastEvent,
     clearError,
     reset,
@@ -73,6 +74,8 @@ export function LostCitiesApp({ onBack }: LostCitiesAppProps) {
           result={gameOver}
           yourSide={game?.yourSide ?? null}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={rematchOffered}
+          onRematch={() => sendMessage({ type: 'lc_rematch' })}
         />
       ) : game ? (
         <LCBoard

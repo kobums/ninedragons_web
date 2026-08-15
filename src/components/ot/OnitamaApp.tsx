@@ -37,6 +37,7 @@ export function OnitamaApp({ onBack }: OnitamaAppProps) {
     gameOver,
     error,
     opponentDisconnected,
+    rematchOffered,
     lastEvent,
     clearError,
     reset,
@@ -73,6 +74,8 @@ export function OnitamaApp({ onBack }: OnitamaAppProps) {
           result={gameOver}
           yourSide={game?.yourSide ?? null}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={rematchOffered}
+          onRematch={() => sendMessage({ type: 'ot_rematch' })}
         />
       ) : game ? (
         <OTBoard

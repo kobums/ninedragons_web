@@ -27,6 +27,8 @@ interface SnapshotState<TGame, TOver> {
   gameOver: TOver | null;
   error: string | null;
   opponentDisconnected: boolean;
+  // 상대가 재대결을 신청했는지 (게임 종료 화면용)
+  rematchOffered: boolean;
 }
 
 export const useSnapshotGameState = <
@@ -43,6 +45,7 @@ export const useSnapshotGameState = <
     gameOver: null,
     error: null,
     opponentDisconnected: false,
+    rematchOffered: false,
   };
   const [state, setState] = useState<SnapshotState<TGame, TOver>>(initialState);
   // 마지막 연출 이벤트. 잠시 뒤 스스로 사라진다.
@@ -62,14 +65,21 @@ export const useSnapshotGameState = <
 
       case `${prefix}_game_state`: {
         const game = lastMessage.payload as TGame;
+        // 게임 종료 후 새 스냅샷이 오면 재대결이 시작된 것 — 종료 화면을 걷는다
         setState((prev) => ({
           ...prev,
           game,
           hasJoined: true,
+          gameOver: null,
+          rematchOffered: false,
           opponentDisconnected: !game.opponentConnected,
         }));
         break;
       }
+
+      case `${prefix}_rematch_offer`:
+        setState((prev) => ({ ...prev, rematchOffered: true }));
+        break;
 
       case `${prefix}_event`: {
         const event = lastMessage.payload as TEvent;

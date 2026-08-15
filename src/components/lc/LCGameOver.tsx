@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { LCGameOver as LCGameOverPayload, LCSide } from '../../types/lostcities';
 import './LCGameOver.css';
 
@@ -5,9 +6,19 @@ interface LCGameOverProps {
   result: LCGameOverPayload;
   yourSide: LCSide | null;
   onPlayAgain: () => void;
+  rematchOffered: boolean;
+  onRematch: () => void;
 }
 
-export function LCGameOver({ result, yourSide, onPlayAgain }: LCGameOverProps) {
+export function LCGameOver({
+  result,
+  yourSide,
+  onPlayAgain,
+  rematchOffered,
+  onRematch,
+}: LCGameOverProps) {
+  const [requested, setRequested] = useState(false);
+
   const isTie = result.winner === '';
   const youWon = !isTie && yourSide !== null && result.winner === yourSide;
   const myScore = yourSide === 'north' ? result.northScore : result.southScore;
@@ -38,8 +49,22 @@ export function LCGameOver({ result, yourSide, onPlayAgain }: LCGameOverProps) {
           </div>
         </div>
 
-        <button type="button" className="lc-action-button" onClick={onPlayAgain}>
-          다시 하기
+        {rematchOffered && !requested && (
+          <p className="lc-rematch-offer">상대가 재대결을 원합니다!</p>
+        )}
+        <button
+          type="button"
+          className="lc-action-button"
+          disabled={requested}
+          onClick={() => {
+            setRequested(true);
+            onRematch();
+          }}
+        >
+          {requested ? '상대 수락 대기 중...' : rematchOffered ? '🔁 재대결 수락' : '🔁 재대결 신청'}
+        </button>
+        <button type="button" className="lc-secondary-button" onClick={onPlayAgain}>
+          새 게임 찾기
         </button>
       </div>
     </div>

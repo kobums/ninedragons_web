@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { OTGameOver as OTGameOverPayload, OTSide } from '../../types/onitama';
 import './OTGameOver.css';
 
@@ -10,9 +11,19 @@ interface OTGameOverProps {
   result: OTGameOverPayload;
   yourSide: OTSide | null;
   onPlayAgain: () => void;
+  rematchOffered: boolean;
+  onRematch: () => void;
 }
 
-export function OTGameOver({ result, yourSide, onPlayAgain }: OTGameOverProps) {
+export function OTGameOver({
+  result,
+  yourSide,
+  onPlayAgain,
+  rematchOffered,
+  onRematch,
+}: OTGameOverProps) {
+  const [requested, setRequested] = useState(false);
+
   const youWon = yourSide !== null && result.winner === yourSide;
 
   return (
@@ -23,8 +34,22 @@ export function OTGameOver({ result, yourSide, onPlayAgain }: OTGameOverProps) {
           <strong>{result.winnerName}</strong>님 승리 — {REASON_LABEL[result.reason]}
         </p>
 
-        <button type="button" className="ot-action-button" onClick={onPlayAgain}>
-          다시 하기
+        {rematchOffered && !requested && (
+          <p className="ot-rematch-offer">상대가 재대결을 원합니다!</p>
+        )}
+        <button
+          type="button"
+          className="ot-action-button"
+          disabled={requested}
+          onClick={() => {
+            setRequested(true);
+            onRematch();
+          }}
+        >
+          {requested ? '상대 수락 대기 중...' : rematchOffered ? '🔁 재대결 수락' : '🔁 재대결 신청'}
+        </button>
+        <button type="button" className="ot-secondary-button" onClick={onPlayAgain}>
+          새 게임 찾기
         </button>
       </div>
     </div>

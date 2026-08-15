@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { QDGameOver as QDGameOverPayload, QDSide } from '../../types/quoridor';
 import './QDGameOver.css';
 
@@ -9,9 +10,19 @@ interface QDGameOverProps {
   result: QDGameOverPayload;
   yourSide: QDSide | null;
   onPlayAgain: () => void;
+  rematchOffered: boolean;
+  onRematch: () => void;
 }
 
-export function QDGameOver({ result, yourSide, onPlayAgain }: QDGameOverProps) {
+export function QDGameOver({
+  result,
+  yourSide,
+  onPlayAgain,
+  rematchOffered,
+  onRematch,
+}: QDGameOverProps) {
+  const [requested, setRequested] = useState(false);
+
   const youWon = yourSide !== null && result.winner === yourSide;
 
   return (
@@ -22,8 +33,22 @@ export function QDGameOver({ result, yourSide, onPlayAgain }: QDGameOverProps) {
           <strong>{result.winnerName}</strong>님 승리 — {REASON_LABEL[result.reason]}
         </p>
 
-        <button type="button" className="qd-action-button" onClick={onPlayAgain}>
-          다시 하기
+        {rematchOffered && !requested && (
+          <p className="qd-rematch-offer">상대가 재대결을 원합니다!</p>
+        )}
+        <button
+          type="button"
+          className="qd-action-button"
+          disabled={requested}
+          onClick={() => {
+            setRequested(true);
+            onRematch();
+          }}
+        >
+          {requested ? '상대 수락 대기 중...' : rematchOffered ? '🔁 재대결 수락' : '🔁 재대결 신청'}
+        </button>
+        <button type="button" className="qd-secondary-button" onClick={onPlayAgain}>
+          새 게임 찾기
         </button>
       </div>
     </div>

@@ -37,6 +37,7 @@ export function QuoridorApp({ onBack }: QuoridorAppProps) {
     gameOver,
     error,
     opponentDisconnected,
+    rematchOffered,
     lastEvent,
     clearError,
     reset,
@@ -73,6 +74,8 @@ export function QuoridorApp({ onBack }: QuoridorAppProps) {
           result={gameOver}
           yourSide={game?.yourSide ?? null}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={rematchOffered}
+          onRematch={() => sendMessage({ type: 'qd_rematch' })}
         />
       ) : game ? (
         <QDBoard

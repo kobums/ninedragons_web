@@ -37,6 +37,7 @@ export function CantStopApp({ onBack }: CantStopAppProps) {
     gameOver,
     error,
     opponentDisconnected,
+    rematchOffered,
     lastEvent,
     clearError,
     reset,
@@ -73,6 +74,8 @@ export function CantStopApp({ onBack }: CantStopAppProps) {
           result={gameOver}
           yourSide={game?.yourSide ?? null}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={rematchOffered}
+          onRematch={() => sendMessage({ type: 'cs_rematch' })}
         />
       ) : game ? (
         <CSBoard

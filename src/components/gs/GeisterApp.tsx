@@ -37,6 +37,7 @@ export function GeisterApp({ onBack }: GeisterAppProps) {
     gameOver,
     error,
     opponentDisconnected,
+    rematchOffered,
     lastEvent,
     clearError,
     reset,
@@ -73,6 +74,8 @@ export function GeisterApp({ onBack }: GeisterAppProps) {
           result={gameOver}
           yourSide={game?.yourSide ?? null}
           onPlayAgain={handlePlayAgain}
+          rematchOffered={rematchOffered}
+          onRematch={() => sendMessage({ type: 'gs_rematch' })}
         />
       ) : game ? (
         <GSBoard
