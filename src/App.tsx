@@ -10,6 +10,8 @@ import { QuoridorApp } from './components/qd/QuoridorApp';
 import { OnitamaApp } from './components/ot/OnitamaApp';
 import { LostCitiesApp } from './components/lc/LostCitiesApp';
 import { CantStopApp } from './components/cs/CantStopApp';
+import { TichuApp } from './components/tichu/TichuApp';
+import { MightyApp } from './components/mighty/MightyApp';
 import type { GameId } from './config/games';
 import './App.css';
 
@@ -62,6 +64,14 @@ function App() {
 
   if (selectedGame === 'cantstop') {
     return <CantStopApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'tichu') {
+    return <TichuApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'mighty') {
+    return <MightyApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;
