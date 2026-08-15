@@ -20,6 +20,11 @@ export const useReconnectingWebSocket = <T,>(
   const wsRef = useRef<WebSocket | null>(null);
   const optionsRef = useRef(options);
   optionsRef.current = options;
+  // 수신 큐: 도착 순서 그대로, 메시지마다 별도 태스크에서 하나씩 소비한다.
+  // (예전의 index*10ms 타이머 방식은 프레임 두 개가 연달아 오면 타이머가
+  //  교차해 낡은 상태가 최신 상태를 덮을 수 있었다)
+  const queueRef = useRef<T[]>([]);
+  const drainingRef = useRef(false);
 
   useEffect(() => {
     const prefix = optionsRef.current.logPrefix ?? '[WebSocket]';
@@ -61,24 +66,23 @@ export const useReconnectingWebSocket = <T,>(
       };
 
       ws.onmessage = (event) => {
+        // 정리된(교체된) 소켓의 늦은 메시지는 무시한다
+        if (disposed || wsRef.current !== ws) return;
         try {
-          // 개행으로 구분된 여러 JSON 메시지를 처리
-          const messages = event.data
+          // 개행으로 구분된 여러 JSON 메시지를 큐에 넣고 순서대로 소비
+          const lines = event.data
             .trim()
             .split('\n')
             .filter((line: string) => line.trim());
 
-          messages.forEach((messageStr: string, index: number) => {
+          for (const messageStr of lines) {
             try {
-              const message: T = JSON.parse(messageStr);
-              // 각 메시지를 순차적으로 처리하기 위해 타이머 사용
-              setTimeout(() => {
-                setLastMessage(message);
-              }, index * 10);
+              queueRef.current.push(JSON.parse(messageStr) as T);
             } catch (parseError) {
               console.error(`${prefix} Error parsing message:`, parseError, messageStr);
             }
-          });
+          }
+          drain();
         } catch (error) {
           console.error(`${prefix} Error processing message:`, error, event.data);
         }
@@ -98,6 +102,22 @@ export const useReconnectingWebSocket = <T,>(
         console.log(`${prefix} reconnecting in ${delay}ms`);
         reconnectTimer = window.setTimeout(connect, delay);
       };
+    };
+
+    // 큐를 한 건씩 별도 태스크로 비운다 — 메시지마다 렌더·이펙트가 돌도록
+    const drain = () => {
+      if (drainingRef.current) return;
+      drainingRef.current = true;
+      const step = () => {
+        const next = queueRef.current.shift();
+        if (next === undefined) {
+          drainingRef.current = false;
+          return;
+        }
+        setLastMessage(next);
+        setTimeout(step, 0);
+      };
+      step();
     };
 
     // 백그라운드에선 타이머가 돌지 않으므로, 복귀 이벤트에서 즉시 재접속한다
