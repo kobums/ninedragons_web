@@ -25,6 +25,9 @@
 }
 
 .gs-board-page .gs-cell {
+  /* 좁은 화면에서 컨테이너 aspect-ratio가 무시되어 보드가 납작해진다 —
+     셀 자체를 정사각으로 강제 (오니타마와 동일 수정) */
+  aspect-ratio: 1;
   position: relative;
   border: 1px solid var(--color-hairline-soft);
   border-radius: 8px;

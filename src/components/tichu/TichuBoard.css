@@ -614,6 +614,11 @@
     padding: var(--space-sm) var(--space-xs) var(--space-md);
   }
 
+  /* 우상단 고정 ⓘ 버튼(34px + 여백)과 1·3팀 배지가 겹치지 않게 비켜준다 */
+  .tc-header {
+    padding-right: 52px;
+  }
+
   .tc-table {
     grid-template-columns: minmax(72px, 1fr) minmax(0, 1.8fr) minmax(72px, 1fr);
   }

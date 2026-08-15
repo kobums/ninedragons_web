@@ -21,7 +21,8 @@ html {
 }
 
 body {
-  min-width: 320px;
+  /* 갤럭시 폴드 접힘(280px)까지 지원 — 320 고정은 좁은 기기에서 가로 스크롤을 만든다 */
+  min-width: 280px;
   min-height: 100vh;
   font-family: var(--font-sans);
   font-size: var(--text-body-md);

@@ -267,6 +267,12 @@
     flex-direction: column;
   }
 
+  /* 세로 배치에서는 flex-basis(0)가 height를 이겨 22px로 찌그러진다 —
+     터치 타깃 확보를 위해 flex를 풀고 고정 높이를 살린다 */
+  .waiting-room .color-btn {
+    flex: none;
+  }
+
   .waiting-room .game-rules {
     padding: var(--space-md);
   }

@@ -33,9 +33,14 @@
   width: 100%;
   max-width: 460px;
   justify-content: center;
+  /* 좁은 화면(폴드 접힘~일반 폰)에서는 대기 카드를 보드 아래 줄로 내린다 */
+  flex-wrap: wrap;
 }
 
 .ot-board-page .ot-cell {
+  /* 컨테이너 aspect-ratio는 좁은 flex 레이아웃에서 무시될 수 있다 —
+     셀 자체를 정사각으로 강제해 보드 비율을 보장한다 */
+  aspect-ratio: 1;
   position: relative;
   border: 1px solid var(--color-hairline-soft);
   border-radius: 8px;
