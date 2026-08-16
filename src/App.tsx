@@ -13,6 +13,7 @@ import { CantStopApp } from './components/cs/CantStopApp';
 import { TichuApp } from './components/tichu/TichuApp';
 import { MightyApp } from './components/mighty/MightyApp';
 import { SkyfallApp } from './components/skyfall/SkyfallApp';
+import { SpyfallApp } from './components/spyfall/SpyfallApp';
 import type { GameId } from './config/games';
 import './App.css';
 
@@ -77,6 +78,10 @@ function App() {
 
   if (selectedGame === 'skyfall') {
     return <SkyfallApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'spyfall') {
+    return <SpyfallApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;

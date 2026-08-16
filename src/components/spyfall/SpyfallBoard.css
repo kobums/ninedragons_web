@@ -1,0 +1,505 @@
+/* 스파이폴 보드 — 첩보물 차콜 + 앰버 포인트.
+   장소 그리드는 반응형 2~3열 (280px 오버플로 금지). */
+
+.sp-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--sp-dark-elevated) 0%,
+    var(--sp-dark) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 96px; /* 하단 확인 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.sp-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.sp-toast {
+  background: rgba(15, 13, 10, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: sp-toast-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes sp-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 상단 배너 (타이머 / 투표) ---------- */
+
+.sp-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+  background: var(--sp-amber-tint);
+  border: 1px solid var(--sp-amber);
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.sp-phase-banner.urgent {
+  background: var(--sp-danger-tint);
+  border-color: var(--sp-danger);
+}
+
+.sp-phase-banner.voting {
+  background: var(--sp-citizen-tint);
+  border-color: var(--sp-citizen);
+}
+
+.sp-timer-caption {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--sp-fog);
+}
+
+.sp-timer-digits {
+  font-family: var(--font-mono);
+  font-size: var(--text-display-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--sp-amber-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-timer-digits.urgent {
+  color: var(--sp-danger);
+  animation: sp-timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes sp-timer-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.sp-phase-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+}
+
+.sp-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--sp-fog);
+}
+
+/* ---------- 내 카드 ---------- */
+
+.sp-identity-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  /* 배정 시 강조 등장 (key 교체로 재생) */
+  animation: sp-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes sp-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sp-identity-card.spy {
+  background: var(--sp-danger-tint);
+  border: 1px solid var(--sp-danger);
+}
+
+.sp-identity-card.agent {
+  background: var(--sp-amber-tint);
+  border: 1px solid var(--sp-amber);
+}
+
+.sp-identity-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--sp-danger);
+}
+
+.sp-identity-caption {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--sp-fog);
+}
+
+.sp-identity-location {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--sp-amber-strong);
+}
+
+.sp-identity-desc {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--sp-fog);
+}
+
+/* ---------- 섹션 공통 헤더 ---------- */
+
+.sp-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.sp-section-title {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--sp-fog);
+  font-weight: 700;
+}
+
+.sp-section-hint {
+  font-size: var(--text-caption);
+  color: var(--sp-fog);
+}
+
+/* ---------- 장소 목록 그리드 ---------- */
+
+.sp-locations,
+.sp-players {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sp-location-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xxs);
+}
+
+.sp-location {
+  min-width: 0;
+  padding: 9px 6px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+/* 비스파이의 실제 장소 표시 */
+.sp-location.mine {
+  border-color: var(--sp-amber);
+  background: var(--sp-amber-tint);
+  color: var(--sp-amber-strong);
+  font-weight: 800;
+}
+
+/* 스파이 추리 후보 */
+.sp-location.picked {
+  border-color: var(--sp-danger);
+  background: var(--sp-danger-tint);
+  color: var(--sp-danger);
+  box-shadow: 0 0 0 1px var(--sp-danger);
+  transform: scale(1.03);
+}
+
+/* 개인 소거 메모 (로컬 전용) */
+.sp-location.struck {
+  opacity: 0.4;
+  text-decoration: line-through;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- 플레이어 타일 ---------- */
+
+.sp-player-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.sp-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  text-align: left;
+  cursor: default;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.sp-tile.me {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.sp-tile.selectable {
+  cursor: pointer;
+}
+
+.sp-tile.selectable:hover {
+  border-color: var(--sp-amber);
+}
+
+.sp-tile.selected {
+  border-color: var(--sp-amber);
+  background: var(--sp-amber-tint);
+  box-shadow: 0 0 0 1px var(--sp-amber);
+  transform: scale(1.02);
+}
+
+.sp-tile:disabled {
+  /* 버튼 기본 비활성 스타일 무력화 — 시각 상태는 클래스가 결정 */
+  color: var(--color-on-dark);
+}
+
+.sp-tile-name {
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.sp-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: var(--text-caption-uppercase);
+  color: var(--sp-fog);
+}
+
+.sp-badge.off {
+  background: rgba(212, 160, 23, 0.18);
+  color: var(--color-warning);
+}
+
+.sp-badge.voted {
+  background: rgba(93, 184, 114, 0.16);
+  color: var(--color-success);
+}
+
+.sp-badge.count {
+  background: var(--sp-amber);
+  color: var(--sp-dark);
+  font-weight: 800;
+}
+
+/* ---------- 공개 투표 목록 ---------- */
+
+.sp-vote-list {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sp-vote-list-title {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--sp-fog);
+}
+
+.sp-vote-row {
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.sp-vote-row strong {
+  color: var(--sp-amber-strong);
+}
+
+/* ---------- 하단 확인 바 ---------- */
+
+.sp-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 950;
+  width: calc(100% - 24px);
+  max-width: 480px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--sp-dark-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-modal);
+  animation: sp-toast-in 0.2s ease;
+}
+
+.sp-confirm-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  min-width: 0;
+}
+
+.sp-confirm-text strong {
+  color: var(--sp-amber-strong);
+}
+
+.sp-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.sp-confirm-button {
+  padding: 9px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sp-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.sp-cancel-button {
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--sp-fog);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+/* ---------- 모바일 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 420px) {
+  .sp-board {
+    padding: var(--space-xs);
+    padding-bottom: 96px;
+  }
+
+  .sp-player-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sp-tile {
+    padding: 8px;
+  }
+
+  .sp-tile-name {
+    font-size: var(--text-caption);
+  }
+
+  .sp-location {
+    font-size: var(--text-caption);
+  }
+}
+
+@media (max-width: 340px) {
+  .sp-location-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

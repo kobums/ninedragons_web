@@ -1,0 +1,235 @@
+/* 스파이폴 대기실 — 첩보물 차콜 + 앰버 포인트 (tokens.css 토큰만 사용) */
+
+.sp-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--sp-dark-elevated) 0%,
+    var(--sp-dark) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.sp-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+}
+
+.sp-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+}
+
+.sp-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--sp-fog);
+  font-size: var(--text-body-sm);
+}
+
+.sp-join-form,
+.sp-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sp-form-group {
+  text-align: left;
+}
+
+.sp-form-group label {
+  display: block;
+  color: var(--sp-fog);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.sp-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+.sp-primary-button {
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sp-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.sp-primary-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--sp-fog);
+  cursor: not-allowed;
+}
+
+.sp-ghost-button {
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--sp-fog);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.sp-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sp-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.sp-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.sp-seat-item.empty {
+  color: var(--sp-fog);
+  font-weight: 400;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: transparent;
+  justify-content: center;
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+}
+
+.sp-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-crown {
+  font-size: var(--text-body-sm);
+}
+
+.sp-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.sp-dot.on {
+  background: var(--color-success);
+}
+
+.sp-dot.off {
+  background: var(--color-muted-soft);
+}
+
+/* ---------- 타이머 선택 (host 토글) ---------- */
+
+.sp-timer-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+}
+
+.sp-timer-label {
+  color: var(--sp-fog);
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+
+.sp-timer-options {
+  display: flex;
+  gap: 6px;
+}
+
+.sp-timer-option {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: var(--sp-fog);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.sp-timer-option:disabled {
+  cursor: default;
+}
+
+.sp-timer-option.active {
+  border-color: var(--sp-amber);
+  background: var(--sp-amber-tint);
+  color: var(--sp-amber-strong);
+}
+
+.sp-waiting-hint {
+  margin: 0;
+  color: var(--sp-fog);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 360px) {
+  .sp-waiting {
+    padding: var(--space-sm);
+  }
+
+  .sp-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .sp-timer-picker {
+    justify-content: center;
+  }
+}

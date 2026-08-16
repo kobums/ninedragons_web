@@ -140,6 +140,21 @@
   --sf-citizen: var(--color-on-dark-soft);
   --sf-day-tint: rgba(232, 165, 90, 0.14); /* 낮 배너 온기 */
 
+  /* ---------- Spyfall 첩보 무드 ----------
+     스카이폴 밤 네이비보다 따뜻하게 그을린 차콜 + 앰버 포인트.
+     서류철·조명 아래 심문실 느낌. CTA·라이트 서피스에는 쓰지 않는다. */
+  --sp-dark: #131110; /* 첩보 차콜 블랙 */
+  --sp-dark-elevated: #211d17;
+  --sp-dark-soft: #1a1712;
+  --sp-fog: #b8b0a0; /* 다크 배경 보조 텍스트 (웜 그레이) */
+  --sp-amber: var(--color-accent-amber);
+  --sp-amber-strong: #f2b871; /* 다크 배경 강조 밝힘 */
+  --sp-amber-tint: rgba(232, 165, 90, 0.14);
+  --sp-danger: #d96a6a; /* 타이머 임박·스파이 승 */
+  --sp-danger-tint: rgba(217, 106, 106, 0.14);
+  --sp-citizen: #7d9fd1; /* 시민팀 — 앰버와 대비되는 차가운 톤 */
+  --sp-citizen-tint: rgba(125, 159, 209, 0.14);
+
   /* Warm scrim — never pure black over the cream canvas. */
   --scrim: rgba(20, 20, 19, 0.6);
 
