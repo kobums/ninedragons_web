@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useFanHand } from '../../hooks/useFanHand';
 import type { STCard, STEvent, STGameState } from '../../types/schottentotten';
 import { ST_TACTIC_LABELS, ST_TACTIC_NAMES } from '../../types/schottentotten';
 import './STGameBoard.css';
@@ -63,6 +64,7 @@ export function STGameBoard({
   onRecruiterReturn,
 }: STGameBoardProps) {
   const [selectedHandIndex, setSelectedHandIndex] = useState<number | null>(null);
+  const handRef = useFanHand(game.yourHand.length);
   const [targeting, setTargeting] = useState<Targeting>(null);
   const [showDiscard, setShowDiscard] = useState(false);
 
@@ -440,7 +442,7 @@ export function STGameBoard({
         <div className="st-player-stones">돌 {game.yourStoneCount}개</div>
       </div>
 
-      <div className="st-hand">
+      <div className="st-hand" ref={handRef}>
         {game.yourHand.map((card, i) => (
           <button
             key={`${card.tactic ?? 'clan'}-${card.color}-${card.rank}-${i}`}

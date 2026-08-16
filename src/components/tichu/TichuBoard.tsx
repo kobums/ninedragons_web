@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { TichuCard, TichuGameState, TichuPlayer } from '../../types/tichu';
 import { COMBO_LABELS, rankLabel, teamOfSeat } from '../../types/tichu';
 import type { TichuToast } from '../../hooks/useTichuGameState';
+import { useFanHand } from '../../hooks/useFanHand';
 import { TichuCardView } from './TichuCardView';
 import './TichuBoard.css';
 
@@ -80,6 +81,7 @@ export function TichuBoard({
 }: TichuBoardProps) {
   // 로컬 입력 상태 — 서버가 최종 판정하므로 여기서는 선택만 관리한다
   const [selected, setSelected] = useState<TichuCard[]>([]);
+  const handRef = useFanHand(game.yourHand.length);
   const [wish, setWish] = useState<number | null>(null);
   // 교환 슬롯 — 화면 배치 순서 [왼쪽(rel 1), 파트너(rel 2), 오른쪽(rel 3)]
   const [exchangeSlots, setExchangeSlots] = useState<(TichuCard | null)[]>([
@@ -342,7 +344,7 @@ export function TichuBoard({
       {/* 내 손패 */}
       <div className="tc-hand-area">
         {game.yourHand.length > 0 ? (
-          <div className="tc-hand">
+          <div className="tc-hand" ref={handRef}>
             {game.yourHand.map((card) => (
               <TichuCardView
                 key={card}

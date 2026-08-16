@@ -343,17 +343,39 @@
 
 /* 손패 — 문양 그룹 사이 간격, 모바일에선 줄바꿈으로 10~13장 모두 탭 가능 */
 .mt-hand {
+  /* 부채(수평 겹침) — 겹침 폭은 useFanHand 가 --fan-ml 로 계산 */
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: 4px;
-  row-gap: 10px;
+  width: 100%;
   max-width: 720px;
-  padding: 4px 0 8px;
+  padding: 10px 0 8px;
 }
 
+.mt-hand > * {
+  flex-shrink: 0;
+}
+
+.mt-hand > *:not(:first-child) {
+  margin-left: var(--fan-ml, 4px);
+}
+
+/* 부채 겹침에서는 문양 구분 여백 대신 정렬·색으로 구분한다 */
 .mt-hand-slot.suit-break {
-  margin-left: 10px;
+  margin-left: var(--fan-ml, 4px);
+}
+
+.mt-hand-slot {
+  position: relative;
+}
+
+.mt-hand-slot:has(.mt-card.selected),
+.mt-hand-slot:has(.mt-card.highlighted) {
+  z-index: 5;
+}
+
+.mt-hand-slot:hover {
+  z-index: 6;
 }
 
 /* ---------- 모바일 ---------- */
@@ -386,14 +408,7 @@
     font-size: 14px;
   }
 
-  .mt-hand {
-    gap: 3px;
-    row-gap: 8px;
-  }
 
-  .mt-hand-slot.suit-break {
-    margin-left: 6px;
-  }
 
   .mt-trick-name {
     /* 280px(폴드 접힘)에서 중앙 컬럼이 ~70px까지 줄어든다 —

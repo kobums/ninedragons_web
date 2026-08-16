@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useFanHand } from '../../hooks/useFanHand';
 import type {
   JHCard,
   JHEvent,
@@ -79,6 +80,7 @@ export function JHGameBoard({
   onGreedCards,
 }: JHGameBoardProps) {
   const [selected, setSelected] = useState<number[]>([]);
+  const handRef = useFanHand(game.yourHand.length);
 
   const isJekyll = game.yourRole === 'jekyll';
   const yourName = isJekyll ? game.jekyllName : game.hydeName;
@@ -387,7 +389,7 @@ export function JHGameBoard({
         </span>
       </div>
 
-      <div className="jh-hand">
+      <div className="jh-hand" ref={handRef}>
         {game.yourHand.map((card, i) => {
           const selectable = isSelectable(i);
           return (

@@ -486,11 +486,34 @@
 /* ---------- 손패 ---------- */
 
 .jh-board .jh-hand {
+  /* 부채(수평 겹침) — 겹침 폭은 useFanHand 가 --fan-ml 로 계산 */
   display: flex;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: var(--space-xxs);
+  width: 100%;
+  padding-top: 12px;
   padding-bottom: var(--space-md);
-  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.jh-board .jh-hand > * {
+  flex-shrink: 0;
+}
+
+.jh-board .jh-hand > *:not(:first-child) {
+  margin-left: var(--fan-ml, 4px);
+}
+
+.jh-board .jh-hand-slot {
+  position: relative;
+}
+
+.jh-board .jh-hand-slot.selected {
+  z-index: 5;
+}
+
+.jh-board .jh-hand-slot:hover {
+  z-index: 6;
 }
 
 .jh-board .jh-hand-slot {

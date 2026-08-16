@@ -9,6 +9,7 @@ import type {
   MTSuit,
 } from '../../types/mighty';
 import type { MTToast } from '../../hooks/useMightyGameState';
+import { useFanHand } from '../../hooks/useFanHand';
 import {
   BID_SUIT_LABEL,
   SUIT_SYMBOL,
@@ -130,6 +131,7 @@ export function MightyBoard({
 }: MightyBoardProps) {
   // 키티 단계에서 버릴 카드 선택 (주공 전용)
   const [kittyDiscard, setKittyDiscard] = useState<MTCard[]>([]);
+  const handRef = useFanHand(game.yourHand.length);
   // 조커 리드 → 문양 선택 대기 / 조커콜 카드 리드 → 선언 확인 대기
   const [pendingJoker, setPendingJoker] = useState(false);
   const [pendingJokerCall, setPendingJokerCall] = useState<MTCard | null>(null);
@@ -357,7 +359,7 @@ export function MightyBoard({
           </div>
         )}
 
-        <div className="mt-hand">
+        <div className="mt-hand" ref={handRef}>
           {game.yourHand.map((card, i) => {
             const prev = i > 0 ? game.yourHand[i - 1] : null;
             const suitBreak = prev !== null && suitOf(prev) !== suitOf(card);

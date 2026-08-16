@@ -377,11 +377,29 @@
 }
 
 .tc-hand {
+  /* 부채(수평 겹침) — 겹침 폭은 useFanHand 가 --fan-ml 로 계산 */
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: 6px;
-  max-width: 100%;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.tc-hand > * {
+  flex-shrink: 0;
+}
+
+.tc-hand > *:not(:first-child) {
+  margin-left: var(--fan-ml, 6px);
+}
+
+/* 겹침에서 선택·호버 카드는 맨 앞으로 떠오른다 */
+.tc-hand .tc-card.selected {
+  z-index: 5;
+}
+
+.tc-hand .tc-card.clickable:not(:disabled):hover {
+  z-index: 6;
 }
 
 .tc-out-note {
@@ -632,10 +650,7 @@
     min-height: 120px;
   }
 
-  /* 14장이 두 줄로 랩핑되어 전부 선택 가능해야 한다 */
-  .tc-hand {
-    gap: 5px;
-  }
+
 
   .tc-exchange-slots {
     gap: var(--space-sm);

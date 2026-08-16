@@ -204,11 +204,31 @@
 /* ==================== 손패 ==================== */
 
 .lc-board-page .lc-hand {
+  /* 부채(수평 겹침) — 겹침 폭은 useFanHand 가 --fan-ml 로 계산 */
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
+  width: 100%;
   min-height: 56px;
+  padding-top: 8px;
+  box-sizing: border-box;
+}
+
+.lc-board-page .lc-hand > * {
+  flex-shrink: 0;
+}
+
+.lc-board-page .lc-hand > *:not(:first-child) {
+  margin-left: var(--fan-ml, 6px);
+}
+
+.lc-board-page .lc-hand-card.selected,
+.lc-board-page .lc-hand-card.pending {
+  z-index: 5;
+}
+
+.lc-board-page .lc-hand-card:hover {
+  z-index: 6;
 }
 
 .lc-board-page .lc-hand-card {

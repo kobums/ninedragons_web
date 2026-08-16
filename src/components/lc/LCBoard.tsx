@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useFanHand } from '../../hooks/useFanHand';
 import type { LCCard, LCColor, LCEvent, LCGameState } from '../../types/lostcities';
 import { LC_COLORS, LC_COLOR_LABEL, LC_WAGER } from '../../types/lostcities';
 import './LCBoard.css';
@@ -36,6 +37,7 @@ export function LCBoard({ game, lastEvent, onMove }: LCBoardProps) {
   const myTurn = game.phase === 'play' && game.currentSide === me;
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const handRef = useFanHand(game.yourHand.length);
   // 놓기/버리기를 정한 뒤 뽑기를 기다리는 상태
   const [pending, setPending] = useState<{ cardId: number; action: 'play' | 'discard' } | null>(
     null,
@@ -220,7 +222,7 @@ export function LCBoard({ game, lastEvent, onMove }: LCBoardProps) {
         )}
       </div>
 
-      <div className="lc-hand">
+      <div className="lc-hand" ref={handRef}>
         {sortedHand.map((card) => (
           <button
             key={card.id}

@@ -388,10 +388,34 @@
 /* ---------- 손패 ---------- */
 
 .st-board .st-hand {
+  /* 부채(수평 겹침) — 겹침 폭은 useFanHand 가 --fan-ml 로 계산 */
   display: flex;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: var(--space-xs);
+  width: 100%;
+  padding-top: 10px;
   padding-bottom: var(--space-md);
+  box-sizing: border-box;
+}
+
+.st-board .st-hand > * {
+  flex-shrink: 0;
+}
+
+.st-board .st-hand > *:not(:first-child) {
+  margin-left: var(--fan-ml, 8px);
+}
+
+.st-board .st-hand-slot {
+  position: relative;
+}
+
+.st-board .st-hand-slot.selected {
+  z-index: 5;
+}
+
+.st-board .st-hand-slot:hover {
+  z-index: 6;
 }
 
 .st-board .st-hand-slot {
