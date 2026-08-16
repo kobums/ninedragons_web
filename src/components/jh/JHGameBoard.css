@@ -259,6 +259,7 @@
 /* ---------- 카드 ---------- */
 
 .jh-board .jh-card {
+  position: relative;
   width: 64px;
   height: 88px;
   display: flex;
@@ -266,9 +267,44 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: 6px;
   color: var(--color-on-primary);
-  box-shadow: var(--shadow-subtle);
+  /* 실물 카드 결: 컬러 페이스 위 종이 광택 + 어두운 테두리 */
+  background-image: linear-gradient(
+    170deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(20, 20, 19, 0.12) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.3);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.18),
+    0 2px 6px rgba(20, 20, 19, 0.12);
+}
+
+/* 모서리 인덱스 — 우하단은 180° 미러 */
+.jh-board .jh-card .jh-card-corner {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.jh-board .jh-card .jh-card-corner.tl {
+  top: 4px;
+  left: 5px;
+}
+
+.jh-board .jh-card .jh-card-corner.br {
+  bottom: 4px;
+  right: 5px;
+  transform: rotate(180deg);
+}
+
+.jh-board .jh-card.jh-card-small .jh-card-corner {
+  display: none;
 }
 
 .jh-board .jh-suit-pride {
@@ -290,7 +326,8 @@
 }
 
 .jh-board .jh-card-value {
-  font-size: var(--text-title-md);
+  font-family: var(--font-display);
+  font-size: var(--text-title-lg);
   font-weight: 700;
   line-height: 1;
 }

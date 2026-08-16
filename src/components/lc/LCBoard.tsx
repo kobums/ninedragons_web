@@ -235,7 +235,9 @@ export function LCBoard({ game, lastEvent, onMove }: LCBoardProps) {
               .join(' ')}
             onClick={() => handleHandClick(card)}
           >
-            {cardLabel(card)}
+            <span className="lc-card-corner tl">{cardLabel(card)}</span>
+            <span className="lc-card-num">{cardLabel(card)}</span>
+            <span className="lc-card-corner br">{cardLabel(card)}</span>
           </button>
         ))}
       </div>

@@ -174,22 +174,53 @@
 /* ---------- 클랜 카드 ---------- */
 
 .st-board .st-card {
+  position: relative;
   width: 30px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-xs);
+  border-radius: 4px;
   font-size: var(--text-body-md);
   font-weight: 700;
   color: var(--color-on-primary);
-  box-shadow: var(--shadow-subtle);
+  /* 실물 카드 결: 컬러 페이스 위 종이 광택 + 같은 색조의 어두운 테두리 */
+  background-image: linear-gradient(
+    170deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(20, 20, 19, 0.1) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.3);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.18),
+    0 2px 5px rgba(20, 20, 19, 0.12);
 }
 
 .st-board .st-card.st-card-small {
   width: 28px;
   height: 38px;
   font-size: var(--text-body-sm);
+}
+
+/* 모서리 인덱스 — 우하단은 180° 미러 */
+.st-board .st-card .st-card-corner {
+  position: absolute;
+  font-size: 7px;
+  line-height: 1;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.st-board .st-card .st-card-corner.tl {
+  top: 2px;
+  left: 3px;
+}
+
+.st-board .st-card .st-card-corner.br {
+  bottom: 2px;
+  right: 3px;
+  transform: rotate(180deg);
 }
 
 /* 전술 카드: 어두운 카드 + 흰 라벨 */
@@ -389,6 +420,12 @@
 .st-board .st-hand-slot .st-card {
   width: 40px;
   height: 56px;
+  font-size: var(--text-title-sm);
+  border-radius: 5px;
+}
+
+.st-board .st-hand-slot .st-card .st-card-corner {
+  font-size: 8px;
 }
 
 /* ---------- 모바일 ---------- */

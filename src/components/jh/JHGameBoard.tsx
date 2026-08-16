@@ -52,8 +52,10 @@ function JHCardView({
         .filter(Boolean)
         .join(' ')}
     >
+      <span className="jh-card-corner tl">{cardText(card)}</span>
       <span className="jh-card-value">{cardText(card)}</span>
       <span className="jh-card-suit">{SUIT_LABELS[card.suit]}</span>
+      <span className="jh-card-corner br">{cardText(card)}</span>
     </div>
   );
 }

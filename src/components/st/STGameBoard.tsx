@@ -43,7 +43,9 @@ function ClanCard({ card, small }: { card: STCard; small?: boolean }) {
   }
   return (
     <div className={`st-card st-clan-${card.color}${small ? ' st-card-small' : ''}`}>
-      {card.rank}
+      <span className="st-card-corner tl">{card.rank}</span>
+      <span className="st-card-rank">{card.rank}</span>
+      <span className="st-card-corner br">{card.rank}</span>
     </div>
   );
 }

@@ -212,15 +212,49 @@
 }
 
 .lc-board-page .lc-hand-card {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 38px;
   height: 52px;
-  border-radius: 8px;
-  border: 2px solid var(--color-canvas);
+  border-radius: 5px;
   color: var(--color-on-primary);
   font-size: 18px;
   font-weight: 800;
   cursor: pointer;
+  /* 실물 카드 결: 컬러 페이스 위 종이 광택 + 어두운 테두리 */
+  background-image: linear-gradient(
+    170deg,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(20, 20, 19, 0.1) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.3);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.18),
+    0 2px 5px rgba(20, 20, 19, 0.12);
   transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.lc-board-page .lc-hand-card .lc-card-corner {
+  position: absolute;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.lc-board-page .lc-hand-card .lc-card-corner.tl {
+  top: 3px;
+  left: 4px;
+}
+
+.lc-board-page .lc-hand-card .lc-card-corner.br {
+  bottom: 3px;
+  right: 4px;
+  transform: rotate(180deg);
 }
 
 .lc-board-page .lc-hand-card.selected {
