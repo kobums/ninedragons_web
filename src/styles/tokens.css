@@ -110,6 +110,18 @@
   --tc-star: #c64545; /* R 별 red */
   --tc-special: #7c5cad; /* 특수 카드 강조 purple */
   --tc-special-tint: rgba(124, 92, 173, 0.1);
+  /* 특수 카드 4종 개별 색 — 실물 카드풍 전면 디자인용 */
+  --tc-mah: #3d7fb5; /* 참새 sky */
+  --tc-mah-tint: #e9f2f9;
+  --tc-dog: #9a6a3f; /* 개 warm tan */
+  --tc-dog-tint: #f6efe5;
+  --tc-phx: #d05a2e; /* 봉황 flame */
+  --tc-phx-tint: #fbeee6;
+  --tc-drg: #b03a3a; /* 용 crimson */
+  --tc-drg-tint: #f9e9e9;
+  /* 트럼프 카드 공통 몸통 — 상아빛 종이 결 */
+  --card-face: #fffdf8;
+  --card-face-edge: #f3efe6;
 
   /* Warm scrim — never pure black over the cream canvas. */
   --scrim: rgba(20, 20, 19, 0.6);

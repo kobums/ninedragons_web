@@ -20,7 +20,9 @@ interface MightyCardProps {
   highlighted?: boolean;
 }
 
-// 카드 한 장. onClick 이 있으면 <button>, 없으면 표시 전용 <div>.
+// 카드 한 장 — 실물 트럼프 결: 좌상단 인덱스(랭크+문양) + 우하단 180° 미러
+// + 중앙 문양. J/Q/K 는 코트 카드 프레임, A 는 큰 단일 문양, 조커는 전용.
+// onClick 이 있으면 <button>, 없으면 표시 전용 <div>.
 export function MightyCard({
   card,
   size = 'md',
@@ -32,6 +34,8 @@ export function MightyCard({
   const joker = isJoker(card);
   const suit = suitOf(card);
   const red = suit !== null && isRedSuit(suit);
+  const rank = joker ? 0 : rankOf(card);
+  const court = rank >= 11 && rank <= 13;
 
   const className = [
     'mt-card',
@@ -43,15 +47,44 @@ export function MightyCard({
     .filter(Boolean)
     .join(' ');
 
+  const index = (pos: 'tl' | 'br') =>
+    suit && (
+      <span className={`mt-card-index ${pos}`}>
+        <span className="mt-card-index-rank">{rankLabel(rank)}</span>
+        <span className="mt-card-index-suit">{SUIT_SYMBOL[suit]}</span>
+      </span>
+    );
+
   const body = joker ? (
     <>
-      <span className="mt-card-rank">JK</span>
-      <span className="mt-card-suit">🃏</span>
+      <span className="mt-card-index tl jk">
+        <span className="mt-card-index-rank">J</span>
+        <span className="mt-card-index-rank">K</span>
+      </span>
+      <span className="mt-card-jester" aria-hidden="true">
+        🃏
+      </span>
+      <span className="mt-card-index br jk">
+        <span className="mt-card-index-rank">J</span>
+        <span className="mt-card-index-rank">K</span>
+      </span>
     </>
   ) : (
     <>
-      <span className="mt-card-rank">{rankLabel(rankOf(card))}</span>
-      <span className="mt-card-suit">{suit ? SUIT_SYMBOL[suit] : ''}</span>
+      {index('tl')}
+      {court ? (
+        <span className="mt-card-court">
+          <span className="mt-card-court-letter">{rankLabel(rank)}</span>
+          <span className="mt-card-court-suit">
+            {suit ? SUIT_SYMBOL[suit] : ''}
+          </span>
+        </span>
+      ) : (
+        <span className={`mt-card-pip${rank === 14 ? ' ace' : ''}`}>
+          {suit ? SUIT_SYMBOL[suit] : ''}
+        </span>
+      )}
+      {index('br')}
     </>
   );
 

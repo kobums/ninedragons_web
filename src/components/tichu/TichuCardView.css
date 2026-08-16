@@ -1,16 +1,23 @@
+/* 티츄 카드 한 장 — 실물 트럼프 결.
+   상아빛 종이 몸통 + 모서리 인덱스(우하단 180°) + 중앙 문양.
+   특수 카드 4종은 개별 색 전면 디자인. 크림 캔버스 위에 놓인다. */
+
 .tc-card {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-sm);
+  background: linear-gradient(170deg, var(--card-face) 0%, var(--card-face-edge) 100%);
+  border: 1px solid rgba(20, 20, 19, 0.24);
   font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1;
   padding: 0;
   box-sizing: border-box;
   user-select: none;
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.14),
+    0 2px 6px rgba(20, 20, 19, 0.1);
   transition: transform 0.12s ease, border-color 0.12s ease,
     box-shadow 0.12s ease;
 }
@@ -18,11 +25,13 @@
 .tc-card-md {
   width: 52px;
   height: 74px;
+  border-radius: 6px;
 }
 
 .tc-card-sm {
   width: 34px;
   height: 48px;
+  border-radius: 4px;
 }
 
 .tc-card.clickable {
@@ -40,79 +49,181 @@
   box-shadow: 0 0 0 2px var(--color-primary-ring), var(--shadow-subtle);
 }
 
-.tc-card-rank {
-  font-size: var(--text-title-md);
-  font-weight: 700;
-  line-height: 1;
+/* ---------- 모서리 인덱스 ---------- */
+
+.tc-card-index {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
 }
 
-.tc-card-sm .tc-card-rank {
-  font-size: var(--text-body-sm);
+.tc-card-index.tl {
+  top: 4px;
+  left: 4px;
 }
 
-.tc-card-suit {
-  font-size: var(--text-body-sm);
-  line-height: 1;
+.tc-card-index.br {
+  bottom: 4px;
+  right: 4px;
+  transform: rotate(180deg);
 }
 
-.tc-card-sm .tc-card-suit {
-  font-size: 11px;
+.tc-card-md .tc-card-index-rank {
+  font-size: 12px;
+  letter-spacing: -0.5px;
 }
 
-/* 문양 색 — 토큰만 사용 */
-.tc-suit-G .tc-card-rank,
-.tc-suit-G .tc-card-suit {
+.tc-card-md .tc-card-index-suit {
+  font-size: 9px;
+  margin-top: 1px;
+}
+
+.tc-card-sm .tc-card-index-rank {
+  font-size: 9px;
+  letter-spacing: -0.5px;
+}
+
+.tc-card-sm .tc-card-index-suit {
+  font-size: 7px;
+}
+
+/* ---------- 중앙 문양 ---------- */
+
+.tc-card-pip {
+  pointer-events: none;
+}
+
+.tc-card-md .tc-card-pip {
+  font-size: 24px;
+}
+
+.tc-card-sm .tc-card-pip {
+  font-size: 16px;
+}
+
+.tc-card-md .tc-card-pip.ace {
+  font-size: 30px;
+}
+
+.tc-card-sm .tc-card-pip.ace {
+  font-size: 20px;
+}
+
+/* ---------- 문양 색 — 토큰만 사용 ---------- */
+
+.tc-suit-G {
   color: var(--tc-jade);
 }
 
-.tc-suit-B .tc-card-rank,
-.tc-suit-B .tc-card-suit {
+.tc-suit-B {
   color: var(--tc-sword);
 }
 
-.tc-suit-U .tc-card-rank,
-.tc-suit-U .tc-card-suit {
+.tc-suit-U {
   color: var(--tc-pagoda);
 }
 
-.tc-suit-R .tc-card-rank,
-.tc-suit-R .tc-card-suit {
+.tc-suit-R {
   color: var(--tc-star);
 }
 
-/* 특수 카드 */
-.tc-card-special {
-  background: var(--tc-special-tint);
-  border-color: var(--tc-special);
+/* ---------- 특수 카드 — 전면 디자인 ---------- */
+
+.tc-card-special .tc-card-art {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
 }
 
-.tc-card-glyph {
-  font-size: var(--text-title-lg);
-  line-height: 1;
+.tc-card-md .tc-card-glyph {
+  font-size: 24px;
 }
 
 .tc-card-sm .tc-card-glyph {
-  font-size: var(--text-body-md);
+  font-size: 15px;
 }
 
 .tc-card-name {
-  font-size: 10px;
   font-weight: 700;
-  color: var(--tc-special);
   line-height: 1;
 }
 
-.tc-card-sm .tc-card-name {
-  font-size: 9px;
+.tc-card-md .tc-card-name {
+  font-size: 10px;
 }
+
+.tc-card-sm .tc-card-name {
+  font-size: 8px;
+}
+
+/* 특수 코너 인덱스는 이모지/숫자 단독 — 크기만 맞춘다 */
+.tc-card-special .tc-card-index-rank {
+  font-size: 10px;
+}
+
+.tc-card-sm.tc-card-special .tc-card-index-rank {
+  font-size: 8px;
+}
+
+/* 개별 색: 몸통 틴트 + 잉크 */
+.tc-sp-mah {
+  color: var(--tc-mah);
+  background: linear-gradient(170deg, var(--card-face) 0%, var(--tc-mah-tint) 100%);
+  border-color: var(--tc-mah);
+}
+
+.tc-sp-dog {
+  color: var(--tc-dog);
+  background: linear-gradient(170deg, var(--card-face) 0%, var(--tc-dog-tint) 100%);
+  border-color: var(--tc-dog);
+}
+
+.tc-sp-phx {
+  color: var(--tc-phx);
+  background: linear-gradient(170deg, var(--card-face) 0%, var(--tc-phx-tint) 100%);
+  border-color: var(--tc-phx);
+}
+
+.tc-sp-drg {
+  color: var(--tc-drg);
+  background: linear-gradient(170deg, var(--card-face) 0%, var(--tc-drg-tint) 100%);
+  border-color: var(--tc-drg);
+}
+
+/* ---------- 모바일 ---------- */
 
 @media (max-width: 480px) {
   .tc-card-md {
     width: 44px;
     height: 62px;
+    border-radius: 5px;
   }
 
-  .tc-card-md .tc-card-rank {
-    font-size: var(--text-body-md);
+  .tc-card-md .tc-card-index-rank {
+    font-size: 10px;
+  }
+
+  .tc-card-md .tc-card-index-suit {
+    font-size: 8px;
+  }
+
+  .tc-card-md .tc-card-pip {
+    font-size: 20px;
+  }
+
+  .tc-card-md .tc-card-pip.ace {
+    font-size: 25px;
+  }
+
+  .tc-card-md .tc-card-glyph {
+    font-size: 19px;
+  }
+
+  .tc-card-md .tc-card-name {
+    font-size: 9px;
   }
 }

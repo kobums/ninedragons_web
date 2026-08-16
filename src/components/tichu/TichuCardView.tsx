@@ -10,12 +10,15 @@ const SUIT_GLYPHS: Record<TichuSuit, string> = {
   R: '★', // 별
 };
 
-// 특수 카드는 이모지 + 한글 이름으로 구분한다
-const SPECIAL_VIEWS: Record<string, { glyph: string; label: string }> = {
-  MAH: { glyph: '🐦', label: '참새 1' },
-  DOG: { glyph: '🐕', label: '개' },
-  PHX: { glyph: '🔥', label: '봉황' },
-  DRG: { glyph: '🐉', label: '용' },
+// 특수 카드 — 실물 카드풍 전면 디자인 (개별 색·코너 인덱스·이름 배너)
+const SPECIAL_VIEWS: Record<
+  string,
+  { glyph: string; label: string; corner: string }
+> = {
+  MAH: { glyph: '🐦', label: '참새', corner: '1' },
+  DOG: { glyph: '🐕', label: '개', corner: '🐕' },
+  PHX: { glyph: '🔥', label: '봉황', corner: '🔥' },
+  DRG: { glyph: '🐉', label: '용', corner: '🐉' },
 };
 
 interface TichuCardViewProps {
@@ -26,6 +29,7 @@ interface TichuCardViewProps {
   onClick?: () => void;
 }
 
+// 카드 한 장 — 실물 트럼프 결: 좌상단 인덱스 + 우하단 180° 미러 + 중앙 문양.
 export function TichuCardView({
   card,
   size = 'md',
@@ -34,25 +38,45 @@ export function TichuCardView({
   onClick,
 }: TichuCardViewProps) {
   const suit = cardSuit(card);
+  const special = suit ? null : SPECIAL_VIEWS[card];
   const classes = [
     'tc-card',
     `tc-card-${size}`,
-    suit ? `tc-suit-${suit}` : 'tc-card-special',
+    suit ? `tc-suit-${suit}` : `tc-card-special tc-sp-${card.toLowerCase()}`,
     selected ? 'selected' : '',
     onClick ? 'clickable' : '',
   ]
     .filter(Boolean)
     .join(' ');
 
-  const body = suit ? (
+  const index = (pos: 'tl' | 'br') =>
+    suit ? (
+      <span className={`tc-card-index ${pos}`}>
+        <span className="tc-card-index-rank">{rankLabel(cardRank(card))}</span>
+        <span className="tc-card-index-suit">{SUIT_GLYPHS[suit]}</span>
+      </span>
+    ) : (
+      <span className={`tc-card-index ${pos}`}>
+        <span className="tc-card-index-rank">{special?.corner ?? '?'}</span>
+      </span>
+    );
+
+  const rank = suit ? cardRank(card) : 0;
+
+  const body = (
     <>
-      <span className="tc-card-rank">{rankLabel(cardRank(card))}</span>
-      <span className="tc-card-suit">{SUIT_GLYPHS[suit]}</span>
-    </>
-  ) : (
-    <>
-      <span className="tc-card-glyph">{SPECIAL_VIEWS[card]?.glyph ?? '?'}</span>
-      <span className="tc-card-name">{SPECIAL_VIEWS[card]?.label ?? card}</span>
+      {index('tl')}
+      {suit ? (
+        <span className={`tc-card-pip${rank === 14 ? ' ace' : ''}`}>
+          {SUIT_GLYPHS[suit]}
+        </span>
+      ) : (
+        <span className="tc-card-art">
+          <span className="tc-card-glyph">{special?.glyph ?? '?'}</span>
+          <span className="tc-card-name">{special?.label ?? card}</span>
+        </span>
+      )}
+      {index('br')}
     </>
   );
 

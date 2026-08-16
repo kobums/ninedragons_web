@@ -1,38 +1,146 @@
-/* 마이티 카드 한 장 — 흰 몸통 + 문양색 잉크.
+/* 마이티 카드 한 장 — 실물 트럼프 결.
+   상아빛 종이 몸통 + 모서리 인덱스(우하단 180°) + 중앙 문양.
    다크 보드(--color-surface-dark) 위에 놓인다. */
 
 .mt-card {
+  position: relative;
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
-  background: var(--color-canvas);
-  border: 1px solid rgba(20, 20, 19, 0.25);
-  border-radius: var(--radius-sm);
+  background: linear-gradient(170deg, var(--card-face) 0%, var(--card-face-edge) 100%);
+  border: 1px solid rgba(20, 20, 19, 0.28);
   font-family: var(--font-sans);
   font-weight: 700;
   line-height: 1;
   user-select: none;
   padding: 0;
-  box-shadow: var(--shadow-subtle);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.18),
+    0 2px 6px rgba(20, 20, 19, 0.12);
 }
 
 .mt-card-md {
   width: 44px;
   height: 62px;
-  font-size: 17px;
+  border-radius: 5px;
 }
 
 .mt-card-sm {
   width: 32px;
   height: 45px;
-  font-size: 13px;
+  border-radius: 4px;
 }
 
-.mt-card .mt-card-suit {
-  font-size: 0.9em;
+/* ---------- 모서리 인덱스 ---------- */
+
+.mt-card-index {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  pointer-events: none;
 }
+
+.mt-card-index.tl {
+  top: 3px;
+  left: 3px;
+}
+
+.mt-card-index.br {
+  bottom: 3px;
+  right: 3px;
+  transform: rotate(180deg);
+}
+
+.mt-card-md .mt-card-index-rank {
+  font-size: 11px;
+  letter-spacing: -0.5px;
+}
+
+.mt-card-md .mt-card-index-suit {
+  font-size: 9px;
+  margin-top: 1px;
+}
+
+.mt-card-sm .mt-card-index-rank {
+  font-size: 9px;
+  letter-spacing: -0.5px;
+}
+
+.mt-card-sm .mt-card-index-suit {
+  font-size: 7px;
+}
+
+/* ---------- 중앙 ---------- */
+
+.mt-card-pip {
+  pointer-events: none;
+}
+
+.mt-card-md .mt-card-pip {
+  font-size: 21px;
+}
+
+.mt-card-sm .mt-card-pip {
+  font-size: 15px;
+}
+
+.mt-card-md .mt-card-pip.ace {
+  font-size: 26px;
+}
+
+.mt-card-sm .mt-card-pip.ace {
+  font-size: 18px;
+}
+
+/* 코트 카드(J/Q/K): 세리프 대문자 + 작은 문양, 이중 프레임 */
+.mt-card-court {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1.5px var(--card-face);
+  outline: 1px solid currentColor;
+  outline-offset: -3.5px;
+  pointer-events: none;
+}
+
+.mt-card-md .mt-card-court {
+  width: 24px;
+  height: 34px;
+}
+
+.mt-card-sm .mt-card-court {
+  width: 17px;
+  height: 24px;
+}
+
+.mt-card-court-letter {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.mt-card-md .mt-card-court-letter {
+  font-size: 17px;
+}
+
+.mt-card-sm .mt-card-court-letter {
+  font-size: 12px;
+}
+
+.mt-card-md .mt-card-court-suit {
+  font-size: 8px;
+}
+
+.mt-card-sm .mt-card-court-suit {
+  font-size: 6px;
+}
+
+/* ---------- 잉크 색 ---------- */
 
 .mt-card.black {
   color: var(--color-ink);
@@ -42,16 +150,28 @@
   color: var(--color-team-red);
 }
 
+/* ---------- 조커 ---------- */
+
 .mt-card.joker {
-  color: var(--color-ink);
-  background: linear-gradient(
-    160deg,
-    var(--color-surface-soft) 0%,
-    var(--color-surface-cream-strong) 100%
-  );
+  color: var(--tc-special, #7c5cad);
+  background:
+    linear-gradient(170deg, var(--card-face) 0%, var(--tc-special-tint) 100%);
 }
 
-/* 버튼일 때 */
+.mt-card.joker .mt-card-index.jk .mt-card-index-rank {
+  line-height: 1.05;
+}
+
+.mt-card-md .mt-card-jester {
+  font-size: 24px;
+}
+
+.mt-card-sm .mt-card-jester {
+  font-size: 17px;
+}
+
+/* ---------- 버튼 상태 ---------- */
+
 button.mt-card {
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
