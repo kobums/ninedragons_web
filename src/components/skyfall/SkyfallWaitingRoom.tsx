@@ -49,7 +49,7 @@ export function SkyfallWaitingRoom({
   return (
     <div className="sf-waiting">
       <div className="sf-waiting-container">
-        <h1 className="sf-title">스카이폴</h1>
+        <h1 className="sf-title">마피아</h1>
         <p className="sf-subtitle">클래식 마피아 · 6~10인</p>
 
         {!hasJoined ? (
