@@ -14,7 +14,8 @@ export type GameId =
   | 'lostcities'
   | 'cantstop'
   | 'tichu'
-  | 'mighty';
+  | 'mighty'
+  | 'skyfall';
 
 export interface RuleSection {
   heading?: string;
@@ -481,6 +482,49 @@ export const GAMES: Record<GameId, GameMeta> = {
         heading: '승부',
         items: [
           '주공팀(주공+프렌드)이 딴 점수 카드가 공약 이상이면 성공, 미달이면 수비팀 승리입니다.',
+        ],
+      },
+    ],
+  },
+  skyfall: {
+    title: '스카이폴',
+    tag: '마피아 · 심리전',
+    description: '역할을 숨긴 마피아 심리전',
+    players: '6~10인',
+    duration: '15-30분',
+    cardTheme: 'dark',
+    wsPath: '/ws/skyfall',
+    logPrefix: '[Skyfall] WebSocket',
+    sessionKey: 'sf_session_id',
+    rules: [
+      {
+        heading: '준비',
+        items: [
+          '6~10명이 참가하며 역할이 비밀리에 배정됩니다 — 마피아 2~3, 경찰 1, 의사 1, 나머지는 시민.',
+          '마피아는 서로가 누구인지 압니다. 다른 사람은 자기 역할만 압니다.',
+          '토론은 같은 공간(또는 음성)에서 하고, 앱은 역할·밤 행동·투표를 진행합니다.',
+        ],
+      },
+      {
+        heading: '밤',
+        items: [
+          '마피아: 제거할 사람을 지목합니다 (여럿이면 다수결).',
+          '경찰: 한 명을 조사해 마피아인지 확인합니다 (결과는 나만 봅니다).',
+          '의사: 한 명을 치료합니다 — 마피아의 표적과 일치하면 살립니다.',
+        ],
+      },
+      {
+        heading: '낮',
+        items: [
+          '밤의 결과가 발표됩니다. 토론 후 처형할 사람에게 공개 투표하세요 (기권 가능).',
+          '최다 득표자가 처형되고 역할이 공개됩니다. 동표면 아무도 처형되지 않습니다.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: [
+          '시민팀: 마피아를 전부 처형하면 승리합니다.',
+          '마피아팀: 마피아 수가 남은 시민팀 수 이상이 되면 승리합니다.',
         ],
       },
     ],

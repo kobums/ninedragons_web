@@ -1,0 +1,181 @@
+/* 스카이폴 대기실 — 마피아 밤하늘 딥 네이비 셸 (tokens.css 토큰만 사용) */
+
+.sf-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--sf-night-elevated) 0%,
+    var(--sf-night) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.sf-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+}
+
+.sf-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+}
+
+.sf-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--sf-moon);
+  font-size: var(--text-body-sm);
+}
+
+.sf-join-form,
+.sf-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sf-form-group {
+  text-align: left;
+}
+
+.sf-form-group label {
+  display: block;
+  color: var(--sf-moon);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.sf-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+.sf-primary-button {
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sf-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.sf-primary-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--sf-moon);
+  cursor: not-allowed;
+}
+
+.sf-ghost-button {
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--sf-moon);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.sf-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sf-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.sf-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.sf-seat-item.empty {
+  color: var(--sf-moon);
+  font-weight: 400;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: transparent;
+  justify-content: center;
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+}
+
+.sf-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-crown {
+  font-size: var(--text-body-sm);
+}
+
+.sf-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.sf-dot.on {
+  background: var(--color-success);
+}
+
+.sf-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.sf-waiting-hint {
+  margin: 0;
+  color: var(--sf-moon);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 360px) {
+  .sf-waiting {
+    padding: var(--space-sm);
+  }
+
+  .sf-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}

@@ -1,0 +1,605 @@
+/* 스카이폴 보드 — 밤하늘 딥 네이비, 낮에는 살짝 온기가 도는 다크.
+   플레이어 타일 그리드는 반응형 2~3열 (280px 오버플로 금지). */
+
+.sf-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--sf-night-elevated) 0%,
+    var(--sf-night) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 96px; /* 하단 확인 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+.sf-board.day {
+  background: linear-gradient(
+    170deg,
+    var(--color-surface-dark-elevated) 0%,
+    var(--sf-night-soft) 100%
+  );
+}
+
+/* ---------- 토스트 ---------- */
+
+.sf-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.sf-toast {
+  background: rgba(10, 12, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: sf-toast-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes sf-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 단계 배너 ---------- */
+
+.sf-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.sf-phase-banner.night {
+  background: rgba(125, 159, 209, 0.08);
+  border: 1px solid rgba(125, 159, 209, 0.25);
+}
+
+.sf-phase-banner.day {
+  background: var(--sf-day-tint);
+  border: 1px solid var(--color-accent-amber);
+}
+
+.sf-phase-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+}
+
+.sf-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--sf-moon);
+}
+
+.sf-dead-banner {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--sf-moon);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 낮 발표 ---------- */
+
+.sf-announce {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-title-md);
+  font-weight: 700;
+  animation: sf-announce-in 0.4s ease;
+}
+
+.sf-announce.killed {
+  background: var(--sf-mafia-tint);
+  border: 1px solid var(--sf-mafia);
+  color: var(--sf-mafia);
+}
+
+.sf-announce.saved {
+  background: var(--sf-doctor-tint);
+  border: 1px solid var(--sf-doctor);
+  color: var(--sf-doctor);
+}
+
+@keyframes sf-announce-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sf-announce-chip {
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: var(--text-caption);
+  color: var(--sf-moon);
+}
+
+/* ---------- 내 역할 카드 ---------- */
+
+.sf-role-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+  /* 첫 배정 시 강조 등장 (key 교체로 재생) */
+  animation: sf-role-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes sf-role-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sf-role-card.role-mafia {
+  border-color: var(--sf-mafia);
+  background: var(--sf-mafia-tint);
+}
+
+.sf-role-card.role-police {
+  border-color: var(--sf-police);
+  background: var(--sf-police-tint);
+}
+
+.sf-role-card.role-doctor {
+  border-color: var(--sf-doctor);
+  background: var(--sf-doctor-tint);
+}
+
+.sf-role-card.role-citizen {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.sf-role-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sf-role-icon {
+  font-size: var(--text-title-lg);
+}
+
+.sf-role-name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+}
+
+.sf-role-card.role-mafia .sf-role-name {
+  color: var(--sf-mafia);
+}
+
+.sf-role-card.role-police .sf-role-name {
+  color: var(--sf-police);
+}
+
+.sf-role-card.role-doctor .sf-role-name {
+  color: var(--sf-doctor);
+}
+
+.sf-role-desc {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--sf-moon);
+}
+
+.sf-role-mates {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--sf-mafia);
+}
+
+/* 경찰 조사 결과 칩 — 낮 동안 유지 */
+.sf-invest-chip {
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+
+.sf-invest-chip.mafia {
+  background: var(--sf-mafia-tint);
+  border: 1px solid var(--sf-mafia);
+  color: var(--sf-mafia);
+}
+
+.sf-invest-chip.clear {
+  background: var(--sf-police-tint);
+  border: 1px solid var(--sf-police);
+  color: var(--sf-police);
+}
+
+/* ---------- 플레이어 타일 그리드 ---------- */
+
+.sf-grid {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.sf-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  text-align: left;
+  cursor: default;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.sf-tile.me {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.sf-tile.selectable {
+  cursor: pointer;
+}
+
+.sf-tile.selectable:hover {
+  border-color: var(--color-primary);
+}
+
+.sf-tile.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 1px var(--color-primary);
+  transform: scale(1.02);
+}
+
+/* 사망자는 어둡게 */
+.sf-tile.dead {
+  opacity: 0.55;
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.sf-tile:disabled {
+  /* 버튼 기본 비활성 스타일 무력화 — 시각 상태는 클래스가 결정 */
+  color: var(--color-on-dark);
+}
+
+.sf-tile-name {
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.sf-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: var(--text-caption-uppercase);
+  color: var(--sf-moon);
+}
+
+.sf-badge.off {
+  background: rgba(212, 160, 23, 0.18);
+  color: var(--color-warning);
+}
+
+.sf-badge.mate {
+  background: var(--sf-mafia-tint);
+  color: var(--sf-mafia);
+  font-weight: 700;
+}
+
+.sf-badge.voted {
+  background: rgba(93, 184, 114, 0.16);
+  color: var(--color-success);
+}
+
+.sf-badge.count {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 800;
+}
+
+.sf-tile-dead-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-caption-uppercase);
+  color: var(--sf-moon);
+}
+
+/* 공개된 역할 표기 (사망·처형·종료) */
+.sf-role-chip {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-on-dark);
+}
+
+.sf-role-chip.role-mafia {
+  background: var(--sf-mafia-tint);
+  color: var(--sf-mafia);
+}
+
+.sf-role-chip.role-police {
+  background: var(--sf-police-tint);
+  color: var(--sf-police);
+}
+
+.sf-role-chip.role-doctor {
+  background: var(--sf-doctor-tint);
+  color: var(--sf-doctor);
+}
+
+.sf-role-chip.role-citizen {
+  color: var(--sf-citizen);
+}
+
+.sf-role-chip.big {
+  font-size: var(--text-body-md);
+  padding: 4px 14px;
+}
+
+/* ---------- 밤 대기 · 투표 목록 ---------- */
+
+.sf-night-pending {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--sf-moon);
+}
+
+.sf-vote-list {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sf-vote-list-title {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--sf-moon);
+}
+
+.sf-vote-row {
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.sf-vote-row em {
+  color: var(--sf-moon);
+  font-style: normal;
+}
+
+.sf-vote-row strong {
+  color: var(--color-accent-amber);
+}
+
+/* ---------- 하단 확인 바 · 기권 ---------- */
+
+.sf-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 950;
+  width: calc(100% - 24px);
+  max-width: 480px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--sf-night-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-modal);
+  animation: sf-announce-in 0.2s ease;
+}
+
+.sf-confirm-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  min-width: 0;
+}
+
+.sf-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.sf-confirm-button {
+  padding: 9px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sf-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.sf-cancel-button {
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--sf-moon);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+.sf-abstain-button {
+  padding: 9px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  font-size: var(--text-button);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- 처형 오버레이 ---------- */
+
+.sf-exec-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+}
+
+.sf-exec-card {
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-xl);
+  background: var(--sf-night-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--shadow-modal);
+  text-align: center;
+  animation: sf-role-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sf-exec-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-on-dark);
+}
+
+.sf-exec-sub {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--sf-moon);
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 420px) {
+  .sf-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sf-board {
+    padding: var(--space-xs);
+    padding-bottom: 96px;
+  }
+
+  .sf-tile {
+    padding: 8px;
+  }
+
+  .sf-tile-name {
+    font-size: var(--text-caption);
+  }
+}

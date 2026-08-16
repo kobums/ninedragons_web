@@ -123,6 +123,23 @@
   --card-face: #fffdf8;
   --card-face-edge: #f3efe6;
 
+  /* ---------- Skyfall (마피아) 밤 무드 ----------
+     마이티 웜 네이비보다 차갑고 어두운 밤하늘 톤. 역할 색은 기존
+     저채도 토큰을 다크 배경 가독용으로 살짝 밝힌 변주다 —
+     CTA·라이트 서피스에는 쓰지 않는다. */
+  --sf-night: #101320; /* 밤하늘 딥 네이비 */
+  --sf-night-elevated: #1b1f30;
+  --sf-night-soft: #161927;
+  --sf-moon: #aeb6d0; /* 밤 보조 텍스트 */
+  --sf-mafia: #d96a6a; /* team-red 의 다크 배경 밝힘 */
+  --sf-mafia-tint: rgba(217, 106, 106, 0.14);
+  --sf-police: #7d9fd1; /* team-blue 의 다크 배경 밝힘 */
+  --sf-police-tint: rgba(125, 159, 209, 0.14);
+  --sf-doctor: var(--color-accent-teal);
+  --sf-doctor-tint: rgba(93, 184, 166, 0.14);
+  --sf-citizen: var(--color-on-dark-soft);
+  --sf-day-tint: rgba(232, 165, 90, 0.14); /* 낮 배너 온기 */
+
   /* Warm scrim — never pure black over the cream canvas. */
   --scrim: rgba(20, 20, 19, 0.6);
 
