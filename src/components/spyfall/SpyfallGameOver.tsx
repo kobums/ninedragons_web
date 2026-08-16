@@ -32,7 +32,7 @@ export function SpyfallGameOver({ game, onFindNewGame }: SpyfallGameOverProps) {
       case 'guess_right':
       case 'guess_wrong':
         return result.guessedLocation
-          ? `추리한 장소: ${result.guessedLocation}`
+          ? `추리한 답: ${result.guessedLocation}`
           : '';
       case 'vote_caught':
         return '';
@@ -62,7 +62,7 @@ export function SpyfallGameOver({ game, onFindNewGame }: SpyfallGameOverProps) {
               </span>
             </div>
             <div className="sp-over-fact">
-              <span className="sp-over-fact-label">실제 장소</span>
+              <span className="sp-over-fact-label">정답 ({result.category || '장소'})</span>
               <span className="sp-over-fact-value location">
                 {result.location}
               </span>

@@ -9,6 +9,7 @@ export type SPMessageType =
   | 'sp_fill_bots'
   | 'sp_start'
   | 'sp_set_timer'
+  | 'sp_set_category'
   | 'sp_guess'
   | 'sp_vote'
   | 'sp_rejoin'
@@ -53,6 +54,7 @@ export type SPReason =
 export interface SPResult {
   winner: SPWinner;
   spySeat: number;
+  category: string;
   location: string;
   reason: SPReason;
   // 스파이가 추리했을 때만 채워진다 ('' = 추리 없음)
@@ -69,9 +71,12 @@ export interface SPGameState {
   hostSeat: number;
   yourSeat: number;
   timerMinutes: number;
+  // 대기실 host 선택 (기본 '랜덤')과 시작 시 확정 카테고리
+  categoryChoice: string;
+  category: string;
   // playing 중 unixMillis, 그 외 0 — 프론트가 카운트다운 계산
   endsAt: number;
-  // 장소 24곳 (playing 부터)
+  // 확정 카테고리 단어 24개 (playing 부터)
   locations?: string[] | null;
   isSpy: boolean;
   // 비스파이만 채워진다 (스파이·waiting 은 '')
@@ -105,9 +110,21 @@ export const SP_MAX_PLAYERS = 8;
 // host 가 대기실에서 고르는 타이머 (분)
 export const SP_TIMER_CHOICES = [3, 5, 8] as const;
 
+// host 가 대기실에서 고르는 카테고리 (서버 계약과 동일 표기)
+export const SP_CATEGORY_RANDOM = '랜덤';
+export const SP_CATEGORY_CHOICES = [
+  SP_CATEGORY_RANDOM,
+  '장소',
+  '직업',
+  '과일',
+  '음식',
+  '동물',
+  '스포츠',
+] as const;
+
 // 종료 사유 한글 라벨
 export const SP_REASON_LABEL: Record<SPReason, string> = {
-  guess_right: '스파이가 장소를 알아냈습니다',
+  guess_right: '스파이가 정답을 알아냈습니다',
   guess_wrong: '스파이의 추리가 빗나갔습니다',
   vote_caught: '투표로 스파이를 검거했습니다',
   vote_missed: '투표가 스파이를 놓쳤습니다',

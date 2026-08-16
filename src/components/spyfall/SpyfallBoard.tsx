@@ -24,7 +24,7 @@ function toastText(event: SPEvent, game: SPGameState): string {
     case 'started':
       return '🕵️ 게임 시작 — 스파이를 찾아내세요';
     case 'guess':
-      return '🕵️ 스파이가 장소를 추리했습니다';
+      return '🕵️ 스파이가 정답을 추리했습니다';
     case 'vote_begin':
       return '🗳️ 시간 종료 — 스파이 투표를 시작합니다';
     case 'bot_takeover':
@@ -136,11 +136,13 @@ export function SpyfallBoard({
 
   const votedCount = game.players.filter((p) => p.voted).length;
 
+  const category = game.category || '장소';
+
   const bannerSub = (() => {
     if (isPlaying) {
       return game.isSpy
-        ? '정체를 숨기고 대화에서 장소를 알아내세요'
-        : '스파이에게 장소를 들키지 않게 질문하세요';
+        ? `정체를 숨기고 대화에서 ${category} 정답을 알아내세요`
+        : `스파이에게 ${category} 정답을 들키지 않게 질문하세요`;
     }
     if (isVoting) {
       if (canVote) return '스파이로 의심되는 사람을 지목하세요';
@@ -185,13 +187,13 @@ export function SpyfallBoard({
             <span className="sp-identity-title">🕵️ 당신은 스파이</span>
             <p className="sp-identity-desc">
               {isPlaying
-                ? '아래 장소 목록에서 탭해 추리할 수 있습니다 — 적중하면 즉시 승리, 빗나가면 즉시 패배'
+                ? `아래 ${category} 목록에서 탭해 추리할 수 있습니다 — 적중하면 즉시 승리, 빗나가면 즉시 패배`
                 : '들키지 않았기를 빌어보세요…'}
             </p>
           </>
         ) : (
           <>
-            <span className="sp-identity-caption">장소</span>
+            <span className="sp-identity-caption">{category}</span>
             <span className="sp-identity-location">{game.location}</span>
             <p className="sp-identity-desc">
               당신만 아는 것이 아닙니다 — 스파이만 모릅니다
@@ -203,10 +205,10 @@ export function SpyfallBoard({
       {/* 장소 목록 24곳 */}
       <div className="sp-locations">
         <div className="sp-section-head">
-          <span className="sp-section-title">장소 목록</span>
+          <span className="sp-section-title">{category} 목록</span>
           <span className="sp-section-hint">
             {canGuess
-              ? '탭해서 추리할 장소 선택'
+              ? '탭해서 추리할 정답 선택'
               : '탭하면 개인 메모용으로 지워집니다'}
           </span>
         </div>
@@ -303,7 +305,7 @@ export function SpyfallBoard({
       {canGuess && guessPick !== null && (
         <div className="sp-confirm-bar">
           <span className="sp-confirm-text">
-            장소를 <strong>{guessPick}</strong>(으)로 추리할까요? 틀리면 즉시
+            정답을 <strong>{guessPick}</strong>(으)로 추리할까요? 틀리면 즉시
             패배합니다
           </span>
           <div className="sp-confirm-actions">

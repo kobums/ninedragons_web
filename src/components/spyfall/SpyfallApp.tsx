@@ -90,6 +90,9 @@ export function SpyfallApp({ onBack }: SpyfallAppProps) {
           onSetTimer={(minutes) =>
             sendMessage({ type: 'sp_set_timer', payload: { minutes } })
           }
+          onSetCategory={(category) =>
+            sendMessage({ type: 'sp_set_category', payload: { category } })
+          }
           onBack={onBack}
         />
       )}

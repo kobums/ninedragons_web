@@ -4,6 +4,8 @@ import {
   SP_MAX_PLAYERS,
   SP_MIN_PLAYERS,
   SP_TIMER_CHOICES,
+  SP_CATEGORY_CHOICES,
+  SP_CATEGORY_RANDOM,
 } from '../../types/spyfall';
 import './SpyfallWaitingRoom.css';
 
@@ -15,6 +17,7 @@ interface SpyfallWaitingRoomProps {
   onStart: () => void;
   onFillBots: () => void;
   onSetTimer: (minutes: number) => void;
+  onSetCategory: (category: string) => void;
   onBack: () => void;
 }
 
@@ -25,6 +28,7 @@ export function SpyfallWaitingRoom({
   onStart,
   onFillBots,
   onSetTimer,
+  onSetCategory,
   onBack,
 }: SpyfallWaitingRoomProps) {
   const [name, setName] = useState('');
@@ -52,12 +56,13 @@ export function SpyfallWaitingRoom({
   const isHost = game !== null && game.yourSeat === hostSeat;
   const needMore = Math.max(0, SP_MIN_PLAYERS - filled);
   const timerMinutes = game?.timerMinutes ?? 5;
+  const categoryChoice = game?.categoryChoice ?? SP_CATEGORY_RANDOM;
 
   return (
     <div className="sp-waiting">
       <div className="sp-waiting-container">
         <h1 className="sp-title">스파이폴</h1>
-        <p className="sp-subtitle">🕵️ 장소 추리 · 3~8인</p>
+        <p className="sp-subtitle">🕵️ 단어 추리 · 3~8인</p>
 
         {!hasJoined ? (
           <form onSubmit={handleSubmit} className="sp-join-form">
@@ -122,6 +127,28 @@ export function SpyfallWaitingRoom({
                     disabled={!isHost}
                   >
                     {m}분
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 카테고리 선택 — host 만 조작, 나머지는 현황 표시 */}
+            <div className="sp-timer-picker">
+              <span className="sp-timer-label">🗂️ 카테고리</span>
+              <div
+                className="sp-timer-options"
+                role="group"
+                aria-label="카테고리 선택"
+              >
+                {SP_CATEGORY_CHOICES.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    className={`sp-timer-option ${categoryChoice === c ? 'active' : ''}`}
+                    onClick={() => isHost && onSetCategory(c)}
+                    disabled={!isHost}
+                  >
+                    {c}
                   </button>
                 ))}
               </div>
