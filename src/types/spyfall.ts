@@ -98,6 +98,8 @@ export type SPEventKind =
 export interface SPEvent {
   kind: SPEventKind;
   seat?: number;
+  // 서버가 실어주는 표시 이름 — 퇴장자처럼 스냅샷에서 이미 빠진 좌석용
+  name?: string;
   message?: string;
 }
 

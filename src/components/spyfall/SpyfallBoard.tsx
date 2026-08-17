@@ -14,7 +14,8 @@ interface SpyfallBoardProps {
 function toastText(event: SPEvent, game: SPGameState): string {
   if (event.message) return event.message;
   const name = (seat?: number) =>
-    game.players.find((p) => p.seat === seat)?.name ?? '?';
+    // 퇴장 이벤트는 스냅샷에서 좌석이 이미 빠진 뒤라 이벤트의 name 이 우선
+    game.players.find((p) => p.seat === seat)?.name ?? event.name ?? '?';
 
   switch (event.kind) {
     case 'joined':
@@ -69,11 +70,17 @@ export function SpyfallBoard({
   const isVoting = game.phase === 'voting';
 
   useEffect(() => {
-    if (!isPlaying || game.endsAt <= 0) return;
+    if ((!isPlaying && !isVoting) || game.endsAt <= 0) return;
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
-    setNow(Date.now());
-    return () => window.clearInterval(timer);
-  }, [isPlaying, game.endsAt]);
+    const sync = () => setNow(Date.now());
+    // 백그라운드 탭 복귀 직후 낡은 시간이 보이지 않게 즉시 재동기화
+    document.addEventListener('visibilitychange', sync);
+    sync();
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, [isPlaying, isVoting, game.endsAt]);
 
   // 단계가 바뀌면 로컬 입력 상태를 리셋한다 (소거 메모는 유지)
   useEffect(() => {
@@ -95,7 +102,8 @@ export function SpyfallBoard({
     game.players.find((p) => p.seat === seat)?.name ?? '?';
 
   const canGuess = isPlaying && game.isSpy && !submitted;
-  const canVote = isVoting && !myVoted && !submitted;
+  // 집계 전에는 서버가 덮어쓰기를 허용한다 — 투표 후에도 다시 지목해 변경 가능
+  const canVote = isVoting && !submitted;
 
   // 장소 타일 탭 — 스파이는 추리 후보 선택, 그 외에는 개인 소거 토글
   const handleLocationTap = (loc: string) => {
@@ -140,14 +148,15 @@ export function SpyfallBoard({
 
   const bannerSub = (() => {
     if (isPlaying) {
+      if (game.endsAt > 0 && remaining <= 0) return '곧 투표가 시작됩니다…';
       return game.isSpy
         ? `정체를 숨기고 대화에서 ${category} 정답을 알아내세요`
         : `스파이에게 ${category} 정답을 들키지 않게 질문하세요`;
     }
     if (isVoting) {
-      if (canVote) return '스파이로 의심되는 사람을 지목하세요';
-      if (myVoted) return `투표 완료 — 다른 요원을 기다리는 중… (${votedCount}/${game.players.length})`;
-      return '';
+      if (myVoted)
+        return `투표 완료 (${votedCount}/${game.players.length}) — 마감 전에는 다시 탭해 변경할 수 있습니다`;
+      return '스파이로 의심되는 사람을 지목하세요';
     }
     return '';
   })();
@@ -172,7 +181,14 @@ export function SpyfallBoard({
             </span>
           </>
         ) : (
-          <span className="sp-phase-title">🗳️ 스파이 투표</span>
+          <>
+            <span className="sp-phase-title">🗳️ 스파이 투표</span>
+            {isVoting && game.endsAt > 0 && (
+              <span className={`sp-timer-digits ${remaining < 20_000 ? 'urgent' : ''}`}>
+                {formatRemaining(remaining)}
+              </span>
+            )}
+          </>
         )}
         {bannerSub && <span className="sp-phase-sub">{bannerSub}</span>}
       </div>
