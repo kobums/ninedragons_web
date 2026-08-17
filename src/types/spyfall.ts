@@ -120,6 +120,9 @@ export const SP_CATEGORY_CHOICES = [
   '음식',
   '동물',
   '스포츠',
+  '영화',
+  '나라',
+  '브랜드',
 ] as const;
 
 // 종료 사유 한글 라벨

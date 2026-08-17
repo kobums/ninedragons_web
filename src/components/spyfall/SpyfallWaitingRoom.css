@@ -187,6 +187,9 @@
 .sp-timer-options {
   display: flex;
   gap: 6px;
+  /* 카테고리 픽커는 10개 버튼 — 좁은 화면에서 줄바꿈 */
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .sp-timer-option {
