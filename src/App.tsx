@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GameSelection } from './components/GameSelection';
 import { NineDragonsApp } from './components/NineDragonsApp';
 import { NumberChangeApp } from './components/nc/NumberChangeApp';
@@ -15,16 +15,46 @@ import { MightyApp } from './components/mighty/MightyApp';
 import { SkyfallApp } from './components/skyfall/SkyfallApp';
 import { SpyfallApp } from './components/spyfall/SpyfallApp';
 import type { GameId } from './config/games';
+import { GAMES } from './config/games';
 import './App.css';
 
+// 해시 라우팅 (#/tichu) — 브라우저/모바일 뒤로가기로 게임 선택에 돌아올 수
+// 있고, 특정 게임 딥링크 공유도 된다. 정적 호스팅이라 경로 라우팅 대신
+// 해시를 쓴다 (서버 fallback 설정 불필요).
+function gameFromHash(): GameId | null {
+  const id = window.location.hash.replace(/^#\/?/, '');
+  return id in GAMES ? (id as GameId) : null;
+}
+
 function App() {
-  const [selectedGame, setSelectedGame] = useState<GameId | null>(null);
+  const [selectedGame, setSelectedGame] = useState<GameId | null>(gameFromHash);
+
+  // 뒤로가기/앞으로가기·주소 직접 변경을 상태에 반영한다
+  useEffect(() => {
+    const onHashChange = () => setSelectedGame(gameFromHash());
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   const handleSelectGame = (game: GameId) => {
+    // 히스토리 엔트리가 쌓여 뒤로가기가 게임 선택으로 돌아온다.
+    // state 마킹으로 "선택 화면에서 들어왔음"을 기억한다 (딥링크와 구분).
+    window.history.pushState({ fromSelection: true }, '', `#/${game}`);
     setSelectedGame(game);
   };
 
   const handleBackToSelection = () => {
+    if (window.history.state?.fromSelection) {
+      // 선택 화면에서 들어온 경우 — 되감아 엔트리가 쌓이지 않게 한다
+      window.history.back();
+      return;
+    }
+    // 딥링크로 바로 들어온 경우 — 엔트리를 교체해 사이트 이탈을 막는다
+    window.history.replaceState(
+      null,
+      '',
+      window.location.pathname + window.location.search,
+    );
     setSelectedGame(null);
   };
 
