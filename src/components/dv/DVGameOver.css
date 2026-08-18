@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, var(--dv-surface) 0%, var(--dv-canvas) 100%);
+  background: var(--color-canvas);
   padding: 24px;
 }
 
@@ -18,13 +18,13 @@
 
 .dv-over-title {
   margin: 0;
-  color: var(--dv-gold);
+  color: var(--color-ink);
   font-size: 34px;
 }
 
 .dv-over-winner {
   margin: 0;
-  color: var(--dv-ink);
+  color: var(--color-body);
   font-size: 16px;
 }
 

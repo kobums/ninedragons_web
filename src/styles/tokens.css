@@ -73,21 +73,6 @@
   --jh-greed: #5b9e6f; /* 탐욕 green */
   --jh-potion: #8e8b82; /* 물약 neutral */
 
-  /* ---------- DaVinci Code dark-purple theme ----------
-     다빈치 전용 보라 다크 팔레트. 값은 기존 화면 그대로 — 재사용되는
-     색만 토큰으로 승격했고 1회성 음영은 각 파일에 남겼다. */
-  --dv-canvas: #14101f;
-  --dv-surface: #201a2e;
-  --dv-surface-soft: #322c3c;
-  --dv-ink: #f4f1ea; /* 아이보리 본문 = 흰 타일 몸통 */
-  --dv-muted: #b6aed0;
-  --dv-muted-bright: #d8d2e8;
-  --dv-gold: #f6c344;
-  --dv-on-gold: #2b2113;
-  --dv-tile-black: #1d1d22;
-  --dv-tile-black-border: #3a3a42;
-  --dv-tile-white-border: #d8d2c4;
-
   /* ---------- Lost Cities expedition colors ----------
      원작의 5색 탐험지. 클랜 색과 같은 저채도 규칙이며,
      white 는 크림 배경 위에서 "무색"으로 읽히는 웜 그레이. */

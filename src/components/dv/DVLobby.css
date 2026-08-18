@@ -3,15 +3,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, var(--dv-surface) 0%, var(--dv-canvas) 100%);
+  background: var(--color-canvas);
   padding: 24px;
 }
 
 .dv-lobby-container {
   width: 100%;
   max-width: 420px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
   border-radius: 16px;
   padding: 32px 28px;
   text-align: center;
@@ -20,12 +20,12 @@
 .dv-title {
   margin: 0 0 4px;
   font-size: 32px;
-  color: var(--dv-ink);
+  color: var(--color-ink);
 }
 
 .dv-subtitle {
   margin: 0 0 24px;
-  color: var(--dv-muted);
+  color: var(--color-muted);
   font-size: 14px;
 }
 
@@ -42,7 +42,7 @@
 
 .dv-form-group label {
   display: block;
-  color: var(--dv-muted-bright);
+  color: var(--color-body);
   font-size: 13px;
   margin-bottom: 6px;
 }
@@ -52,9 +52,9 @@
   box-sizing: border-box;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.25);
-  color: var(--dv-ink);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
   font-size: 16px;
 }
 
@@ -62,25 +62,25 @@
   padding: 13px;
   border: none;
   border-radius: 10px;
-  background: var(--dv-gold);
-  color: var(--dv-on-gold);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .dv-primary-button:disabled {
-  background: #5a5468;
-  color: #a49dbb;
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
   cursor: not-allowed;
 }
 
 .dv-ghost-button {
   padding: 11px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-hairline);
   border-radius: 10px;
   background: transparent;
-  color: var(--dv-muted-bright);
+  color: var(--color-body);
   font-size: 14px;
   cursor: pointer;
 }
@@ -100,15 +100,15 @@
   justify-content: space-between;
   padding: 12px 14px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.07);
-  color: var(--dv-ink);
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
   font-weight: 600;
 }
 
 .dv-player-item.empty {
-  color: #7a7391;
+  color: var(--color-muted-soft);
   font-weight: 400;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border: 1px dashed var(--color-hairline);
   background: transparent;
   justify-content: center;
 }
@@ -130,15 +130,15 @@
 }
 
 .dv-dot.on {
-  background: #58d68d;
+  background: var(--color-success);
 }
 
 .dv-dot.off {
-  background: #888;
+  background: var(--color-muted-soft);
 }
 
 .dv-lobby-hint {
   margin: 0;
-  color: var(--dv-muted);
+  color: var(--color-muted);
   font-size: 13px;
 }
