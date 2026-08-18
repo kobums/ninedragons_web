@@ -53,7 +53,13 @@ export function TichuApp({ onBack }: TichuAppProps) {
       <ConnectionBanner
         isConnected={isConnected}
         opponentDisconnected={someoneDisconnected}
-        isGameActive={inGame && !isGameOver}
+        isGameActive={!isGameOver && (inGame || Boolean(game))}
+        disconnectText={`${
+          game?.players
+            .filter((p) => !p.connected && !p.bot)
+            .map((p) => p.name)
+            .join(', ') || '참가자'
+        }님의 연결이 끊겼습니다 — 90초 내 미복귀 시 봇이 이어받습니다`}
       />
       <ErrorToast error={error} onClear={clearError} />
       <GameInfoButton game="tichu" />
@@ -91,6 +97,7 @@ export function TichuApp({ onBack }: TichuAppProps) {
       ) : (
         <TichuWaitingRoom
           game={game}
+          toasts={toasts}
           hasJoined={hasJoined}
           onJoin={(name: string) =>
             sendMessage({ type: 'tc_join_game', payload: { name } })

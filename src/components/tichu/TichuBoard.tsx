@@ -81,7 +81,9 @@ export function TichuBoard({
 }: TichuBoardProps) {
   // 로컬 입력 상태 — 서버가 최종 판정하므로 여기서는 선택만 관리한다
   const [selected, setSelected] = useState<TichuCard[]>([]);
-  const handRef = useFanHand(game.yourHand.length);
+  // 서버가 빈 손을 null 로 보내는 회귀가 있어도 죽지 않게 방어한다
+  const yourHand = game.yourHand ?? [];
+  const handRef = useFanHand(yourHand.length);
   const [wish, setWish] = useState<number | null>(null);
   // 교환 슬롯 — 화면 배치 순서 [왼쪽(rel 1), 파트너(rel 2), 오른쪽(rel 3)]
   const [exchangeSlots, setExchangeSlots] = useState<(TichuCard | null)[]>([
@@ -98,9 +100,9 @@ export function TichuBoard({
   }, [game.phase, game.handNo]);
 
   // 손패에서 사라진 카드는 선택·슬롯에서도 걷어낸다
-  const handKey = game.yourHand.join('|');
+  const handKey = yourHand.join('|');
   useEffect(() => {
-    const hand = new Set(game.yourHand);
+    const hand = new Set(yourHand);
     setSelected((prev) => prev.filter((c) => hand.has(c)));
     setExchangeSlots((prev) =>
       prev.map((c) => (c !== null && hand.has(c) ? c : null)),
@@ -123,12 +125,13 @@ export function TichuBoard({
   const myTurn = game.currentTurn === game.yourSeat;
   const inExchangeInput = game.phase === 'exchange' && !game.exchangeDone;
   const iAmOut = me?.out ?? false;
+  // 서버는 교환 카드 제출 전을 포함해 첫 플레이 전까지 선언을 허용한다
   const canDeclareTichu =
     Boolean(me) &&
     !iAmOut &&
     me!.tichu === '' &&
-    ((game.phase === 'exchange' && game.exchangeDone) ||
-      (game.phase === 'play' && game.yourHand.length === 14));
+    (game.phase === 'exchange' ||
+      (game.phase === 'play' && yourHand.length === 14));
 
   const handClickable =
     inExchangeInput || (game.phase === 'play' && !iAmOut);
@@ -159,12 +162,12 @@ export function TichuBoard({
   const handlePlay = () => {
     if (selected.length === 0) return;
     // 손패 정렬 순서 그대로 보낸다
-    const cards = game.yourHand.filter((c) => selected.includes(c));
+    const cards = yourHand.filter((c) => selected.includes(c));
     const wishValue =
       selected.includes('MAH') && wish !== null ? wish : undefined;
     onPlay(cards, wishValue);
-    setSelected([]);
-    setWish(null);
+    // 선택은 비우지 않는다 — 서버가 거절하면 그대로 재조정하고,
+    // 성공하면 손패에서 카드가 사라지며 handKey 이펙트가 걷어낸다
   };
 
   const exchangeReady = exchangeSlots.every((c) => c !== null);
@@ -343,9 +346,9 @@ export function TichuBoard({
 
       {/* 내 손패 */}
       <div className="tc-hand-area">
-        {game.yourHand.length > 0 ? (
+        {yourHand.length > 0 ? (
           <div className="tc-hand" ref={handRef}>
-            {game.yourHand.map((card) => (
+            {yourHand.map((card) => (
               <TichuCardView
                 key={card}
                 card={card}
@@ -459,7 +462,7 @@ export function TichuBoard({
               처음 8장을 보고 선언하세요 (성공 +200 / 실패 -200)
             </p>
             <div className="tc-overlay-cards">
-              {game.yourHand.map((card) => (
+              {yourHand.map((card) => (
                 <TichuCardView key={card} card={card} size="md" />
               ))}
             </div>
@@ -548,7 +551,9 @@ export function TichuBoard({
                 )}
               </>
             )}
-            <p className="tc-overlay-desc">준비 {readyCount}/4</p>
+            <p className="tc-overlay-desc">
+              준비 {readyCount}/4 · 잠시 후 자동으로 다음 핸드가 시작됩니다
+            </p>
             <button
               type="button"
               className="tc-primary-button"

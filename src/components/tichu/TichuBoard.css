@@ -207,6 +207,12 @@
   font-weight: 700;
   font-size: var(--text-body-sm);
   color: var(--color-ink);
+  min-width: 0;
+}
+
+/* flex 컨테이너에서는 자식에 min-width:0 + ellipsis 가 있어야 말줄임이 동작한다 */
+.tc-plate-name > * {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -655,4 +661,10 @@
   .tc-exchange-slots {
     gap: var(--space-sm);
   }
+}
+
+/* 소원 픽커 버튼 터치 타깃 보강 */
+.tc-wish-options button {
+  min-height: 34px;
+  min-width: 34px;
 }

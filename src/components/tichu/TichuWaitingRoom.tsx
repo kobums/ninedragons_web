@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { TichuGameState, TichuPlayer } from '../../types/tichu';
+import type { TichuToast } from '../../hooks/useTichuGameState';
 import './TichuWaitingRoom.css';
 
 const SEATS = [0, 1, 2, 3];
@@ -7,6 +8,7 @@ const SEATS = [0, 1, 2, 3];
 interface TichuWaitingRoomProps {
   // waiting 스냅샷 (입장 전이나 스냅샷 도착 전에는 null)
   game: TichuGameState | null;
+  toasts?: TichuToast[];
   hasJoined: boolean;
   onJoin: (name: string) => void;
   onSetTarget: (target: 500 | 1000) => void;
@@ -16,6 +18,7 @@ interface TichuWaitingRoomProps {
 
 export function TichuWaitingRoom({
   game,
+  toasts = [],
   hasJoined,
   onJoin,
   onSetTarget,
@@ -46,6 +49,15 @@ export function TichuWaitingRoom({
 
   return (
     <div className="tc-waiting-room">
+      {toasts.length > 0 && (
+        <div className="tc-waiting-toasts">
+          {toasts.map((t) => (
+            <div key={t.id} className="tc-waiting-toast">
+              {t.event.message}
+            </div>
+          ))}
+        </div>
+      )}
       <div className="tc-waiting-container">
         <h1 className="tc-waiting-title">티츄</h1>
         <p className="tc-waiting-subtitle">팀 트릭테이킹 · 4인 (0·2 팀 vs 1·3 팀)</p>
