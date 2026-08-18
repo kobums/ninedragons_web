@@ -4,6 +4,8 @@ interface ConnectionBannerProps {
   isConnected: boolean;
   opponentDisconnected: boolean;
   isGameActive: boolean;
+  // 다인 게임용 문구 오버라이드 (기본: 2인용 "상대방 연결이 끊겼습니다…")
+  disconnectText?: string;
 }
 
 const bannerStyle: CSSProperties = {
@@ -26,6 +28,7 @@ export function ConnectionBanner({
   isConnected,
   opponentDisconnected,
   isGameActive,
+  disconnectText,
 }: ConnectionBannerProps) {
   if (!isGameActive) return null;
 
@@ -40,7 +43,7 @@ export function ConnectionBanner({
   if (opponentDisconnected) {
     return (
       <div style={{ ...bannerStyle, background: '#f0ad4e' }}>
-        상대방 연결이 끊겼습니다. 재접속을 기다리는 중...
+        {disconnectText ?? '상대방 연결이 끊겼습니다. 재접속을 기다리는 중...'}
       </div>
     );
   }

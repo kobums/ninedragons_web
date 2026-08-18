@@ -47,7 +47,8 @@ const NIGHT_VERB: Partial<Record<SFRole, string>> = {
 function toastText(event: SFEvent, game: SFGameState): string {
   if (event.message) return event.message;
   const name = (seat?: number) =>
-    game.players.find((p) => p.seat === seat)?.name ?? '?';
+    // 퇴장 이벤트는 스냅샷에서 좌석이 이미 빠진 뒤라 이벤트의 name 이 우선
+    game.players.find((p) => p.seat === seat)?.name ?? event.name ?? '?';
 
   switch (event.kind) {
     case 'joined':
@@ -62,8 +63,6 @@ function toastText(event: SFEvent, game: SFGameState): string {
       return '☀️ 아침이 밝았습니다';
     case 'vote_begin':
       return '🗳️ 투표를 시작합니다';
-    case 'voted':
-      return `${name(event.seat)}님이 투표했습니다`;
     case 'executed':
       return `⚖️ ${name(event.seat)}님이 처형되었습니다`;
     case 'no_execution':
@@ -98,6 +97,25 @@ export function SkyfallBoard({
     setSubmitted(false);
   }, [game.phase, game.dayNo]);
 
+  // 밤 행동·낮 투표 마감 카운트다운 (서버 endsAt 기준, 탭 복귀 시 즉시 재동기화)
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (game.endsAt <= 0) return;
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    const sync = () => setNow(Date.now());
+    document.addEventListener('visibilitychange', sync);
+    sync();
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, [game.endsAt]);
+  const remaining = game.endsAt > 0 ? Math.max(0, game.endsAt - now) : 0;
+  const mmss = (ms: number) => {
+    const s = Math.ceil(ms / 1000);
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  };
+
   const me = game.players.find((p) => p.seat === game.yourSeat);
   const amAlive = me?.alive ?? false;
   const role = game.yourRole;
@@ -116,10 +134,10 @@ export function SkyfallBoard({
     amAlive &&
     role !== '' &&
     role !== 'citizen' &&
-    !(game.night?.yourActionDone ?? false) &&
+    // 해소 전에는 서버가 덮어쓰기를 허용한다 — 제출 후에도 다시 지목해 변경 가능
     !submitted;
 
-  const canVote = isVote && amAlive && !myVote && !submitted;
+  const canVote = isVote && amAlive && !submitted;
 
   // 이 타일을 지금 탭할 수 있는가
   const selectable = (p: SFPlayerView): boolean => {
@@ -162,19 +180,22 @@ export function SkyfallBoard({
   // 상단 배너 보조 문구
   const bannerSub = (() => {
     if (isNight) {
+      if (canAct && (game.night?.yourActionDone ?? false))
+        return '제출 완료 — 해소 전에는 다시 지목해 변경할 수 있습니다';
       if (canAct) return NIGHT_PROMPT[role] ?? '';
       return '마을이 잠들었습니다… 밤이 지나가길 기다립니다';
     }
     if (game.phase === 'day_result') return '밤 사이 무슨 일이 있었을까요…';
     if (isVote) {
-      if (canVote) return '처형할 사람을 지목하거나 기권하세요';
       if (!amAlive) return '사망자는 투표할 수 없습니다 — 관전 중';
-      return '투표 완료 — 다른 주민을 기다리는 중…';
+      if (myVote) return '투표 완료 — 마감 전에는 다시 탭해 변경할 수 있습니다';
+      if (canVote) return '처형할 사람을 지목하거나 기권하세요';
+      return '';
     }
     return '';
   })();
 
-  const pendingRoles = game.night?.pendingRoles ?? [];
+  const pendingCount = game.night?.pendingCount ?? 0;
 
   return (
     <div className={`sf-board ${isNight ? 'night' : 'day'}`}>
@@ -190,6 +211,11 @@ export function SkyfallBoard({
       <div className={`sf-phase-banner ${isNight ? 'night' : 'day'}`}>
         <span className="sf-phase-title">
           {isNight ? '🌙' : '☀️'} {game.dayNo}일차 · {isNight ? '밤' : '낮'}
+          {game.endsAt > 0 && (
+            <span className={`sf-deadline ${remaining < 20_000 ? 'urgent' : ''}`}>
+              ⏱ {mmss(remaining)}
+            </span>
+          )}
         </span>
         {bannerSub && <span className="sf-phase-sub">{bannerSub}</span>}
       </div>
@@ -231,7 +257,11 @@ export function SkyfallBoard({
               동료:{' '}
               {[...mafiaSet]
                 .filter((seat) => seat !== game.yourSeat)
-                .map((seat) => nameOf(seat))
+                .map((seat) => {
+                  const dead =
+                    game.players.find((p) => p.seat === seat)?.alive === false;
+                  return `${dead ? '💀 ' : ''}${nameOf(seat)}`;
+                })
                 .join(' · ')}
             </p>
           )}
@@ -301,13 +331,10 @@ export function SkyfallBoard({
         })}
       </div>
 
-      {/* 밤 대기 — 아직 행동 안 한 역할 표시 */}
-      {isNight && !canAct && pendingRoles.length > 0 && (
+      {/* 밤 대기 — 인원수만 (역할 목록은 사망자 역할 추론 여지가 있어 비공개) */}
+      {isNight && pendingCount > 0 && (
         <p className="sf-night-pending">
-          행동 대기 —{' '}
-          {pendingRoles
-            .map((r) => SF_ROLE_LABEL[r as Exclude<SFRole, ''>] ?? r)
-            .join(' · ')}
+          아직 {pendingCount}명이 행동 중입니다…
         </p>
       )}
 

@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import type { SFGameState } from '../../types/skyfall';
 import { SF_MAX_PLAYERS, SF_MIN_PLAYERS } from '../../types/skyfall';
+import type { SFToast } from '../../hooks/useSkyfallGameState';
 import './SkyfallWaitingRoom.css';
 
 interface SkyfallWaitingRoomProps {
   // 입장 전이면 null (hasJoined 가 false 일 수도 있다)
   game: SFGameState | null;
   hasJoined: boolean;
+  toasts?: SFToast[];
   onJoin: (name: string) => void;
   onStart: () => void;
   onFillBots: () => void;
@@ -16,6 +18,7 @@ interface SkyfallWaitingRoomProps {
 export function SkyfallWaitingRoom({
   game,
   hasJoined,
+  toasts = [],
   onJoin,
   onStart,
   onFillBots,
@@ -48,6 +51,20 @@ export function SkyfallWaitingRoom({
 
   return (
     <div className="sf-waiting">
+      {toasts.length > 0 && (
+        <div className="sf-waiting-toasts">
+          {toasts.map((t) => (
+            <div key={t.id} className="sf-waiting-toast">
+              {t.event.message ??
+                (t.event.kind === 'left'
+                  ? `${t.event.name ?? '?'}님이 나갔습니다`
+                  : t.event.kind === 'joined'
+                    ? `${t.event.name ?? '?'}님이 입장했습니다`
+                    : '')}
+            </div>
+          ))}
+        </div>
+      )}
       <div className="sf-waiting-container">
         <h1 className="sf-title">마피아</h1>
         <p className="sf-subtitle">클래식 마피아 · 6~10인</p>
@@ -121,7 +138,7 @@ export function SkyfallWaitingRoom({
                     className="sf-ghost-button"
                     onClick={onFillBots}
                   >
-                    🤖 봇으로 채우고 시작 (6인)
+                    🤖 봇으로 채우기 (6인)
                   </button>
                 )}
               </div>

@@ -603,3 +603,27 @@
     font-size: var(--text-caption);
   }
 }
+
+/* 밤 행동·낮 투표 마감 카운트다운 */
+.sf-board .sf-deadline {
+  margin-left: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--sf-moon);
+  font-size: var(--text-body-sm);
+}
+
+.sf-board .sf-deadline.urgent {
+  color: var(--sf-mafia);
+  animation: sf-deadline-pulse 1s ease infinite;
+}
+
+@keyframes sf-deadline-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* 확인/취소/기권 버튼 터치 타깃 (모바일 44px 권장) */
+.sf-board .sf-confirm-bar button {
+  min-height: 44px;
+}

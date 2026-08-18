@@ -503,3 +503,9 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* 확인/취소/기권 버튼 터치 타깃 (모바일 44px 권장) */
+.sp-board .sp-confirm-bar button,
+.sp-board .sp-abstain-button {
+  min-height: 44px;
+}

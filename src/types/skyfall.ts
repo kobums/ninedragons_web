@@ -47,8 +47,9 @@ export interface SFPlayerView {
 // night 단계에서만 채워진다
 export interface SFNightInfo {
   yourActionDone: boolean;
-  // 아직 밤 행동을 제출하지 않은 역할 목록 (예: ['mafia', 'police'])
-  pendingRoles: string[];
+  // 아직 제출하지 않은 생존 역할자 수 — 역할 목록을 노출하면 밤 사망자의
+  // 비공개 역할이 추론되므로 인원수만 온다
+  pendingCount: number;
 }
 
 // 경찰에게만 — 직전 밤 조사 결과 (낮 동안 유지)
@@ -83,6 +84,8 @@ export interface SFGameState {
   gameId: string;
   phase: SFPhase;
   dayNo: number;
+  // 밤 행동·낮 투표 마감 시각 (unixMillis, 그 외 0) — 카운트다운 표시용
+  endsAt: number;
   hostSeat: number;
   yourSeat: number;
   yourRole: SFRole;
@@ -104,7 +107,6 @@ export type SFEventKind =
   | 'night_begin'
   | 'day_result'
   | 'vote_begin'
-  | 'voted'
   | 'executed'
   | 'no_execution'
   | 'bot_takeover'
@@ -113,6 +115,8 @@ export type SFEventKind =
 export interface SFEvent {
   kind: SFEventKind;
   seat?: number;
+  // 서버가 실어주는 표시 이름 — 퇴장자처럼 스냅샷에서 이미 빠진 좌석용
+  name?: string;
   message?: string;
 }
 

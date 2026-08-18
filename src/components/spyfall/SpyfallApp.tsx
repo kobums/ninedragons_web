@@ -61,6 +61,12 @@ export function SpyfallApp({ onBack }: SpyfallAppProps) {
         isConnected={isConnected}
         opponentDisconnected={someoneDisconnected}
         isGameActive={inGame && !isOver}
+        disconnectText={`${
+          game?.players
+            .filter((p) => !p.connected && !p.bot)
+            .map((p) => p.name)
+            .join(', ') || '참가자'
+        }님의 연결이 끊겼습니다 — 90초 내 미복귀 시 봇이 이어받습니다`}
       />
       <ErrorToast error={error} onClear={clearError} />
       <GameInfoButton game="spyfall" />
