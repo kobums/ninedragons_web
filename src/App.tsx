@@ -18,28 +18,39 @@ import type { GameId } from './config/games';
 import { GAMES } from './config/games';
 import './App.css';
 
-// 해시 라우팅 (#/tichu) — 브라우저/모바일 뒤로가기로 게임 선택에 돌아올 수
-// 있고, 특정 게임 딥링크 공유도 된다. 정적 호스팅이라 경로 라우팅 대신
-// 해시를 쓴다 (서버 fallback 설정 불필요).
-function gameFromHash(): GameId | null {
-  const id = window.location.hash.replace(/^#\/?/, '');
+// 경로 라우팅 (/tichu) — 브라우저/모바일 뒤로가기로 게임 선택에 돌아올 수
+// 있고, 특정 게임 딥링크 공유도 된다. nginx 가 모든 경로를 index.html 로
+// 돌려주므로(try_files) 새로고침·직접 진입에도 404 가 없다.
+function gameFromPath(): GameId | null {
+  const id = window.location.pathname.replace(/^\/+|\/+$/g, '');
   return id in GAMES ? (id as GameId) : null;
 }
 
-function App() {
-  const [selectedGame, setSelectedGame] = useState<GameId | null>(gameFromHash);
+// 예전 해시 링크(#/tichu) 호환 — 공유된 링크가 깨지지 않게 경로로 승격한다
+function migrateLegacyHash(): void {
+  const id = window.location.hash.replace(/^#\/?/, '');
+  if (id in GAMES) {
+    window.history.replaceState(null, '', `/${id}`);
+  }
+}
 
-  // 뒤로가기/앞으로가기·주소 직접 변경을 상태에 반영한다
+function App() {
+  const [selectedGame, setSelectedGame] = useState<GameId | null>(() => {
+    migrateLegacyHash();
+    return gameFromPath();
+  });
+
+  // 뒤로가기/앞으로가기를 상태에 반영한다
   useEffect(() => {
-    const onHashChange = () => setSelectedGame(gameFromHash());
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
+    const onPopState = () => setSelectedGame(gameFromPath());
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
   const handleSelectGame = (game: GameId) => {
     // 히스토리 엔트리가 쌓여 뒤로가기가 게임 선택으로 돌아온다.
     // state 마킹으로 "선택 화면에서 들어왔음"을 기억한다 (딥링크와 구분).
-    window.history.pushState({ fromSelection: true }, '', `#/${game}`);
+    window.history.pushState({ fromSelection: true }, '', `/${game}`);
     setSelectedGame(game);
   };
 
@@ -50,11 +61,7 @@ function App() {
       return;
     }
     // 딥링크로 바로 들어온 경우 — 엔트리를 교체해 사이트 이탈을 막는다
-    window.history.replaceState(
-      null,
-      '',
-      window.location.pathname + window.location.search,
-    );
+    window.history.replaceState(null, '', '/');
     setSelectedGame(null);
   };
 
