@@ -41,6 +41,9 @@ function toastText(event: DVEvent, game: DVGameState): string {
       return `${name(event.seat)}님 탈락!`;
     case 'player_forfeited':
       return `${name(event.seat)}님이 재접속하지 않아 몰수패 처리됐습니다`;
+    // react 등 토스트로 쓰지 않는 이벤트 — 훅에서 걸러지지만 타입상 방어
+    default:
+      return '';
   }
 }
 

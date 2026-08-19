@@ -32,6 +32,9 @@ function toastText(event: SPEvent, game: SPGameState): string {
       return `${name(event.seat)}님 자리를 봇이 이어받습니다`;
     case 'game_over':
       return '게임이 종료되었습니다';
+    // react 등 토스트로 쓰지 않는 이벤트 — 훅에서 걸러지지만 타입상 방어
+    default:
+      return '';
   }
 }
 

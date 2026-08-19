@@ -80,6 +80,9 @@ function toastText(event: MTEvent, game: MTGameState): string {
       return `${name(event.seat ?? event.winner)}님이 트릭을 가져갑니다`;
     case 'bot_takeover':
       return `${name(event.seat)}님 자리를 봇이 이어받습니다`;
+    // react 등 토스트로 쓰지 않는 이벤트 — 훅에서 걸러지지만 타입상 방어
+    default:
+      return '';
   }
 }
 
