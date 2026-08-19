@@ -100,6 +100,7 @@ export function AvalonApp({ onBack }: AvalonAppProps) {
           game={game}
           winner={gameOver?.winner || game.winner}
           reason={gameOver?.reason}
+          roomCode={game.roomCode}
           onFindNewGame={handleFindNewGame}
         />
       ) : inGame && game ? (

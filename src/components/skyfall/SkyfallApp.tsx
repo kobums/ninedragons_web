@@ -99,6 +99,7 @@ export function SkyfallApp({ onBack }: SkyfallAppProps) {
         <SkyfallGameOver
           game={game}
           winner={gameOver?.winner || game.winner}
+          roomCode={game.roomCode}
           onFindNewGame={handleFindNewGame}
         />
       ) : inGame && game ? (

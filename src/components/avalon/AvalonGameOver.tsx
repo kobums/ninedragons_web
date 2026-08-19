@@ -8,6 +8,8 @@ interface AvalonGameOverProps {
   winner: AVWinner;
   // 서버가 실어준 승리 사유 (없으면 스냅샷에서 유추)
   reason?: string;
+  // 사설 방 코드 — 있으면 같은 방 재대결 버튼을 보여준다 (공용 로비는 ''/생략)
+  roomCode?: string;
   onFindNewGame: () => void;
 }
 
@@ -25,11 +27,12 @@ function deriveReason(game: AVGameState, winner: AVWinner): string {
   return '';
 }
 
-// 단판 승부 결과 오버레이. 재대결 없음 — "새 게임 찾기"만 제공한다.
+// 단판 승부 결과 오버레이 — 사설 방이면 같은 방 재대결, 아니면 "새 게임 찾기"만.
 export function AvalonGameOver({
   game,
   winner,
   reason,
+  roomCode,
   onFindNewGame,
 }: AvalonGameOverProps) {
   const myRole = game.yourRole;
@@ -94,6 +97,19 @@ export function AvalonGameOver({
           ))}
         </ul>
 
+        {roomCode && (
+          // 전체 리로드 + ?room 프리필 — 같은 코드로 다시 join 하면 관대한
+          // 생성으로 같은 코드의 새 대기실이 열린다 (기존 흐름 재사용)
+          <button
+            type="button"
+            className="av-primary-button"
+            onClick={() => {
+              window.location.href = `${window.location.pathname}?room=${roomCode}`;
+            }}
+          >
+            🔄 같은 방에서 재대결
+          </button>
+        )}
         <button
           type="button"
           className="av-primary-button"

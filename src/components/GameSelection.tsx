@@ -7,9 +7,10 @@ import './GameSelection.css'
 
 interface GameSelectionProps {
   onSelectGame: (game: GameId) => void
+  onOpenRecords: () => void
 }
 
-export function GameSelection({ onSelectGame }: GameSelectionProps) {
+export function GameSelection({ onSelectGame, onOpenRecords }: GameSelectionProps) {
   // 상대를 기다리는 사람이 있는 게임 — 15초마다 갱신 (실패하면 조용히 무시)
   const [waiting, setWaiting] = useState<string[]>([])
 
@@ -66,7 +67,7 @@ export function GameSelection({ onSelectGame }: GameSelectionProps) {
           })}
         </div>
 
-        <StatsBar />
+        <StatsBar onOpen={onOpenRecords} />
       </div>
     </div>
   )

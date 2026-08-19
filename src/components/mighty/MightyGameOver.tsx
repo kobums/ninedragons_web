@@ -6,13 +6,16 @@ interface MightyGameOverProps {
   result: MTResult;
   // 내 좌석 (승패 타이틀 판정용 — 이름은 중복될 수 있어 좌석으로 판정). 모르면 null.
   yourSeat: number | null;
+  // 사설 방 코드 — 있으면 같은 방 재대결 버튼을 보여준다 (공용 로비는 ''/생략)
+  roomCode?: string;
   onFindNewGame: () => void;
 }
 
-// 단판 승부 결과 오버레이. 재대결 없음 — "새 게임 찾기"만 제공한다.
+// 단판 승부 결과 오버레이 — 사설 방이면 같은 방 재대결, 아니면 "새 게임 찾기"만.
 export function MightyGameOver({
   result,
   yourSeat,
+  roomCode,
   onFindNewGame,
 }: MightyGameOverProps) {
   const onDeclarerTeam =
@@ -55,6 +58,19 @@ export function MightyGameOver({
           </div>
         </div>
 
+        {roomCode && (
+          // 전체 리로드 + ?room 프리필 — 같은 코드로 다시 join 하면 관대한
+          // 생성으로 같은 코드의 새 대기실이 열린다 (기존 흐름 재사용)
+          <button
+            type="button"
+            className="mt-primary-button"
+            onClick={() => {
+              window.location.href = `${window.location.pathname}?room=${roomCode}`;
+            }}
+          >
+            🔄 같은 방에서 재대결
+          </button>
+        )}
         <button type="button" className="mt-primary-button" onClick={onFindNewGame}>
           새 게임 찾기
         </button>

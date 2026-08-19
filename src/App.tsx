@@ -15,6 +15,7 @@ import { MightyApp } from './components/mighty/MightyApp';
 import { SkyfallApp } from './components/skyfall/SkyfallApp';
 import { SpyfallApp } from './components/spyfall/SpyfallApp';
 import { AvalonApp } from './components/avalon/AvalonApp';
+import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
 import './App.css';
@@ -25,6 +26,11 @@ import './App.css';
 function gameFromPath(): GameId | null {
   const id = window.location.pathname.replace(/^\/+|\/+$/g, '');
   return id in GAMES ? (id as GameId) : null;
+}
+
+// /records 특수 페이지 — 게임이 아니라 gameFromPath 와 별도로 판별한다
+function isRecordsPath(): boolean {
+  return window.location.pathname.replace(/^\/+|\/+$/g, '') === 'records';
 }
 
 // 예전 해시 링크(#/tichu) 호환 — 공유된 링크가 깨지지 않게 경로로 승격한다
@@ -40,10 +46,14 @@ function App() {
     migrateLegacyHash();
     return gameFromPath();
   });
+  const [showRecords, setShowRecords] = useState<boolean>(() => isRecordsPath());
 
   // 뒤로가기/앞으로가기를 상태에 반영한다
   useEffect(() => {
-    const onPopState = () => setSelectedGame(gameFromPath());
+    const onPopState = () => {
+      setSelectedGame(gameFromPath());
+      setShowRecords(isRecordsPath());
+    };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
@@ -65,6 +75,25 @@ function App() {
     window.history.replaceState(null, '', '/');
     setSelectedGame(null);
   };
+
+  // 전적 페이지 — 게임 선택과 같은 pushState/뒤로가기 결
+  const handleOpenRecords = () => {
+    window.history.pushState({ fromSelection: true }, '', '/records');
+    setShowRecords(true);
+  };
+
+  const handleBackFromRecords = () => {
+    if (window.history.state?.fromSelection) {
+      window.history.back();
+      return;
+    }
+    window.history.replaceState(null, '', '/');
+    setShowRecords(false);
+  };
+
+  if (showRecords) {
+    return <RecordsPage onBack={handleBackFromRecords} />;
+  }
 
   if (selectedGame === 'ninedragons') {
     return <NineDragonsApp onBack={handleBackToSelection} />;
@@ -126,7 +155,12 @@ function App() {
     return <AvalonApp onBack={handleBackToSelection} />;
   }
 
-  return <GameSelection onSelectGame={handleSelectGame} />;
+  return (
+    <GameSelection
+      onSelectGame={handleSelectGame}
+      onOpenRecords={handleOpenRecords}
+    />
+  );
 }
 
 export default App;

@@ -89,6 +89,7 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
         <DVGameOver
           result={gameOver}
           yourSeat={game?.yourSeat ?? null}
+          roomCode={game?.roomCode}
           onPlayAgain={handlePlayAgain}
         />
       ) : game ? (

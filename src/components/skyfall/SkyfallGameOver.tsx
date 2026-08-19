@@ -6,13 +6,16 @@ interface SkyfallGameOverProps {
   // 마지막 스냅샷 (phase 'game_over' — 전원 역할 공개 상태)
   game: SFGameState;
   winner: SFWinner;
+  // 사설 방 코드 — 있으면 같은 방 재대결 버튼을 보여준다 (공용 로비는 ''/생략)
+  roomCode?: string;
   onFindNewGame: () => void;
 }
 
-// 단판 승부 결과 오버레이. 재대결 없음 — "새 게임 찾기"만 제공한다.
+// 단판 승부 결과 오버레이 — 사설 방이면 같은 방 재대결, 아니면 "새 게임 찾기"만.
 export function SkyfallGameOver({
   game,
   winner,
+  roomCode,
   onFindNewGame,
 }: SkyfallGameOverProps) {
   const myRole = game.yourRole;
@@ -51,6 +54,19 @@ export function SkyfallGameOver({
           ))}
         </ul>
 
+        {roomCode && (
+          // 전체 리로드 + ?room 프리필 — 같은 코드로 다시 join 하면 관대한
+          // 생성으로 같은 코드의 새 대기실이 열린다 (기존 흐름 재사용)
+          <button
+            type="button"
+            className="sf-primary-button"
+            onClick={() => {
+              window.location.href = `${window.location.pathname}?room=${roomCode}`;
+            }}
+          >
+            🔄 같은 방에서 재대결
+          </button>
+        )}
         <button
           type="button"
           className="sf-primary-button"

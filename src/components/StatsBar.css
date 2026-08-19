@@ -12,3 +12,18 @@
   font-weight: 700;
   color: var(--color-body);
 }
+
+/* 전적 페이지 진입 버튼 모드 — 표시는 그대로, 힌트만 덧붙는다 */
+.stats-bar-link {
+  width: 100%;
+  cursor: pointer;
+}
+
+.stats-bar-link:active .stats-open-hint {
+  color: var(--color-primary-active);
+}
+
+.stats-bar .stats-open-hint {
+  font-weight: 700;
+  color: var(--color-primary);
+}

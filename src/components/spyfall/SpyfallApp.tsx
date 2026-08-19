@@ -96,7 +96,11 @@ export function SpyfallApp({ onBack }: SpyfallAppProps) {
       )}
 
       {isOver && game ? (
-        <SpyfallGameOver game={game} onFindNewGame={handleFindNewGame} />
+        <SpyfallGameOver
+          game={game}
+          roomCode={game.roomCode}
+          onFindNewGame={handleFindNewGame}
+        />
       ) : inGame && game ? (
         <SpyfallBoard
           game={game}

@@ -11,10 +11,12 @@ interface TichuGameOverProps {
   game: TichuGameState | null;
   // tc_game_over payload (있으면 보조 출처)
   gameOver: TichuGameOverPayload | null;
+  // 사설 방 코드 — 있으면 같은 방 재대결 버튼을 보여준다 (공용 로비는 ''/생략)
+  roomCode?: string;
   onNewGame: () => void;
 }
 
-export function TichuGameOver({ game, gameOver, onNewGame }: TichuGameOverProps) {
+export function TichuGameOver({ game, gameOver, roomCode, onNewGame }: TichuGameOverProps) {
   const winnerTeam = game?.winnerTeam || gameOver?.winnerTeam || '';
   const scores = game?.scores ?? gameOver?.scores ?? null;
   const players: TichuPlayer[] = game?.players ?? gameOver?.players ?? [];
@@ -81,6 +83,19 @@ export function TichuGameOver({ game, gameOver, onNewGame }: TichuGameOverProps)
           </div>
         )}
 
+        {roomCode && (
+          // 전체 리로드 + ?room 프리필 — 같은 코드로 다시 join 하면 관대한
+          // 생성으로 같은 코드의 새 대기실이 열린다 (기존 흐름 재사용)
+          <button
+            type="button"
+            className="tc-new-game-button"
+            onClick={() => {
+              window.location.href = `${window.location.pathname}?room=${roomCode}`;
+            }}
+          >
+            🔄 같은 방에서 재대결
+          </button>
+        )}
         <button type="button" className="tc-new-game-button" onClick={onNewGame}>
           새 게임 찾기
         </button>

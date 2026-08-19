@@ -93,6 +93,7 @@ export function MightyApp({ onBack }: MightyAppProps) {
         <MightyGameOver
           result={result}
           yourSeat={yourSeat}
+          roomCode={game?.roomCode}
           onFindNewGame={handleFindNewGame}
         />
       ) : inGame && game ? (

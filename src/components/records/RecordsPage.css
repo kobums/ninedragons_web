@@ -1,0 +1,377 @@
+/* =============================================================
+   Records page — dark product surface, mobile-first (320px~).
+   전역 스타일시트 규칙에 따라 모든 셀렉터를 .records-page 로 스코프한다.
+   ============================================================= */
+
+.records-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  padding: var(--space-lg) var(--space-md) var(--space-xxl);
+}
+
+.records-page .records-container {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ---------- Header ---------- */
+
+.records-page .rec-back-button {
+  padding: 6px 12px 6px 8px;
+  margin-left: -8px;
+  border-radius: var(--radius-md);
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+}
+
+.records-page .rec-back-button:active {
+  color: var(--color-on-dark);
+  background: var(--color-surface-dark-elevated);
+}
+
+.records-page .records-eyebrow {
+  display: block;
+  margin-top: var(--space-md);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 500;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--color-on-dark-soft);
+}
+
+.records-page .records-title {
+  margin-top: var(--space-xxs);
+  font-size: var(--text-display-lg);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-display-lg);
+  color: var(--color-on-dark);
+}
+
+/* ---------- Tabs ---------- */
+
+.records-page .rec-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin: var(--space-lg) 0;
+}
+
+.records-page .rec-tab {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.records-page .rec-tab.active {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* ---------- Shared ---------- */
+
+.records-page .rec-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.records-page .rec-empty {
+  padding: var(--space-lg) 0;
+  text-align: center;
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-body-sm);
+}
+
+/* ---------- 종합 ---------- */
+
+.records-page .rec-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xxs);
+  padding: var(--space-lg) 0 var(--space-md);
+}
+
+.records-page .rec-total-number {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-xl);
+  letter-spacing: var(--tracking-display-xl);
+  line-height: 1;
+  color: var(--color-on-dark);
+}
+
+.records-page .rec-total-label {
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+}
+
+.records-page .rec-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.records-page .rec-bar-row {
+  display: grid;
+  /* 320px 에서도 이름·바·숫자가 한 줄 — 이름은 말줄임 */
+  grid-template-columns: 84px minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.records-page .rec-bar-name {
+  font-size: var(--text-caption);
+  color: var(--color-on-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.records-page .rec-bar-track {
+  height: 14px;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-dark-elevated);
+  overflow: hidden;
+}
+
+.records-page .rec-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-xs);
+  background: var(--color-primary);
+}
+
+.records-page .rec-bar-count {
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 최근 경기 ---------- */
+
+.records-page .rec-matches {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.records-page .rec-match {
+  padding: var(--space-sm) 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-dark-elevated);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.records-page .rec-match-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.records-page .rec-match-game {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-on-dark);
+}
+
+.records-page .rec-match-bot {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-dark-soft);
+  color: var(--color-on-dark-soft);
+}
+
+.records-page .rec-match-time {
+  margin-left: auto;
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+  flex-shrink: 0;
+}
+
+.records-page .rec-match-players {
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+  overflow-wrap: anywhere;
+}
+
+.records-page .rec-match-bottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+}
+
+.records-page .rec-match-winner strong {
+  color: var(--color-primary);
+}
+
+.records-page .rec-match-duration {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 플레이어 ---------- */
+
+.records-page .rec-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-surface-dark-elevated);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-dark-soft);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+}
+
+.records-page .rec-search-input::placeholder {
+  color: var(--color-on-dark-soft);
+}
+
+.records-page .rec-player-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.records-page .rec-player-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px 36px 48px;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  text-align: left;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.records-page .rec-player-row > span:not(.rec-player-name) {
+  text-align: right;
+}
+
+.records-page button.rec-player-row:active {
+  background: var(--color-surface-dark-elevated);
+}
+
+.records-page .rec-player-head {
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+  border-bottom: 1px solid var(--color-surface-dark-elevated);
+  border-radius: 0;
+}
+
+.records-page .rec-player-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- 플레이어 상세 ---------- */
+
+.records-page .rec-list-back {
+  align-self: flex-start;
+  padding: 4px 10px 4px 6px;
+  margin-left: -6px;
+  border-radius: var(--radius-md);
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-body-sm);
+}
+
+.records-page .rec-list-back:active {
+  color: var(--color-on-dark);
+  background: var(--color-surface-dark-elevated);
+}
+
+.records-page .rec-player-title {
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+  overflow-wrap: anywhere;
+}
+
+.records-page .rec-player-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xs);
+}
+
+.records-page .rec-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-sm) 4px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-dark-elevated);
+}
+
+.records-page .rec-stat strong {
+  font-size: var(--text-title-md);
+  color: var(--color-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.records-page .rec-stat span {
+  font-size: var(--text-caption);
+  color: var(--color-on-dark-soft);
+}
+
+.records-page .rec-subhead {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  letter-spacing: normal;
+  color: var(--color-on-dark-soft);
+  margin-top: var(--space-xs);
+}
+
+.records-page .rec-pergame {
+  display: flex;
+  flex-direction: column;
+}
+
+.records-page .rec-pergame-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+}
+
+.records-page .rec-pergame-row:nth-child(odd) {
+  background: var(--color-surface-dark-soft);
+}
+
+.records-page .rec-pergame-name {
+  color: var(--color-on-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.records-page .rec-pergame-count {
+  flex-shrink: 0;
+  color: var(--color-on-dark-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.records-page .rec-pergame-count strong {
+  color: var(--color-primary);
+}

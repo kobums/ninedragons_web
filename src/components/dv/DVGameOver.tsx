@@ -5,10 +5,12 @@ import './DVGameOver.css';
 interface DVGameOverProps {
   result: DVGameOverPayload;
   yourSeat: number | null;
+  // 사설 방 코드 — 있으면 같은 방 재대결 버튼을 보여준다 (공용 로비는 ''/생략)
+  roomCode?: string;
   onPlayAgain: () => void;
 }
 
-export function DVGameOver({ result, yourSeat, onPlayAgain }: DVGameOverProps) {
+export function DVGameOver({ result, yourSeat, roomCode, onPlayAgain }: DVGameOverProps) {
   const youWon = yourSeat !== null && result.winnerSeat === yourSeat;
 
   return (
@@ -31,6 +33,19 @@ export function DVGameOver({ result, yourSeat, onPlayAgain }: DVGameOverProps) {
           ))}
         </div>
 
+        {roomCode && (
+          // 전체 리로드 + ?room 프리필 — 같은 코드로 다시 join 하면 관대한
+          // 생성으로 같은 코드의 새 대기실이 열린다 (기존 흐름 재사용)
+          <button
+            type="button"
+            className="dv-primary-button"
+            onClick={() => {
+              window.location.href = `${window.location.pathname}?room=${roomCode}`;
+            }}
+          >
+            🔄 같은 방에서 재대결
+          </button>
+        )}
         <button type="button" className="dv-primary-button" onClick={onPlayAgain}>
           다시 하기
         </button>

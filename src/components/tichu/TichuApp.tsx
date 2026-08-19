@@ -95,6 +95,7 @@ export function TichuApp({ onBack }: TichuAppProps) {
         <TichuGameOver
           game={game}
           gameOver={gameOver}
+          roomCode={game?.roomCode}
           // 재대결 없음 — 상태를 비워 대기실(입장 화면)로 돌아간다
           onNewGame={() => {
             clearSpectate();
