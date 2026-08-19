@@ -14,6 +14,7 @@ import { TichuApp } from './components/tichu/TichuApp';
 import { MightyApp } from './components/mighty/MightyApp';
 import { SkyfallApp } from './components/skyfall/SkyfallApp';
 import { SpyfallApp } from './components/spyfall/SpyfallApp';
+import { AvalonApp } from './components/avalon/AvalonApp';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
 import './App.css';
@@ -119,6 +120,10 @@ function App() {
 
   if (selectedGame === 'spyfall') {
     return <SpyfallApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'avalon') {
+    return <AvalonApp onBack={handleBackToSelection} />;
   }
 
   return <GameSelection onSelectGame={handleSelectGame} />;

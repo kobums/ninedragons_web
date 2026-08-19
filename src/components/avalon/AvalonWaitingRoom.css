@@ -1,0 +1,205 @@
+/* 아발론 대기실 — 카멜롯 딥 블루 + 골드 포인트 셸 (tokens.css --av-* 토큰만 사용) */
+
+.av-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--av-night-elevated) 0%,
+    var(--av-night) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.av-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 90, 0.22);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+}
+
+.av-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--av-gold-strong);
+}
+
+.av-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--av-mist);
+  font-size: var(--text-body-sm);
+}
+
+.av-join-form,
+.av-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.av-form-group {
+  text-align: left;
+}
+
+.av-form-group label {
+  display: block;
+  color: var(--av-mist);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.av-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+.av-primary-button {
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.av-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.av-primary-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--av-mist);
+  cursor: not-allowed;
+}
+
+.av-ghost-button {
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--av-mist);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.av-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.av-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.av-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.av-seat-item.empty {
+  color: var(--av-mist);
+  font-weight: 400;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: transparent;
+  justify-content: center;
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+}
+
+.av-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.av-crown {
+  font-size: var(--text-body-sm);
+}
+
+.av-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.av-dot.on {
+  background: var(--color-success);
+}
+
+.av-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.av-waiting-hint {
+  margin: 0;
+  color: var(--av-mist);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 360px) {
+  .av-waiting {
+    padding: var(--space-sm);
+  }
+
+  .av-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* 입장·퇴장 토스트 (대기실 상단) */
+.av-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.av-waiting-toast {
+  background: var(--av-night-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+}

@@ -1,0 +1,868 @@
+/* 아발론 보드 — 카멜롯 딥 블루 + 골드 포인트.
+   플레이어 타일 그리드는 반응형 2~3열 (280px 오버플로 금지). */
+
+.av-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--av-night-elevated) 0%,
+    var(--av-night) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 96px; /* 하단 확인 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.av-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.av-toast {
+  background: rgba(8, 12, 24, 0.9);
+  border: 1px solid rgba(212, 175, 90, 0.3);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: av-toast-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes av-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 단계 배너 ---------- */
+
+.av-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+  background: var(--av-gold-tint);
+  border: 1px solid rgba(212, 175, 90, 0.35);
+}
+
+.av-phase-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--av-gold-strong);
+}
+
+.av-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--av-mist);
+}
+
+.av-deadline {
+  margin-left: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--av-mist);
+  font-size: var(--text-body-sm);
+}
+
+.av-deadline.urgent {
+  color: var(--av-evil);
+  animation: av-deadline-pulse 1s ease infinite;
+}
+
+@keyframes av-deadline-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- 원정 트랙 · 부결 트래커 ---------- */
+
+.av-track-wrap {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.av-quest-track {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.av-quest-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.av-quest-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--text-title-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  color: var(--av-mist);
+  box-sizing: border-box;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.av-quest-circle.current {
+  border-color: var(--av-gold);
+  color: var(--av-gold-strong);
+  box-shadow: 0 0 0 3px var(--av-gold-tint);
+}
+
+.av-quest-circle.good {
+  background: var(--av-good-tint);
+  border-color: var(--av-good);
+  color: var(--av-good);
+}
+
+.av-quest-circle.evil {
+  background: var(--av-evil-tint);
+  border-color: var(--av-evil);
+  color: var(--av-evil);
+}
+
+.av-two-fail-mark {
+  position: absolute;
+  bottom: -12px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--av-evil);
+  font-weight: 800;
+}
+
+.av-reject-track {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.av-reject-label {
+  font-size: var(--text-caption-uppercase);
+  color: var(--av-mist);
+  margin-right: 4px;
+}
+
+.av-reject-cell {
+  width: 18px;
+  height: 10px;
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-sizing: border-box;
+}
+
+.av-reject-cell.filled {
+  background: var(--av-evil);
+  border-color: var(--av-evil);
+}
+
+.av-reject-cell.last {
+  border-color: rgba(217, 106, 106, 0.6);
+}
+
+.av-track-note {
+  margin: 0;
+  font-size: var(--text-caption-uppercase);
+  color: var(--av-mist);
+}
+
+/* ---------- 원정 결과 발표 배너 ---------- */
+
+.av-quest-announce {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  animation: av-announce-in 0.4s ease;
+}
+
+.av-quest-announce.good {
+  background: var(--av-good-tint);
+  border: 1px solid var(--av-good);
+  color: var(--av-good);
+}
+
+.av-quest-announce.evil {
+  background: var(--av-evil-tint);
+  border: 1px solid var(--av-evil);
+  color: var(--av-evil);
+}
+
+@keyframes av-announce-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 내 역할 카드 ---------- */
+
+.av-role-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+  /* 첫 배정 시 강조 등장 (key 교체로 재생) */
+  animation: av-role-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes av-role-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.av-role-card.faction-good {
+  border-color: var(--av-good);
+  background: var(--av-good-tint);
+}
+
+.av-role-card.faction-evil {
+  border-color: var(--av-evil);
+  background: var(--av-evil-tint);
+}
+
+.av-role-card.role-merlin {
+  border-color: var(--av-gold);
+  background: var(--av-gold-tint);
+}
+
+.av-role-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.av-role-icon {
+  font-size: var(--text-title-lg);
+}
+
+.av-role-name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+}
+
+.av-role-card.role-merlin .av-role-name {
+  color: var(--av-gold-strong);
+}
+
+.av-role-card.faction-good:not(.role-merlin) .av-role-name {
+  color: var(--av-good);
+}
+
+.av-role-card.faction-evil .av-role-name {
+  color: var(--av-evil);
+}
+
+.av-faction-chip {
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+}
+
+.av-faction-chip.good {
+  background: var(--av-good-tint);
+  color: var(--av-good);
+  border: 1px solid var(--av-good);
+}
+
+.av-faction-chip.evil {
+  background: var(--av-evil-tint);
+  color: var(--av-evil);
+  border: 1px solid var(--av-evil);
+}
+
+.av-role-desc {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--av-mist);
+}
+
+.av-role-mates {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--av-evil);
+}
+
+.av-role-card.role-merlin .av-role-mates {
+  color: var(--av-gold-strong);
+}
+
+/* ---------- 플레이어 타일 그리드 ---------- */
+
+.av-grid {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.av-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  text-align: left;
+  cursor: default;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.av-tile.me {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.av-tile.selectable {
+  cursor: pointer;
+}
+
+.av-tile.selectable:hover {
+  border-color: var(--av-gold);
+}
+
+.av-tile.picked {
+  border-color: var(--av-gold);
+  background: var(--av-gold-tint);
+  box-shadow: 0 0 0 1px var(--av-gold);
+}
+
+.av-tile.selectable.picked {
+  transform: scale(1.02);
+}
+
+.av-tile:disabled {
+  /* 버튼 기본 비활성 스타일 무력화 — 시각 상태는 클래스가 결정 */
+  color: var(--color-on-dark);
+}
+
+.av-tile-name {
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.av-tile-crown {
+  margin-right: 4px;
+}
+
+.av-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.av-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: var(--text-caption-uppercase);
+  color: var(--av-mist);
+}
+
+.av-badge.off {
+  background: rgba(212, 160, 23, 0.18);
+  color: var(--color-warning);
+}
+
+.av-badge.evil-mark {
+  background: var(--av-evil-tint);
+  color: var(--av-evil);
+  font-weight: 700;
+}
+
+.av-badge.team {
+  background: var(--av-gold-tint);
+  color: var(--av-gold-strong);
+  font-weight: 700;
+}
+
+.av-badge.voted {
+  background: rgba(93, 184, 114, 0.16);
+  color: var(--color-success);
+}
+
+/* ---------- 원정대 투표 패널 ---------- */
+
+.av-vote-panel {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.av-vote-team-line {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  text-align: center;
+  color: var(--av-gold-strong);
+}
+
+.av-vote-buttons {
+  display: flex;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 360px;
+}
+
+.av-vote-button {
+  flex: 1;
+  min-height: 56px;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+  cursor: pointer;
+  border: 2px solid;
+  background: transparent;
+  transition:
+    transform 0.1s ease,
+    background 0.15s ease;
+}
+
+.av-vote-button:active {
+  transform: scale(0.97);
+}
+
+.av-vote-button.approve {
+  border-color: var(--av-good);
+  background: var(--av-good-tint);
+  color: var(--av-good);
+}
+
+.av-vote-button.reject {
+  border-color: var(--av-evil);
+  background: var(--av-evil-tint);
+  color: var(--av-evil);
+}
+
+.av-vote-done {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+.av-vote-progress {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--av-mist);
+}
+
+/* ---------- 투표 일괄 공개 목록 ---------- */
+
+.av-vote-list {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: av-announce-in 0.3s ease;
+}
+
+.av-vote-list-title {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--av-mist);
+}
+
+.av-vote-rows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.av-vote-row {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+
+.av-vote-row.approve {
+  background: var(--av-good-tint);
+  color: var(--av-good);
+}
+
+.av-vote-row.reject {
+  background: var(--av-evil-tint);
+  color: var(--av-evil);
+}
+
+/* ---------- 원정 카드 패널 ---------- */
+
+.av-quest-panel {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.av-quest-cards {
+  display: flex;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 360px;
+}
+
+.av-quest-card {
+  flex: 1;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+  cursor: pointer;
+  border: 2px solid;
+  background: transparent;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.av-quest-card-icon {
+  font-size: var(--text-title-lg);
+}
+
+.av-quest-card.success {
+  border-color: var(--av-good);
+  background: var(--av-good-tint);
+  color: var(--av-good);
+}
+
+.av-quest-card.fail {
+  border-color: var(--av-evil);
+  background: var(--av-evil-tint);
+  color: var(--av-evil);
+}
+
+.av-quest-card.selected {
+  transform: translateY(-4px) scale(1.03);
+}
+
+.av-quest-card.success.selected {
+  box-shadow: 0 0 0 2px var(--av-good);
+}
+
+.av-quest-card.fail.selected {
+  box-shadow: 0 0 0 2px var(--av-evil);
+}
+
+.av-quest-card:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.av-quest-hint {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--av-mist);
+}
+
+.av-quest-waiting {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--av-mist);
+}
+
+/* ---------- 하단 확인 바 ---------- */
+
+.av-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 950;
+  width: calc(100% - 24px);
+  max-width: 480px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--av-night-elevated);
+  border: 1px solid rgba(212, 175, 90, 0.4);
+  box-shadow: var(--shadow-modal);
+  animation: av-announce-in 0.2s ease;
+}
+
+.av-confirm-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  min-width: 0;
+}
+
+.av-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.av-confirm-button {
+  padding: 9px 18px;
+  min-height: 44px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.av-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.av-confirm-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--av-mist);
+  cursor: not-allowed;
+}
+
+.av-confirm-button.wide {
+  width: 100%;
+}
+
+.av-cancel-button {
+  padding: 9px 14px;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--av-mist);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+/* ---------- 암살 오버레이 ---------- */
+
+.av-assassin-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.av-assassin-card {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-xl);
+  background: var(--av-night-elevated);
+  border: 1px solid var(--av-evil);
+  box-shadow: var(--shadow-modal);
+  text-align: center;
+  animation: av-role-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.av-assassin-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--av-evil);
+}
+
+.av-assassin-sub {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--av-mist);
+}
+
+.av-assassin-merlin {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--av-gold-strong);
+}
+
+.av-assassin-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.av-assassin-tile {
+  min-height: 44px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.av-assassin-tile.selected {
+  border-color: var(--av-evil);
+  background: var(--av-evil-tint);
+  box-shadow: 0 0 0 1px var(--av-evil);
+}
+
+/* ---------- 모바일 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 420px) {
+  .av-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .av-board {
+    padding: var(--space-xs);
+    padding-bottom: 96px;
+  }
+
+  .av-tile {
+    padding: 8px;
+  }
+
+  .av-tile-name {
+    font-size: var(--text-caption);
+  }
+
+  .av-quest-track {
+    gap: 6px;
+  }
+
+  .av-quest-circle {
+    width: 38px;
+    height: 38px;
+    font-size: var(--text-body-sm);
+  }
+}

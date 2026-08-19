@@ -140,6 +140,22 @@
   --sp-citizen: #7d9fd1; /* 시민팀 — 앰버와 대비되는 차가운 톤 */
   --sp-citizen-tint: rgba(125, 159, 209, 0.14);
 
+  /* ---------- Avalon 아서왕 무드 ----------
+     스카이폴 밤 네이비보다 깊고 푸른 카멜롯 밤 + 골드 포인트.
+     진영 색은 team-blue/red 의 다크 배경 밝힘 변주 —
+     CTA·라이트 서피스에는 쓰지 않는다. */
+  --av-night: #0d1526; /* 카멜롯 딥 블루 */
+  --av-night-elevated: #17233c;
+  --av-night-soft: #121b30;
+  --av-mist: #a9b7d6; /* 다크 배경 보조 텍스트 */
+  --av-gold: #d4af5a; /* 원탁 골드 포인트 */
+  --av-gold-strong: #e8c87e; /* 다크 배경 강조 밝힘 */
+  --av-gold-tint: rgba(212, 175, 90, 0.14);
+  --av-good: #7d9fd1; /* 선(블루) 진영 */
+  --av-good-tint: rgba(125, 159, 209, 0.16);
+  --av-evil: #d96a6a; /* 악(레드) 진영 */
+  --av-evil-tint: rgba(217, 106, 106, 0.16);
+
   /* Warm scrim — never pure black over the cream canvas. */
   --scrim: rgba(20, 20, 19, 0.6);
 

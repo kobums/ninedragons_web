@@ -16,7 +16,8 @@ export type GameId =
   | 'tichu'
   | 'mighty'
   | 'skyfall'
-  | 'spyfall';
+  | 'spyfall'
+  | 'avalon';
 
 export interface RuleSection {
   heading?: string;
@@ -562,6 +563,42 @@ export const GAMES: Record<GameId, GameMeta> = {
         items: [
           '타이머가 끝나면 전원이 스파이로 의심되는 사람에게 공개 투표합니다 (제한 시간 1분, 마감 전 변경 가능).',
           '단독 최다 득표자가 스파이면 시민팀 승리, 그 외(오지목·동표)는 스파이 승리입니다.',
+        ],
+      },
+    ],
+  },
+  avalon: {
+    title: '아발론',
+    tag: '정체 은닉 · 원정',
+    description: '멀린과 암살자의 원정 심리전',
+    players: '5~10인',
+    duration: '15-30분',
+    cardTheme: 'dark',
+    wsPath: '/ws/avalon',
+    logPrefix: '[Avalon] WebSocket',
+    sessionKey: 'av_session_id',
+    rules: [
+      {
+        heading: '준비',
+        items: [
+          '5~10명이 선의 세력과 악의 세력으로 나뉩니다 (악은 5~6인 2명, 7~9인 3명, 10인 4명).',
+          '악끼리는 서로를 알고, 선의 멀린은 악이 누구인지 봅니다.',
+          '토론은 같은 공간(또는 음성)에서 — 앱은 지명·투표·원정 카드를 진행합니다.',
+        ],
+      },
+      {
+        heading: '원정 (5라운드)',
+        items: [
+          '리더가 돌아가며 원정대를 지명하고, 전원이 공개 찬반 투표합니다. 과반 찬성이면 원정을 떠납니다.',
+          '연속 5번 부결되면 악의 세력이 즉시 승리합니다.',
+          '원정대원은 비밀리에 성공/실패 카드를 냅니다 — 실패는 악만 낼 수 있고, 실패 1장이면 원정 실패입니다 (7인 이상의 4라운드만 2장 필요).',
+        ],
+      },
+      {
+        heading: '승리',
+        items: [
+          '원정 3회 실패 → 악의 승리.',
+          '원정 3회 성공 → 암살 단계: 암살자가 멀린을 지목합니다. 맞히면 악의 역전승, 빗나가면 선의 승리입니다.',
         ],
       },
     ],
