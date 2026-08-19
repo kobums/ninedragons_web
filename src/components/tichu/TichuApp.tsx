@@ -8,6 +8,11 @@ import { ConnectionBanner } from '../ConnectionBanner';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { ErrorToast } from '../ErrorToast';
 import { GameInfoButton } from '../GameInfoButton';
+import { ReactionBar } from '../ReactionBar';
+import { ReactionOverlay } from '../ReactionOverlay';
+import { SpectatorBadge, SpectatorCount } from '../SpectatorBadge';
+import { useReactions } from '../../hooks/useReactions';
+import { useSpectate } from '../../hooks/useSpectate';
 import type { TichuCard, TichuMessage } from '../../types/tichu';
 import { TC_SESSION_KEY } from '../../types/tichu';
 import { getSessionId } from '../../utils/session';
@@ -40,6 +45,15 @@ export function TichuApp({ onBack }: TichuAppProps) {
     reset,
   } = useTichuGameState(lastMessage);
 
+  // 관전 모드 (tc_spectate_joined → 이후 스냅샷은 yourSeat -1)
+  const { spectate, clearSpectate } = useSpectate(
+    lastMessage,
+    'tc_spectate_joined',
+  );
+  const isSpectating = spectate !== null;
+  // 리액션 팝 — 훅 토스트 경로와 별개로 tc_event 의 kind 'react' 만 감시
+  const reactions = useReactions(lastMessage, 'tc_event');
+
   // 게임 시작 전에만 전체 화면 연결 대기 표시
   if (!isConnected && !game) {
     return <ConnectingScreen />;
@@ -47,6 +61,9 @@ export function TichuApp({ onBack }: TichuAppProps) {
 
   const isGameOver = Boolean(gameOver) || game?.phase === 'game_over';
   const inGame = Boolean(game) && game!.phase !== 'waiting';
+  // 리액션은 좌석 보유자만 (관전자는 서버가 에러 처리) — 대기실에서도 허용
+  const canReact =
+    !isSpectating && !isGameOver && (game ? game.yourSeat >= 0 : hasJoined);
 
   return (
     <div className="app">
@@ -63,13 +80,26 @@ export function TichuApp({ onBack }: TichuAppProps) {
       />
       <ErrorToast error={error} onClear={clearError} />
       <GameInfoButton game="tichu" />
+      {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
+      {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
+      <ReactionOverlay pops={reactions} />
+      {canReact && (
+        <ReactionBar
+          onReact={(emoji) =>
+            sendMessage({ type: 'tc_react', payload: { emoji } })
+          }
+        />
+      )}
 
       {isGameOver ? (
         <TichuGameOver
           game={game}
           gameOver={gameOver}
           // 재대결 없음 — 상태를 비워 대기실(입장 화면)로 돌아간다
-          onNewGame={reset}
+          onNewGame={() => {
+            clearSpectate();
+            reset();
+          }}
         />
       ) : inGame && game ? (
         <TichuBoard

@@ -25,8 +25,10 @@ export type DVMessageType =
   | 'dv_guess'
   | 'dv_continue_choice'
   | 'dv_reveal_own'
+  | 'dv_react'
   // 서버 → 클라
   | 'dv_lobby_state'
+  | 'dv_spectate_joined'
   | 'dv_game_state'
   | 'dv_event'
   | 'dv_game_over'
@@ -94,6 +96,8 @@ export interface DVGameState {
   players: DVPlayerView[];
   // 사설 방 코드 (공용 로비는 '' 또는 생략 — 재접속 복원용)
   roomCode?: string;
+  // 관전자 수 (구버전 서버는 생략)
+  spectators?: number;
 }
 
 export interface DVEvent {
@@ -104,7 +108,8 @@ export interface DVEvent {
     | 'turn_stopped'
     | 'tile_revealed'
     | 'player_eliminated'
-    | 'player_forfeited';
+    | 'player_forfeited'
+    | 'react';
   guesserSeat?: number;
   targetSeat?: number;
   tileIndex?: number;
@@ -113,6 +118,9 @@ export interface DVEvent {
   seat?: number;
   color?: DVTileColor;
   value?: number;
+  // kind 'react' 전용 — 표시 이름과 이모지
+  name?: string;
+  message?: string;
 }
 
 export interface DVGameOver {

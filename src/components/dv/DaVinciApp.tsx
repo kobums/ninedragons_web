@@ -9,6 +9,11 @@ import { DVGameOver } from './DVGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
+import { ReactionBar } from '../ReactionBar';
+import { ReactionOverlay } from '../ReactionOverlay';
+import { SpectatorBadge, SpectatorCount } from '../SpectatorBadge';
+import { useReactions } from '../../hooks/useReactions';
+import { useSpectate } from '../../hooks/useSpectate';
 import type { DVMessage } from '../../types/davinci';
 import { DV_SESSION_KEY, getSessionId } from '../../utils/session';
 
@@ -32,6 +37,12 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
   const { lobby, game, gameOver, error, someoneDisconnected, toasts, clearError, reset } =
     useDVGameState(lastMessage);
 
+  // 관전 모드 (dv_spectate_joined → 이후 스냅샷은 yourSeat -1)
+  const { spectate } = useSpectate(lastMessage, 'dv_spectate_joined');
+  const isSpectating = spectate !== null;
+  // 리액션 팝 — 훅 토스트 경로와 별개로 dv_event 의 kind 'react' 만 감시
+  const reactions = useReactions(lastMessage, 'dv_event');
+
   useEffect(() => {
     if (error) {
       alert(error);
@@ -49,6 +60,12 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
     return <ConnectingScreen />;
   }
 
+  // 리액션은 좌석 보유자만 (관전자는 서버가 에러 처리) — 로비에서도 허용
+  const canReact =
+    !isSpectating &&
+    !gameOver &&
+    (game ? game.yourSeat >= 0 : lobby !== null);
+
   return (
     <div className="app">
       <ConnectionBanner
@@ -57,6 +74,16 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
         isGameActive={Boolean(game) && !gameOver}
       />
       <GameInfoButton game="davinci" />
+      {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
+      {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
+      <ReactionOverlay pops={reactions} />
+      {canReact && (
+        <ReactionBar
+          onReact={(emoji) =>
+            sendMessage({ type: 'dv_react', payload: { emoji } })
+          }
+        />
+      )}
 
       {gameOver ? (
         <DVGameOver

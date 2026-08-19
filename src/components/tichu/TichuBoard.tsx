@@ -110,8 +110,11 @@ export function TichuBoard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handKey]);
 
-  // 내 좌석이 항상 아래 — (seat - yourSeat + 4) % 4 → 아래/왼쪽/위/오른쪽
-  const seatAt = (rel: number) => (game.yourSeat + rel) % 4;
+  // 관전(yourSeat -1)이면 좌석 0 시점으로 회전해 그린다 — 음수 인덱스 방지
+  const isSpectator = game.yourSeat < 0;
+  const viewSeat = isSpectator ? 0 : game.yourSeat;
+  // 내(시점) 좌석이 항상 아래 — (seat - viewSeat + 4) % 4 → 아래/왼쪽/위/오른쪽
+  const seatAt = (rel: number) => (viewSeat + rel) % 4;
   const playerAt = (rel: number) =>
     game.players.find((p) => p.seat === seatAt(rel));
   const me = playerAt(0);
@@ -122,11 +125,14 @@ export function TichuBoard({
   const nameOf = (seat: number) =>
     game.players.find((p) => p.seat === seat)?.name ?? `좌석 ${seat}`;
 
-  const myTurn = game.currentTurn === game.yourSeat;
-  const inExchangeInput = game.phase === 'exchange' && !game.exchangeDone;
+  // 관전이면 -1 === -1 (currentTurn/dragonPendingSeat 부재값) 오판을 막는다
+  const myTurn = !isSpectator && game.currentTurn === game.yourSeat;
+  const inExchangeInput =
+    !isSpectator && game.phase === 'exchange' && !game.exchangeDone;
   const iAmOut = me?.out ?? false;
   // 서버는 교환 카드 제출 전을 포함해 첫 플레이 전까지 선언을 허용한다
   const canDeclareTichu =
+    !isSpectator &&
     Boolean(me) &&
     !iAmOut &&
     me!.tichu === '' &&
@@ -134,7 +140,7 @@ export function TichuBoard({
       (game.phase === 'play' && yourHand.length === 14));
 
   const handClickable =
-    inExchangeInput || (game.phase === 'play' && !iAmOut);
+    !isSpectator && (inExchangeInput || (game.phase === 'play' && !iAmOut));
 
   const handleCardClick = (card: TichuCard) => {
     if (inExchangeInput) {
@@ -179,9 +185,11 @@ export function TichuBoard({
     onExchange(exchangeSlots[2]!, exchangeSlots[1]!, exchangeSlots[0]!);
   };
 
-  const dragonChoosing = game.dragonPendingSeat === game.yourSeat;
+  const dragonChoosing =
+    !isSpectator && game.dragonPendingSeat === game.yourSeat;
   const readyCount = game.players.filter((p) => p.ready).length;
-  const myTeam = teamOfSeat(game.yourSeat);
+  // 관전자는 어느 팀도 아니다 — 'mine' 강조 없음
+  const myTeam = isSpectator ? null : teamOfSeat(game.yourSeat);
 
   const exchangeSlotDefs = [
     { label: '왼쪽', player: leftPlayer, idx: 0 },
@@ -305,9 +313,9 @@ export function TichuBoard({
         <div className="tc-pos-bottom">
           <SeatPlate
             player={me}
-            isYou
-            isTurn={myTurn}
-            dragonPending={dragonChoosing}
+            isYou={!isSpectator}
+            isTurn={game.currentTurn === seatAt(0)}
+            dragonPending={game.dragonPendingSeat === seatAt(0)}
           />
         </div>
       </div>
@@ -363,6 +371,7 @@ export function TichuBoard({
             ))}
           </div>
         ) : (
+          !isSpectator &&
           iAmOut && (
             <div className="tc-out-note">
               아웃 — {me && me.outRank > 0 ? `${me.outRank}위` : '완주'}
@@ -371,8 +380,8 @@ export function TichuBoard({
         )}
       </div>
 
-      {/* 액션 바 */}
-      {game.phase === 'play' && !iAmOut && (
+      {/* 액션 바 — 관전자는 행동 UI 없음 */}
+      {!isSpectator && game.phase === 'play' && !iAmOut && (
         <div className="tc-action-bar">
           <span className="tc-turn-note">
             {myTurn
@@ -453,8 +462,8 @@ export function TichuBoard({
         </div>
       )}
 
-      {/* 그랜드 티츄 오버레이 */}
-      {game.phase === 'grand' && !game.grandAnswered && (
+      {/* 그랜드 티츄 오버레이 — 관전자는 선언 대상이 아니다 */}
+      {!isSpectator && game.phase === 'grand' && !game.grandAnswered && (
         <div className="tc-overlay">
           <div className="tc-overlay-panel">
             <h2 className="tc-overlay-title">그랜드 티츄?</h2>
@@ -554,14 +563,16 @@ export function TichuBoard({
             <p className="tc-overlay-desc">
               준비 {readyCount}/4 · 잠시 후 자동으로 다음 핸드가 시작됩니다
             </p>
-            <button
-              type="button"
-              className="tc-primary-button"
-              disabled={me?.ready ?? false}
-              onClick={onReady}
-            >
-              {me?.ready ? '다른 플레이어 대기 중...' : '다음 핸드'}
-            </button>
+            {!isSpectator && (
+              <button
+                type="button"
+                className="tc-primary-button"
+                disabled={me?.ready ?? false}
+                onClick={onReady}
+              >
+                {me?.ready ? '다른 플레이어 대기 중...' : '다음 핸드'}
+              </button>
+            )}
           </div>
         </div>
       )}

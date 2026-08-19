@@ -1,0 +1,37 @@
+/* 관전 배지 — 상단 고정. ErrorToast(z 1000)보다는 아래,
+   GameInfoButton(우상단, z 900)과 겹치지 않게 배치한다. */
+
+.spectator-badge {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 890;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--color-on-dark);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.spectator-count {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 890;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--color-on-dark);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}

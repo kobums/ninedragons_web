@@ -21,8 +21,10 @@ export type AVMessageType =
   | 'av_team_vote'
   | 'av_quest'
   | 'av_assassinate'
+  | 'av_react'
   // 서버 → 클라
   | 'av_player_joined'
+  | 'av_spectate_joined'
   | 'av_game_state'
   | 'av_event'
   | 'av_game_over'
@@ -97,6 +99,8 @@ export interface AVGameState {
   winner: AVWinner;
   // game_over 에서 암살자가 지목한 좌석 (지목 없으면 -1)
   assassinTarget: number;
+  // 관전자 수 (구버전 서버는 생략)
+  spectators?: number;
 }
 
 // 서버 이벤트 — kind 목록은 백엔드 재량이라 열지 않고,

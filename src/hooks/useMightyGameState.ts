@@ -32,8 +32,9 @@ const initialState: MTState = {
   someoneDisconnected: false,
 };
 
-// 매 플레이마다 오는 잔이벤트는 스냅샷 갱신으로 충분해 토스트에서 거른다
-const TOAST_SKIP: ReadonlySet<string> = new Set(['play', 'bid', 'pass']);
+// 매 플레이마다 오는 잔이벤트는 스냅샷 갱신으로 충분해 토스트에서 거른다.
+// react 는 셸의 useReactions 가 ReactionOverlay 로 따로 띄운다.
+const TOAST_SKIP: ReadonlySet<string> = new Set(['play', 'bid', 'pass', 'react']);
 
 // 서버가 상태 변경마다 개인화 전체 스냅샷(mt_game_state)을 보내므로
 // 이 훅은 스냅샷을 그대로 반영하고 토스트/에러만 따로 관리한다.

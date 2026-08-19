@@ -137,8 +137,10 @@ export function AvalonBoard({
   const votedCount = game.players.filter((p) => p.votedTeam).length;
   const questDoneCount = game.players.filter((p) => p.questDone).length;
 
+  // 관전자(yourSeat -1)는 행동 잠금 — 서버도 에러 처리하지만 UI 부터 막는다
+  const isSpectator = game.yourSeat < 0;
   const canPick = isPick && isLeader && !submitted;
-  const canVote = isVote && !myVoted && !submitted;
+  const canVote = !isSpectator && isVote && !myVoted && !submitted;
   const canQuest = isQuest && amOnTeam && !myQuestDone && !submitted;
 
   // 리더의 타일 탭 — 정원까지 선택, 이미 뽑은 타일은 다시 탭해 해제
@@ -200,6 +202,7 @@ export function AvalonBoard({
       return `👑 ${nameOf(game.leaderSeat)}님이 원정대를 뽑는 중…`;
     }
     if (isVote) {
+      if (isSpectator) return '원정대 투표가 진행 중입니다…';
       if (myVoted) return '투표 제출 완료 — 전원 제출 시 일괄 공개됩니다';
       return '제안된 원정대에 찬성/반대를 던지세요 — 시간 초과 시 찬성 처리됩니다';
     }
@@ -411,7 +414,8 @@ export function AvalonBoard({
               </button>
             </div>
           ) : (
-            <p className="av-vote-done">투표 제출 완료</p>
+            // 관전자는 투표 대상이 아니다 — '제출 완료' 오표기를 막는다
+            !isSpectator && <p className="av-vote-done">투표 제출 완료</p>
           )}
           <p className="av-vote-progress">
             제출 {votedCount}/{playerCount} — 전원 제출 시 일괄 공개

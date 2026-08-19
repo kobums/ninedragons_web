@@ -101,9 +101,11 @@ export function SpyfallBoard({
   const nameOf = (seat: number) =>
     game.players.find((p) => p.seat === seat)?.name ?? '?';
 
-  const canGuess = isPlaying && game.isSpy && !submitted;
+  // 관전자(yourSeat -1)는 행동 잠금 — 서버도 에러 처리하지만 UI 부터 막는다
+  const isSpectator = game.yourSeat < 0;
+  const canGuess = !isSpectator && isPlaying && game.isSpy && !submitted;
   // 집계 전에는 서버가 덮어쓰기를 허용한다 — 투표 후에도 다시 지목해 변경 가능
-  const canVote = isVoting && !submitted;
+  const canVote = !isSpectator && isVoting && !submitted;
 
   // 장소 타일 탭 — 스파이는 추리 후보 선택, 그 외에는 개인 소거 토글
   const handleLocationTap = (loc: string) => {
@@ -149,11 +151,14 @@ export function SpyfallBoard({
   const bannerSub = (() => {
     if (isPlaying) {
       if (game.endsAt > 0 && remaining <= 0) return '곧 투표가 시작됩니다…';
+      if (isSpectator) return '요원들의 대화를 지켜보는 중…';
       return game.isSpy
         ? `정체를 숨기고 대화에서 ${category} 정답을 알아내세요`
         : `스파이에게 ${category} 정답을 들키지 않게 질문하세요`;
     }
     if (isVoting) {
+      if (isSpectator)
+        return `스파이 투표가 진행 중입니다 (${votedCount}/${game.players.length})`;
       if (myVoted)
         return `투표 완료 (${votedCount}/${game.players.length}) — 마감 전에는 다시 탭해 변경할 수 있습니다`;
       return '스파이로 의심되는 사람을 지목하세요';
@@ -193,7 +198,16 @@ export function SpyfallBoard({
         {bannerSub && <span className="sp-phase-sub">{bannerSub}</span>}
       </div>
 
-      {/* 내 카드 — key 교체로 배정 연출이 다시 돈다 */}
+      {/* 내 카드 — key 교체로 배정 연출이 다시 돈다.
+          관전자는 정체 카드가 없다 (isSpy false·location '' 로 와서 오해 소지). */}
+      {isSpectator ? (
+        <div className="sp-identity-card agent">
+          <span className="sp-identity-caption">관전</span>
+          <p className="sp-identity-desc">
+            공개 정보만 볼 수 있습니다 — 정답과 스파이는 종료 시 공개됩니다
+          </p>
+        </div>
+      ) : (
       <div
         key={`identity-${game.isSpy ? 'spy' : game.location}`}
         className={`sp-identity-card ${game.isSpy ? 'spy' : 'agent'}`}
@@ -217,6 +231,7 @@ export function SpyfallBoard({
           </>
         )}
       </div>
+      )}
 
       {/* 장소 목록 24곳 */}
       <div className="sp-locations">

@@ -64,6 +64,8 @@ export const useDVGameState = (lastMessage: DVMessage | null) => {
 
       case 'dv_event': {
         const event = lastMessage.payload as DVEvent;
+        // react 는 셸의 useReactions 가 ReactionOverlay 로 따로 띄운다
+        if (event.kind === 'react') break;
         toastId.current += 1;
         const id = toastId.current;
         setToasts((prev) => [...prev.slice(-3), { id, event }]);

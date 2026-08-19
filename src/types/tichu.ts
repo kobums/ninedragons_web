@@ -41,7 +41,8 @@ export type TichuEventKind =
   | 'player_out'
   | 'dragon_given'
   | 'hand_end'
-  | 'bot_takeover';
+  | 'bot_takeover'
+  | 'react';
 
 export type TichuMessageType =
   // 클라 → 서버
@@ -56,8 +57,10 @@ export type TichuMessageType =
   | 'tc_dragon_give'
   | 'tc_ready'
   | 'tc_rejoin'
+  | 'tc_react'
   // 서버 → 클라
   | 'tc_player_joined'
+  | 'tc_spectate_joined'
   | 'tc_game_state'
   | 'tc_event'
   | 'tc_game_over'
@@ -122,11 +125,15 @@ export interface TichuGameState {
   winnerTeam: '' | '02' | '13';
   // 사설 방 코드 (공용 로비는 '' 또는 생략 — 구버전 서버 호환)
   roomCode?: string;
+  // 관전자 수 (구버전 서버는 생략)
+  spectators?: number;
 }
 
 export interface TichuEvent {
   kind: TichuEventKind;
   seat?: number;
+  // kind 'react' 에서 서버가 실어주는 표시 이름
+  name?: string;
   message: string;
 }
 

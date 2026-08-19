@@ -131,7 +131,9 @@ export function MightyBoard({
 }: MightyBoardProps) {
   // 키티 단계에서 버릴 카드 선택 (주공 전용)
   const [kittyDiscard, setKittyDiscard] = useState<MTCard[]>([]);
-  const handRef = useFanHand(game.yourHand.length);
+  // 관전(yourSeat -1) 스냅샷이 손패를 비우거나 생략해도 죽지 않게 방어한다
+  const yourHand = game.yourHand ?? [];
+  const handRef = useFanHand(yourHand.length);
   // 조커 리드 → 문양 선택 대기 / 조커콜 카드 리드 → 선언 확인 대기
   const [pendingJoker, setPendingJoker] = useState(false);
   const [pendingJokerCall, setPendingJokerCall] = useState<MTCard | null>(null);
@@ -145,13 +147,20 @@ export function MightyBoard({
     setPendingJokerCall(null);
   }, [game.phase, game.currentTurn, game.trickNo]);
 
+  // 관전(yourSeat -1)이면 me 는 없다 — 좌석 0 시점으로 회전해 그리고,
+  // 좌석 0 플레이어를 아래(내 영역 명패)에 표시한다 (pos-0 그리드 영역이 없음)
+  const isSpectator = game.yourSeat < 0;
+  const viewSeat = isSpectator ? 0 : game.yourSeat;
   const me = game.players.find((p) => p.seat === game.yourSeat);
-  // 내 좌석은 항상 아래, 나머지는 반원 배치: (seat - yourSeat + 5) % 5
+  const bottomPlayer = isSpectator
+    ? game.players.find((p) => p.seat === viewSeat)
+    : me;
+  // 내(시점) 좌석은 항상 아래, 나머지는 반원 배치: (seat - viewSeat + 5) % 5
   const others = game.players
-    .filter((p) => p.seat !== game.yourSeat)
+    .filter((p) => p.seat !== viewSeat)
     .map((p) => ({
       player: p,
-      position: (p.seat - game.yourSeat + 5) % 5,
+      position: (p.seat - viewSeat + 5) % 5,
     }));
 
   const nameOf = (seat: number) =>
@@ -164,7 +173,7 @@ export function MightyBoard({
   const leading = myPlayTurn && game.ledSuit === '' && game.trick.length === 0;
 
   const legal = myPlayTurn
-    ? legalPlays(game.yourHand, game.ledSuit, game.jokerCallActive, trump)
+    ? legalPlays(yourHand, game.ledSuit, game.jokerCallActive, trump)
     : null;
 
   const toggleKittyDiscard = (card: MTCard) => {
@@ -220,10 +229,10 @@ export function MightyBoard({
     return null;
   })();
 
-  // 트릭 카드 5칸 (position 별)
+  // 트릭 카드 5칸 (position 별) — 관전이면 좌석 0 시점 기준
   const trickAt = (position: number) =>
     game.trick.find(
-      (t) => (t.seat - game.yourSeat + 5) % 5 === position,
+      (t) => (t.seat - viewSeat + 5) % 5 === position,
     ) ?? null;
 
   return (
@@ -341,27 +350,30 @@ export function MightyBoard({
 
       {/* 내 영역 */}
       <div className="mt-my-area">
-        {me && (
+        {bottomPlayer && (
           <div
             className={`mt-my-info ${myBidTurn || myPlayTurn ? 'turn' : ''}`}
           >
             <span className="mt-seat-name-text">
-              {me.isDeclarer && '👑 '}
-              {me.name} (나)
+              {bottomPlayer.isDeclarer && '👑 '}
+              {bottomPlayer.name}
+              {!isSpectator && ' (나)'}
             </span>
-            {me.friendRevealed && <span className="mt-friend-badge">프렌드</span>}
-            {game.phase === 'bidding' && me.passed && (
+            {bottomPlayer.friendRevealed && (
+              <span className="mt-friend-badge">프렌드</span>
+            )}
+            {game.phase === 'bidding' && bottomPlayer.passed && (
               <span className="mt-pass-badge">패스</span>
             )}
             <span className="mt-seat-stats-inline">
-              트릭 {me.tricksWon} · 점수 {me.capturedPoints}
+              트릭 {bottomPlayer.tricksWon} · 점수 {bottomPlayer.capturedPoints}
             </span>
           </div>
         )}
 
         <div className="mt-hand" ref={handRef}>
-          {game.yourHand.map((card, i) => {
-            const prev = i > 0 ? game.yourHand[i - 1] : null;
+          {yourHand.map((card, i) => {
+            const prev = i > 0 ? yourHand[i - 1] : null;
             const suitBreak = prev !== null && suitOf(prev) !== suitOf(card);
             const inKitty = game.yourKitty?.includes(card) ?? false;
             const disabled =

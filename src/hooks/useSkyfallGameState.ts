@@ -32,8 +32,9 @@ const initialState: SFState = {
   someoneDisconnected: false,
 };
 
-// 투표 한 건 한 건은 스냅샷의 공개 투표 목록으로 충분해 토스트에서 거른다
-const TOAST_SKIP: ReadonlySet<string> = new Set(['voted']);
+// 투표 한 건 한 건은 스냅샷의 공개 투표 목록으로 충분해 토스트에서 거른다.
+// react 는 셸의 useReactions 가 ReactionOverlay 로 따로 띄운다.
+const TOAST_SKIP: ReadonlySet<string> = new Set(['voted', 'react']);
 
 // 서버가 상태 변경마다 개인화 전체 스냅샷(sf_game_state)을 보내므로
 // 이 훅은 스냅샷을 그대로 반영하고 토스트/에러만 따로 관리한다.

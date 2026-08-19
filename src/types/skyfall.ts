@@ -19,8 +19,10 @@ export type SFMessageType =
   | 'sf_rejoin'
   | 'sf_night_action'
   | 'sf_vote'
+  | 'sf_react'
   // 서버 → 클라
   | 'sf_player_joined'
+  | 'sf_spectate_joined'
   | 'sf_game_state'
   | 'sf_event'
   | 'sf_game_over'
@@ -100,6 +102,8 @@ export interface SFGameState {
   winner: SFWinner;
   // 사설 방 코드 (공용 로비는 '' 또는 생략 — 구버전 서버 호환)
   roomCode?: string;
+  // 관전자 수 (구버전 서버는 생략)
+  spectators?: number;
 }
 
 export type SFEventKind =
@@ -112,7 +116,8 @@ export type SFEventKind =
   | 'executed'
   | 'no_execution'
   | 'bot_takeover'
-  | 'game_over';
+  | 'game_over'
+  | 'react';
 
 export interface SFEvent {
   kind: SFEventKind;

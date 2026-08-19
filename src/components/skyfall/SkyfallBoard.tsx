@@ -220,7 +220,8 @@ export function SkyfallBoard({
         {bannerSub && <span className="sf-phase-sub">{bannerSub}</span>}
       </div>
 
-      {!amAlive && (
+      {/* 관전자(yourSeat -1, me 없음)에게는 사망 배너를 띄우지 않는다 */}
+      {me && !amAlive && (
         <div className="sf-dead-banner">
           💀 당신은 사망했습니다 — 관전 중입니다
         </div>

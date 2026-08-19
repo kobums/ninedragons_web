@@ -13,8 +13,10 @@ export type SPMessageType =
   | 'sp_guess'
   | 'sp_vote'
   | 'sp_rejoin'
+  | 'sp_react'
   // 서버 → 클라
   | 'sp_player_joined'
+  | 'sp_spectate_joined'
   | 'sp_game_state'
   | 'sp_event'
   | 'sp_game_over'
@@ -86,6 +88,8 @@ export interface SPGameState {
   result?: SPResult | null;
   // 사설 방 코드 (공용 로비는 '' 또는 생략 — 구버전 서버 호환)
   roomCode?: string;
+  // 관전자 수 (구버전 서버는 생략)
+  spectators?: number;
 }
 
 export type SPEventKind =
@@ -95,7 +99,8 @@ export type SPEventKind =
   | 'guess'
   | 'vote_begin'
   | 'game_over'
-  | 'bot_takeover';
+  | 'bot_takeover'
+  | 'react';
 
 export interface SPEvent {
   kind: SPEventKind;

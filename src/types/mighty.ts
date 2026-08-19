@@ -26,8 +26,10 @@ export type MTMessageType =
   | 'mt_kitty'
   | 'mt_friend'
   | 'mt_play'
+  | 'mt_react'
   // 서버 → 클라
   | 'mt_player_joined'
+  | 'mt_spectate_joined'
   | 'mt_game_state'
   | 'mt_event'
   | 'mt_game_over'
@@ -119,6 +121,8 @@ export interface MTGameState {
   result: MTResult | null;
   // 사설 방 코드 (공용 로비는 '' 또는 생략 — 구버전 서버 호환)
   roomCode?: string;
+  // 관전자 수 (구버전 서버는 생략)
+  spectators?: number;
 }
 
 export type MTEventKind =
@@ -134,7 +138,8 @@ export type MTEventKind =
   | 'play'
   | 'joker_call'
   | 'trick_won'
-  | 'bot_takeover';
+  | 'bot_takeover'
+  | 'react';
 
 // 이벤트 부가 필드는 kind 마다 다르므로 전부 옵셔널로 둔다
 export interface MTEvent {
@@ -145,6 +150,8 @@ export interface MTEvent {
   count?: number;
   card?: MTCard;
   winner?: number;
+  // kind 'react' 의 이모지 등 표시 문구
+  message?: string;
 }
 
 // sessionStorage 키 — 값을 바꾸면 기존 재접속 세션이 끊기므로 불변

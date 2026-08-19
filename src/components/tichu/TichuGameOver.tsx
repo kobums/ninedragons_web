@@ -25,7 +25,9 @@ export function TichuGameOver({ game, gameOver, onNewGame }: TichuGameOverProps)
       .map((p) => p.name)
       .join(' · ');
 
-  const myTeam = game ? teamOfSeat(game.yourSeat) : null;
+  // 관전(yourSeat -1)이면 어느 팀도 아니다 — '우리 팀' 강조 없음
+  const myTeam =
+    game && game.yourSeat >= 0 ? teamOfSeat(game.yourSeat) : null;
   const iWon = myTeam !== null && winnerTeam !== '' && myTeam === winnerTeam;
 
   return (
