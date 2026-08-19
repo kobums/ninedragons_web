@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './GSWaitingRoom.css';
 
 interface GSWaitingRoomProps {
@@ -8,7 +9,7 @@ interface GSWaitingRoomProps {
 }
 
 export function GSWaitingRoom({ hasJoined, onJoinGame, onBack }: GSWaitingRoomProps) {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(loadNickname);
   // 연타로 join 이 두 번 나가는 것을 막는다 (서버 가드와 이중 방어)
   const [joining, setJoining] = useState(false);
 
@@ -17,6 +18,7 @@ export function GSWaitingRoom({ hasJoined, onJoinGame, onBack }: GSWaitingRoomPr
     // 봇전은 이름이 비어 있으면 기본 이름으로 바로 시작한다
     const name = playerName.trim() || (vsBot ? '나' : '');
     if (!name) return;
+    saveNickname(playerName);
     setJoining(true);
     onJoinGame(name, vsBot);
     setTimeout(() => setJoining(false), 2000);

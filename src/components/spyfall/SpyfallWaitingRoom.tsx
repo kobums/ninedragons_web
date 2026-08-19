@@ -7,13 +7,15 @@ import {
   SP_CATEGORY_CHOICES,
   SP_CATEGORY_RANDOM,
 } from '../../types/spyfall';
+import { RoomCodeBadge, RoomJoinControls, useRoomJoin } from '../RoomCodeControls';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './SpyfallWaitingRoom.css';
 
 interface SpyfallWaitingRoomProps {
   // 입장 전이면 null (hasJoined 가 false 일 수도 있다)
   game: SPGameState | null;
   hasJoined: boolean;
-  onJoin: (name: string) => void;
+  onJoin: (name: string, room: string) => void;
   onStart: () => void;
   onFillBots: () => void;
   onSetTimer: (minutes: number) => void;
@@ -31,15 +33,17 @@ export function SpyfallWaitingRoom({
   onSetCategory,
   onBack,
 }: SpyfallWaitingRoomProps) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(loadNickname);
   // 연타로 join 이 두 번 나가는 것을 막는다
   const [joining, setJoining] = useState(false);
+  const roomJoin = useRoomJoin();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (joining || !name.trim()) return;
+    if (joining || !name.trim() || !roomJoin.roomReady) return;
     setJoining(true);
-    onJoin(name.trim());
+    saveNickname(name);
+    onJoin(name.trim(), roomJoin.room);
     // 응답이 늦거나 실패해도 다시 시도할 수 있게 잠깐만 잠근다
     setTimeout(() => setJoining(false), 2000);
   };
@@ -78,7 +82,12 @@ export function SpyfallWaitingRoom({
                 required
               />
             </div>
-            <button type="submit" className="sp-primary-button" disabled={joining}>
+            <RoomJoinControls join={roomJoin} tone="dark" idPrefix="sp" />
+            <button
+              type="submit"
+              className="sp-primary-button"
+              disabled={joining || !roomJoin.roomReady}
+            >
               {joining ? '입장 중...' : '입장하기'}
             </button>
             <button type="button" className="sp-ghost-button" onClick={onBack}>
@@ -89,6 +98,7 @@ export function SpyfallWaitingRoom({
           <p className="sp-waiting-hint">입장 중...</p>
         ) : (
           <div className="sp-seat-list-wrap">
+            <RoomCodeBadge code={game.roomCode} tone="dark" />
             <ul className="sp-seat-list">
               {Array.from({ length: SP_MAX_PLAYERS }).map((_, seat) => {
                 const p = seatOf(seat);

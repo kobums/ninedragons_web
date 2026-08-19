@@ -88,8 +88,12 @@ export function SpyfallApp({ onBack }: SpyfallAppProps) {
         <SpyfallWaitingRoom
           game={game}
           hasJoined={hasJoined}
-          onJoin={(name) =>
-            sendMessage({ type: 'sp_join_game', payload: { name } })
+          onJoin={(name, room) =>
+            sendMessage({
+              type: 'sp_join_game',
+              // room 생략 = 공용 로비 (기존 와이어 그대로 — 하위 호환)
+              payload: room ? { name, room } : { name },
+            })
           }
           onStart={() => sendMessage({ type: 'sp_start', payload: {} })}
           onFillBots={() => sendMessage({ type: 'sp_fill_bots', payload: {} })}

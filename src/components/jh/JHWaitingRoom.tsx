@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './JHWaitingRoom.css';
 
 interface JHWaitingRoomProps {
@@ -8,11 +9,12 @@ interface JHWaitingRoomProps {
 }
 
 export function JHWaitingRoom({ hasJoined, onJoinGame, onBack }: JHWaitingRoomProps) {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(loadNickname);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (playerName.trim()) {
+      saveNickname(playerName);
       onJoinGame(playerName.trim());
     }
   };

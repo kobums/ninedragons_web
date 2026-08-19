@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { PlayerColor } from '../types/game';
+import { loadNickname, saveNickname } from '../utils/nickname';
 import './WaitingRoom.css';
 
 interface WaitingRoomProps {
@@ -13,7 +14,7 @@ export const WaitingRoom: React.FC<WaitingRoomProps> = ({
   isWaiting,
   hasJoined = false,
 }) => {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(loadNickname);
   const [selectedColor, setSelectedColor] = useState<PlayerColor | ''>('');
   // 연타로 join 이 두 번 나가는 것을 막는다 (서버 가드와 이중 방어)
   const [joining, setJoining] = useState(false);
@@ -23,6 +24,7 @@ export const WaitingRoom: React.FC<WaitingRoomProps> = ({
     // 봇전은 이름이 비어 있으면 기본 이름으로 바로 시작한다
     const name = playerName.trim() || (vsBot ? '나' : '');
     if (!name) return;
+    saveNickname(playerName);
     setJoining(true);
     // 선택한 색(또는 미선택)은 봇전에서도 그대로 서버로 보낸다
     onJoinGame(name, selectedColor || undefined, vsBot);

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { SFGameState } from '../../types/skyfall';
 import { SF_MAX_PLAYERS, SF_MIN_PLAYERS } from '../../types/skyfall';
 import type { SFToast } from '../../hooks/useSkyfallGameState';
+import { RoomCodeBadge, RoomJoinControls, useRoomJoin } from '../RoomCodeControls';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './SkyfallWaitingRoom.css';
 
 interface SkyfallWaitingRoomProps {
@@ -9,7 +11,7 @@ interface SkyfallWaitingRoomProps {
   game: SFGameState | null;
   hasJoined: boolean;
   toasts?: SFToast[];
-  onJoin: (name: string) => void;
+  onJoin: (name: string, room: string) => void;
   onStart: () => void;
   onFillBots: () => void;
   onBack: () => void;
@@ -24,15 +26,17 @@ export function SkyfallWaitingRoom({
   onFillBots,
   onBack,
 }: SkyfallWaitingRoomProps) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(loadNickname);
   // 연타로 join 이 두 번 나가는 것을 막는다
   const [joining, setJoining] = useState(false);
+  const roomJoin = useRoomJoin();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (joining || !name.trim()) return;
+    if (joining || !name.trim() || !roomJoin.roomReady) return;
     setJoining(true);
-    onJoin(name.trim());
+    saveNickname(name);
+    onJoin(name.trim(), roomJoin.room);
     // 응답이 늦거나 실패해도 다시 시도할 수 있게 잠깐만 잠근다
     setTimeout(() => setJoining(false), 2000);
   };
@@ -83,7 +87,12 @@ export function SkyfallWaitingRoom({
                 required
               />
             </div>
-            <button type="submit" className="sf-primary-button" disabled={joining}>
+            <RoomJoinControls join={roomJoin} tone="dark" idPrefix="sf" />
+            <button
+              type="submit"
+              className="sf-primary-button"
+              disabled={joining || !roomJoin.roomReady}
+            >
               {joining ? '입장 중...' : '입장하기'}
             </button>
             <button type="button" className="sf-ghost-button" onClick={onBack}>
@@ -94,6 +103,7 @@ export function SkyfallWaitingRoom({
           <p className="sf-waiting-hint">입장 중...</p>
         ) : (
           <div className="sf-seat-list-wrap">
+            <RoomCodeBadge code={game.roomCode} tone="dark" />
             <ul className="sf-seat-list">
               {Array.from({ length: SF_MAX_PLAYERS }).map((_, seat) => {
                 const p = seatOf(seat);

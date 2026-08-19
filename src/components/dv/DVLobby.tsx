@@ -1,28 +1,32 @@
 import { useState } from 'react';
 import type { DVLobbyState } from '../../types/davinci';
+import { RoomCodeBadge, RoomJoinControls, useRoomJoin } from '../RoomCodeControls';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './DVLobby.css';
 
 const MAX_PLAYERS = 4;
 
 interface DVLobbyProps {
   lobby: DVLobbyState | null;
-  onJoin: (playerName: string) => void;
+  onJoin: (playerName: string, room: string) => void;
   onStart: () => void;
   onLeave: () => void;
   onBack: () => void;
 }
 
 export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProps) {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(loadNickname);
   // 연타로 join 이 두 번 나가는 것을 막는다. 서버에도 가드가 있지만
   // 버튼을 잠가 두 번째 클릭 자체가 나가지 않게 한다.
   const [joining, setJoining] = useState(false);
+  const roomJoin = useRoomJoin();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (joining || !playerName.trim()) return;
+    if (joining || !playerName.trim() || !roomJoin.roomReady) return;
     setJoining(true);
-    onJoin(playerName.trim());
+    saveNickname(playerName);
+    onJoin(playerName.trim(), roomJoin.room);
     // 응답이 늦거나 실패해도 다시 시도할 수 있게 잠깐만 잠근다
     setTimeout(() => setJoining(false), 2000);
   };
@@ -47,7 +51,12 @@ export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProp
                 required
               />
             </div>
-            <button type="submit" className="dv-primary-button" disabled={joining}>
+            <RoomJoinControls join={roomJoin} idPrefix="dv" />
+            <button
+              type="submit"
+              className="dv-primary-button"
+              disabled={joining || !roomJoin.roomReady}
+            >
               {joining ? '입장 중...' : '입장하기'}
             </button>
             <button type="button" className="dv-ghost-button" onClick={onBack}>
@@ -56,6 +65,7 @@ export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProp
           </form>
         ) : (
           <div className="dv-waiting">
+            <RoomCodeBadge code={lobby.roomCode} />
             <ul className="dv-player-list">
               {lobby.players.map((p) => (
                 <li key={p.seat} className="dv-player-item">

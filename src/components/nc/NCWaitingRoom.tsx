@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { TeamColor } from '../../types/numberchange';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './NCWaitingRoom.css';
 
 interface NCWaitingRoomProps {
@@ -12,7 +13,7 @@ export function NCWaitingRoom({
   onJoinGame,
   hasJoined,
 }: NCWaitingRoomProps) {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(loadNickname);
   const [selectedTeam, setSelectedTeam] = useState<TeamColor | undefined>(
     undefined
   );
@@ -24,6 +25,7 @@ export function NCWaitingRoom({
     // 봇전은 이름이 비어 있으면 기본 이름으로 바로 시작한다
     const name = playerName.trim() || (vsBot ? '나' : '');
     if (!name) return;
+    saveNickname(playerName);
     setJoining(true);
     // 선택한 팀(또는 미선택)은 봇전에서도 그대로 서버로 보낸다
     onJoinGame(name, selectedTeam, vsBot);

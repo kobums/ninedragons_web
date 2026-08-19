@@ -99,8 +99,12 @@ export function TichuApp({ onBack }: TichuAppProps) {
           game={game}
           toasts={toasts}
           hasJoined={hasJoined}
-          onJoin={(name: string) =>
-            sendMessage({ type: 'tc_join_game', payload: { name } })
+          onJoin={(name: string, room: string) =>
+            sendMessage({
+              type: 'tc_join_game',
+              // room 생략 = 공용 로비 (기존 와이어 그대로 — 하위 호환)
+              payload: room ? { name, room } : { name },
+            })
           }
           onSetTarget={(target: 500 | 1000) =>
             sendMessage({ type: 'tc_set_target', payload: { target } })

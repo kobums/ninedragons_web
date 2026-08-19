@@ -103,8 +103,12 @@ export function MightyApp({ onBack }: MightyAppProps) {
         <MightyWaitingRoom
           game={game}
           hasJoined={hasJoined}
-          onJoin={(name) =>
-            sendMessage({ type: 'mt_join_game', payload: { name } })
+          onJoin={(name, room) =>
+            sendMessage({
+              type: 'mt_join_game',
+              // room 생략 = 공용 로비 (기존 와이어 그대로 — 하위 호환)
+              payload: room ? { name, room } : { name },
+            })
           }
           onFillBots={() => sendMessage({ type: 'mt_fill_bots', payload: {} })}
           onBack={onBack}

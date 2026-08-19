@@ -93,8 +93,12 @@ export function SkyfallApp({ onBack }: SkyfallAppProps) {
           game={game}
           toasts={toasts}
           hasJoined={hasJoined}
-          onJoin={(name) =>
-            sendMessage({ type: 'sf_join_game', payload: { name } })
+          onJoin={(name, room) =>
+            sendMessage({
+              type: 'sf_join_game',
+              // room 생략 = 공용 로비 (기존 와이어 그대로 — 하위 호환)
+              payload: room ? { name, room } : { name },
+            })
           }
           onStart={() => sendMessage({ type: 'sf_start', payload: {} })}
           onFillBots={() => sendMessage({ type: 'sf_fill_bots', payload: {} })}

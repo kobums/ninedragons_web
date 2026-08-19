@@ -1,0 +1,169 @@
+/* 방 코드·초대 링크 공통 컨트롤 — 톤 변수로 크림/다크 대기실 모두 대응.
+   기본(라이트)은 tokens.css 의 크림 카드 토큰, .rc-dark 는 다크 셸의
+   반투명 화이트 톤 (mt/sf/sp 대기실과 동일한 계열). */
+
+.rc-controls,
+.rc-room-line {
+  --rc-line: var(--color-hairline);
+  --rc-text: var(--color-body);
+  --rc-muted: var(--color-muted);
+  --rc-ink: var(--color-ink);
+  --rc-field-bg: var(--color-canvas);
+  --rc-chip-bg: var(--color-surface-soft);
+  --rc-active-bg: var(--color-primary);
+  --rc-active-text: var(--color-on-primary);
+}
+
+.rc-dark {
+  --rc-line: rgba(255, 255, 255, 0.18);
+  --rc-text: rgba(255, 255, 255, 0.78);
+  --rc-muted: rgba(255, 255, 255, 0.55);
+  --rc-ink: var(--color-on-dark);
+  --rc-field-bg: rgba(0, 0, 0, 0.25);
+  --rc-chip-bg: rgba(255, 255, 255, 0.08);
+  --rc-active-bg: var(--color-primary);
+  --rc-active-text: var(--color-on-primary);
+}
+
+/* ---------- 입장 폼: 세그먼트 + 코드 입력 ---------- */
+
+.rc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  min-width: 0;
+}
+
+.rc-invite-note {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px dashed var(--rc-line);
+  background: var(--rc-chip-bg);
+  color: var(--rc-text);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.rc-invite-code {
+  color: var(--rc-ink);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.rc-segment {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--rc-line);
+  border-radius: 10px;
+  background: var(--rc-field-bg);
+}
+
+.rc-segment-option {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 2px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--rc-muted);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.rc-segment-option.active {
+  background: var(--rc-active-bg);
+  color: var(--rc-active-text);
+  font-weight: 700;
+}
+
+.rc-code-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--rc-line);
+  background: var(--rc-field-bg);
+  color: var(--rc-ink);
+  font-size: 18px;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.35em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rc-code-input::placeholder {
+  color: var(--rc-muted);
+  font-weight: 400;
+}
+
+.rc-hint {
+  margin: 0;
+  color: var(--rc-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ---------- 대기실: 방 코드 뱃지 + 초대 링크 복사 ---------- */
+
+.rc-room-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.rc-room-badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--rc-line);
+  background: var(--rc-chip-bg);
+  color: var(--rc-text);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rc-room-code {
+  color: var(--rc-ink);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.rc-copy-button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--rc-line);
+  background: transparent;
+  color: var(--rc-text);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.rc-copy-button.copied {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+/* 초소형 화면(280px)에서도 세그먼트 3칸이 한 줄에 들어가게 */
+@media (max-width: 340px) {
+  .rc-segment-option {
+    font-size: 11px;
+    padding: 8px 0;
+  }
+}

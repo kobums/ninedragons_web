@@ -76,6 +76,8 @@ export interface DVLobbyState {
   hostSeat: number;
   players: DVLobbyPlayer[];
   canStart: boolean;
+  // 사설 방 코드 (공용 로비는 '' 또는 생략 — 구버전 서버 호환)
+  roomCode?: string;
 }
 
 export interface DVGameState {
@@ -90,6 +92,8 @@ export interface DVGameState {
   yourPendingJokers?: DVTileView[];
   drawnTile?: DVTileView;
   players: DVPlayerView[];
+  // 사설 방 코드 (공용 로비는 '' 또는 생략 — 재접속 복원용)
+  roomCode?: string;
 }
 
 export interface DVEvent {

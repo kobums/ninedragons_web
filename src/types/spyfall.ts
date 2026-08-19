@@ -84,6 +84,8 @@ export interface SPGameState {
   players: SPPlayerView[];
   votes?: SPVoteEntry[] | null;
   result?: SPResult | null;
+  // 사설 방 코드 (공용 로비는 '' 또는 생략 — 구버전 서버 호환)
+  roomCode?: string;
 }
 
 export type SPEventKind =

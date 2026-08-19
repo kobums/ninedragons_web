@@ -98,6 +98,8 @@ export interface SFGameState {
   votes?: SFVoteEntry[] | null;
   execution?: SFExecution | null;
   winner: SFWinner;
+  // 사설 방 코드 (공용 로비는 '' 또는 생략 — 구버전 서버 호환)
+  roomCode?: string;
 }
 
 export type SFEventKind =

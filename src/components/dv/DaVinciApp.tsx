@@ -88,8 +88,12 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
       ) : (
         <DVLobby
           lobby={lobby}
-          onJoin={(playerName) =>
-            sendMessage({ type: 'dv_join_lobby', payload: { playerName } })
+          onJoin={(playerName, room) =>
+            sendMessage({
+              type: 'dv_join_lobby',
+              // room 생략 = 공용 로비 (기존 와이어 그대로 — 하위 호환)
+              payload: room ? { playerName, room } : { playerName },
+            })
           }
           onStart={() => sendMessage({ type: 'dv_start_game' })}
           onLeave={() => {

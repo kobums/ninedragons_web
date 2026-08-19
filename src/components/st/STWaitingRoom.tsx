@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { STMode } from '../../types/schottentotten';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './STWaitingRoom.css';
 
 interface STWaitingRoomProps {
@@ -9,12 +10,13 @@ interface STWaitingRoomProps {
 }
 
 export function STWaitingRoom({ hasJoined, onJoinGame, onBack }: STWaitingRoomProps) {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(loadNickname);
   const [mode, setMode] = useState<STMode>('basic');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (playerName.trim()) {
+      saveNickname(playerName);
       onJoinGame(playerName.trim(), mode);
     }
   };

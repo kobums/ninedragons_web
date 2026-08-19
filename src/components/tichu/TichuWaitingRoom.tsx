@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { TichuGameState, TichuPlayer } from '../../types/tichu';
 import type { TichuToast } from '../../hooks/useTichuGameState';
+import { RoomCodeBadge, RoomJoinControls, useRoomJoin } from '../RoomCodeControls';
+import { loadNickname, saveNickname } from '../../utils/nickname';
 import './TichuWaitingRoom.css';
 
 const SEATS = [0, 1, 2, 3];
@@ -10,7 +12,7 @@ interface TichuWaitingRoomProps {
   game: TichuGameState | null;
   toasts?: TichuToast[];
   hasJoined: boolean;
-  onJoin: (name: string) => void;
+  onJoin: (name: string, room: string) => void;
   onSetTarget: (target: 500 | 1000) => void;
   onFillBots: () => void;
   onBack: () => void;
@@ -25,15 +27,17 @@ export function TichuWaitingRoom({
   onFillBots,
   onBack,
 }: TichuWaitingRoomProps) {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(loadNickname);
   // 연타로 join 이 두 번 나가는 것을 막는다 (서버 가드와 이중 방어)
   const [joining, setJoining] = useState(false);
+  const roomJoin = useRoomJoin();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (joining || !playerName.trim()) return;
+    if (joining || !playerName.trim() || !roomJoin.roomReady) return;
     setJoining(true);
-    onJoin(playerName.trim());
+    saveNickname(playerName);
+    onJoin(playerName.trim(), roomJoin.room);
     // 응답이 늦거나 실패해도 다시 시도할 수 있게 잠깐만 잠근다
     setTimeout(() => setJoining(false), 2000);
   };
@@ -76,7 +80,12 @@ export function TichuWaitingRoom({
                 required
               />
             </div>
-            <button type="submit" className="tc-primary-button" disabled={joining}>
+            <RoomJoinControls join={roomJoin} idPrefix="tc" />
+            <button
+              type="submit"
+              className="tc-primary-button"
+              disabled={joining || !roomJoin.roomReady}
+            >
               {joining ? '입장 중...' : '입장하기'}
             </button>
             <button type="button" className="tc-ghost-button" onClick={onBack}>
@@ -85,6 +94,7 @@ export function TichuWaitingRoom({
           </form>
         ) : (
           <div className="tc-waiting-body">
+            <RoomCodeBadge code={game?.roomCode} />
             <ul className="tc-seat-list">
               {SEATS.map((seat) => {
                 const p = seatPlayer(seat);
