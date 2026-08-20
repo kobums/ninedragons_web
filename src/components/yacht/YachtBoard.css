@@ -1,0 +1,481 @@
+/* 요트 다이스 보드 — 크림 캔버스 (tokens.css 토큰만 사용).
+   페이지 가로 스크롤 금지 — 280px 에서는 점수표만 자체 overflow-x 스크롤.
+   터치 타깃 44px 이상. */
+
+.yt-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 120px;
+  max-width: 640px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  overflow-x: hidden;
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.yt-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.yt-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.yt-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.yt-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.yt-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.yt-deadline.urgent {
+  color: var(--color-error);
+}
+
+.yt-phase-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.yt-last-action {
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 주사위 패널 ---------- */
+
+.yt-dice-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.yt-dice-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* 주사위 한 개 — 눈금은 3×3 그리드의 CSS 도트 */
+.yt-die {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 2px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--card-face);
+  box-shadow: var(--shadow-subtle);
+  flex-shrink: 0;
+}
+
+.yt-die.clickable {
+  cursor: pointer;
+}
+
+/* 홀드 토글 — 선택 테두리 + 살짝 가라앉는 결 */
+.yt-die.held {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  transform: translateY(3px);
+}
+
+.yt-die-face {
+  position: absolute;
+  inset: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.yt-pip-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yt-pip-cell.on::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  background: var(--color-ink);
+}
+
+.yt-die.held .yt-pip-cell.on::before {
+  background: var(--color-primary-active);
+}
+
+.yt-die-hold-tag {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+/* 굴림 애니메이션 — CSS 셰이크 (홀드 안 된 주사위만) */
+@keyframes yt-shake {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(-2px, -3px) rotate(-8deg);
+  }
+  40% {
+    transform: translate(3px, 1px) rotate(6deg);
+  }
+  60% {
+    transform: translate(-3px, 2px) rotate(-5deg);
+  }
+  80% {
+    transform: translate(2px, -2px) rotate(4deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+.yt-die.rolling {
+  animation: yt-shake 0.55s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yt-die.rolling {
+    animation: none;
+  }
+}
+
+.yt-roll-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.yt-roll-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+.yt-roll-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.yt-roll-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.yt-roll-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.yt-spectator-note {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+/* ---------- 점수표 ---------- */
+
+/* 좁은 화면에서는 표만 자체 가로 스크롤 — 페이지는 절대 안 밀린다 */
+.yt-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+}
+
+.yt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  min-width: 100%;
+}
+
+.yt-table th,
+.yt-table td {
+  border-bottom: 1px solid var(--color-hairline-soft);
+  padding: 7px 8px;
+}
+
+.yt-table tbody tr:last-child th,
+.yt-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 족보 열 — 가로 스크롤 시 왼쪽 고정 */
+.yt-col-cat {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--color-surface-card);
+  text-align: left;
+  min-width: 108px;
+  max-width: 150px;
+  box-shadow: inset -1px 0 0 var(--color-hairline-soft);
+}
+
+.yt-col-head {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  font-weight: 600;
+}
+
+.yt-cat-label {
+  display: block;
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: var(--text-caption);
+  line-height: 1.25;
+}
+
+.yt-cat-hint {
+  display: block;
+  color: var(--color-muted-soft);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+/* 플레이어 열 헤더 */
+.yt-col-player {
+  text-align: center;
+  min-width: 64px;
+  vertical-align: bottom;
+}
+
+.yt-player-name {
+  display: block;
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-caption);
+  max-width: 96px;
+  margin: 0 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yt-turn-mark {
+  color: var(--color-primary);
+  margin-right: 2px;
+}
+
+.yt-player-tags {
+  display: block;
+  color: var(--color-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* 점수 셀 */
+.yt-cell {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 현재 차례 플레이어 열 강조 */
+.yt-cell.current,
+.yt-col-player.current {
+  background: var(--color-primary-tint);
+}
+
+.yt-cell-empty {
+  color: var(--color-muted-soft);
+}
+
+.yt-cell-score {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.yt-cell-score.zero {
+  color: var(--color-muted-soft);
+  font-weight: 400;
+}
+
+.yt-cell-score.bonus {
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.yt-bonus-progress {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.yt-bonus-row th,
+.yt-bonus-row td {
+  background: var(--color-surface-soft);
+}
+
+.yt-bonus-row .yt-col-cat {
+  background: var(--color-surface-soft);
+}
+
+.yt-bonus-row .yt-cell.current {
+  background: var(--color-primary-tint);
+}
+
+/* 내 차례 기록 가능 칸 — 예상 점수 미리보기, 탭으로 기록 */
+.yt-cell.scorable {
+  padding: 2px;
+}
+
+.yt-score-button {
+  width: 100%;
+  min-height: 34px;
+  border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.yt-score-button:active {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* 합계 행 */
+.yt-total-row th,
+.yt-total-row td {
+  border-top: 2px solid var(--color-hairline);
+  background: var(--color-surface-cream-strong);
+}
+
+.yt-total-row .yt-col-cat {
+  background: var(--color-surface-cream-strong);
+}
+
+.yt-total-row .yt-cell.current {
+  background: var(--color-primary-tint);
+}
+
+.yt-cell-total {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+/* ---------- 축소 화면 ---------- */
+
+@media (max-width: 400px) {
+  .yt-die {
+    width: 46px;
+    height: 46px;
+  }
+
+  .yt-dice-row {
+    gap: 7px;
+  }
+}
+
+@media (max-width: 320px) {
+  .yt-board {
+    padding: var(--space-sm) var(--space-xs) 120px;
+  }
+
+  /* 주사위 행 축소 — 5개가 한 줄에 들어가게 */
+  .yt-die {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+  }
+
+  .yt-die-face {
+    inset: 5px;
+  }
+
+  .yt-pip-cell.on::before {
+    width: 7px;
+    height: 7px;
+  }
+
+  .yt-dice-row {
+    gap: 6px;
+  }
+
+  .yt-dice-panel {
+    padding: var(--space-sm) var(--space-xs);
+  }
+
+  .yt-col-cat {
+    min-width: 92px;
+  }
+}
