@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 interface ReconnectingWebSocketOptions {
   /** 연결(재연결 포함)될 때마다 호출. isReconnect가 true면 끊겼다 다시 붙은 경우 */
@@ -114,7 +115,10 @@ export const useReconnectingWebSocket = <T,>(
           drainingRef.current = false;
           return;
         }
-        setLastMessage(next);
+        // React 18 은 연속 setState 를 렌더 한 번으로 병합한다. 같은 프레임에
+        // 묶여 온 메시지들이 병합되면 중간 메시지를 effect 가 못 보고 유실되므로
+        // (예: player_joined + waiting_player), 메시지마다 렌더를 강제한다.
+        flushSync(() => setLastMessage(next));
         setTimeout(step, 0);
       };
       step();
