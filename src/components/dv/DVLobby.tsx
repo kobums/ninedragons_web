@@ -10,11 +10,12 @@ interface DVLobbyProps {
   lobby: DVLobbyState | null;
   onJoin: (playerName: string, room: string) => void;
   onStart: () => void;
+  onFillBots: () => void;
   onLeave: () => void;
   onBack: () => void;
 }
 
-export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProps) {
+export function DVLobby({ lobby, onJoin, onStart, onFillBots, onLeave, onBack }: DVLobbyProps) {
   const [playerName, setPlayerName] = useState(loadNickname);
   // 연타로 join 이 두 번 나가는 것을 막는다. 서버에도 가드가 있지만
   // 버튼을 잠가 두 번째 클릭 자체가 나가지 않게 한다.
@@ -89,14 +90,25 @@ export function DVLobby({ lobby, onJoin, onStart, onLeave, onBack }: DVLobbyProp
             </p>
 
             {lobby.yourSeat === lobby.hostSeat ? (
-              <button
-                type="button"
-                className="dv-primary-button"
-                onClick={onStart}
-                disabled={!lobby.canStart}
-              >
-                {lobby.canStart ? '게임 시작' : '2명 이상 모여야 합니다'}
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="dv-primary-button"
+                  onClick={onStart}
+                  disabled={!lobby.canStart}
+                >
+                  {lobby.canStart ? '게임 시작' : '2명 이상 모여야 합니다'}
+                </button>
+                {lobby.players.length < MAX_PLAYERS && (
+                  <button
+                    type="button"
+                    className="dv-ghost-button"
+                    onClick={onFillBots}
+                  >
+                    🤖 봇으로 채우고 시작
+                  </button>
+                )}
+              </>
             ) : (
               <p className="dv-lobby-hint">
                 👑 {lobby.players.find((p) => p.seat === lobby.hostSeat)?.name ?? '호스트'}

@@ -119,6 +119,7 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
             })
           }
           onStart={() => sendMessage({ type: 'dv_start_game' })}
+          onFillBots={() => sendMessage({ type: 'dv_fill_bots' })}
           onLeave={() => {
             sendMessage({ type: 'dv_leave_lobby' });
             reset();

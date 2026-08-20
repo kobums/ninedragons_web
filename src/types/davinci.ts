@@ -17,6 +17,7 @@ export type DVMessageType =
   // 클라 → 서버
   | 'dv_join_lobby'
   | 'dv_leave_lobby'
+  | 'dv_fill_bots'
   | 'dv_start_game'
   | 'dv_rejoin_game'
   | 'dv_place_joker'
