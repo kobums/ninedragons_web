@@ -1,0 +1,610 @@
+/* 코드네임 보드 — 첩보 차콜 위 5×5 상아빛 단어 카드.
+   공개 시 팀 색으로 뒤집힘(3D 플립), 스파이마스터는 키 카드 테두리.
+   280px에서도 5열 유지 — 폰트 축소 + 말줄임 (열 수 전환 금지).
+   cn 스코프 변수는 CodenamesApp.css 의 .cn-app 에서 내려온다. */
+
+.cn-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--cn-dark-elevated) 0%,
+    var(--cn-dark) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 96px; /* 하단 확정 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.cn-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.cn-phase-banner.red {
+  background: var(--cn-red-tint);
+  border: 1px solid var(--cn-red);
+}
+
+.cn-phase-banner.blue {
+  background: var(--cn-blue-tint);
+  border: 1px solid var(--cn-blue);
+}
+
+.cn-phase-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+}
+
+.cn-deadline {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cn-fog);
+}
+
+.cn-deadline.urgent {
+  color: var(--cn-red);
+  animation: cn-deadline-pulse 1s ease-in-out infinite;
+}
+
+@keyframes cn-deadline-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.cn-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--cn-fog);
+}
+
+/* ---------- 남은 단어 배지 ---------- */
+
+.cn-score-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  max-width: 560px;
+}
+
+.cn-left-badge {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.cn-left-badge.red {
+  background: var(--cn-red-tint);
+  border: 1px solid var(--cn-red);
+  color: var(--cn-red);
+}
+
+.cn-left-badge.blue {
+  background: var(--cn-blue-tint);
+  border: 1px solid var(--cn-blue);
+  color: var(--cn-blue);
+}
+
+.cn-me-badge {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--cn-fog);
+}
+
+.cn-me-badge.red {
+  color: var(--cn-red);
+  border-color: var(--cn-red);
+}
+
+.cn-me-badge.blue {
+  color: var(--cn-blue);
+  border-color: var(--cn-blue);
+}
+
+/* ---------- 현재 힌트 ---------- */
+
+.cn-clue-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cn-clue-card.red {
+  border-color: var(--cn-red);
+}
+
+.cn-clue-card.blue {
+  border-color: var(--cn-blue);
+}
+
+.cn-clue-label {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--cn-fog);
+}
+
+.cn-clue-word {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  color: var(--color-on-dark);
+}
+
+.cn-clue-remaining {
+  font-size: var(--text-caption);
+  color: var(--cn-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 스파이마스터 힌트 입력 ---------- */
+
+.cn-clue-form {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cn-clue-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+.cn-clue-counts {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.cn-count-chip {
+  min-width: 0;
+  padding: 8px 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.cn-count-chip.selected {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* ---------- 5×5 단어 카드 그리드 ---------- */
+
+.cn-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.cn-card {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 5 / 4;
+  min-height: 42px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  perspective: 480px;
+  cursor: default;
+}
+
+.cn-card.clickable {
+  cursor: pointer;
+}
+
+/* 3D 플립 몸통 */
+.cn-card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0.1, 0.2, 1);
+}
+
+.cn-card.revealed .cn-card-inner {
+  transform: rotateY(180deg);
+}
+
+.cn-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  backface-visibility: hidden;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 앞면 — 미공개 상아빛 종이 카드 */
+.cn-card-face.front {
+  background: var(--cn-card-face);
+  border: 2px solid var(--cn-card-edge);
+  color: var(--color-ink);
+}
+
+/* 뒷면 — 공개된 팀 색 (회전된 채 대기) */
+.cn-card-face.back {
+  transform: rotateY(180deg);
+  color: var(--color-on-dark);
+  border: 2px solid transparent;
+}
+
+.cn-card.revealed.red .cn-card-face.back {
+  background: var(--cn-red-deep);
+}
+
+.cn-card.revealed.blue .cn-card-face.back {
+  background: var(--cn-blue-deep);
+}
+
+.cn-card.revealed.neutral .cn-card-face.back {
+  background: var(--cn-neutral);
+  color: var(--color-ink);
+}
+
+.cn-card.revealed.assassin .cn-card-face.back {
+  background: var(--cn-assassin);
+  border-color: var(--cn-red);
+}
+
+/* 공개된 카드는 그리드에서 살짝 가라앉는다 */
+.cn-card.revealed {
+  opacity: 0.85;
+}
+
+/* 단어 — 280px에서도 5열 유지: 폰트 축소 + 말줄임 */
+.cn-card-word {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(9px, 3.2vw, 15px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+@media (min-width: 561px) {
+  /* 그리드 상한(560px)에 도달하면 vw 대신 고정 크기 */
+  .cn-card-word {
+    font-size: 15px;
+  }
+}
+
+/* 요원 지목 선택 상태 */
+.cn-card.selected .cn-card-face.front {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+/* ---------- 스파이마스터 키 카드 오버레이 (미공개 카드 테두리) ---------- */
+
+.cn-card.key-red .cn-card-face.front {
+  border-color: var(--cn-red);
+  box-shadow: inset 0 0 0 1px var(--cn-red);
+}
+
+.cn-card.key-blue .cn-card-face.front {
+  border-color: var(--cn-blue);
+  box-shadow: inset 0 0 0 1px var(--cn-blue);
+}
+
+.cn-card.key-neutral .cn-card-face.front {
+  border-style: dashed;
+  border-color: var(--cn-neutral);
+}
+
+.cn-card.key-assassin .cn-card-face.front {
+  border-color: var(--cn-assassin);
+  box-shadow: inset 0 0 0 2px var(--cn-assassin);
+}
+
+/* 선택 상태가 키 테두리보다 우선한다 */
+.cn-card.selected.key-red .cn-card-face.front,
+.cn-card.selected.key-blue .cn-card-face.front,
+.cn-card.selected.key-neutral .cn-card-face.front,
+.cn-card.selected.key-assassin .cn-card-face.front {
+  border-color: var(--color-primary);
+  border-style: solid;
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+/* 암살자 경고 마크 (스파이마스터 전용, 카드 우상단) */
+.cn-key-mark {
+  position: absolute;
+  top: 1px;
+  right: 4px;
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+/* ---------- 요원 확정 바 ---------- */
+
+.cn-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 800;
+  width: min(92vw, 560px);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--cn-dark-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-modal);
+  animation: cn-toast-in 0.2s ease;
+}
+
+.cn-confirm-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.cn-confirm-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cn-confirm-button {
+  padding: 9px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cn-confirm-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cn-confirm-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--cn-fog);
+  cursor: not-allowed;
+}
+
+.cn-cancel-button {
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--cn-fog);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+/* ---------- "그만" (턴 종료) ---------- */
+
+.cn-endturn-button {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cn-endturn-button:disabled {
+  color: var(--cn-fog);
+  cursor: not-allowed;
+}
+
+.cn-spectator-note {
+  margin: 0;
+  color: var(--cn-fog);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 힌트 히스토리 ---------- */
+
+.cn-history {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cn-history-title {
+  margin: 0 0 8px;
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--cn-fog);
+}
+
+.cn-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cn-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+}
+
+.cn-history-item.red {
+  background: var(--cn-red-tint);
+}
+
+.cn-history-item.blue {
+  background: var(--cn-blue-tint);
+}
+
+.cn-history-team {
+  color: var(--cn-fog);
+  flex-shrink: 0;
+}
+
+.cn-history-clue {
+  font-weight: 700;
+  color: var(--color-on-dark);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- 팀 명단 ---------- */
+
+.cn-roster {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cn-roster-team {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--text-caption);
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+}
+
+.cn-roster-team.red {
+  background: var(--cn-red-tint);
+}
+
+.cn-roster-team.blue {
+  background: var(--cn-blue-tint);
+}
+
+.cn-roster-title {
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.cn-roster-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  color: var(--color-on-dark);
+}
+
+.cn-roster-name.off {
+  color: var(--cn-fog);
+  text-decoration: line-through;
+}
+
+/* ---------- 초소형 화면 (280px) ---------- */
+
+@media (max-width: 340px) {
+  .cn-board {
+    padding: var(--space-xs);
+    padding-bottom: 88px;
+  }
+
+  .cn-grid {
+    gap: 3px;
+  }
+
+  .cn-card {
+    min-height: 36px;
+  }
+
+  .cn-card-face {
+    padding: 1px 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .cn-clue-counts {
+    gap: 2px;
+  }
+}

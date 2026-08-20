@@ -1,0 +1,209 @@
+/* 코드네임 대기실 — 첩보 차콜 다크 셸 + 적/청 팀 미리보기.
+   cn 스코프 변수는 CodenamesApp.css 의 .cn-app 에서 내려온다. */
+
+.cn-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--cn-dark-elevated) 0%,
+    var(--cn-dark) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.cn-waiting-container {
+  width: 100%;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+}
+
+.cn-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+}
+
+.cn-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--cn-fog);
+  font-size: var(--text-body-sm);
+}
+
+.cn-join-form,
+.cn-lobby {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cn-form-group {
+  text-align: left;
+}
+
+.cn-form-group label {
+  display: block;
+  color: var(--cn-fog);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.cn-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+/* ---------- 팀·역할 미리보기 ---------- */
+
+.cn-team-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+
+.cn-team-panel {
+  border-radius: var(--radius-lg);
+  padding: 10px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cn-team-panel.red {
+  background: var(--cn-red-tint);
+  border-color: var(--cn-red);
+}
+
+.cn-team-panel.blue {
+  background: var(--cn-blue-tint);
+  border-color: var(--cn-blue);
+}
+
+.cn-team-panel-title {
+  margin: 0 0 8px;
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  color: var(--color-on-dark);
+}
+
+.cn-team-empty {
+  margin: 0;
+  color: var(--cn-fog);
+  font-size: var(--text-caption);
+}
+
+.cn-team-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.cn-team-member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-caption);
+}
+
+.cn-member-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cn-member-side {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cn-crown {
+  font-size: var(--text-caption);
+}
+
+.cn-role-chip {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--cn-fog);
+}
+
+.cn-role-chip.spymaster {
+  font-weight: 700;
+  color: var(--color-on-dark);
+}
+
+.cn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.cn-dot.on {
+  background: var(--color-success);
+}
+
+.cn-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.cn-preview-note {
+  margin: 0;
+  color: var(--cn-fog);
+  font-size: var(--text-caption);
+}
+
+.cn-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cn-waiting-hint {
+  margin: 0;
+  color: var(--cn-fog);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 400px) {
+  .cn-waiting {
+    padding: var(--space-sm);
+  }
+
+  .cn-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  /* 좁은 화면에서는 팀 패널을 위아래로 */
+  .cn-team-preview {
+    grid-template-columns: 1fr;
+  }
+}

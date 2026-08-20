@@ -1,0 +1,103 @@
+/* 코드네임 셸 — 첩보 차콜 다크 + 적/청 팀.
+   tokens.css 의 기존 토큰만 참조한다 (신규 hex 금지 — DESIGN.md).
+   팀 색은 --color-error(team-red)/team-blue 계열의 다크 배경 밝힘 변주를
+   cn 스코프 변수로 격리해 쓴다. CTA·라이트 서피스에는 쓰지 않는다. */
+
+.cn-app {
+  /* 배경 — 첩보 차콜 (코드네임도 첩보 소재라 spyfall 무드 셸을 공유) */
+  --cn-dark: var(--sp-dark);
+  --cn-dark-elevated: var(--sp-dark-elevated);
+  --cn-dark-soft: var(--sp-dark-soft);
+  --cn-fog: var(--sp-fog);
+
+  /* 적팀 — --color-error(team-red) 계열 다크 밝힘 */
+  --cn-red: var(--sf-mafia);
+  --cn-red-tint: var(--sf-mafia-tint);
+  --cn-red-deep: var(--color-team-red-strong);
+
+  /* 청팀 — team-blue 계열 다크 밝힘 */
+  --cn-blue: var(--sf-police);
+  --cn-blue-tint: var(--sf-police-tint);
+  --cn-blue-deep: var(--color-team-blue-strong);
+
+  /* 중립·암살자 */
+  --cn-neutral: var(--color-muted-soft);
+  --cn-assassin: var(--color-ink);
+
+  /* 미공개 단어 카드 몸통 — 상아빛 종이 결 (트럼프 카드 공통 토큰 재사용) */
+  --cn-card-face: var(--card-face);
+  --cn-card-edge: var(--card-face-edge);
+}
+
+/* ---------- 공용 버튼 (대기실·보드·종료 공유) ---------- */
+
+.cn-primary-button {
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cn-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cn-primary-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--cn-fog);
+  cursor: not-allowed;
+}
+
+.cn-ghost-button {
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--cn-fog);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+/* ---------- 공용 토스트 ---------- */
+
+.cn-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.cn-toast {
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: cn-toast-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes cn-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

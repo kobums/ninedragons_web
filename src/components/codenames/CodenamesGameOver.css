@@ -1,0 +1,174 @@
+/* 코드네임 종료 화면 — 승리 팀 색 + 최종 보드 미니어처.
+   cn 스코프 변수는 CodenamesApp.css 의 .cn-app 에서 내려온다. */
+
+.cn-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--cn-dark-elevated) 0%,
+    var(--cn-dark) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.cn-over-container {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+}
+
+.cn-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.cn-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+}
+
+.cn-over-title.red {
+  color: var(--cn-red);
+}
+
+.cn-over-title.blue {
+  color: var(--cn-blue);
+}
+
+.cn-over-sub {
+  margin: 0;
+  color: var(--cn-fog);
+  font-size: var(--text-body-sm);
+}
+
+.cn-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 800;
+}
+
+.cn-over-verdict.win {
+  color: var(--color-success);
+}
+
+.cn-over-verdict.lose {
+  color: var(--cn-fog);
+}
+
+/* ---------- 최종 보드 미니어처 (280px에서도 5열 유지) ---------- */
+
+.cn-over-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.cn-over-cell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 6px 2px;
+  border-radius: var(--radius-xs);
+  font-size: clamp(8px, 2.4vw, 11px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cn-over-cell.red {
+  background: var(--cn-red-deep);
+  color: var(--color-on-dark);
+}
+
+.cn-over-cell.blue {
+  background: var(--cn-blue-deep);
+  color: var(--color-on-dark);
+}
+
+.cn-over-cell.neutral {
+  background: var(--cn-neutral);
+  color: var(--color-ink);
+}
+
+.cn-over-cell.assassin {
+  background: var(--cn-assassin);
+  color: var(--color-on-dark);
+  border: 1px solid var(--cn-red);
+}
+
+/* 종료 스냅샷에 색이 없는(미공개) 칸 — 상아빛 종이 그대로 */
+.cn-over-cell.hidden {
+  background: var(--cn-card-face);
+  color: var(--color-muted);
+}
+
+/* ---------- 팀 명단 ---------- */
+
+.cn-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cn-over-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.cn-over-row.red {
+  background: var(--cn-red-tint);
+}
+
+.cn-over-row.blue {
+  background: var(--cn-blue-tint);
+}
+
+.cn-over-row.winner {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.cn-over-team {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.cn-over-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  font-size: var(--text-caption);
+  color: var(--cn-fog);
+}
+
+@media (max-width: 400px) {
+  .cn-game-over {
+    padding: var(--space-sm);
+  }
+
+  .cn-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
