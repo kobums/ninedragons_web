@@ -7,6 +7,7 @@ import { WaitingRoom } from './WaitingRoom';
 import { GameBoard } from './GameBoard';
 import { GameOver } from './GameOver';
 import { ConnectionBanner } from './ConnectionBanner';
+import { ErrorToast } from './ErrorToast';
 import { ConnectingScreen } from './ConnectingScreen';
 import { GameInfoButton } from './GameInfoButton';
 import type { Message, PlayerColor } from '../types/game';
@@ -28,7 +29,7 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
       }
     },
   });
-  const { gameState, playTile, resetGame, isMyTurn } =
+  const { gameState, playTile, resetGame, isMyTurn, clearError } =
     useGameState(lastMessage);
 
   useEffect(() => {
@@ -72,11 +73,6 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
     onBack();
   };
 
-  useEffect(() => {
-    if (gameState.error) {
-      alert(gameState.error);
-    }
-  }, [gameState.error]);
 
   // 게임 시작 전에만 전체 화면 연결 대기 표시
   // 게임 중 끊김은 화면을 유지한 채 배너로 알리고 자동 재접속을 기다린다
@@ -97,6 +93,7 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
         opponentDisconnected={gameState.opponentDisconnected}
         isGameActive={gameState.isGameStarted && !gameState.isGameOver}
       />
+      <ErrorToast error={gameState.error} onClear={clearError} />
       <GameInfoButton game="ninedragons" />
 
       {!gameState.isGameStarted && (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type {
   GameState,
   Message,
@@ -320,5 +320,10 @@ export const useGameState = (lastMessage: Message | null) => {
     );
   };
 
-  return { gameState, playTile, resetGame, isMyTurn };
+  // 에러 토스트 해제용 — alert 대체 (ErrorToast)
+  const clearError = useCallback(() => {
+    setGameState((prev) => ({ ...prev, error: null }));
+  }, []);
+
+  return { gameState, playTile, resetGame, isMyTurn, clearError };
 };

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useReconnectingWebSocket } from '../../hooks/useReconnectingWebSocket';
 import { GAMES } from '../../config/games';
 import { buildWsUrl } from '../../utils/ws';
@@ -7,6 +6,7 @@ import { JHWaitingRoom } from './JHWaitingRoom';
 import { JHGameBoard } from './JHGameBoard';
 import { JHGameOver } from './JHGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { ErrorToast } from '../ErrorToast';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
 import type { JHMessage } from '../../types/jekyllhyde';
@@ -41,12 +41,6 @@ export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
     reset,
   } = useJHGameState(lastMessage);
 
-  useEffect(() => {
-    if (error) {
-      alert(error);
-      clearError();
-    }
-  }, [error, clearError]);
 
   const handlePlayAgain = () => {
     reset();
@@ -65,6 +59,7 @@ export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
         opponentDisconnected={opponentDisconnected}
         isGameActive={Boolean(game) && !gameOver}
       />
+      <ErrorToast error={error} onClear={clearError} />
       <GameInfoButton game="jekyllhyde" />
 
       {gameOver ? (

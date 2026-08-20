@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useReconnectingWebSocket } from '../../hooks/useReconnectingWebSocket';
 import { GAMES } from '../../config/games';
 import { buildWsUrl } from '../../utils/ws';
@@ -7,6 +6,7 @@ import { STWaitingRoom } from './STWaitingRoom';
 import { STGameBoard } from './STGameBoard';
 import { STGameOver } from './STGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { ErrorToast } from '../ErrorToast';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
 import type { STMessage } from '../../types/schottentotten';
@@ -41,12 +41,6 @@ export function SchottenTottenApp({ onBack }: SchottenTottenAppProps) {
     reset,
   } = useSTGameState(lastMessage);
 
-  useEffect(() => {
-    if (error) {
-      alert(error);
-      clearError();
-    }
-  }, [error, clearError]);
 
   const handlePlayAgain = () => {
     reset();
@@ -65,6 +59,7 @@ export function SchottenTottenApp({ onBack }: SchottenTottenAppProps) {
         opponentDisconnected={opponentDisconnected}
         isGameActive={Boolean(game) && !gameOver}
       />
+      <ErrorToast error={error} onClear={clearError} />
       <GameInfoButton game="schottentotten" />
 
       {gameOver ? (

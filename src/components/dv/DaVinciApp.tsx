@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useReconnectingWebSocket } from '../../hooks/useReconnectingWebSocket';
 import { GAMES } from '../../config/games';
 import { buildWsUrl } from '../../utils/ws';
@@ -7,6 +6,7 @@ import { DVLobby } from './DVLobby';
 import { DVGameBoard } from './DVGameBoard';
 import { DVGameOver } from './DVGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { ErrorToast } from '../ErrorToast';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
 import { ReactionBar } from '../ReactionBar';
@@ -43,12 +43,6 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
   // 리액션 팝 — 훅 토스트 경로와 별개로 dv_event 의 kind 'react' 만 감시
   const reactions = useReactions(lastMessage, 'dv_event');
 
-  useEffect(() => {
-    if (error) {
-      alert(error);
-      clearError();
-    }
-  }, [error, clearError]);
 
   const handlePlayAgain = () => {
     reset();
@@ -73,6 +67,7 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
         opponentDisconnected={someoneDisconnected}
         isGameActive={Boolean(game) && !gameOver}
       />
+      <ErrorToast error={error} onClear={clearError} />
       <GameInfoButton game="davinci" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}

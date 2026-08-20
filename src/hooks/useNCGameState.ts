@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type {
   NCGameState,
   NCMessage,
@@ -495,8 +495,14 @@ export const useNCGameState = (lastMessage: NCMessage | null) => {
     };
   };
 
+  // 에러 토스트 해제용 — alert 대체 (ErrorToast)
+  const clearError = useCallback(() => {
+    setGameState((prev) => ({ ...prev, error: null }));
+  }, []);
+
   return {
     gameState,
+    clearError,
     selectBlock,
     resetGame,
     isMyTurn,

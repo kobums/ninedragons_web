@@ -7,6 +7,7 @@ import { NCWaitingRoom } from './NCWaitingRoom';
 import { NCGameBoard } from './NCGameBoard';
 import { NCGameOver } from './NCGameOver';
 import { ConnectionBanner } from '../ConnectionBanner';
+import { ErrorToast } from '../ErrorToast';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
 import type { NCMessage, TeamColor } from '../../types/numberchange';
@@ -26,6 +27,7 @@ export function NumberChangeApp() {
   });
   const {
     gameState,
+    clearError,
     selectBlock,
     resetGame,
     canSubmit,
@@ -139,11 +141,6 @@ export function NumberChangeApp() {
     window.location.reload();
   };
 
-  useEffect(() => {
-    if (gameState.error) {
-      alert(gameState.error);
-    }
-  }, [gameState.error]);
 
   // 게임 시작 전에만 전체 화면 연결 대기 표시
   // 게임 중 끊김은 화면을 유지한 채 배너로 알리고 자동 재접속을 기다린다
@@ -164,6 +161,7 @@ export function NumberChangeApp() {
         opponentDisconnected={gameState.opponentDisconnected}
         isGameActive={gameState.isGameStarted && !gameState.isGameOver}
       />
+      <ErrorToast error={gameState.error} onClear={clearError} />
       <GameInfoButton game="numberchange" />
 
       {!gameState.isGameStarted && (
