@@ -1,0 +1,123 @@
+.omok-waiting-room {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: 24px;
+}
+
+.omok-waiting-room .omok-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.omok-waiting-room .omok-title {
+  margin: 0 0 4px;
+  font-size: 32px;
+  color: var(--color-ink);
+}
+
+.omok-waiting-room .omok-subtitle {
+  margin: 0 0 24px;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.omok-waiting-room .omok-join-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.omok-waiting-room .omok-form-group {
+  text-align: left;
+}
+
+.omok-waiting-room .omok-form-group label {
+  display: block;
+  color: var(--color-body);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.omok-waiting-room .omok-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: 16px;
+}
+
+.omok-waiting-room .omok-join-button {
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.omok-waiting-room .omok-join-button:disabled {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+.omok-waiting-room .omok-bot-button {
+  padding: 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: 10px;
+  background: var(--color-primary-tint);
+  color: var(--color-primary-active);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.omok-waiting-room .omok-bot-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.omok-waiting-room .omok-back-button {
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-body);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.omok-waiting-room .omok-waiting-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-body);
+}
+
+.omok-waiting-room .omok-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-hairline);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: omok-spin 0.9s linear infinite;
+}
+
+@keyframes omok-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

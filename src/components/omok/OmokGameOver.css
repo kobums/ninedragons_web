@@ -1,0 +1,91 @@
+.omok-game-over {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: 56px 12px 28px;
+  box-sizing: border-box;
+}
+
+/* 마지막 국면(승리 5목 하이라이트) + 결과 카드 세로 배치 */
+.omok-game-over .omok-over-layout {
+  width: 100%;
+  max-width: 440px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.omok-game-over .omok-over-container {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.omok-game-over .omok-over-title {
+  margin: 0;
+  font-size: 32px;
+  color: var(--color-ink);
+}
+
+.omok-game-over .omok-over-reason {
+  margin: 0;
+  color: var(--color-body);
+  font-size: 15px;
+}
+
+.omok-game-over .omok-rematch-offer {
+  margin: 0;
+  color: var(--color-primary-active);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.omok-game-over .omok-action-button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.omok-game-over .omok-action-button:disabled {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+/* 재대결 가능 시간 카운트다운 문구 */
+.omok-game-over .omok-rematch-countdown {
+  margin: -6px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.omok-game-over .omok-secondary-button {
+  padding: 11px 28px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-body);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+@media (max-width: 340px) {
+  .omok-game-over {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
