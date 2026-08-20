@@ -1,0 +1,691 @@
+/* 러브레터 보드 — 크림 캔버스 위 실물 카드 결 (tokens.css 토큰만 사용).
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상. */
+
+.lv-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 120px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.lv-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.lv-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.lv-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.lv-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lv-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.lv-deadline.urgent {
+  color: var(--color-error);
+}
+
+.lv-phase-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 테이블 중앙 — 덱·공개 제거 ---------- */
+
+.lv-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-xs) 0;
+  flex-wrap: wrap;
+}
+
+.lv-deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 덱 뒷면 — 러브레터 봉투 결의 프라이머리 틴트 카드 등 */
+.lv-deck-back {
+  width: 44px;
+  height: 62px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    170deg,
+    var(--color-primary) 0%,
+    var(--color-primary-active) 100%
+  );
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--text-title-md);
+  box-shadow: var(--shadow-subtle);
+}
+
+.lv-deck-label,
+.lv-removed-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+}
+
+.lv-removed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.lv-removed-cards {
+  display: flex;
+  gap: 4px;
+}
+
+/* ---------- 라운드 결과 ---------- */
+
+.lv-round-result {
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-ring);
+  color: var(--color-ink);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  text-align: center;
+  font-size: var(--text-body-sm);
+  animation: lv-pop-in 0.25s ease;
+}
+
+@keyframes lv-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 플레이어 타일 ---------- */
+
+.lv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-xs);
+}
+
+.lv-tile {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.lv-tile.current {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.lv-tile.out {
+  opacity: 0.55;
+}
+
+.lv-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lv-tile-name {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lv-tile-turn {
+  color: var(--color-primary);
+}
+
+.lv-tile-tokens {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.lv-tile-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.lv-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+}
+
+.lv-badge.shield {
+  background: var(--color-team-blue-tint);
+  color: var(--color-team-blue-strong);
+  border-color: var(--color-team-blue);
+}
+
+.lv-badge.out {
+  background: var(--color-team-red-tint);
+  color: var(--color-team-red-strong);
+  border-color: var(--color-team-red);
+}
+
+.lv-badge.off {
+  color: var(--color-muted-soft);
+}
+
+/* 버린 카드 열 — 카운팅 요소라 전원 공개, 넘치면 타일 안에서만 스크롤 */
+.lv-tile-discards {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+/* ---------- 미니 카드 (버린 카드·공개 제거) ---------- */
+
+.lv-mini-card {
+  flex-shrink: 0;
+  width: 30px;
+  height: 42px;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  user-select: none;
+}
+
+.lv-mini-value {
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.lv-mini-name {
+  font-size: 7px;
+  line-height: 1;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* ---------- 개인 결과 패널 (사제·남작) ---------- */
+
+.lv-private-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  font-size: var(--text-body-sm);
+  animation: lv-pop-in 0.25s ease;
+}
+
+.lv-private-icon {
+  font-size: var(--text-title-md);
+  flex-shrink: 0;
+}
+
+.lv-private-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lv-private-close {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-on-dark);
+  font-size: var(--text-title-md);
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* ---------- 내 손패 — 실물 캐릭터 카드 ---------- */
+
+.lv-hand-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-top: var(--space-xs);
+}
+
+.lv-hand-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.lv-hand {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.lv-spectator-note {
+  margin: var(--space-xs) 0 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* 카드 한 장 — 상아빛 종이 몸통 + 모서리 인덱스(우하단 180°) +
+   세리프 인물 이름 + 한 줄 효과 (tc-card 실물 결) */
+.lv-card {
+  position: relative;
+  width: clamp(104px, 34vw, 128px);
+  height: clamp(150px, 49vw, 184px);
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 3px solid currentColor;
+  font-family: var(--font-sans);
+  padding: 0;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.14),
+    0 2px 6px rgba(20, 20, 19, 0.1);
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.lv-card.clickable {
+  cursor: pointer;
+}
+
+.lv-card.clickable:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.lv-card.selected {
+  transform: translateY(-10px);
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 2px var(--color-primary-ring),
+    var(--shadow-subtle);
+}
+
+.lv-card-index {
+  position: absolute;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.lv-card-index.tl {
+  top: 8px;
+  left: 9px;
+}
+
+.lv-card-index.br {
+  bottom: 8px;
+  right: 9px;
+  transform: rotate(180deg);
+}
+
+.lv-card-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  pointer-events: none;
+  text-align: center;
+}
+
+.lv-card-name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  line-height: 1.1;
+}
+
+.lv-card-effect {
+  color: var(--color-body);
+  font-size: 11px;
+  line-height: 1.45;
+  word-break: keep-all;
+}
+
+/* 값별 잉크 색 — 크림 캔버스 위 식별용 저채도 토큰만 (CTA·서피스 금지) */
+.lv-card-v1 {
+  color: var(--st-clan-1);
+}
+.lv-card-v2 {
+  color: var(--st-clan-5);
+}
+.lv-card-v3 {
+  color: var(--st-clan-2);
+}
+.lv-card-v4 {
+  color: var(--st-clan-3);
+}
+.lv-card-v5 {
+  color: var(--st-clan-4);
+}
+.lv-card-v6 {
+  color: var(--tc-drg);
+}
+.lv-card-v7 {
+  color: var(--tc-phx);
+}
+.lv-card-v8 {
+  color: var(--color-primary);
+}
+
+/* ---------- 확인 바 (대상 없는 카드) ---------- */
+
+.lv-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 320;
+  width: min(94vw, 480px);
+  box-sizing: border-box;
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-modal);
+}
+
+.lv-confirm-text {
+  font-size: var(--text-body-sm);
+  text-align: center;
+}
+
+.lv-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+}
+
+.lv-confirm-button {
+  min-height: 44px;
+  padding: 0 22px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lv-confirm-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.lv-confirm-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lv-cancel-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.lv-confirm-button.wide,
+.lv-cancel-button.wide {
+  width: 100%;
+}
+
+/* ---------- 대상 선택 오버레이 ---------- */
+
+.lv-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: var(--scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.lv-overlay-card {
+  width: 100%;
+  max-width: 400px;
+  max-height: 86vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: var(--color-canvas);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-modal);
+}
+
+.lv-overlay-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  text-align: center;
+}
+
+.lv-overlay-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+.lv-target-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--space-xs);
+}
+
+.lv-target-tile {
+  min-height: 48px;
+  padding: 10px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lv-target-tile.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.lv-guess-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  gap: 6px;
+}
+
+.lv-guess-tile {
+  min-height: 52px;
+  padding: 6px 4px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.lv-guess-tile.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.lv-guess-value {
+  font-weight: 800;
+  font-size: var(--text-title-md);
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.lv-guess-name {
+  font-size: 11px;
+  color: var(--color-muted);
+  line-height: 1;
+}
+
+.lv-overlay-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .lv-board {
+    padding: var(--space-sm) var(--space-xs) 120px;
+  }
+
+  .lv-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lv-hand {
+    gap: var(--space-xs);
+  }
+
+  .lv-card {
+    width: clamp(96px, 40vw, 118px);
+    height: clamp(140px, 58vw, 170px);
+  }
+
+  .lv-card-name {
+    font-size: var(--text-title-md);
+  }
+
+  .lv-card-effect {
+    font-size: 10px;
+  }
+
+  .lv-guess-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

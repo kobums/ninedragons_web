@@ -1,0 +1,106 @@
+/* 러브레터 게임 종료 — 크림 종이 결 (tokens.css 토큰만 사용) */
+
+.lv-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.lv-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lv-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.lv-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+}
+
+.lv-over-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+.lv-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.lv-over-verdict.win {
+  color: var(--color-primary);
+}
+
+.lv-over-verdict.lose {
+  color: var(--color-muted);
+}
+
+.lv-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.lv-over-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.lv-over-row.winner {
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.lv-over-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lv-over-tokens {
+  flex-shrink: 0;
+  font-weight: 800;
+}
+
+@media (max-width: 360px) {
+  .lv-game-over {
+    padding: var(--space-sm);
+  }
+
+  .lv-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
