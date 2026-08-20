@@ -17,6 +17,11 @@ export type GameId =
   | 'mighty'
   | 'skyfall'
   | 'spyfall'
+  | 'loveletter'
+  | 'omok'
+  | 'skull'
+  | 'codenames'
+  | 'yacht'
   | 'avalon';
 
 export interface RuleSection {
@@ -580,6 +585,141 @@ export const GAMES: Record<GameId, GameMeta> = {
           '타이머가 끝나면 전원이 스파이로 의심되는 사람에게 공개 투표합니다 (제한 시간 1분, 마감 전 변경 가능).',
           '단독 최다 득표자가 스파이면 시민팀 승리, 그 외(오지목·동표)는 스파이 승리입니다.',
         ],
+      },
+    ],
+  },
+  loveletter: {
+    mood: 'cream',
+    title: '러브레터',
+    tag: '카드 추리 · 소품',
+    description: '16장의 카드로 공주의 마음을 얻는 추리전',
+    players: '2~4인',
+    duration: '10-20분',
+    cardTheme: 'dark',
+    wsPath: '/ws/loveletter',
+    logPrefix: '[LoveLetter] WebSocket',
+    sessionKey: 'lv_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '매 턴 1장을 뽑아 손의 2장 중 1장을 내고 효과를 적용합니다.',
+          '카드: 1경비병(값 추측, 맞으면 탈락) · 2사제(손패 엿보기) · 3남작(비교, 낮은 쪽 탈락) · 4시녀(보호) · 5왕자(버리고 새로 뽑기) · 6왕(교환) · 7백작부인(왕·왕자와 함께면 강제) · 8공주(버리면 탈락).',
+          '덱이 떨어지면 남은 손패가 높은 사람이, 혼자 남으면 그 사람이 라운드 승리입니다.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: [
+          '라운드 승리마다 토큰 1개 — 2인 7개, 3인 5개, 4인 4개를 먼저 모으면 승리합니다.',
+          '버린 카드는 전원에게 공개됩니다 — 카드 카운팅이 핵심입니다.',
+        ],
+      },
+    ],
+  },
+  omok: {
+    mood: 'cream',
+    title: '오목',
+    tag: '클래식 · 2인',
+    description: '다섯 개의 돌을 먼저 이으면 승리',
+    players: '2인',
+    duration: '5-15분',
+    cardTheme: 'cream',
+    wsPath: '/ws/omok',
+    logPrefix: '[Omok] WebSocket',
+    sessionKey: 'omok_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '15×15 바둑판에 흑과 백이 번갈아 돌을 놓습니다 (먼저 입장한 사람이 흑, 흑 선공).',
+          '가로·세로·대각선으로 5개 이상 이으면 즉시 승리합니다 (금수 없음).',
+          '판이 가득 차면 무승부입니다.',
+        ],
+      },
+    ],
+  },
+  skull: {
+    mood: 'dark',
+    title: '스컬',
+    tag: '배팅 · 심리전',
+    description: '장미와 해골, 허세의 배팅 심리전',
+    players: '3~6인',
+    duration: '10-20분',
+    cardTheme: 'cream',
+    wsPath: '/ws/skull',
+    logPrefix: '[Skull] WebSocket',
+    sessionKey: 'sk_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '각자 장미 3장·해골 1장의 원판을 가집니다. 전원이 1장을 비공개로 내려놓고 시작합니다.',
+          '차례에 카드를 더 내려놓거나, "장미 N장을 뒤집겠다"고 배팅합니다. 배팅이 시작되면 레이즈 또는 패스만 가능합니다.',
+          '최고 배팅자는 자기 더미를 전부 뒤집은 뒤 상대 더미를 골라 뒤집습니다. 해골이 나오면 실패 — 내 카드 1장을 잃습니다.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: [
+          '장미만 N장 뒤집으면 1점 — 2점을 먼저 얻으면 승리합니다.',
+          '카드를 전부 잃으면 탈락하고, 혼자 남아도 승리합니다.',
+        ],
+      },
+    ],
+  },
+  codenames: {
+    mood: 'dark',
+    title: '코드네임',
+    tag: '팀전 · 단어 추리',
+    description: '한 단어 힌트로 아군 단어를 찾는 팀 대결',
+    players: '4~8인',
+    duration: '15-25분',
+    cardTheme: 'dark',
+    wsPath: '/ws/codenames',
+    logPrefix: '[Codenames] WebSocket',
+    sessionKey: 'cn_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '25개 단어 중 적팀 9 · 청팀 8 · 중립 7 · 암살자 1 — 배치는 각 팀 스파이마스터만 봅니다.',
+          '스파이마스터가 "단어 하나 + 숫자" 힌트를 내면(음성 추천, 앱에 기록) 요원들이 아군 단어를 추측합니다. 숫자+1번까지 계속할 수 있습니다.',
+          '중립이나 상대 단어를 고르면 턴이 넘어가고, 암살자를 고르면 그 팀이 즉시 패배합니다.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: [
+          '자기 팀 단어를 모두 먼저 찾으면 승리합니다.',
+          '팀 배정은 입장 순서로 번갈아, 스파이마스터는 팀의 첫 사람이 맡습니다.',
+        ],
+      },
+    ],
+  },
+  yacht: {
+    mood: 'cream',
+    title: '요트 다이스',
+    tag: '주사위 · 족보',
+    description: '주사위 다섯 개로 족보를 채우는 점수 대결',
+    players: '2~4인',
+    duration: '10-20분',
+    cardTheme: 'cream',
+    wsPath: '/ws/yacht',
+    logPrefix: '[Yacht] WebSocket',
+    sessionKey: 'yt_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '턴마다 주사위 5개를 최대 3번 굴립니다 — 원하는 주사위는 홀드하고 나머지만 다시 굴립니다.',
+          '13칸 족보(1~6 눈합, 트리플, 포카드, 풀하우스 25, 스몰 30, 라지 40, 요트 50, 찬스) 중 빈 칸 하나에 기록합니다. 0점 기록도 가능합니다.',
+          '상단(1~6) 합계가 63점 이상이면 보너스 +35점.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: ['13라운드가 끝나면 총점이 가장 높은 사람이 승리합니다 (동점은 공동 우승).'],
       },
     ],
   },

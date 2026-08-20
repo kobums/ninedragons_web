@@ -15,6 +15,11 @@ import { MightyApp } from './components/mighty/MightyApp';
 import { SkyfallApp } from './components/skyfall/SkyfallApp';
 import { SpyfallApp } from './components/spyfall/SpyfallApp';
 import { AvalonApp } from './components/avalon/AvalonApp';
+import { LoveLetterApp } from './components/loveletter/LoveLetterApp';
+import { OmokApp } from './components/omok/OmokApp';
+import { SkullApp } from './components/skull/SkullApp';
+import { CodenamesApp } from './components/codenames/CodenamesApp';
+import { YachtApp } from './components/yacht/YachtApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -149,6 +154,26 @@ function App() {
 
   if (selectedGame === 'spyfall') {
     return <SpyfallApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'loveletter') {
+    return <LoveLetterApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'omok') {
+    return <OmokApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'skull') {
+    return <SkullApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'codenames') {
+    return <CodenamesApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'yacht') {
+    return <YachtApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
