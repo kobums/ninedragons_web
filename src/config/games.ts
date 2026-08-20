@@ -32,6 +32,8 @@ export interface GameMeta {
   duration: string;
   // 게임 선택 카드 색 (크림-다크 교차 리듬)
   cardTheme: 'dark' | 'cream';
+  // 게임 화면의 실제 배경 무드 (정보 팝업 등 오버레이 테마 기준)
+  mood: 'dark' | 'cream';
   wsPath: string;
   logPrefix: string;
   // sessionStorage 키. 값을 바꾸면 기존 재접속 세션이 끊기므로 불변으로 둔다.
@@ -41,6 +43,7 @@ export interface GameMeta {
 
 export const GAMES: Record<GameId, GameMeta> = {
   ninedragons: {
+    mood: 'cream',
     title: '구룡투',
     tag: '전략 · 심리전',
     description: '전략적 타일 배치 게임',
@@ -67,6 +70,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   numberchange: {
+    mood: 'cream',
     title: '넘버체인지',
     tag: '계산 · 교환',
     description: '숫자 블록 합계 대결 게임',
@@ -99,6 +103,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   davinci: {
+    mood: 'dark',
     title: '다빈치 코드',
     tag: '추리 · 심리전',
     description: '숫자 타일 추리 게임',
@@ -134,6 +139,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   schottentotten: {
+    mood: 'cream',
     title: '쇼텐토텐',
     tag: '전략 · 족보',
     description: '국경석을 둔 카드 진형 대결',
@@ -177,6 +183,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   jekyllhyde: {
+    mood: 'cream',
     title: '지킬 앤 하이드',
     tag: '트릭테이킹 · 심리전',
     description: '인격을 건 카드 트릭 대결',
@@ -220,6 +227,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   geister: {
+    mood: 'cream',
     title: '가이스터',
     tag: '심리전 · 기물',
     description: '유령 정체를 숨긴 탈출 대결',
@@ -256,6 +264,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   quoridor: {
+    mood: 'cream',
     title: '쿼리도',
     tag: '전략 · 길막기',
     description: '벽으로 길을 막는 경주 대결',
@@ -288,6 +297,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   onitama: {
+    mood: 'cream',
     title: '오니타마',
     tag: '전략 · 무술 카드',
     description: '이동 카드가 순환하는 기물 대결',
@@ -324,6 +334,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   lostcities: {
+    mood: 'cream',
     title: '로스트 시티',
     tag: '카드 · 탐험',
     description: '탐험대에 카드를 쌓는 수집 대결',
@@ -362,6 +373,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   cantstop: {
+    mood: 'cream',
     title: '캔트 스톱',
     tag: '주사위 · 운시험',
     description: '멈출 타이밍을 겨루는 등반 대결',
@@ -397,6 +409,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   tichu: {
+    mood: 'dark',
     title: '티츄',
     tag: '팀전 · 클라이밍',
     description: '2:2 팀으로 겨루는 카드 클라이밍',
@@ -444,6 +457,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   mighty: {
+    mood: 'dark',
     title: '마이티',
     tag: '트릭테이킹 · 공약',
     description: '공약과 프렌드의 5인 트릭테이킹',
@@ -489,6 +503,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   skyfall: {
+    mood: 'dark',
     title: '마피아',
     tag: '마피아 · 심리전',
     description: '역할을 숨긴 마피아 심리전',
@@ -532,6 +547,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   spyfall: {
+    mood: 'dark',
     title: '스파이폴',
     tag: '스파이 · 추리',
     description: '스파이만 정답을 모르는 질문 게임',
@@ -568,6 +584,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   avalon: {
+    mood: 'dark',
     title: '아발론',
     tag: '정체 은닉 · 원정',
     description: '멀린과 암살자의 원정 심리전',

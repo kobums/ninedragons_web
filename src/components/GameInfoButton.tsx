@@ -25,9 +25,15 @@ export function GameInfoButton({ game }: GameInfoButtonProps) {
 
       {open && (
         <div className="game-info-overlay" onClick={() => setOpen(false)}>
-          <div className="game-info-modal" onClick={(e) => e.stopPropagation()}>
+          <div
+            className={`game-info-modal ${meta.mood}`}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="game-info-header">
-              <h2>{meta.title} 게임 방법</h2>
+              <div>
+                <span className="game-info-eyebrow">How to Play</span>
+                <h2>{meta.title}</h2>
+              </div>
               <button
                 type="button"
                 className="game-info-close"

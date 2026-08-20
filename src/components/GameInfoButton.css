@@ -12,7 +12,7 @@
   font-size: 16px;
   font-weight: 800;
   font-style: italic;
-  font-family: Georgia, serif;
+  font-family: var(--font-display);
   cursor: pointer;
   backdrop-filter: blur(4px);
   display: flex;
@@ -28,11 +28,12 @@
   position: fixed;
   inset: 0;
   z-index: 1100;
-  background: rgba(10, 8, 16, 0.7);
+  background: rgba(20, 20, 19, 0.55);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: var(--space-lg, 20px);
 }
 
 .game-info-modal {
@@ -41,45 +42,96 @@
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  background: #201a2e;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
+  border-radius: var(--radius-lg, 16px);
   overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* 크림 무드 (종이 결) — 구룡투·다빈치·쇼텐토텐 계열 */
+.game-info-modal.cream {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+}
+
+/* 다크 무드 — 마이티·마피아·아발론 계열 */
+.game-info-modal.dark {
+  background: var(--color-surface-dark-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-on-dark);
 }
 
 .game-info-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 14px 18px;
+  padding: 18px 20px 14px;
+}
+
+.game-info-modal.cream .game-info-header {
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.game-info-modal.dark .game-info-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-info-eyebrow {
+  display: block;
+  font-size: var(--text-caption-uppercase, 11px);
+  font-weight: 600;
+  letter-spacing: var(--tracking-uppercase, 0.12em);
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 2px;
 }
 
 .game-info-header h2 {
   margin: 0;
-  font-size: 17px;
-  color: #f6c344;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1.15;
+}
+
+.game-info-modal.cream .game-info-header h2 {
+  color: var(--color-ink);
+}
+
+.game-info-modal.dark .game-info-header h2 {
+  color: var(--color-on-dark);
 }
 
 .game-info-close {
   border: none;
   background: none;
-  color: #b6aed0;
-  font-size: 24px;
+  font-size: 26px;
   line-height: 1;
   cursor: pointer;
   padding: 0 4px;
+  margin-top: 2px;
+}
+
+.game-info-modal.cream .game-info-close {
+  color: var(--color-ink-soft, #6b6a66);
+}
+
+.game-info-modal.dark .game-info-close {
+  color: var(--color-on-dark-soft);
 }
 
 .game-info-body {
   overflow-y: auto;
-  padding: 14px 18px 20px;
+  padding: 16px 20px 22px;
 }
 
 .game-info-body h3 {
-  margin: 14px 0 6px;
-  font-size: 13px;
-  color: #f6c344;
+  margin: 16px 0 6px;
+  font-size: var(--text-caption-uppercase, 11.5px);
+  font-weight: 600;
+  letter-spacing: var(--tracking-uppercase, 0.12em);
+  text-transform: uppercase;
+  color: var(--color-primary);
 }
 
 .game-info-body section:first-child h3 {
@@ -91,11 +143,26 @@
   padding-left: 18px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .game-info-body li {
-  color: #e6e1f2;
   font-size: 13.5px;
-  line-height: 1.55;
+  line-height: 1.6;
+}
+
+.game-info-modal.cream .game-info-body li {
+  color: var(--color-ink);
+}
+
+.game-info-modal.cream .game-info-body li::marker {
+  color: var(--color-primary);
+}
+
+.game-info-modal.dark .game-info-body li {
+  color: var(--color-on-dark);
+}
+
+.game-info-modal.dark .game-info-body li::marker {
+  color: var(--color-primary);
 }
