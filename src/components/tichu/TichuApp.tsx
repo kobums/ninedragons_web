@@ -66,7 +66,7 @@ export function TichuApp({ onBack }: TichuAppProps) {
     !isSpectating && !isGameOver && (game ? game.yourSeat >= 0 : hasJoined);
 
   return (
-    <div className="app">
+    <div className="app mood-cream">
       <ConnectionBanner
         isConnected={isConnected}
         opponentDisconnected={someoneDisconnected}

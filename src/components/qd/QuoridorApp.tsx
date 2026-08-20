@@ -54,7 +54,7 @@ export function QuoridorApp({ onBack }: QuoridorAppProps) {
   }
 
   return (
-    <div className="app">
+    <div className="app mood-cream">
       <ConnectionBanner
         isConnected={isConnected}
         opponentDisconnected={opponentDisconnected}

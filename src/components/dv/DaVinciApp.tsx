@@ -60,8 +60,12 @@ export function DaVinciApp({ onBack }: DaVinciAppProps) {
     !gameOver &&
     (game ? game.yourSeat >= 0 : lobby !== null);
 
+  // 다빈치는 화면마다 무드가 다르다 — 로비는 크림(dv-lobby 종이 결),
+  // 게임 보드·게임오버는 다크. 고정 오버레이(FAB·배지·리액션)가 이 클래스를
+  // 후손 셀렉터로 따라가므로 진행 상태에 맞춰 전환한다.
+
   return (
-    <div className="app">
+    <div className="app mood-cream">
       <ConnectionBanner
         isConnected={isConnected}
         opponentDisconnected={someoneDisconnected}

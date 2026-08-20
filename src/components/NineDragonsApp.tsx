@@ -87,7 +87,7 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
   });
 
   return (
-    <div className="app">
+    <div className="app mood-cream">
       <ConnectionBanner
         isConnected={isConnected}
         opponentDisconnected={gameState.opponentDisconnected}

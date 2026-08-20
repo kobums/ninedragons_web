@@ -24,6 +24,19 @@
   background: rgba(0, 0, 0, 0.55);
 }
 
+/* 크림 무드 — 다크 글래스 대신 종이 결 (밝은 카드 + 잉크 + 헤어라인).
+   position:fixed 지만 DOM 은 .app 하위라 후손 셀렉터가 적용된다. */
+.mood-cream .game-info-fab {
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+  border-color: var(--color-hairline);
+  box-shadow: var(--shadow-subtle);
+}
+
+.mood-cream .game-info-fab:hover {
+  background: var(--color-surface-cream-strong);
+}
+
 .game-info-overlay {
   position: fixed;
   inset: 0;

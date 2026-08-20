@@ -42,6 +42,13 @@
   white-space: nowrap;
 }
 
+/* 다크 무드 — 밝은 종이 필 대신 어두운 반투명 필 + on-dark 텍스트. */
+.mood-dark .reaction-pop-name {
+  color: var(--color-on-dark);
+  background: var(--scrim);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
 @keyframes reaction-pop {
   0% {
     opacity: 0;

@@ -103,7 +103,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   davinci: {
-    mood: 'dark',
+    mood: 'cream',
     title: '다빈치 코드',
     tag: '추리 · 심리전',
     description: '숫자 타일 추리 게임',
@@ -409,7 +409,7 @@ export const GAMES: Record<GameId, GameMeta> = {
     ],
   },
   tichu: {
-    mood: 'dark',
+    mood: 'cream',
     title: '티츄',
     tag: '팀전 · 클라이밍',
     description: '2:2 팀으로 겨루는 카드 클라이밍',

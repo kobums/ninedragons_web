@@ -66,11 +66,11 @@ export function SpyfallApp({ onBack }: SpyfallAppProps) {
 
   // 게임 시작 전에만 전체 화면 연결 대기 표시
   if (!isConnected && !inGame) {
-    return <ConnectingScreen />;
+    return <ConnectingScreen mood="dark" />;
   }
 
   return (
-    <div className="app">
+    <div className="app mood-dark">
       <ConnectionBanner
         isConnected={isConnected}
         opponentDisconnected={someoneDisconnected}

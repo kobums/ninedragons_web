@@ -35,6 +35,14 @@
   animation: app-connect-pulse 1.4s ease-in-out infinite;
 }
 
+/* 다크 무드 게임(티츄·마이티·마피아·스파이폴·아발론 등)의 연결 대기 —
+   크림 캔버스 대신 다크 서피스, 텍스트는 on-dark 보조 톤. 펄스 도트의
+   코랄은 다크 위에서도 포인트로 성립하므로 그대로 둔다. */
+.mood-dark .connecting {
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark-soft);
+}
+
 @keyframes app-connect-pulse {
   0%,
   100% {

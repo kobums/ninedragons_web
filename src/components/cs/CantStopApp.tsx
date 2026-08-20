@@ -54,7 +54,7 @@ export function CantStopApp({ onBack }: CantStopAppProps) {
   }
 
   return (
-    <div className="app">
+    <div className="app mood-cream">
       <ConnectionBanner
         isConnected={isConnected}
         opponentDisconnected={opponentDisconnected}
