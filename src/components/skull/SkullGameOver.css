@@ -1,0 +1,122 @@
+/* 스컬 결과 오버레이 — 승자 + 최종 점수(장미) 표 */
+
+.sk-game-over {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.sk-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: var(--sk-dark-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-modal);
+}
+
+.sk-over-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.sk-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--sk-rose-strong);
+  overflow-wrap: anywhere;
+}
+
+.sk-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 700;
+}
+
+.sk-over-verdict.win {
+  color: var(--color-success);
+}
+
+.sk-over-verdict.lose {
+  color: var(--sk-fog);
+}
+
+.sk-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.sk-over-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.sk-over-row.winner {
+  background: var(--sk-rose-tint);
+  border-color: rgba(228, 116, 133, 0.5);
+}
+
+.sk-over-row.dead {
+  opacity: 0.55;
+}
+
+.sk-over-name {
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sk-over-points {
+  flex-shrink: 0;
+  display: inline-flex;
+  gap: 2px;
+}
+
+.sk-over-point {
+  opacity: 0.18;
+  filter: grayscale(1);
+}
+
+.sk-over-point.won {
+  opacity: 1;
+  filter: none;
+}
+
+@media (max-width: 360px) {
+  .sk-game-over {
+    padding: var(--space-sm);
+  }
+
+  .sk-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
