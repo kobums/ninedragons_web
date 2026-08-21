@@ -1,0 +1,652 @@
+/* 인디언 포커 보드 — 그린 펠트 포커 테이블 + 골드 칩 포인트.
+   좌석 타일 그리드는 반응형 2열 (280px 오버플로 금지, 터치 44px+).
+   팔레트는 IndianPokerApp.css 의 ip-scope 변수만 사용한다. */
+
+.ip-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(
+      ellipse at 50% 30%,
+      var(--ip-felt-elevated) 0%,
+      var(--ip-felt) 70%
+    ),
+    var(--ip-felt);
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: var(--space-xl);
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.ip-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.ip-toast {
+  background: rgba(6, 20, 15, 0.92);
+  border: 1px solid var(--ip-rail);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: ip-toast-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes ip-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 단계 배너 ---------- */
+
+.ip-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+  background: var(--ip-gold-tint);
+  border: 1px solid var(--ip-rail);
+}
+
+.ip-phase-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--ip-gold-strong);
+}
+
+.ip-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--ip-fog);
+}
+
+.ip-deadline {
+  margin-left: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ip-fog);
+  font-size: var(--text-body-sm);
+}
+
+.ip-deadline.urgent {
+  color: var(--ip-danger);
+  animation: ip-deadline-pulse 1s ease infinite;
+}
+
+@keyframes ip-deadline-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- 중앙 팟 (칩 더미 + 숫자) ---------- */
+
+.ip-pot {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px 14px;
+  border-radius: var(--radius-xl);
+  /* 테이블 한가운데 — 레일 이중선으로 펠트 위 팟 존을 그린다 */
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--ip-rail);
+  box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.18);
+}
+
+.ip-pot-chips {
+  display: inline-flex;
+  align-items: flex-end;
+  padding-left: 10px;
+  min-height: 34px;
+}
+
+/* 골드 칩 — 실물 칩 결: 테두리 눈금 + 하이라이트, 겹쳐 쌓인다 */
+.ip-chip-disc {
+  width: 30px;
+  height: 30px;
+  margin-left: -12px;
+  border-radius: var(--radius-full);
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0) 55%
+    ),
+    var(--ip-gold);
+  border: 2px dashed rgba(0, 0, 0, 0.45);
+  box-shadow:
+    inset 0 0 0 3px var(--ip-gold-strong),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  transform: translateY(calc(var(--i, 0) * -3px));
+}
+
+.ip-pot-amount {
+  font-size: var(--text-body-sm);
+  color: var(--ip-fog);
+}
+
+.ip-pot-amount strong {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--ip-gold-strong);
+  font-variant-numeric: tabular-nums;
+  margin-left: 4px;
+}
+
+.ip-pot-sub {
+  font-size: var(--text-caption);
+  color: var(--ip-fog);
+}
+
+/* ---------- 좌석 타일 그리드 ---------- */
+
+.ip-grid {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+@media (min-width: 520px) {
+  .ip-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ip-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--ip-line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-on-dark);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.ip-tile.me {
+  border-color: var(--ip-rail);
+}
+
+.ip-tile.turn {
+  border-color: var(--ip-gold);
+  box-shadow: 0 0 0 1px var(--ip-gold) inset;
+  background: var(--ip-gold-tint);
+}
+
+.ip-tile.folded {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.ip-tile.winner {
+  border-color: var(--ip-gold-strong);
+  box-shadow: 0 0 14px rgba(232, 165, 90, 0.35);
+  background: var(--ip-gold-tint);
+}
+
+.ip-tile.dead {
+  opacity: 0.45;
+}
+
+.ip-tile-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ip-tile-name {
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ip-turn-mark {
+  color: var(--ip-gold-strong);
+  margin-right: 4px;
+}
+
+.ip-tile-chips {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ip-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.ip-tile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ip-tile-hint {
+  font-size: var(--text-caption-uppercase);
+  color: var(--ip-fog);
+}
+
+.ip-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.ip-badge {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-on-dark);
+}
+
+.ip-badge.bet {
+  background: var(--ip-gold-tint);
+  color: var(--ip-gold-strong);
+  border: 1px solid var(--ip-rail);
+}
+
+.ip-badge.folded {
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--ip-fog);
+}
+
+.ip-badge.allin {
+  background: var(--ip-danger-tint);
+  color: var(--ip-danger);
+  border: 1px solid rgba(217, 106, 106, 0.45);
+}
+
+.ip-badge.off {
+  background: var(--ip-danger-tint);
+  color: var(--ip-danger);
+}
+
+.ip-badge.win {
+  background: var(--ip-gold-tint);
+  color: var(--ip-gold-strong);
+  border: 1px solid rgba(232, 165, 90, 0.5);
+}
+
+.ip-tile-out {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- 실물 카드 ---------- */
+
+.ip-card {
+  position: relative;
+  width: 72px;
+  height: 100px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* 앞면 — 상아빛 종이 몸통 (tc-card 결) + 세리프 숫자 */
+.ip-card.face {
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.3),
+    0 3px 8px rgba(0, 0, 0, 0.35);
+  color: var(--color-ink);
+}
+
+.ip-card-rank {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: var(--tracking-display-sm);
+  font-variant-numeric: tabular-nums;
+  margin-top: -8px;
+}
+
+.ip-card-pip {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--color-primary);
+  pointer-events: none;
+}
+
+.ip-card-index {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.ip-card-index.tl {
+  top: 5px;
+  left: 6px;
+}
+
+.ip-card-index.br {
+  bottom: 5px;
+  right: 6px;
+  transform: rotate(180deg);
+}
+
+/* 뒷면 — 다크 그린 다이아 패턴 + 골드 테두리 (이마에 붙인 카드) */
+.ip-card.back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(232, 165, 90, 0.12) 0 6px,
+      rgba(232, 165, 90, 0) 6px 12px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(232, 165, 90, 0.12) 0 6px,
+      rgba(232, 165, 90, 0) 6px 12px
+    ),
+    var(--ip-felt-elevated);
+  border: 1px solid var(--ip-rail);
+  box-shadow:
+    inset 0 0 0 4px rgba(0, 0, 0, 0.25),
+    0 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+.ip-card-question {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: 38px;
+  line-height: 1;
+  color: var(--ip-gold-strong);
+  animation: ip-question-pulse 2s ease infinite;
+}
+
+@keyframes ip-question-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.ip-card-back-pip {
+  font-size: 18px;
+  color: var(--ip-rail);
+}
+
+/* 폴드 — 카드 어둡게 + 살짝 엎어진 기울기 */
+.ip-card.folded {
+  filter: brightness(0.5) grayscale(0.5);
+  transform: rotate(7deg);
+}
+
+/* 쇼다운 — 내 카드 뒤집힘 연출 */
+.ip-card.reveal {
+  animation: ip-card-flip 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+@keyframes ip-card-flip {
+  from {
+    transform: rotateY(90deg) scale(0.85);
+    opacity: 0.4;
+  }
+  to {
+    transform: rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---------- 라운드 결과 배너 ---------- */
+
+.ip-round-result {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--ip-gold-tint);
+  border: 1px solid rgba(232, 165, 90, 0.5);
+  animation: ip-rr-pop 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes ip-rr-pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ip-rr-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.ip-rr-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ip-rr-title {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  color: var(--ip-gold-strong);
+}
+
+.ip-rr-sub {
+  font-size: var(--text-caption);
+  color: var(--ip-fog);
+}
+
+/* ---------- 베팅 컨트롤 ---------- */
+
+.ip-controls {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: var(--ip-gold-tint);
+  border: 1px solid var(--ip-rail);
+}
+
+.ip-controls-title {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--ip-gold-strong);
+  text-align: center;
+}
+
+.ip-controls-row {
+  width: 100%;
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ip-call-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px; /* 터치 44px+ */
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ip-call-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.ip-fold-button {
+  flex: 0 1 auto;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid rgba(217, 106, 106, 0.5);
+  border-radius: var(--radius-md);
+  background: var(--ip-danger-tint);
+  color: var(--ip-danger);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ip-fold-button:not(:disabled):active {
+  background: rgba(217, 106, 106, 0.28);
+}
+
+.ip-raise-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 8px;
+  border: 1px solid var(--ip-rail);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ip-gold-strong);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ip-raise-button:not(:disabled):active {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.ip-call-button:disabled,
+.ip-fold-button:disabled,
+.ip-raise-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.ip-controls-hint {
+  font-size: var(--text-caption);
+  color: var(--ip-fog);
+  text-align: center;
+}
+
+.ip-observer-note {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--ip-fog);
+  text-align: center;
+}
+
+/* ---------- 초소형 화면 (280px) ---------- */
+
+@media (max-width: 340px) {
+  .ip-board {
+    padding: var(--space-xs);
+    padding-bottom: var(--space-lg);
+  }
+
+  .ip-grid {
+    gap: 6px;
+  }
+
+  .ip-tile {
+    padding: 8px;
+  }
+
+  .ip-card {
+    width: 60px;
+    height: 84px;
+  }
+
+  .ip-card-rank {
+    font-size: 32px;
+  }
+
+  .ip-card-question {
+    font-size: 30px;
+  }
+
+  .ip-raise-button {
+    padding: 0 6px;
+    font-size: var(--text-caption);
+  }
+}
