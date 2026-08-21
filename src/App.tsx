@@ -20,6 +20,7 @@ import { OmokApp } from './components/omok/OmokApp';
 import { SkullApp } from './components/skull/SkullApp';
 import { CodenamesApp } from './components/codenames/CodenamesApp';
 import { YachtApp } from './components/yacht/YachtApp';
+import { IndianPokerApp } from './components/indianpoker/IndianPokerApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -174,6 +175,10 @@ function App() {
 
   if (selectedGame === 'yacht') {
     return <YachtApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'indianpoker') {
+    return <IndianPokerApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {

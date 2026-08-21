@@ -22,6 +22,7 @@ export type GameId =
   | 'skull'
   | 'codenames'
   | 'yacht'
+  | 'indianpoker'
   | 'avalon';
 
 export interface RuleSection {
@@ -720,6 +721,35 @@ export const GAMES: Record<GameId, GameMeta> = {
       {
         heading: '승리',
         items: ['13라운드가 끝나면 총점이 가장 높은 사람이 승리합니다 (동점은 공동 우승).'],
+      },
+    ],
+  },
+  indianpoker: {
+    mood: 'dark',
+    title: '인디언 포커',
+    tag: '배팅 · 역은닉',
+    description: '내 카드만 못 보는 배팅 심리전',
+    players: '2~6인',
+    duration: '10-15분',
+    cardTheme: 'dark',
+    wsPath: '/ws/indianpoker',
+    logPrefix: '[IndianPoker] WebSocket',
+    sessionKey: 'ip_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '각자 카드 1장을 받는데, 남의 카드는 보이고 내 카드만 안 보입니다.',
+          '매 라운드 전원 1칩 안테 후, 차례로 콜 / 레이즈(+1~3, 라운드당 3회) / 폴드를 선택합니다.',
+          '전원 콜이면 쇼다운 — 가장 높은 숫자가 팟을 가져갑니다 (동점은 나눠 가짐). 혼자 남으면 카드 공개 없이 팟을 가져갑니다.',
+        ],
+      },
+      {
+        heading: '승리',
+        items: [
+          '카드는 1~10 각 4장, 시작 칩은 20개입니다. 칩이 떨어지면 탈락합니다.',
+          '10라운드 후 칩이 가장 많은 사람이 승리합니다 (동점 공동 우승).',
+        ],
       },
     ],
   },
