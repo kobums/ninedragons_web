@@ -1,0 +1,132 @@
+/* 쿠 결과 오버레이 — 승자 + 최종 순위표 (공개 카드·칩) */
+
+.cp-game-over {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.cp-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: var(--cp-court-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-modal);
+}
+
+.cp-over-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.cp-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--cp-gold-strong);
+  overflow-wrap: anywhere;
+}
+
+.cp-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 700;
+}
+
+.cp-over-verdict.win {
+  color: var(--color-success);
+}
+
+.cp-over-verdict.lose {
+  color: var(--cp-fog);
+}
+
+.cp-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.cp-over-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.cp-over-row.winner {
+  background: var(--cp-gold-tint);
+  border-color: rgba(232, 165, 90, 0.5);
+}
+
+.cp-over-row.dead {
+  opacity: 0.55;
+}
+
+.cp-over-name {
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cp-over-rank {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: var(--text-caption-uppercase);
+  color: var(--cp-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.cp-over-info {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cp-over-revealed {
+  font-size: var(--text-caption-uppercase);
+  color: var(--cp-fog);
+}
+
+.cp-over-chips {
+  font-weight: 800;
+  color: var(--cp-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 360px) {
+  .cp-game-over {
+    padding: var(--space-sm);
+  }
+
+  .cp-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}

@@ -1,0 +1,877 @@
+/* 쿠 보드 — 딥 플럼 궁정 + 골드 포인트. 좌석 타일 그리드는 반응형 2열
+   (280px 오버플로 금지, 터치 44px+). 팔레트는 CoupApp.css 의 cp-scope
+   변수만 사용한다. */
+
+.cp-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(
+      ellipse at 50% 25%,
+      var(--cp-court-elevated) 0%,
+      var(--cp-court) 72%
+    ),
+    var(--cp-court);
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: var(--space-xl);
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* 하단 고정 응답 바가 떠 있을 때 내용이 가려지지 않게 */
+.cp-board.with-bar {
+  padding-bottom: 132px;
+}
+
+/* ---------- 이벤트 피드 (최근 3줄) ---------- */
+
+.cp-feed {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.cp-feed-line {
+  background: rgba(16, 8, 14, 0.92);
+  border: 1px solid var(--cp-rail);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: cp-feed-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes cp-feed-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 단계 배너 ---------- */
+
+.cp-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+  background: var(--cp-gold-tint);
+  border: 1px solid var(--cp-rail);
+}
+
+.cp-phase-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--cp-gold-strong);
+}
+
+.cp-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--cp-fog);
+}
+
+.cp-deadline {
+  margin-left: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--cp-fog);
+  font-size: var(--text-body-sm);
+}
+
+.cp-deadline.urgent {
+  color: var(--cp-danger);
+  animation: cp-deadline-pulse 1s ease infinite;
+}
+
+@keyframes cp-deadline-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- 좌석 타일 그리드 ---------- */
+
+.cp-grid {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+@media (min-width: 520px) {
+  .cp-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cp-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--cp-line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-on-dark);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.cp-tile.me {
+  border-color: var(--cp-rail);
+}
+
+.cp-tile.turn {
+  border-color: var(--cp-gold);
+  box-shadow: 0 0 0 1px var(--cp-gold) inset;
+  background: var(--cp-gold-tint);
+}
+
+.cp-tile.target {
+  border-color: rgba(217, 106, 106, 0.6);
+  box-shadow: 0 0 0 1px rgba(217, 106, 106, 0.6) inset;
+}
+
+.cp-tile.dead {
+  opacity: 0.45;
+}
+
+.cp-tile-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cp-tile-name {
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cp-turn-mark {
+  color: var(--cp-gold-strong);
+  margin-right: 4px;
+}
+
+.cp-tile-chips {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--cp-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.cp-tile-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 40px;
+}
+
+/* 좌석 타일의 미니 카드 — 뒷면(비공개)·앞면(잃은 카드 공개) */
+.cp-mini-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 44px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: var(--text-caption-uppercase);
+  line-height: 1.05;
+  text-align: center;
+}
+
+.cp-mini-card.back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(232, 165, 90, 0.14) 0 4px,
+      rgba(232, 165, 90, 0) 4px 8px
+    ),
+    var(--cp-court-elevated);
+  border: 1px solid var(--cp-rail);
+  color: var(--cp-rail);
+  font-size: 11px;
+}
+
+.cp-mini-card.face {
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.28);
+  border-top: 3px solid var(--cp-role, var(--color-muted));
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  padding: 2px;
+  word-break: keep-all;
+  /* 잃은 카드 — 살짝 바랜 결 */
+  filter: saturate(0.8) brightness(0.94);
+}
+
+.cp-mini-card.face.role-duke {
+  --cp-role: var(--cp-duke);
+}
+.cp-mini-card.face.role-assassin {
+  --cp-role: var(--cp-assassin);
+}
+.cp-mini-card.face.role-captain {
+  --cp-role: var(--cp-captain);
+}
+.cp-mini-card.face.role-ambassador {
+  --cp-role: var(--cp-ambassador);
+}
+.cp-mini-card.face.role-contessa {
+  --cp-role: var(--cp-contessa);
+}
+
+.cp-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.cp-badge {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-on-dark);
+}
+
+.cp-badge.act {
+  background: var(--cp-gold-tint);
+  color: var(--cp-gold-strong);
+  border: 1px solid var(--cp-rail);
+}
+
+.cp-badge.tgt {
+  background: var(--cp-danger-tint);
+  color: var(--cp-danger);
+  border: 1px solid rgba(217, 106, 106, 0.45);
+}
+
+.cp-badge.blk {
+  background: var(--cp-safe-tint);
+  color: var(--cp-safe);
+  border: 1px solid rgba(125, 159, 209, 0.45);
+}
+
+.cp-badge.lose {
+  background: var(--cp-danger-tint);
+  color: var(--cp-danger);
+}
+
+.cp-badge.off {
+  background: var(--cp-danger-tint);
+  color: var(--cp-danger);
+}
+
+.cp-tile-out {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- 내 비공개 카드 (실물 결) ---------- */
+
+.cp-hand {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 14px;
+  border-radius: var(--radius-xl);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--cp-rail);
+}
+
+.cp-hand-title {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--cp-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.cp-hand-row {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cp-hand-card {
+  position: relative;
+  width: 128px;
+  height: 172px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px 10px 12px;
+  box-sizing: border-box;
+  text-align: center;
+  user-select: none;
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.3),
+    0 3px 8px rgba(0, 0, 0, 0.35);
+  color: var(--color-ink);
+  overflow: hidden;
+}
+
+/* 역할 색 리본 — 카드 상단 띠 */
+.cp-hand-ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--cp-role, var(--color-muted));
+}
+
+.cp-hand-card.role-duke {
+  --cp-role: var(--cp-duke);
+}
+.cp-hand-card.role-assassin {
+  --cp-role: var(--cp-assassin);
+}
+.cp-hand-card.role-captain {
+  --cp-role: var(--cp-captain);
+}
+.cp-hand-card.role-ambassador {
+  --cp-role: var(--cp-ambassador);
+}
+.cp-hand-card.role-contessa {
+  --cp-role: var(--cp-contessa);
+}
+
+.cp-hand-en {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--cp-role, var(--color-muted));
+  font-weight: 700;
+}
+
+.cp-hand-name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-display-sm);
+  word-break: keep-all;
+}
+
+.cp-hand-ability {
+  font-size: var(--text-caption-uppercase);
+  line-height: 1.35;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+/* 탭 가능한 카드 (제거·교환 선택) */
+.cp-hand-card.tappable {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.cp-hand-card.tappable:not(:disabled):active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.cp-hand-card.selected {
+  outline: 3px solid var(--cp-gold-strong);
+  outline-offset: -3px;
+  box-shadow:
+    0 0 14px rgba(232, 165, 90, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+.cp-hand-card.dimmed {
+  opacity: 0.55;
+}
+
+/* ---------- 액션 그리드 ---------- */
+
+.cp-actions {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: var(--cp-gold-tint);
+  border: 1px solid var(--cp-rail);
+}
+
+.cp-actions-title {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--cp-gold-strong);
+  text-align: center;
+}
+
+.cp-actions-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+@media (min-width: 440px) {
+  .cp-actions-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cp-action-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 64px; /* 터치 44px+ */
+  padding: 8px 6px;
+  border: 1px solid var(--cp-line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--color-on-dark);
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.cp-action-button.claim {
+  border-color: var(--cp-rail);
+}
+
+.cp-action-button:not(:disabled):active {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.cp-action-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cp-action-label {
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+}
+
+.cp-action-cost {
+  color: var(--cp-danger);
+  font-variant-numeric: tabular-nums;
+}
+
+.cp-action-sub {
+  font-size: var(--text-caption-uppercase);
+  color: var(--cp-gold-strong);
+  word-break: keep-all;
+}
+
+.cp-action-note {
+  font-size: var(--text-caption-uppercase);
+  color: var(--cp-fog);
+  word-break: keep-all;
+}
+
+.cp-observer-note {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--cp-fog);
+  text-align: center;
+}
+
+/* ---------- 하단 고정 응답 바 ---------- */
+
+.cp-response-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 950;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--space-sm) calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(16, 8, 14, 0.96);
+  border-top: 1px solid var(--cp-rail);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+  animation: cp-bar-up 0.25s ease;
+}
+
+@keyframes cp-bar-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.cp-bar-prompt {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  text-align: center;
+  max-width: 560px;
+}
+
+.cp-bar-timer {
+  margin-left: 8px;
+  color: var(--cp-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.cp-bar-timer.urgent {
+  color: var(--cp-danger);
+  animation: cp-deadline-pulse 1s ease infinite;
+}
+
+.cp-bar-buttons {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cp-challenge-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid rgba(217, 106, 106, 0.5);
+  border-radius: var(--radius-md);
+  background: var(--cp-danger-tint);
+  color: var(--cp-danger);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cp-challenge-button:not(:disabled):active {
+  background: rgba(217, 106, 106, 0.28);
+}
+
+.cp-block-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid rgba(125, 159, 209, 0.5);
+  border-radius: var(--radius-md);
+  background: var(--cp-safe-tint);
+  color: var(--cp-safe);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cp-block-button:not(:disabled):active {
+  background: rgba(125, 159, 209, 0.28);
+}
+
+.cp-allow-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cp-allow-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cp-challenge-button:disabled,
+.cp-block-button:disabled,
+.cp-allow-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cp-response-bar.passive .cp-bar-prompt {
+  color: var(--cp-fog);
+  font-weight: 400;
+}
+
+/* ---------- 오버레이 공통 (대상 선택·카드 제거·교환) ---------- */
+
+.cp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-md);
+  overflow-y: auto;
+}
+
+.cp-overlay-panel {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: var(--cp-court-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg) var(--space-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-modal);
+  animation: cp-panel-pop 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes cp-panel-pop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cp-overlay-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--cp-gold-strong);
+  word-break: keep-all;
+}
+
+.cp-overlay-sub {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--cp-fog);
+}
+
+.cp-overlay-cards {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+}
+
+.cp-overlay-cards.wrap {
+  flex-wrap: wrap;
+}
+
+.cp-target-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.cp-target-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 1px solid var(--cp-line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.cp-target-button:not(:disabled):active {
+  background: var(--cp-gold-tint);
+  border-color: var(--cp-rail);
+}
+
+.cp-target-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cp-target-name {
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cp-target-info {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  color: var(--cp-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.cp-overlay-confirm {
+  min-height: 48px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cp-overlay-confirm:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cp-overlay-confirm:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--cp-fog);
+  cursor: not-allowed;
+}
+
+.cp-overlay-cancel {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--cp-fog);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+/* ---------- 초소형 화면 (280px) ---------- */
+
+@media (max-width: 340px) {
+  .cp-board {
+    padding: var(--space-xs);
+    padding-bottom: var(--space-lg);
+  }
+
+  .cp-board.with-bar {
+    padding-bottom: 128px;
+  }
+
+  .cp-grid {
+    gap: 6px;
+  }
+
+  .cp-tile {
+    padding: 8px;
+  }
+
+  .cp-mini-card {
+    width: 28px;
+    height: 38px;
+  }
+
+  .cp-hand-card {
+    width: 106px;
+    height: 150px;
+    padding: 12px 8px 10px;
+  }
+
+  .cp-hand-name {
+    font-size: 23px;
+  }
+
+  .cp-actions-grid {
+    gap: 6px;
+  }
+
+  .cp-action-button {
+    min-height: 58px;
+    padding: 6px 4px;
+  }
+
+  .cp-bar-buttons {
+    gap: 6px;
+  }
+
+  .cp-challenge-button,
+  .cp-block-button,
+  .cp-allow-button {
+    padding: 0 8px;
+    font-size: var(--text-caption);
+  }
+}

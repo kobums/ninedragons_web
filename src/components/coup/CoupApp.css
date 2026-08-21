@@ -1,0 +1,37 @@
+/* 쿠 셸 — 딥 플럼 "궁정 음모" 다크 무드.
+   tokens.css 에는 쿠 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 기존 토큰과
+   rgba/rgb 변주만 사용 — 컴포넌트에 새 hex 를 흘리지 않는 규칙 유지.
+   인디언포커 그린 펠트·스카이폴 네이비·스파이폴 차콜과 구분되는
+   와인빛 벨벳 결. */
+
+.cp-scope {
+  /* 배경 — 딥 플럼 벨벳 (궁정 밀실) */
+  --cp-court: rgb(26, 14, 23);
+  --cp-court-elevated: rgb(43, 24, 39);
+  --cp-court-soft: rgb(34, 19, 31);
+  /* 보조 텍스트 — 벨벳 위 라일락 그레이 */
+  --cp-fog: rgb(190, 172, 188);
+  /* 포인트 골드 (칩·강조) */
+  --cp-gold: var(--color-accent-amber);
+  --cp-gold-strong: rgb(242, 184, 113);
+  --cp-gold-tint: rgba(232, 165, 90, 0.14);
+  /* 라인 */
+  --cp-line: rgba(255, 255, 255, 0.12);
+  --cp-rail: rgba(232, 165, 90, 0.35);
+  /* 위험(도전·암살·임박 타이머) */
+  --cp-danger: rgb(217, 106, 106);
+  --cp-danger-tint: rgba(217, 106, 106, 0.14);
+  /* 허용(안전) — 골드·레드와 대비되는 차가운 톤 */
+  --cp-safe: rgb(125, 159, 209);
+  --cp-safe-tint: rgba(125, 159, 209, 0.14);
+
+  /* ---------- 역할 색 ----------
+     실물 카드 전면의 식별 색. 기존 저채도 팔레트의 변주 —
+     CTA·서피스에는 쓰지 않는다. */
+  --cp-duke: rgb(124, 92, 173); /* 공작 purple (st-clan-4) */
+  --cp-assassin: rgb(176, 58, 58); /* 암살자 crimson (tc-drg) */
+  --cp-captain: rgb(74, 109, 156); /* 사령관 blue (team-blue) */
+  --cp-ambassador: rgb(91, 158, 111); /* 대사 green (st-clan-2) */
+  --cp-contessa: rgb(199, 106, 140); /* 백작부인 rose */
+}
