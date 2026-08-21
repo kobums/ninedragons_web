@@ -1,0 +1,164 @@
+/* 노 땡스! 게임 종료 — 크림 종이 결, 점수 내역 표 (tokens.css 토큰만 사용) */
+
+.nt-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.nt-game-over-container {
+  width: 100%;
+  max-width: 460px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.nt-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.nt-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.nt-over-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+.nt-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.nt-over-verdict.win {
+  color: var(--color-primary);
+}
+
+.nt-over-verdict.lose {
+  color: var(--color-muted);
+}
+
+/* ---------- 점수 내역 표 (카드 합 − 칩 = 점수) ---------- */
+
+.nt-over-table-wrap {
+  overflow-x: auto;
+}
+
+.nt-over-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  color: var(--color-ink);
+}
+
+.nt-over-table th {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-hairline);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.nt-over-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.nt-over-table th.left,
+.nt-over-table td.left {
+  text-align: left;
+}
+
+.nt-over-table tr.winner td {
+  background: var(--color-primary-tint);
+  font-weight: 700;
+}
+
+.nt-over-score {
+  font-weight: 800;
+}
+
+.nt-over-name {
+  display: inline-block;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-weight: 600;
+}
+
+/* ---------- 획득 카드 내역 ---------- */
+
+.nt-over-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.nt-over-cards-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.nt-over-cards-name {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-over-cards-none {
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 360px) {
+  .nt-game-over {
+    padding: var(--space-sm);
+  }
+
+  .nt-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .nt-over-name {
+    max-width: 96px;
+  }
+}

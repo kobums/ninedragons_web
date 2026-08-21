@@ -1,0 +1,507 @@
+/* 노 땡스! 보드 — 크림 캔버스 위 실물 카드 결 (tokens.css 토큰만 사용).
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상. */
+
+.nt-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 96px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.nt-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.nt-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.nt-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.nt-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nt-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.nt-deadline.urgent {
+  color: var(--color-error);
+}
+
+.nt-phase-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 테이블 중앙 — 덱 + 공개 카드 ---------- */
+
+.nt-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-sm) 0 var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.nt-deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 덱 뒷면 — 코랄 틴트 카드 등 */
+.nt-deck-back {
+  width: 48px;
+  height: 68px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    170deg,
+    var(--color-primary) 0%,
+    var(--color-primary-active) 100%
+  );
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--text-title-md);
+  box-shadow: var(--shadow-subtle);
+}
+
+.nt-deck-label,
+.nt-open-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+}
+
+.nt-open-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 중앙 큰 공개 카드 — 상아빛 종이 몸통 + 모서리 인덱스(우하단 180°) +
+   세리프 큰 숫자 (tc-card 실물 결) */
+.nt-open-card {
+  position: relative;
+  width: clamp(108px, 34vw, 132px);
+  height: clamp(152px, 48vw, 186px);
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 3px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.14),
+    0 2px 6px rgba(20, 20, 19, 0.1);
+}
+
+.nt-open-card.empty {
+  color: var(--color-muted-soft);
+  border-top-color: var(--color-hairline);
+}
+
+.nt-open-index {
+  position: absolute;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.nt-open-index.tl {
+  top: 8px;
+  left: 10px;
+}
+
+.nt-open-index.br {
+  bottom: 8px;
+  right: 10px;
+  transform: rotate(180deg);
+}
+
+.nt-open-value {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: clamp(56px, 16vw, 76px);
+  letter-spacing: var(--tracking-display-md);
+  line-height: 1;
+}
+
+/* 카드 위 칩 더미 — 카드 하단에 겹쳐 얹힌다 */
+.nt-pot {
+  position: absolute;
+  left: 50%;
+  bottom: -14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  box-shadow: var(--shadow-subtle);
+  white-space: nowrap;
+}
+
+.nt-pot-stack {
+  display: inline-flex;
+}
+
+.nt-pot-chip {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-amber);
+  border: 1px solid rgba(20, 20, 19, 0.35);
+  margin-left: -5px;
+}
+
+.nt-pot-chip:first-child {
+  margin-left: 0;
+}
+
+.nt-pot-count {
+  font-weight: 800;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 카드값 구간별 잉크 색 — 저채도 식별 토큰만 (CTA·서피스 금지) */
+.nt-open-card.tier-low,
+.nt-mini-card.tier-low {
+  color: var(--st-clan-2);
+}
+
+.nt-open-card.tier-mid,
+.nt-mini-card.tier-mid {
+  color: var(--st-clan-3);
+}
+
+.nt-open-card.tier-high,
+.nt-mini-card.tier-high {
+  color: var(--st-clan-0);
+}
+
+/* ---------- 내 칩 + 행동 버튼 ---------- */
+
+.nt-actions-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-top: var(--space-xs);
+}
+
+.nt-my-chips {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-body);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  font-size: var(--text-body-sm);
+}
+
+.nt-my-chips strong {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.nt-actions {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.nt-pass-button,
+.nt-take-button {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  flex: 1 1 130px;
+  max-width: 240px;
+}
+
+.nt-pass-button {
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+}
+
+.nt-pass-button:not(:disabled):active {
+  background: var(--color-surface-cream-strong);
+}
+
+.nt-take-button {
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.nt-take-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.nt-pass-button:disabled,
+.nt-take-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.nt-actions-hint {
+  color: var(--color-error);
+  font-size: var(--text-caption);
+}
+
+.nt-spectator-note {
+  margin: var(--space-xs) 0 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* ---------- 좌석 타일 ---------- */
+
+.nt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-xs);
+}
+
+.nt-tile {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.nt-tile.current {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.nt-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nt-tile-name {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-tile-turn {
+  color: var(--color-primary);
+}
+
+.nt-tile-chips {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.nt-tile-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.nt-tile-badges:empty {
+  display: none;
+}
+
+.nt-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+}
+
+.nt-badge.off {
+  color: var(--color-muted-soft);
+}
+
+.nt-tile-sum {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.nt-tile-empty {
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 획득 카드 — 연속 시퀀스끼리 붙인 그룹 ---------- */
+
+.nt-runs {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* 한 시퀀스 — 카드끼리 겹쳐 붙여 "이어진 묶음"으로 읽힌다 */
+.nt-run {
+  display: inline-flex;
+}
+
+.nt-mini-card {
+  flex-shrink: 0;
+  width: 28px;
+  height: 40px;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 2px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  user-select: none;
+  margin-left: -9px;
+  box-shadow: -1px 1px 2px rgba(20, 20, 19, 0.1);
+}
+
+.nt-run .nt-mini-card:first-child {
+  margin-left: 0;
+}
+
+/* 시퀀스 최솟값 — 이 값만 점수로 계산되므로 강조 */
+.nt-mini-card.min {
+  font-weight: 800;
+  border-color: currentColor;
+  background: var(--card-face);
+}
+
+/* 뒤에 붙은 카드는 점수 미계산 — 살짝 가라앉힌다 */
+.nt-mini-card:not(.min) {
+  opacity: 0.72;
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .nt-board {
+    padding: var(--space-sm) var(--space-xs) 96px;
+  }
+
+  .nt-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nt-table {
+    gap: var(--space-md);
+  }
+
+  .nt-open-card {
+    width: clamp(96px, 38vw, 118px);
+    height: clamp(138px, 54vw, 166px);
+  }
+
+  .nt-open-value {
+    font-size: clamp(46px, 18vw, 60px);
+  }
+
+  .nt-pass-button,
+  .nt-take-button {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .nt-mini-card {
+    width: 25px;
+    height: 36px;
+    font-size: 13px;
+    margin-left: -8px;
+  }
+}
