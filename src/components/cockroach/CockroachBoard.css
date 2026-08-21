@@ -1,0 +1,707 @@
+/* 바퀴벌레 포커 보드 — 크림 캔버스 위 소품 카드 결 (tokens.css 토큰만 사용).
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상. */
+
+.cr-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 96px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.cr-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.cr-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.cr-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.cr-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cr-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.cr-deadline.urgent {
+  color: var(--color-error);
+}
+
+.cr-phase-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 릴레이 체인 ---------- */
+
+.cr-chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+}
+
+.cr-chain-route {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: var(--text-caption);
+  color: var(--color-body);
+}
+
+.cr-chain-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cr-chain-arrow {
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.cr-chain-name {
+  font-weight: 600;
+}
+
+.cr-chain-name.origin {
+  color: var(--color-muted);
+}
+
+/* 현재 결정권자 — 체인의 끝을 강조 */
+.cr-chain-name.holder {
+  color: var(--color-primary-active);
+  font-weight: 800;
+}
+
+.cr-chain-claim {
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-pill);
+  padding: 3px 12px;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------- 결정권자 — 큰 선언 카드 + 판정 ---------- */
+
+.cr-decide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.cr-claim-card {
+  width: min(100%, 300px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 3px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg) var(--space-md);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.14),
+    0 2px 6px rgba(20, 20, 19, 0.1);
+}
+
+.cr-claim-emoji {
+  font-size: 56px;
+  line-height: 1;
+}
+
+.cr-claim-text {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  text-align: center;
+  word-break: keep-all;
+}
+
+.cr-claim-from {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.cr-judge-actions {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.cr-judge-button {
+  min-height: 52px;
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+  flex: 1 1 120px;
+  max-width: 220px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-top-width: 3px;
+}
+
+.cr-judge-button.true {
+  border-top-color: var(--color-success);
+}
+
+.cr-judge-button.false {
+  border-top-color: var(--color-error);
+}
+
+.cr-judge-button:not(:disabled):active {
+  background: var(--color-surface-cream-strong);
+}
+
+.cr-judge-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 몰래 보고 넘기기 — 판정과 결이 다른 잠입 액션 */
+.cr-relay-open-button {
+  min-height: 48px;
+  width: min(100%, 300px);
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-primary);
+  background: var(--color-primary-tint);
+  color: var(--color-primary-active);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cr-relay-open-button:not(:disabled):active {
+  background: var(--color-surface-cream-strong);
+}
+
+.cr-relay-open-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.cr-decide-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.cr-decide-note {
+  margin: 0;
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+/* ---------- 공용 패널 (넘기기 확인 · 전달 선언) ---------- */
+
+.cr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.cr-panel-title {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+}
+
+.cr-panel-waiting {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+.cr-panel-note {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+/* 실물 카드 — 상아빛 종이 몸통 */
+.cr-real-card {
+  width: 104px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.14),
+    0 2px 6px rgba(20, 20, 19, 0.1);
+  user-select: none;
+}
+
+.cr-real-emoji {
+  font-size: 44px;
+  line-height: 1;
+}
+
+.cr-real-label {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-caption);
+}
+
+.cr-pick-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cr-pick-label {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  text-align: left;
+}
+
+.cr-target-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.cr-target-option {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  cursor: pointer;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cr-target-option.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  color: var(--color-primary-active);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+  font-weight: 800;
+}
+
+/* 동물 선언 그리드 — 8종 (4열 × 2행) */
+.cr-animal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.cr-animal-option {
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  cursor: pointer;
+  padding: 4px 2px;
+  min-width: 0;
+}
+
+.cr-animal-option.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.cr-animal-option-emoji {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.cr-animal-option-label {
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.cr-animal-option.selected .cr-animal-option-label {
+  color: var(--color-primary-active);
+}
+
+.cr-send-button {
+  min-height: 48px;
+  width: 100%;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cr-send-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cr-send-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.cr-back-button {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+/* ---------- 내 손패 ---------- */
+
+.cr-hand-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline-soft);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+}
+
+.cr-hand-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.cr-hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cr-hand-card {
+  width: 54px;
+  height: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 2px solid var(--color-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-subtle);
+  padding: 2px;
+  min-width: 0;
+}
+
+.cr-hand-card:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+.cr-hand-card.selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+  transform: translateY(-3px);
+}
+
+.cr-hand-emoji {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.cr-hand-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-body);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.cr-hand-empty {
+  color: var(--color-error);
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+
+.cr-spectator-note {
+  margin: var(--space-xs) 0 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* ---------- 좌석 타일 + 진열 그리드 ---------- */
+
+.cr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-xs);
+}
+
+.cr-tile {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cr-tile.current {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.cr-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cr-tile-name {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cr-tile-turn {
+  color: var(--color-primary);
+}
+
+.cr-tile-hand {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.cr-tile-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cr-tile-badges:empty {
+  display: none;
+}
+
+.cr-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+}
+
+.cr-badge.off {
+  color: var(--color-muted-soft);
+}
+
+/* 진열 그리드 — 동물 이모지 × 개수 */
+.cr-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cr-display-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  font-size: var(--text-caption);
+}
+
+.cr-display-emoji {
+  line-height: 1;
+}
+
+.cr-display-count {
+  font-weight: 700;
+  color: var(--color-body);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 같은 동물 3장 — 경고색 (1장만 더 모이면 패배) */
+.cr-display-cell.warn {
+  border-color: var(--color-warning);
+}
+
+.cr-display-cell.warn .cr-display-count {
+  color: var(--color-warning);
+  font-weight: 800;
+}
+
+/* 같은 동물 4장 — 패배 확정 */
+.cr-display-cell.danger {
+  border-color: var(--color-error);
+}
+
+.cr-display-cell.danger .cr-display-count {
+  color: var(--color-error);
+  font-weight: 800;
+}
+
+.cr-display-empty {
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .cr-board {
+    padding: var(--space-sm) var(--space-xs) 96px;
+  }
+
+  .cr-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cr-claim-emoji {
+    font-size: 44px;
+  }
+
+  .cr-judge-button {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .cr-animal-grid {
+    gap: 4px;
+  }
+
+  .cr-animal-option-emoji {
+    font-size: 18px;
+  }
+
+  .cr-hand-card {
+    width: 48px;
+    height: 66px;
+  }
+}
