@@ -25,6 +25,8 @@ import { NoThanksApp } from './components/nothanks/NoThanksApp';
 import { LasVegasApp } from './components/lasvegas/LasVegasApp';
 import { CoupApp } from './components/coup/CoupApp';
 import { NimmtApp } from './components/nimmt/NimmtApp';
+import { CiaoCiaoApp } from './components/ciaociao/CiaoCiaoApp';
+import { CockroachApp } from './components/cockroach/CockroachApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -199,6 +201,14 @@ function App() {
 
   if (selectedGame === 'nimmt') {
     return <NimmtApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'ciaociao') {
+    return <CiaoCiaoApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'cockroach') {
+    return <CockroachApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {

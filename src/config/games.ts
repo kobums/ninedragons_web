@@ -27,6 +27,8 @@ export type GameId =
   | 'lasvegas'
   | 'coup'
   | 'nimmt'
+  | 'ciaociao'
+  | 'cockroach'
   | 'avalon';
 
 export interface RuleSection {
@@ -870,6 +872,65 @@ export const GAMES: Record<GameId, GameMeta> = {
         items: [
           '카드마다 소머리 벌점이 있습니다 (5의 배수 2, 10의 배수 3, 11의 배수 5, 55는 7).',
           '10트릭 후 소머리가 가장 적은 사람이 승리합니다.',
+        ],
+      },
+    ],
+  },
+  ciaociao: {
+    mood: 'cream',
+    title: '차오차오',
+    tag: '주사위 블러핑 · 소품',
+    description: '거짓 선언으로 다리를 건너는 담력 승부',
+    players: '2~4인',
+    duration: '10-15분',
+    cardTheme: 'dark',
+    wsPath: '/ws/ciaociao',
+    logPrefix: '[CiaoCiao] WebSocket',
+    sessionKey: 'cc_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '각자 말 3개로 시작합니다. 다리 7칸을 건너 말 2개를 먼저 통과시키면 승리합니다.',
+          '차례에 주사위(1·2·3·4·X·X)를 컵 속에서 굴려 나만 확인하고, 1~4 중 하나를 선언합니다.',
+          'X가 나왔으면 반드시 거짓으로 선언해야 합니다. 숫자가 나왔어도 다르게 선언할 수 있습니다.',
+        ],
+      },
+      {
+        heading: '의심',
+        items: [
+          '선언 후 10초 동안 누구든 의심할 수 있습니다. 아무도 의심하지 않으면 선언한 만큼 전진합니다.',
+          '의심이 맞으면 선언자의 말이, 틀리면 의심자의 말이 다리에서 떨어집니다 (부활 없음).',
+          '말을 전부 잃으면 탈락 — 담력과 거짓말이 승부를 가릅니다!',
+        ],
+      },
+    ],
+  },
+  cockroach: {
+    mood: 'cream',
+    title: '바퀴벌레 포커',
+    tag: '블러핑 · 카드 전달',
+    description: '"이건 쥐다" — 진실 혹은 거짓 카드 떠넘기기',
+    players: '3~6인',
+    duration: '10-20분',
+    cardTheme: 'cream',
+    wsPath: '/ws/cockroach',
+    logPrefix: '[Cockroach] WebSocket',
+    sessionKey: 'cr_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '동물 8종 카드를 전부 나눠 갖습니다. 차례에 카드 1장을 뒤집어 대상에게 건네며 동물을 선언합니다 — 거짓말 가능!',
+          '받은 사람은 "참이다/거짓이다"로 판정하거나, 몰래 확인한 뒤 새 선언으로 다른 사람에게 넘길 수 있습니다.',
+          '판정이 틀리면 그 카드를 자기 앞에 공개로 쌓고, 맞히면 건넨 사람 앞에 쌓입니다.',
+        ],
+      },
+      {
+        heading: '패배',
+        items: [
+          '같은 동물 4장이 자기 앞에 모이면 즉시 패배 — 나머지 전원 승리!',
+          '자기 차례에 낼 손패가 없어도 패배합니다.',
         ],
       },
     ],
