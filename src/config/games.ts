@@ -23,6 +23,8 @@ export type GameId =
   | 'codenames'
   | 'yacht'
   | 'indianpoker'
+  | 'nothanks'
+  | 'lasvegas'
   | 'avalon';
 
 export interface RuleSection {
@@ -749,6 +751,64 @@ export const GAMES: Record<GameId, GameMeta> = {
         items: [
           '카드는 1~10 각 4장, 시작 칩은 20개입니다. 칩이 떨어지면 탈락합니다.',
           '10라운드 후 칩이 가장 많은 사람이 승리합니다 (동점 공동 우승).',
+        ],
+      },
+    ],
+  },
+  nothanks: {
+    mood: 'cream',
+    title: '노 땡스!',
+    tag: '푸시 유어 럭 · 소품',
+    description: '카드를 받을까, 칩을 낼까 — 눈치 소품',
+    players: '3~7인',
+    duration: '10-15분',
+    cardTheme: 'dark',
+    wsPath: '/ws/nothanks',
+    logPrefix: '[NoThanks] WebSocket',
+    sessionKey: 'nt_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '3~35 카드 중 9장을 비밀리에 뺀 24장으로 진행하고, 각자 칩 11개로 시작합니다.',
+          '공개된 카드를 가져가거나, 칩 1개를 카드에 얹고 패스합니다. 칩이 없으면 무조건 가져가야 합니다.',
+          '카드를 가져가면 얹힌 칩도 전부 가져옵니다.',
+        ],
+      },
+      {
+        heading: '점수',
+        items: [
+          '덱이 떨어지면 종료 — 카드 숫자 합에서 칩 수를 뺀 점수가 가장 낮은 사람이 승리합니다.',
+          '연속된 카드 묶음은 가장 작은 숫자만 점수로 칩니다 (22·23·24 = 22점).',
+        ],
+      },
+    ],
+  },
+  lasvegas: {
+    mood: 'dark',
+    title: '라스베가스',
+    tag: '주사위 · 배팅',
+    description: '여섯 카지노에 주사위를 걸어 지폐를 쓸어담기',
+    players: '2~5인',
+    duration: '15-25분',
+    cardTheme: 'cream',
+    wsPath: '/ws/lasvegas',
+    logPrefix: '[LasVegas] WebSocket',
+    sessionKey: 'vg_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '카지노 1~6에 지폐가 깔립니다. 각자 주사위 8개로 시작합니다.',
+          '차례에 주사위를 전부 굴려, 한 눈을 골라 그 눈의 주사위 전부를 해당 카지노에 배치합니다.',
+          '전원이 주사위를 소진하면 정산 — 카지노마다 가장 많이 배치한 사람이 큰 지폐를 가져갑니다.',
+        ],
+      },
+      {
+        heading: '핵심',
+        items: [
+          '배치 수가 같은 사람끼리는 서로 상쇄되어 아무것도 못 받습니다!',
+          '4라운드 후 총액이 가장 많은 사람이 승리합니다.',
         ],
       },
     ],

@@ -21,6 +21,8 @@ import { SkullApp } from './components/skull/SkullApp';
 import { CodenamesApp } from './components/codenames/CodenamesApp';
 import { YachtApp } from './components/yacht/YachtApp';
 import { IndianPokerApp } from './components/indianpoker/IndianPokerApp';
+import { NoThanksApp } from './components/nothanks/NoThanksApp';
+import { LasVegasApp } from './components/lasvegas/LasVegasApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -179,6 +181,14 @@ function App() {
 
   if (selectedGame === 'indianpoker') {
     return <IndianPokerApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'nothanks') {
+    return <NoThanksApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'lasvegas') {
+    return <LasVegasApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
