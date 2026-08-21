@@ -16,7 +16,9 @@
 
 .game-selection .game-selection-container {
   width: 100%;
-  max-width: 820px;
+  /* 데스크탑에서 카드 그리드가 화면을 쓰도록 넓게 — auto-fit 그리드가
+     폭에 따라 2~4열로 자연 확장된다 (모바일은 기존과 동일) */
+  max-width: 1560px;
 }
 
 /* ---------- Header ---------- */
