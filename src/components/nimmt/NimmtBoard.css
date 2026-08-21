@@ -1,0 +1,585 @@
+/* 6 님트! 보드 — 크림 캔버스 위 실물 카드 결 (tokens.css 토큰만 사용).
+   280px 까지 가로 오버플로 금지(행 카드는 겹침 렌더), 터치 타깃 44px 이상. */
+
+.nm-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 96px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  overflow-x: hidden;
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.nm-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.nm-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.nm-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.nm-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nm-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.nm-deadline.urgent {
+  color: var(--color-error);
+}
+
+.nm-phase-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 공용 카드 — 상아빛 종이 몸통 + 소머리 뱃지 ---------- */
+
+.nm-card {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 60px;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 2px solid currentColor;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  user-select: none;
+  box-shadow: -1px 1px 2px rgba(20, 20, 19, 0.1);
+}
+
+.nm-card-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-title-sm);
+  line-height: 1;
+}
+
+.nm-bulls {
+  font-size: 10px;
+  line-height: 1;
+  color: var(--color-body);
+  white-space: nowrap;
+}
+
+/* 소머리 수 구간별 잉크 색 — 저채도 식별 토큰만 (CTA·서피스 금지) */
+.nm-card.tier-low,
+.nm-hand-card.tier-low {
+  color: var(--st-clan-2);
+}
+
+.nm-card.tier-mid,
+.nm-hand-card.tier-mid {
+  color: var(--st-clan-3);
+}
+
+.nm-card.tier-high,
+.nm-hand-card.tier-high {
+  color: var(--st-clan-0);
+}
+
+/* ---------- 4개 행 ---------- */
+
+.nm-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.nm-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+  min-height: 44px;
+  text-align: left;
+  min-width: 0;
+}
+
+/* 5장 찬 행 — 다음 카드가 6번째 → 먹는다 */
+.nm-row.full {
+  border-color: var(--color-error);
+  background: var(--color-team-red-tint);
+}
+
+/* 내가 chooser 일 때 행은 버튼 — 탭 대상임을 드러낸다 */
+.nm-row.choosable {
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.nm-row.choosable:active {
+  background: var(--color-surface-cream-strong);
+}
+
+/* 직전 카드가 놓인 행 — 잠깐 밝힌다 */
+.nm-row.placed {
+  border-color: var(--color-primary);
+}
+
+.nm-row-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 26px;
+}
+
+/* 카드 겹침 열 — 왼쪽(오래된 카드)이 아래 깔린다 */
+.nm-row-cards {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.nm-row-cards .nm-card {
+  margin-left: -14px;
+  justify-content: flex-start;
+  padding-top: 8px;
+  box-sizing: border-box;
+}
+
+.nm-row-cards .nm-card:first-child {
+  margin-left: 0;
+}
+
+/* 겹쳐도 왼쪽 위 숫자·소머리가 보이도록 왼쪽 정렬 */
+.nm-row-cards .nm-card .nm-card-value,
+.nm-row-cards .nm-card .nm-bulls {
+  align-self: flex-start;
+  margin-left: 5px;
+}
+
+.nm-row-empty {
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+}
+
+.nm-card.just-placed {
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+  animation: nm-pop 0.5s ease-out;
+}
+
+.nm-row-sum {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-row-warn {
+  color: var(--color-error);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.nm-choose-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--color-primary);
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+
+/* 직전 배치 안내 */
+.nm-placement {
+  margin: 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.nm-placement.ate {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+/* ---------- 일괄 공개 연출 — 낮은 순 순차 하이라이트 ---------- */
+
+.nm-reveal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+}
+
+.nm-reveal-title {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 700;
+  text-align: center;
+}
+
+.nm-reveal-list {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nm-reveal-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  animation: nm-reveal-in 0.45s ease-out forwards;
+}
+
+.nm-reveal-item.me .nm-reveal-name {
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.nm-card.reveal {
+  width: 46px;
+  height: 64px;
+}
+
+.nm-reveal-name {
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-body);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+@keyframes nm-reveal-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.9);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(0) scale(1.08);
+    filter: drop-shadow(0 0 6px var(--color-primary-ring));
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes nm-pop {
+  0% {
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---------- 플레이어 스트립 — 제출 현황 + 벌점 합 ---------- */
+
+.nm-players {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nm-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  padding: 7px 12px;
+  min-width: 0;
+}
+
+.nm-player.me {
+  border-color: var(--color-primary);
+}
+
+.nm-player.chooser {
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.nm-player-name {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-player-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.nm-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+}
+
+.nm-badge.off {
+  color: var(--color-muted-soft);
+}
+
+/* 제출 현황 — ✓ 완료 / … 고르는 중 */
+.nm-pick-status {
+  min-width: 22px;
+  text-align: center;
+  font-size: var(--text-caption);
+  font-weight: 800;
+  color: var(--color-muted-soft);
+}
+
+.nm-pick-status.done {
+  color: var(--color-success);
+}
+
+.nm-pick-status.choosing {
+  color: var(--color-primary);
+  font-size: 11px;
+}
+
+.nm-player-penalty {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- 내 손패 + 확인 바 ---------- */
+
+.nm-hand-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-top: var(--space-xs);
+}
+
+.nm-hand-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+.nm-hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.nm-hand-card {
+  position: relative;
+  width: 44px;
+  height: 64px;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 2px solid currentColor;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: -1px 1px 2px rgba(20, 20, 19, 0.1);
+  font: inherit;
+  transition: transform 0.12s ease-out;
+}
+
+.nm-hand-card .nm-card-value {
+  font-size: var(--text-title-md);
+}
+
+.nm-hand-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.nm-hand-card.selected {
+  transform: translateY(-6px);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.nm-confirm-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-lg);
+  padding: 8px 8px 8px 16px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.nm-confirm-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-confirm-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.nm-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.nm-hand-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--color-success);
+  font-size: var(--text-caption);
+  font-weight: 700;
+}
+
+.nm-spectator-note {
+  margin: var(--space-xs) 0 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지 — 겹침 폭 축소) ---------- */
+
+@media (max-width: 360px) {
+  .nm-board {
+    padding: var(--space-sm) var(--space-xs) 96px;
+  }
+
+  .nm-card {
+    width: 38px;
+    height: 54px;
+  }
+
+  .nm-card-value {
+    font-size: 14px;
+  }
+
+  .nm-row {
+    gap: 6px;
+    padding: 7px 8px;
+  }
+
+  .nm-row-label {
+    width: 22px;
+  }
+
+  /* 행 카드 겹침 폭을 더 줄여 5장이 280px 안에 들어가게 한다 */
+  .nm-row-cards .nm-card {
+    margin-left: -20px;
+  }
+
+  .nm-row-cards .nm-card:first-child {
+    margin-left: 0;
+  }
+
+  .nm-hand-card {
+    width: 40px;
+    height: 58px;
+  }
+
+  .nm-card.reveal {
+    width: 40px;
+    height: 58px;
+  }
+}

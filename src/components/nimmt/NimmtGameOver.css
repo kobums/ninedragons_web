@@ -1,0 +1,161 @@
+/* 6 님트! 게임 종료 — 크림 종이 결, 소머리 벌점 순위 (tokens.css 토큰만 사용) */
+
+.nm-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.nm-game-over-container {
+  width: 100%;
+  max-width: 460px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.nm-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.nm-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.nm-over-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+.nm-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.nm-over-verdict.win {
+  color: var(--color-primary);
+}
+
+.nm-over-verdict.lose {
+  color: var(--color-muted);
+}
+
+/* ---------- 벌점 순위 (소머리 최소 = 1위) ---------- */
+
+.nm-over-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.nm-over-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  min-width: 0;
+}
+
+.nm-over-row.winner {
+  background: var(--color-primary-tint);
+}
+
+.nm-over-name {
+  flex-shrink: 0;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-ink);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  text-align: left;
+}
+
+.nm-over-row.winner .nm-over-name {
+  font-weight: 800;
+}
+
+/* 벌점 크기 비교 막대 — 길수록 소머리를 많이 먹었다 */
+.nm-over-bar-wrap {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-cream-strong);
+  overflow: hidden;
+  min-width: 24px;
+}
+
+.nm-over-bar {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-error);
+  min-width: 2px;
+}
+
+.nm-over-row.winner .nm-over-bar {
+  background: var(--color-success);
+}
+
+.nm-over-penalty {
+  flex-shrink: 0;
+  color: var(--color-ink);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.nm-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.nm-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+@media (max-width: 360px) {
+  .nm-game-over {
+    padding: var(--space-sm);
+  }
+
+  .nm-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .nm-over-name {
+    max-width: 40%;
+  }
+}
