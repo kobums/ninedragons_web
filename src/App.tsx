@@ -23,6 +23,8 @@ import { YachtApp } from './components/yacht/YachtApp';
 import { IndianPokerApp } from './components/indianpoker/IndianPokerApp';
 import { NoThanksApp } from './components/nothanks/NoThanksApp';
 import { LasVegasApp } from './components/lasvegas/LasVegasApp';
+import { CoupApp } from './components/coup/CoupApp';
+import { NimmtApp } from './components/nimmt/NimmtApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -189,6 +191,14 @@ function App() {
 
   if (selectedGame === 'lasvegas') {
     return <LasVegasApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'coup') {
+    return <CoupApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'nimmt') {
+    return <NimmtApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {

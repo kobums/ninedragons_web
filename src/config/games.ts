@@ -25,6 +25,8 @@ export type GameId =
   | 'indianpoker'
   | 'nothanks'
   | 'lasvegas'
+  | 'coup'
+  | 'nimmt'
   | 'avalon';
 
 export interface RuleSection {
@@ -809,6 +811,65 @@ export const GAMES: Record<GameId, GameMeta> = {
         items: [
           '배치 수가 같은 사람끼리는 서로 상쇄되어 아무것도 못 받습니다!',
           '4라운드 후 총액이 가장 많은 사람이 승리합니다.',
+        ],
+      },
+    ],
+  },
+  coup: {
+    mood: 'dark',
+    title: '쿠',
+    tag: '블러핑 · 정체 은닉',
+    description: '거짓 주장과 도전이 오가는 궁정 음모전',
+    players: '2~6인',
+    duration: '10-20분',
+    cardTheme: 'dark',
+    wsPath: '/ws/coup',
+    logPrefix: '[Coup] WebSocket',
+    sessionKey: 'cp_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '각자 비공개 역할 카드 2장과 칩 2개로 시작합니다. 카드 2장을 모두 잃으면 탈락합니다.',
+          '차례에 액션을 선택합니다 — 수입(+1), 해외원조(+2), 세금(공작, +3), 암살(3칩), 강탈(사령관), 교환(대사), 쿠(7칩, 차단 불가).',
+          '역할이 필요한 액션은 카드가 없어도 "주장"할 수 있습니다 — 거짓말이 핵심입니다!',
+        ],
+      },
+      {
+        heading: '도전과 차단',
+        items: [
+          '누구든 역할 주장에 도전할 수 있습니다. 진짜였으면 도전자가, 거짓이면 주장자가 카드를 잃습니다.',
+          '해외원조는 공작, 암살은 백작부인, 강탈은 사령관/대사 주장으로 차단할 수 있습니다 (차단도 도전 가능).',
+          '칩이 10개 이상이면 반드시 쿠를 해야 합니다. 마지막까지 살아남으면 승리!',
+        ],
+      },
+    ],
+  },
+  nimmt: {
+    mood: 'cream',
+    title: '6 님트',
+    tag: '동시 선택 · 카드',
+    description: '여섯 번째 카드를 피하는 소머리 눈치싸움',
+    players: '2~10인',
+    duration: '10-15분',
+    cardTheme: 'cream',
+    wsPath: '/ws/nimmt',
+    logPrefix: '[Nimmt] WebSocket',
+    sessionKey: 'nm_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '1~104 카드를 10장씩 받고, 4개 행에 시작 카드가 놓입니다.',
+          '매 트릭 전원이 동시에 1장을 골라 일괄 공개 — 낮은 카드부터 자기보다 작은 행 끝 중 가장 큰 행에 붙습니다.',
+          '행의 6번째 카드가 되면 그 행 5장을 벌점으로 가져갑니다. 모든 행보다 작으면 행 하나를 골라 가져갑니다.',
+        ],
+      },
+      {
+        heading: '점수',
+        items: [
+          '카드마다 소머리 벌점이 있습니다 (5의 배수 2, 10의 배수 3, 11의 배수 5, 55는 7).',
+          '10트릭 후 소머리가 가장 적은 사람이 승리합니다.',
         ],
       },
     ],
