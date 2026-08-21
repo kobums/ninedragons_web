@@ -1,0 +1,131 @@
+/* 차오차오 게임 종료 — 크림 종이 결, 통과 순위 표 (tokens.css 토큰만 사용).
+   .cc-primary-button·.cc-pawn·.cc-seat-color-N 은 CiaoCiaoWaitingRoom.css 공용. */
+
+.cc-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.cc-game-over-container {
+  width: 100%;
+  max-width: 460px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.cc-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.cc-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.cc-over-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+.cc-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.cc-over-verdict.win {
+  color: var(--color-primary);
+}
+
+.cc-over-verdict.lose {
+  color: var(--color-muted);
+}
+
+/* ---------- 통과 순위 표 ---------- */
+
+.cc-over-table-wrap {
+  overflow-x: auto;
+}
+
+.cc-over-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  color: var(--color-ink);
+}
+
+.cc-over-table th {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-hairline);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cc-over-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cc-over-table th.left,
+.cc-over-table td.left {
+  text-align: left;
+}
+
+.cc-over-table tr.winner td {
+  background: var(--color-primary-tint);
+  font-weight: 700;
+}
+
+.cc-over-crossed {
+  font-weight: 800;
+}
+
+.cc-over-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-weight: 600;
+}
+
+@media (max-width: 360px) {
+  .cc-game-over {
+    padding: var(--space-sm);
+  }
+
+  .cc-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .cc-over-name {
+    max-width: 110px;
+  }
+}

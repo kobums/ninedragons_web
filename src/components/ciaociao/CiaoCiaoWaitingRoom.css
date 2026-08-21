@@ -1,0 +1,235 @@
+/* 차오차오 대기실 — 크림 종이 결 (nt-waiting 결, tokens.css 토큰만 사용) */
+
+.cc-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.cc-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+}
+
+.cc-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-ink);
+}
+
+.cc-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+.cc-join-form,
+.cc-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cc-form-group {
+  text-align: left;
+}
+
+.cc-form-group label {
+  display: block;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.cc-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: var(--text-body-md);
+}
+
+.cc-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cc-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cc-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.cc-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.cc-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cc-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cc-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.cc-seat-item.empty {
+  color: var(--color-muted-soft);
+  font-weight: 400;
+  border: 1px dashed var(--color-hairline);
+  background: transparent;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: var(--text-caption);
+}
+
+.cc-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cc-crown {
+  font-size: var(--text-body-sm);
+}
+
+.cc-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.cc-dot.on {
+  background: var(--color-success);
+}
+
+.cc-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.cc-waiting-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 360px) {
+  .cc-waiting {
+    padding: var(--space-sm);
+  }
+
+  .cc-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* 입장·퇴장 토스트 (대기실 상단) */
+.cc-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.cc-waiting-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 좌석 색 말 토큰 (보드·대기실·종료 공용) ----------
+   저채도 클랜 토큰을 좌석 식별용으로만 쓴다 — CTA·서피스 금지. */
+
+.cc-seat-color-0 {
+  --cc-seat: var(--st-clan-1); /* blue */
+}
+
+.cc-seat-color-1 {
+  --cc-seat: var(--st-clan-0); /* red */
+}
+
+.cc-seat-color-2 {
+  --cc-seat: var(--st-clan-2); /* green */
+}
+
+.cc-seat-color-3 {
+  --cc-seat: var(--st-clan-3); /* gold */
+}
+
+/* 말 토큰 — 색 원판 (미플 머리 느낌의 살짝 눌린 원) */
+.cc-pawn {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--cc-seat, var(--color-muted-soft));
+  border: 1px solid rgba(20, 20, 19, 0.3);
+  box-shadow: inset 0 -2px 0 rgba(20, 20, 19, 0.18);
+  flex-shrink: 0;
+}

@@ -1,0 +1,750 @@
+/* 차오차오 보드 — 크림 캔버스 위 널빤지 다리 결 (tokens.css 토큰만 사용).
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상.
+   좌석 색 토큰(.cc-seat-color-N)·말 토큰(.cc-pawn)은 CiaoCiaoWaitingRoom.css 공용. */
+
+.cc-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 132px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.cc-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.cc-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.cc-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.cc-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cc-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.cc-deadline.urgent {
+  color: var(--color-error);
+}
+
+.cc-phase-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 판정 공개 연출 ---------- */
+
+.cc-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  animation: cc-reveal-in 0.25s ease;
+}
+
+@keyframes cc-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cc-reveal-dice {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+
+.cc-reveal-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cc-reveal-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+}
+
+.cc-reveal-vs {
+  color: var(--color-muted-soft);
+  font-weight: 800;
+  padding-bottom: 12px;
+}
+
+/* 실제 값 카드 뒤집힘 — Y축 플립으로 공개된다 */
+.cc-reveal-flip {
+  display: inline-block;
+  perspective: 300px;
+}
+
+.cc-reveal-flip .cc-die {
+  animation: cc-flip 0.6s ease;
+  backface-visibility: hidden;
+}
+
+@keyframes cc-flip {
+  0% {
+    transform: rotateY(90deg);
+  }
+  60% {
+    transform: rotateY(-14deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+.cc-reveal-text {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  word-break: keep-all;
+}
+
+.cc-reveal-text.lied {
+  color: var(--color-error);
+}
+
+.cc-reveal-text.honest {
+  color: var(--color-body);
+}
+
+/* 낙하한 말 — 떨어지며 사라지는 연출 */
+.cc-reveal-drop {
+  animation: cc-pawn-drop 0.9s ease forwards;
+}
+
+@keyframes cc-pawn-drop {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(14px) rotate(120deg);
+    opacity: 0.25;
+  }
+}
+
+/* ---------- 다리 트랙 ---------- */
+
+.cc-bridge-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* 280px 뷰포트 안전판 — 트랙이 넘치면 자체 가로 스크롤 */
+  overflow-x: auto;
+}
+
+.cc-bridge {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  justify-content: center;
+  padding: var(--space-xs) 2px;
+  min-width: 0;
+}
+
+/* 출발·통과 존 */
+.cc-bridge-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 40px;
+  padding: 6px 4px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  flex-shrink: 0;
+}
+
+.cc-bridge-end.goal {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+}
+
+.cc-bridge-end-icon {
+  font-size: var(--text-title-sm);
+  line-height: 1;
+}
+
+.cc-bridge-end-label {
+  color: var(--color-muted);
+  font-size: 10px;
+}
+
+.cc-goal-flags {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.cc-goal-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 다리 한 칸 — 널빤지 결 (상아빛 종이 + 위쪽 나무 테) */
+.cc-cell {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 26px;
+  max-width: 52px;
+  min-height: 64px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  border-top: 3px solid var(--color-accent-amber);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4px 2px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.cc-cell-num {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--color-muted-soft);
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+/* 칸 위 말 토큰 더미 — 여러 개면 세로로 쌓는다 */
+.cc-cell-pawns {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  max-height: 44px;
+}
+
+.cc-bridge-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 내 차례 — 컵 + 은닉 주사위 + 선언 ---------- */
+
+.cc-roll-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.cc-cup-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* 주사위 컵 — 뒤집힌 사다리꼴 + 굽 (CSS 소품) */
+.cc-cup {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  transform: rotate(-14deg);
+}
+
+.cc-cup-body {
+  width: 44px;
+  height: 50px;
+  background: linear-gradient(
+    170deg,
+    var(--color-surface-dark-elevated) 0%,
+    var(--color-surface-dark) 100%
+  );
+  clip-path: polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%);
+  border-radius: 4px 4px 8px 8px;
+}
+
+.cc-cup-rim {
+  width: 52px;
+  height: 7px;
+  margin-top: -2px;
+  background: var(--color-surface-dark-elevated);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-subtle);
+}
+
+.cc-secret {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-secret-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  font-weight: 600;
+}
+
+.cc-secret-rolling {
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* X 경고 — 반드시 거짓 선언 */
+.cc-x-warning {
+  margin: 0;
+  color: var(--color-error);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  background: var(--color-team-red-tint);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.cc-declare-row {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  width: 100%;
+}
+
+/* 선언 버튼 1~4 — 터치 타깃 44px 이상 */
+.cc-declare-button {
+  flex: 1 1 0;
+  min-width: 44px;
+  max-width: 76px;
+  min-height: 52px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-title-md);
+  font-weight: 800;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.cc-declare-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cc-declare-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.cc-declare-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+/* ---------- 의심 창 ---------- */
+
+.cc-doubt-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.cc-declared-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-declared-name {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.cc-declared-value {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  line-height: 1;
+}
+
+.cc-doubt-passive {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+/* 하단 판단 바 — 고정. 우측 리액션 토글(44px)과 안 겹치게 오른쪽 여백 */
+.cc-doubt-bar {
+  position: fixed;
+  left: 12px;
+  right: 68px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 900;
+  display: flex;
+  gap: var(--space-xs);
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.cc-doubt-button,
+.cc-allow-button {
+  flex: 1 1 0;
+  min-height: 52px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow-subtle);
+}
+
+.cc-doubt-button {
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.cc-doubt-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.cc-allow-button {
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+}
+
+.cc-allow-button:not(:disabled):active {
+  background: var(--color-surface-cream-strong);
+}
+
+.cc-doubt-button:disabled,
+.cc-allow-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.cc-spectator-note {
+  margin: var(--space-xs) 0 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* ---------- 주사위 (YachtBoard 3×3 CSS 도트 결) ---------- */
+
+.cc-die {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border: 2px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--card-face);
+  box-shadow: var(--shadow-subtle);
+  flex-shrink: 0;
+}
+
+.cc-die.sm {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+
+.cc-die.x {
+  border-color: var(--color-error);
+  background: var(--color-team-red-tint);
+}
+
+.cc-die-skull {
+  font-size: 26px;
+  line-height: 1;
+  color: var(--color-error);
+}
+
+.cc-die.sm .cc-die-skull {
+  font-size: 21px;
+}
+
+.cc-die-face {
+  position: absolute;
+  inset: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.cc-pip-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-pip-cell.on::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  background: var(--color-ink);
+}
+
+.cc-die.sm .cc-pip-cell.on::before {
+  width: 7px;
+  height: 7px;
+}
+
+/* ---------- 좌석 스트립 ---------- */
+
+.cc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-xs);
+}
+
+.cc-tile {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cc-tile.current {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.cc-tile.dead {
+  opacity: 0.55;
+}
+
+.cc-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cc-tile-name {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cc-tile-turn {
+  color: var(--color-primary);
+}
+
+.cc-tile-crossed {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.cc-tile-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cc-tile-badges:empty {
+  display: none;
+}
+
+.cc-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+}
+
+.cc-badge.off {
+  color: var(--color-muted-soft);
+}
+
+.cc-tile-pawns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cc-tile-pawns-label {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.cc-tile-pawns-row {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.cc-tile-pawns-none {
+  color: var(--color-muted-soft);
+  font-size: 11px;
+}
+
+.cc-tile-onbridge {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+/* ---------- 접근성 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-reveal,
+  .cc-reveal-flip .cc-die,
+  .cc-reveal-drop {
+    animation: none;
+  }
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .cc-board {
+    padding: var(--space-sm) var(--space-xs) 132px;
+  }
+
+  .cc-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cc-bridge {
+    gap: 2px;
+  }
+
+  .cc-cell {
+    min-width: 22px;
+    min-height: 56px;
+    border-top-width: 2px;
+  }
+
+  .cc-bridge-end {
+    min-width: 32px;
+  }
+
+  .cc-cup-row {
+    gap: var(--space-md);
+  }
+
+  .cc-declare-button {
+    min-height: 48px;
+  }
+
+  .cc-doubt-bar {
+    left: var(--space-xs);
+    right: 62px;
+  }
+}
