@@ -1,0 +1,125 @@
+/* 라스베가스 종료 화면 — 승자 + 최종 총액 순위표 (네온 카지노 다크) */
+
+.vg-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--vg-night-elevated) 0%,
+    var(--vg-night) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.vg-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--vg-line);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.vg-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.vg-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--vg-gold-strong);
+  overflow-wrap: anywhere;
+}
+
+.vg-over-sub {
+  margin: 0;
+  color: var(--vg-fog);
+  font-size: var(--text-caption);
+}
+
+.vg-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 700;
+}
+
+.vg-over-verdict.win {
+  color: var(--color-success);
+}
+
+.vg-over-verdict.lose {
+  color: var(--vg-fog);
+}
+
+.vg-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.vg-over-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.vg-over-row.winner {
+  background: var(--vg-gold-tint);
+  border-color: rgba(232, 165, 90, 0.5);
+}
+
+.vg-over-rank {
+  flex-shrink: 0;
+  font-size: var(--text-caption-uppercase);
+  color: var(--vg-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.vg-over-name {
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vg-over-cash {
+  flex-shrink: 0;
+  font-weight: 800;
+  color: var(--vg-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 버튼 결은 대기실과 동일 클래스(vg-primary-button)를 재사용한다 —
+   LasVegasWaitingRoom.css 가 셸에서 항상 함께 로드된다. */
+
+@media (max-width: 360px) {
+  .vg-game-over {
+    padding: var(--space-sm);
+  }
+
+  .vg-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}

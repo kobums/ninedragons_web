@@ -1,0 +1,579 @@
+/* 라스베가스 보드 — 네온 카지노 밤 무드 (팔레트는 LasVegasApp.css 의
+   vg-scope 변수). 페이지 가로 스크롤 금지 — 280px 에서는 카지노 그리드가
+   2열로 접힌다. 터치 타깃 44px 이상. */
+
+.vg-board {
+  min-height: 100vh;
+  background: linear-gradient(
+    170deg,
+    var(--vg-night-elevated) 0%,
+    var(--vg-night) 55%
+  );
+  padding: var(--space-md) var(--space-md) 120px;
+  max-width: 640px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  overflow-x: hidden;
+}
+
+/* ---------- 좌석 색 매핑 (5색 순환) ---------- */
+
+.vg-sc0 {
+  --seat-color: var(--vg-seat-0);
+  --seat-tint: var(--vg-seat-0-tint);
+}
+
+.vg-sc1 {
+  --seat-color: var(--vg-seat-1);
+  --seat-tint: var(--vg-seat-1-tint);
+}
+
+.vg-sc2 {
+  --seat-color: var(--vg-seat-2);
+  --seat-tint: var(--vg-seat-2-tint);
+}
+
+.vg-sc3 {
+  --seat-color: var(--vg-seat-3);
+  --seat-tint: var(--vg-seat-3-tint);
+}
+
+.vg-sc4 {
+  --seat-color: var(--vg-seat-4);
+  --seat-tint: var(--vg-seat-4-tint);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.vg-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.vg-toast {
+  background: var(--vg-night-elevated);
+  border: 1px solid var(--vg-line);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.vg-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--vg-line);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+/* 정산 국면 — 골드 라인으로 살짝 달아오른다 */
+.vg-phase-banner.settle {
+  border-color: rgba(232, 165, 90, 0.45);
+  background: var(--vg-gold-tint);
+}
+
+.vg-phase-title {
+  color: var(--color-on-dark);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vg-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--vg-fog);
+  font-weight: 600;
+}
+
+.vg-deadline.urgent {
+  color: var(--vg-danger);
+}
+
+.vg-phase-sub {
+  color: var(--vg-fog);
+  font-size: var(--text-caption);
+}
+
+.vg-phase-banner.settle .vg-phase-sub {
+  color: var(--vg-gold-strong);
+  font-weight: 600;
+}
+
+/* ---------- 플레이어 현황 ---------- */
+
+.vg-players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.vg-player {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--vg-line-soft);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: var(--text-caption);
+  color: var(--color-on-dark);
+  max-width: 100%;
+}
+
+.vg-player.current {
+  border-color: var(--seat-color);
+  background: var(--seat-tint);
+}
+
+.vg-player-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  background: var(--seat-color);
+  flex-shrink: 0;
+}
+
+.vg-player-name {
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120px;
+}
+
+.vg-turn-mark {
+  color: var(--seat-color);
+  margin-right: 2px;
+}
+
+.vg-player-dice {
+  color: var(--vg-fog);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.vg-player-cash {
+  color: var(--vg-gold-strong);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* ---------- 카지노 6칸 그리드 ---------- */
+
+.vg-casino-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vg-casino {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--vg-line);
+  background: var(--vg-night-soft);
+  min-width: 0;
+}
+
+/* 내 차례에 배치 가능한 눈의 카지노 — 네온 라인으로 살짝 초대 */
+.vg-casino.placeable {
+  border-color: var(--vg-neon);
+  background: var(--vg-neon-tint);
+}
+
+.vg-casino-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 주사위 (요트 도트 렌더 결) ---------- */
+
+.vg-die {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--card-face);
+  flex-shrink: 0;
+}
+
+/* 카지노 칸의 큰 눈금 아이콘 */
+.vg-die.vg-casino-die {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-lg);
+}
+
+.vg-die-face {
+  position: absolute;
+  inset: 4px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.vg-pip-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vg-pip-cell.on::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-ink);
+}
+
+.vg-die.vg-casino-die .vg-pip-cell.on::before {
+  width: 7px;
+  height: 7px;
+}
+
+/* 굴림 연출 — CSS 셰이크 (요트 결) */
+@keyframes vg-shake {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(-2px, -3px) rotate(-8deg);
+  }
+  40% {
+    transform: translate(3px, 1px) rotate(6deg);
+  }
+  60% {
+    transform: translate(-3px, 2px) rotate(-5deg);
+  }
+  80% {
+    transform: translate(2px, -2px) rotate(4deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+.vg-die.rolling {
+  animation: vg-shake 0.55s ease-in-out;
+}
+
+/* ---------- 지폐 스택 ---------- */
+
+.vg-bills {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  width: 100%;
+}
+
+.vg-bill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 3px 6px;
+  border-radius: var(--radius-xs);
+  border: 1px solid rgba(232, 165, 90, 0.45);
+  background: var(--vg-gold-tint);
+  color: var(--vg-gold-strong);
+  font-size: var(--text-caption);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.vg-bills-empty {
+  color: var(--vg-fog);
+  font-size: 11px;
+  text-align: center;
+}
+
+/* round_end — 지폐 획득: 받는 좌석 색으로 달아오르며 이름 표시 */
+.vg-bill.awarded {
+  border-color: var(--seat-color);
+  background: var(--seat-tint);
+  color: var(--color-on-dark);
+  animation: vg-award-pop 0.6s ease-out;
+}
+
+@keyframes vg-award-pop {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.vg-bill-to {
+  color: var(--seat-color);
+  font-size: 10px;
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* round_end — 아무도 못 받는 지폐는 버림 처리 */
+.vg-bill.discarded {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+/* ---------- 배치된 주사위 수 배지 (좌석 색) ---------- */
+
+.vg-placed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.vg-placed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--seat-color);
+  background: var(--seat-tint);
+  color: var(--color-on-dark);
+  font-size: var(--text-caption);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.vg-placed-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: var(--seat-color);
+  flex-shrink: 0;
+}
+
+/* round_end — 동수 상쇄: 배지 흐림 + 취소선 + '상쇄' 태그 */
+.vg-placed-badge.cancelled {
+  opacity: 0.55;
+  border-color: var(--vg-danger);
+  background: var(--vg-danger-tint);
+  text-decoration: line-through;
+}
+
+.vg-cancel-tag {
+  color: var(--vg-danger);
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ---------- 주사위 패널 ---------- */
+
+.vg-dice-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--vg-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.vg-dice-owner {
+  margin: 0;
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 남은 주사위 수 뱃지 */
+.vg-dice-left-badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--vg-line);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--vg-fog);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.vg-dice-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 같은 눈 그룹 — 내 차례엔 탭 = 배치 */
+.vg-dice-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--vg-line);
+  background: var(--vg-night-soft);
+}
+
+.vg-dice-group.tappable {
+  cursor: pointer;
+  border-color: var(--vg-neon);
+  background: var(--vg-neon-tint);
+}
+
+.vg-dice-group.tappable:not(:disabled):active {
+  transform: translateY(2px);
+}
+
+.vg-dice-group.tappable:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.vg-group-dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  max-width: 128px;
+}
+
+.vg-group-label {
+  color: var(--vg-fog);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.vg-dice-group.tappable .vg-group-label {
+  color: var(--vg-neon);
+}
+
+.vg-dice-hint {
+  margin: 0;
+  color: var(--vg-fog);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+.vg-spectator-note {
+  margin: 0;
+  color: var(--vg-fog);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+/* ---------- 모션 최소화 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .vg-die.rolling {
+    animation: none;
+  }
+
+  .vg-bill.awarded {
+    animation: none;
+  }
+}
+
+/* ---------- 축소 화면 ---------- */
+
+@media (max-width: 400px) {
+  .vg-die {
+    width: 30px;
+    height: 30px;
+  }
+
+  .vg-die.vg-casino-die {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 340px) {
+  .vg-board {
+    padding: var(--space-sm) var(--space-xs) 120px;
+  }
+
+  /* 280px — 카지노 그리드 2열 전환 (페이지 가로 스크롤 금지) */
+  .vg-casino-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .vg-die {
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-sm);
+  }
+
+  .vg-die-face {
+    inset: 3px;
+  }
+
+  .vg-pip-cell.on::before {
+    width: 5px;
+    height: 5px;
+  }
+
+  .vg-die.vg-casino-die {
+    width: 32px;
+    height: 32px;
+  }
+
+  .vg-dice-panel {
+    padding: var(--space-sm) var(--space-xs);
+  }
+
+  .vg-group-dice {
+    max-width: 96px;
+  }
+}
