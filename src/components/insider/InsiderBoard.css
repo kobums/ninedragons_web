@@ -1,0 +1,551 @@
+/* 인사이더 보드 — 그을린 차콜 다크, 큰 단계 타이머 + 좌석 타일 그리드.
+   .id-scope 변수 정의는 InsiderWaitingRoom.css (같은 번들) 참조.
+   280px 오버플로 금지, 터치 타깃 44px+. */
+
+.id-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--id-bg-elevated) 0%,
+    var(--id-bg) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 96px; /* 하단 확인 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.id-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.id-toast {
+  background: rgba(10, 8, 6, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: id-toast-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes id-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 단계 배너 + 큰 타이머 ---------- */
+
+.id-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+  background: var(--id-master-tint);
+  border: 1px solid var(--id-master);
+}
+
+.id-phase-banner.discussion {
+  background: var(--id-citizen-tint);
+  border-color: var(--id-citizen);
+}
+
+.id-phase-banner.voting {
+  background: var(--id-insider-tint);
+  border-color: var(--id-insider);
+}
+
+.id-phase-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+}
+
+/* 큰 단계 타이머 — question 5:00 / discussion 2:00 (서버 endsAt 기준) */
+.id-timer {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-display-lg);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-on-dark);
+}
+
+.id-timer.small {
+  font-size: var(--text-display-sm);
+}
+
+.id-timer.urgent {
+  color: var(--id-insider);
+  animation: id-timer-pulse 1s ease infinite;
+}
+
+@keyframes id-timer-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.id-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--id-fog);
+}
+
+/* ---------- 내 역할 카드 ---------- */
+
+.id-role-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+  /* 첫 배정 시 강조 등장 (key 교체로 재생) */
+  animation: id-role-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes id-role-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.id-role-card.role-master {
+  border-color: var(--id-master);
+  background: var(--id-master-tint);
+}
+
+.id-role-card.role-insider {
+  border-color: var(--id-insider);
+  background: var(--id-insider-tint);
+}
+
+.id-role-card.role-citizen {
+  border-color: var(--id-citizen);
+  background: var(--id-citizen-tint);
+}
+
+.id-role-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.id-role-icon {
+  font-size: var(--text-title-lg);
+}
+
+.id-role-name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+}
+
+.id-role-card.role-master .id-role-name {
+  color: var(--id-master);
+}
+
+.id-role-card.role-insider .id-role-name {
+  color: var(--id-insider);
+}
+
+.id-role-card.role-citizen .id-role-name {
+  color: var(--id-citizen);
+}
+
+/* 마스터 공개 표시 칩 */
+.id-role-public {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--id-master-tint);
+  border: 1px solid var(--id-master);
+  color: var(--id-master);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+}
+
+.id-role-desc {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--id-fog);
+}
+
+.id-spectator-note {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--id-fog);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 제시어 카드 (마스터·인사이더 전용) ---------- */
+
+.id-word-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px dashed var(--id-master);
+  text-align: center;
+}
+
+.id-word-label {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--id-master);
+  font-weight: 800;
+}
+
+.id-word {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.id-word-hint {
+  font-size: var(--text-caption);
+  color: var(--id-fog);
+}
+
+/* ---------- 마스터 전용 버튼 ---------- */
+
+.id-master-button {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.id-master-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.id-master-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--id-fog);
+  cursor: not-allowed;
+}
+
+/* ---------- 플레이어 타일 그리드 ---------- */
+
+.id-grid {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.id-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  text-align: left;
+  cursor: default;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.id-tile.me {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.id-tile.selectable {
+  cursor: pointer;
+}
+
+.id-tile.selectable:hover {
+  border-color: var(--color-primary);
+}
+
+.id-tile.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 1px var(--color-primary);
+  transform: scale(1.02);
+}
+
+.id-tile:disabled {
+  /* 버튼 기본 비활성 스타일 무력화 — 시각 상태는 클래스가 결정 */
+  color: var(--color-on-dark);
+}
+
+.id-tile-name {
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.id-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.id-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: var(--text-caption-uppercase);
+  color: var(--id-fog);
+}
+
+.id-badge.master {
+  background: var(--id-master-tint);
+  color: var(--id-master);
+  font-weight: 800;
+}
+
+.id-badge.off {
+  background: rgba(212, 160, 23, 0.18);
+  color: var(--color-warning);
+}
+
+.id-badge.voted {
+  background: rgba(93, 184, 114, 0.16);
+  color: var(--color-success);
+}
+
+.id-vote-pending {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--id-fog);
+}
+
+/* ---------- 개표 연출 ---------- */
+
+.id-tally {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.id-tally-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: var(--text-body-sm);
+  /* 득표 순 릴레이 공개 — delay 는 인라인 style 로 행마다 지정 */
+  opacity: 0;
+  animation: id-tally-in 0.45s ease forwards;
+}
+
+.id-tally-row.top {
+  border-color: var(--id-insider);
+  background: var(--id-insider-tint);
+  font-weight: 800;
+}
+
+@keyframes id-tally-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.id-tally-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.id-tally-votes {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--id-master);
+  font-weight: 800;
+}
+
+/* ---------- 하단 확인 바 ---------- */
+
+.id-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 950;
+  width: calc(100% - 24px);
+  max-width: 480px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--id-bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-modal);
+  animation: id-toast-in 0.2s ease;
+}
+
+.id-confirm-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  min-width: 0;
+}
+
+.id-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.id-confirm-button {
+  min-height: 44px;
+  padding: 9px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.id-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.id-cancel-button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--id-fog);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+/* ---------- 모바일 (280px 대응) ---------- */
+
+@media (max-width: 420px) {
+  .id-board {
+    padding: var(--space-xs);
+    padding-bottom: 96px;
+  }
+
+  .id-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .id-tile {
+    padding: 8px;
+  }
+
+  .id-tile-name {
+    font-size: var(--text-caption);
+  }
+}
+
+@media (max-width: 300px) {
+  .id-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .id-timer {
+    font-size: var(--text-display-md);
+  }
+}
