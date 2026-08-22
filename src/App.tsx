@@ -29,6 +29,7 @@ import { CiaoCiaoApp } from './components/ciaociao/CiaoCiaoApp';
 import { CockroachApp } from './components/cockroach/CockroachApp';
 import { InsiderApp } from './components/insider/InsiderApp';
 import { DalmutiApp } from './components/dalmuti/DalmutiApp';
+import { KrakenApp } from './components/kraken/KrakenApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -219,6 +220,10 @@ function App() {
 
   if (selectedGame === 'dalmuti') {
     return <DalmutiApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'kraken') {
+    return <KrakenApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
