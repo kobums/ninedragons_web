@@ -14,6 +14,23 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   onTileClick,
   isMyTurn,
 }) => {
+  // 상대 남은 패 표시용 — 훅은 최상위에서만 부른다. 예전에는 아래
+  // renderOpponentTiles 안에서 useMemo 를 불렀는데, 그 함수가 조건부로
+  // 호출되는 자리라 마운트 조건이 바뀌면 훅 개수가 흔들린다.
+  const opponentUsedKey = gameState.opponentUsedTiles.join(',');
+  const shuffledOpponentTiles = React.useMemo(() => {
+    const tiles = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(
+      (tile) => !opponentUsedKey.split(',').includes(String(tile))
+    );
+    // 게임 상태 기반으로 일관된 순서를 유지하되 무작위하게 보이도록
+    const seed = gameState.gameId || '';
+    return tiles.sort((a, b) => {
+      const hashA = (a * seed.length + gameState.currentRound) % 10;
+      const hashB = (b * seed.length + gameState.currentRound) % 10;
+      return hashA - hashB;
+    });
+  }, [opponentUsedKey, gameState.gameId, gameState.currentRound]);
+
   const renderTiles = () => {
     return [1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => {
       const isUsed = gameState.usedTiles.includes(num);
@@ -123,23 +140,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const opponentAvailableTiles = allTiles.filter(
       (tile) => !gameState.opponentUsedTiles.includes(tile)
     );
-
-    // 패를 색상 패턴으로만 표시 (순서를 섞어서)
-    const shuffledTiles = React.useMemo(() => {
-      const tiles = [...opponentAvailableTiles];
-      // 게임 상태 기반으로 일관된 순서 유지하되 무작위하게 보이도록
-      const seed = gameState.gameId || '';
-      return tiles.sort((a, b) => {
-        const hashA = (a * seed.length + gameState.currentRound) % 10;
-        const hashB = (b * seed.length + gameState.currentRound) % 10;
-        return hashA - hashB;
-      });
-    }, [
-      opponentAvailableTiles.join(','),
-      gameState.gameId,
-      gameState.currentRound,
-      gameState.opponentUsedTiles.length,
-    ]);
+    const shuffledTiles = shuffledOpponentTiles;
 
     return (
       <div className="opponent-tiles-display">
