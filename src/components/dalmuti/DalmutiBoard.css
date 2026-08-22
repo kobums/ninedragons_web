@@ -1,0 +1,807 @@
+/* 위대한 달무티 보드 — 크림 캔버스 위 실물 카드 결.
+   팔레트는 DalmutiApp.css 의 dm-scope 변수 + tokens.css 토큰만 사용한다.
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상. */
+
+.dm-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 96px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.dm-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.dm-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.dm-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.dm-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dm-deadline {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.dm-deadline.urgent {
+  color: var(--color-error);
+}
+
+.dm-phase-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 카드 한 장 (실물 결 간소화) ---------- */
+
+.dm-card {
+  position: relative;
+  flex-shrink: 0;
+  width: 56px;
+  height: 78px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    170deg,
+    var(--dm-card-face) 0%,
+    var(--dm-card-edge) 100%
+  );
+  border: 1px solid var(--dm-card-line);
+  border-top: 3px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  box-shadow:
+    0 1px 2px var(--dm-card-shadow),
+    0 2px 6px var(--dm-card-shadow);
+}
+
+.dm-card.sm {
+  width: 44px;
+  height: 62px;
+  border-top-width: 2px;
+}
+
+.dm-card-index {
+  position: absolute;
+  font-weight: 800;
+  font-size: 11px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.dm-card-index.tl {
+  top: 5px;
+  left: 6px;
+}
+
+.dm-card-index.br {
+  bottom: 5px;
+  right: 6px;
+  transform: rotate(180deg);
+}
+
+.dm-card-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.dm-card-rank {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: 26px;
+  letter-spacing: var(--tracking-display-sm);
+  line-height: 1;
+}
+
+.dm-card.sm .dm-card-rank {
+  font-size: 21px;
+}
+
+.dm-card-name {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--color-muted);
+  letter-spacing: 0.02em;
+}
+
+.dm-card.sm .dm-card-name {
+  font-size: 7px;
+}
+
+/* 계급 잉크 — dm-scope 식별 변수만 (CTA·서피스 금지) */
+.dm-card.tier-noble {
+  color: var(--dm-noble);
+}
+
+.dm-card.tier-mid {
+  color: var(--dm-mid);
+}
+
+.dm-card.tier-low {
+  color: var(--dm-low);
+}
+
+.dm-card.tier-joker {
+  color: var(--dm-joker);
+  background: linear-gradient(
+    170deg,
+    var(--dm-card-face) 0%,
+    var(--dm-joker-tint) 100%
+  );
+}
+
+/* ---------- 테이블 중앙 — 현재 이길 대상 세트 ---------- */
+
+.dm-table {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-sm) 0 var(--space-xs);
+}
+
+.dm-table-set {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* rank × count 카드 무더기 — 겹쳐 쌓인 실물 결 */
+.dm-table-stack {
+  display: flex;
+  align-items: flex-end;
+  padding-left: 12px;
+}
+
+.dm-table-stack .dm-card {
+  margin-left: -34px;
+}
+
+.dm-table-stack .dm-card:first-child {
+  margin-left: 0;
+}
+
+.dm-table-count {
+  align-self: center;
+  margin-left: 8px;
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  font-weight: 800;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+.dm-table-empty {
+  width: 76px;
+  height: 100px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dm-table-empty-mark {
+  font-size: 30px;
+  opacity: 0.5;
+}
+
+.dm-table-label {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+  max-width: 100%;
+}
+
+.dm-table-label strong {
+  color: var(--color-ink);
+}
+
+/* ---------- 좌석 타일 ---------- */
+
+.dm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-xs);
+}
+
+.dm-tile {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dm-tile.current {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.dm-tile.out {
+  background: var(--color-surface-soft);
+}
+
+.dm-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dm-tile-name {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-tile-turn {
+  color: var(--color-primary);
+}
+
+.dm-tile-points {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.dm-tile-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dm-tile-count {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+.dm-tile-out {
+  color: var(--color-success);
+  font-size: var(--text-caption);
+  font-weight: 800;
+}
+
+.dm-rank-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+  font-weight: 700;
+}
+
+.dm-rank-badge.first {
+  background: var(--dm-gold-tint);
+  border-color: var(--dm-gold);
+  color: var(--color-ink);
+}
+
+.dm-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  border: 1px solid var(--color-hairline);
+}
+
+.dm-badge.off {
+  color: var(--color-muted-soft);
+}
+
+/* ---------- 내 손패 — 랭크별 그룹 스택 ---------- */
+
+.dm-hand-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+}
+
+.dm-hand-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dm-hand-title {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+}
+
+.dm-hand-hint {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.dm-hand {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 같은 숫자 스택 + 장수 뱃지 — 티츄 부채 결 간소화 */
+.dm-group {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 44px;
+  padding: 6px 14px 6px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.dm-group .dm-card {
+  margin-left: -32px;
+}
+
+.dm-group .dm-card:first-child {
+  margin-left: 0;
+}
+
+.dm-group-stack {
+  display: flex;
+  align-items: flex-end;
+}
+
+.dm-group-count {
+  position: absolute;
+  top: -2px;
+  right: 2px;
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-pill);
+  padding: 2px 7px;
+  font-weight: 800;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.dm-group.selected {
+  transform: translateY(-6px);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+  background: var(--color-primary-tint);
+}
+
+/* 내 차례인데 규칙상 낼 수 없는 그룹 — 가라앉힌다 */
+.dm-group.dim {
+  opacity: 0.4;
+}
+
+.dm-group:disabled {
+  cursor: not-allowed;
+}
+
+.dm-hand-empty {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+  text-align: center;
+  padding: var(--space-xs) 0;
+}
+
+/* ---------- 조커 "N으로 내기" 패널 ---------- */
+
+.dm-joker-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--dm-joker);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+}
+
+.dm-joker-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-caption);
+}
+
+.dm-joker-options {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dm-joker-option {
+  min-width: 52px;
+  min-height: 48px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--dm-card-face);
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 4px 8px;
+}
+
+.dm-joker-option small {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.dm-joker-option:active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.dm-joker-option.alone {
+  color: var(--dm-joker);
+  border-color: var(--dm-joker);
+}
+
+.dm-joker-none {
+  color: var(--color-error);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+.dm-joker-cancel {
+  min-height: 44px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  cursor: pointer;
+}
+
+/* ---------- 제출/패스 바 ---------- */
+
+.dm-actions-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-top: 2px;
+}
+
+.dm-stepper-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.dm-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  align-self: center;
+}
+
+.dm-step-button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-cream-strong);
+  color: var(--color-ink);
+  font-size: var(--text-title-md);
+  font-weight: 800;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dm-step-button:not(:disabled):active {
+  background: var(--color-primary-tint);
+}
+
+.dm-step-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.dm-step-count {
+  min-width: 76px;
+  text-align: center;
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.dm-joker-note {
+  color: var(--dm-joker);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  text-align: center;
+}
+
+.dm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.dm-pass-button,
+.dm-play-button {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  flex: 1 1 130px;
+  max-width: 240px;
+}
+
+.dm-pass-button {
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+}
+
+.dm-pass-button:not(:disabled):active {
+  background: var(--color-surface-cream-strong);
+}
+
+.dm-play-button {
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.dm-play-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.dm-pass-button:disabled,
+.dm-play-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.dm-spectator-note {
+  margin: var(--space-xs) 0 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* ---------- hand_end 순위 연출 ---------- */
+
+.dm-hand-end-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: var(--scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.dm-hand-end-panel {
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg) var(--space-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-modal);
+  box-sizing: border-box;
+}
+
+.dm-hand-end-mark {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.dm-hand-end-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+}
+
+.dm-hand-end-message {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+}
+
+.dm-hand-end-order {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dm-hand-end-order li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  font-size: var(--text-body-sm);
+}
+
+.dm-hand-end-order li.first {
+  background: var(--dm-gold-tint);
+  border: 1px solid var(--dm-gold);
+}
+
+.dm-hand-end-rank {
+  flex-shrink: 0;
+  font-weight: 800;
+  color: var(--color-body);
+  min-width: 52px;
+  text-align: left;
+}
+
+.dm-hand-end-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.dm-hand-end-points {
+  flex-shrink: 0;
+  color: var(--color-primary);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.dm-hand-end-countdown {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .dm-board {
+    padding: var(--space-sm) var(--space-xs) 96px;
+  }
+
+  .dm-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-card {
+    width: 48px;
+    height: 68px;
+  }
+
+  .dm-card-rank {
+    font-size: 22px;
+  }
+
+  .dm-card.sm {
+    width: 38px;
+    height: 54px;
+  }
+
+  .dm-card.sm .dm-card-rank {
+    font-size: 18px;
+  }
+
+  .dm-table-stack .dm-card {
+    margin-left: -32px;
+  }
+
+  .dm-group .dm-card {
+    margin-left: -28px;
+  }
+
+  .dm-pass-button,
+  .dm-play-button {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+}

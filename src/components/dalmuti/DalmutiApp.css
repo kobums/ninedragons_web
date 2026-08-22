@@ -1,0 +1,22 @@
+/* 위대한 달무티 셸 — 크림 캔버스 위 중세 궁정 결.
+   tokens.css 에는 달무티 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 기존 토큰과
+   rgba 변주만 사용 — 컴포넌트에 새 hex 를 흘리지 않는 규칙 유지. */
+
+.dm-scope {
+  /* 계급 잉크 — 저채도 식별 토큰만 (CTA·서피스 금지).
+     귀족(1~4) 골드 / 중산(5~8) 블루 / 평민(9~12) 그린 / 광대(13) 퍼플 */
+  --dm-noble: var(--st-clan-3);
+  --dm-mid: var(--st-clan-1);
+  --dm-low: var(--st-clan-2);
+  --dm-joker: var(--st-clan-4);
+  --dm-joker-tint: rgba(124, 92, 173, 0.1);
+  /* 왕관·순위 포인트 */
+  --dm-gold: var(--color-accent-amber);
+  --dm-gold-tint: rgba(232, 165, 90, 0.16);
+  /* 카드 몸통 — 상아빛 종이 결 (티츄 공통 변수 재사용) */
+  --dm-card-face: var(--card-face);
+  --dm-card-edge: var(--card-face-edge);
+  --dm-card-line: rgba(20, 20, 19, 0.24);
+  --dm-card-shadow: rgba(20, 20, 19, 0.12);
+}
