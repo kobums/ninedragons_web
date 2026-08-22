@@ -1,0 +1,853 @@
+/* 노 터치 크라켄 보드 — 심해 다크, 라운드 상태 바 + 좌석별 뒷면 카드 줄.
+   .kr-scope 변수 정의는 KrakenWaitingRoom.css (같은 번들) 참조.
+   280px 오버플로 금지, 터치 타깃 44px+. */
+
+.kr-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--kr-bg-elevated) 0%,
+    var(--kr-bg) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 108px; /* 하단 확정 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.kr-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.kr-toast {
+  background: rgba(8, 10, 14, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: kr-fade-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes kr-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 상단 상태 바 ---------- */
+
+.kr-status-bar {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--kr-exp-tint);
+  border: 1px solid var(--kr-exp);
+}
+
+.kr-status-bar.round_end {
+  background: var(--kr-treasure-tint);
+  border-color: var(--kr-treasure);
+}
+
+.kr-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kr-status-chip {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  white-space: nowrap;
+}
+
+.kr-timer {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  white-space: nowrap;
+}
+
+.kr-timer.urgent {
+  color: var(--kr-skull);
+  animation: kr-pulse 1s ease infinite;
+}
+
+@keyframes kr-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.kr-status-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  word-break: keep-all;
+}
+
+.kr-status-sub {
+  font-size: var(--text-caption);
+  color: var(--kr-fog);
+  word-break: keep-all;
+}
+
+/* ---------- 공개 진척 ---------- */
+
+.kr-progress {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.kr-progress-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  font-size: var(--text-caption);
+}
+
+.kr-progress-label {
+  font-weight: 800;
+  color: var(--kr-treasure);
+  font-variant-numeric: tabular-nums;
+}
+
+.kr-kraken-mark {
+  color: var(--kr-fog);
+  font-weight: 700;
+}
+
+.kr-kraken-mark.hit {
+  color: var(--kr-skull);
+  animation: kr-pulse 1s ease infinite;
+}
+
+.kr-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.kr-progress-fill {
+  height: 100%;
+  background: var(--kr-treasure);
+  border-radius: var(--radius-pill);
+  transition: width 0.4s ease;
+}
+
+/* ---------- 내 역할 카드 ---------- */
+
+.kr-role-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+  /* 첫 배정 시 강조 등장 (key 교체로 재생) */
+  animation: kr-role-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes kr-role-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.kr-role-card.role-expedition {
+  border-color: var(--kr-exp);
+  background: var(--kr-exp-tint);
+}
+
+.kr-role-card.role-skeleton {
+  border-color: var(--kr-skull);
+  background: var(--kr-skull-tint);
+}
+
+.kr-role-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.kr-role-icon {
+  font-size: var(--text-title-lg);
+}
+
+.kr-role-name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+}
+
+.kr-role-card.role-expedition .kr-role-name {
+  color: var(--kr-exp);
+}
+
+.kr-role-card.role-skeleton .kr-role-name {
+  color: var(--kr-skull);
+}
+
+.kr-role-desc,
+.kr-role-pool {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--kr-fog);
+  word-break: keep-all;
+}
+
+.kr-role-pool {
+  padding-top: 4px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.14);
+  width: 100%;
+}
+
+.kr-spectator-note {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--kr-fog);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 공개 연출 (카드 플립) ---------- */
+
+.kr-reveal {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  animation: kr-fade-in 0.3s ease;
+}
+
+.kr-reveal.card-treasure {
+  border-color: var(--kr-treasure);
+  background: var(--kr-treasure-tint);
+}
+
+.kr-reveal.card-kraken {
+  border-color: var(--kr-skull);
+  background: var(--kr-skull-tint);
+}
+
+.kr-reveal-card {
+  font-size: var(--text-display-sm);
+  line-height: 1;
+  flex-shrink: 0;
+  transform-origin: center;
+  /* 뒤집히며 등장 */
+  animation: kr-flip 0.6s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes kr-flip {
+  0% {
+    transform: rotateY(90deg) scale(0.7);
+    opacity: 0;
+  }
+  60% {
+    transform: rotateY(-8deg) scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
+.kr-reveal-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  min-width: 0;
+  word-break: keep-all;
+}
+
+/* ---------- 라운드 정산 ---------- */
+
+.kr-round-end {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px dashed var(--kr-treasure);
+  text-align: center;
+  animation: kr-fade-in 0.3s ease;
+}
+
+.kr-round-end-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  color: var(--kr-treasure);
+}
+
+.kr-round-end-sub {
+  font-size: var(--text-caption);
+  color: var(--kr-fog);
+  word-break: keep-all;
+}
+
+/* ---------- 내 손패 ---------- */
+
+.kr-my-hand,
+.kr-claim-box {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.kr-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.kr-section-title {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+}
+
+.kr-section-note {
+  font-size: var(--text-caption);
+  color: var(--kr-fog);
+}
+
+.kr-hand-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* 뒷면 카드 위에 나만 보이는 내용 배지가 올라간 형태 */
+.kr-hand-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 52px;
+  min-height: 68px;
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(0, 0, 0, 0.4)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.kr-hand-card.card-treasure {
+  border-color: var(--kr-treasure);
+  background: var(--kr-treasure-tint);
+}
+
+.kr-hand-card.card-kraken {
+  border-color: var(--kr-skull);
+  background: var(--kr-skull-tint);
+}
+
+.kr-hand-icon {
+  font-size: var(--text-title-lg);
+  line-height: 1;
+}
+
+.kr-hand-label {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  color: var(--kr-fog);
+}
+
+.kr-hand-card.card-treasure .kr-hand-label {
+  color: var(--kr-treasure);
+}
+
+.kr-hand-card.card-kraken .kr-hand-label {
+  color: var(--kr-skull);
+}
+
+.kr-hand-empty {
+  font-size: var(--text-caption);
+  color: var(--kr-fog);
+}
+
+/* ---------- 좌석 그리드 ---------- */
+
+.kr-seats {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.kr-seat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kr-seat.me {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.kr-seat.active {
+  border-color: var(--kr-exp);
+  background: var(--kr-exp-tint);
+}
+
+.kr-seat.targetable {
+  border-color: var(--color-primary);
+}
+
+.kr-seat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.kr-seat-name {
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kr-seat-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.kr-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: var(--text-caption-uppercase);
+  color: var(--kr-fog);
+  white-space: nowrap;
+}
+
+.kr-badge.off {
+  background: rgba(212, 160, 23, 0.18);
+  color: var(--color-warning);
+}
+
+.kr-badge.count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+/* 미공개 카드 뒷면 버튼 */
+.kr-back-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 44px;
+  align-items: center;
+}
+
+.kr-back-card {
+  width: 34px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(
+    150deg,
+    rgba(125, 159, 209, 0.22),
+    rgba(0, 0, 0, 0.5)
+  );
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+  line-height: 1;
+  cursor: default;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.kr-back-card.selectable {
+  cursor: pointer;
+  border-color: var(--color-primary);
+}
+
+.kr-back-card.selectable:hover {
+  transform: translateY(-3px);
+}
+
+.kr-back-card.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+  transform: translateY(-4px);
+}
+
+.kr-back-card:disabled {
+  /* 버튼 기본 비활성 스타일 무력화 — 시각 상태는 클래스가 결정 */
+  color: var(--color-on-dark);
+  opacity: 1;
+}
+
+.kr-back-empty {
+  font-size: var(--text-caption);
+  color: var(--kr-fog);
+}
+
+/* 이번 라운드 공개분 */
+.kr-revealed-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.kr-revealed-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: var(--text-caption);
+}
+
+.kr-revealed-chip.card-treasure {
+  border-color: var(--kr-treasure);
+}
+
+.kr-revealed-chip.card-kraken {
+  border-color: var(--kr-skull);
+}
+
+/* 선언 pill — 거짓일 수 있다 */
+.kr-claim-pill {
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--kr-treasure-tint);
+  border: 1px dashed var(--kr-treasure);
+  color: var(--kr-treasure);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- 선언 입력 ---------- */
+
+.kr-claim-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.kr-stepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.kr-step-button {
+  width: 44px;
+  min-height: 44px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kr-step-button:disabled {
+  color: var(--kr-fog);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.kr-step-value {
+  min-width: 56px;
+  text-align: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-body-sm);
+}
+
+.kr-toggle {
+  flex: 1 1 auto;
+  min-width: 120px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--kr-fog);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kr-toggle.on {
+  border-color: var(--kr-skull);
+  background: var(--kr-skull-tint);
+  color: var(--kr-skull);
+}
+
+.kr-claim-summary {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--kr-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.kr-claim-button {
+  min-height: 44px;
+  padding: 11px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kr-claim-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.kr-claim-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--kr-fog);
+  cursor: not-allowed;
+}
+
+/* ---------- 하단 확정 바 ---------- */
+
+.kr-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 950;
+  width: calc(100% - 24px);
+  max-width: 480px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--kr-bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-modal);
+  animation: kr-fade-in 0.2s ease;
+}
+
+.kr-confirm-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  min-width: 0;
+  word-break: keep-all;
+}
+
+.kr-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.kr-confirm-button {
+  min-height: 44px;
+  padding: 9px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kr-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.kr-cancel-button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--kr-fog);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+/* ---------- 모바일 (280px 대응) ---------- */
+
+@media (max-width: 420px) {
+  .kr-board {
+    padding: var(--space-xs);
+    padding-bottom: 108px;
+  }
+
+  .kr-seat {
+    padding: 8px;
+  }
+
+  .kr-seat-name {
+    font-size: var(--text-caption);
+  }
+}
+
+@media (max-width: 340px) {
+  /* 280px 단일 컬럼 — 좌석·손패가 가로로 넘치지 않게 */
+  .kr-seats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kr-back-card {
+    width: 30px;
+  }
+
+  .kr-hand-card {
+    min-width: 46px;
+  }
+
+  .kr-toggle {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .kr-stepper {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .kr-confirm-bar {
+    justify-content: center;
+    text-align: center;
+  }
+}

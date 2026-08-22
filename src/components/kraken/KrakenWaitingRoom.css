@@ -1,0 +1,242 @@
+/* 노 터치 크라켄 대기실 — 심해·난파선 다크 셸 (tokens.css 토큰만 사용).
+   .kr-scope: 크라켄 전용 변수 오버라이드 — 값은 전부 tokens.css 토큰 참조.
+   스파이폴 다크 무드 토큰을 심해 결로 재매핑한다
+   (탐험대 = 차가운 청색 계열, 해골 = 위험 적색, 보물 = 앰버). */
+
+.kr-scope {
+  --kr-bg: var(--sp-dark);
+  --kr-bg-elevated: var(--sp-dark-elevated);
+  --kr-bg-soft: var(--sp-dark-soft);
+  --kr-fog: var(--sp-fog);
+  /* 탐험대 — 심해에서 올려다본 수면 빛 */
+  --kr-exp: var(--sp-citizen);
+  --kr-exp-tint: var(--sp-citizen-tint);
+  /* 해골·크라켄 — 위험 */
+  --kr-skull: var(--sp-danger);
+  --kr-skull-tint: var(--sp-danger-tint);
+  /* 보물 — 금빛 */
+  --kr-treasure: var(--sp-amber-strong);
+  --kr-treasure-tint: var(--sp-amber-tint);
+  /* 꽝 — 물에 젖은 나무빛 무채색 */
+  --kr-blank: var(--color-on-dark-soft);
+}
+
+.kr-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--kr-bg-elevated) 0%,
+    var(--kr-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.kr-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.kr-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.kr-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--kr-fog);
+  font-size: var(--text-body-sm);
+}
+
+.kr-join-form,
+.kr-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kr-form-group {
+  text-align: left;
+}
+
+.kr-form-group label {
+  display: block;
+  color: var(--kr-fog);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.kr-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+.kr-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kr-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.kr-primary-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--kr-fog);
+  cursor: not-allowed;
+}
+
+.kr-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--kr-fog);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.kr-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.kr-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.kr-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.kr-seat-item.empty {
+  color: var(--kr-fog);
+  font-weight: 400;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: transparent;
+  justify-content: center;
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+}
+
+.kr-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kr-crown {
+  font-size: var(--text-body-sm);
+}
+
+.kr-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.kr-dot.on {
+  background: var(--color-success);
+}
+
+.kr-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.kr-waiting-hint {
+  margin: 0;
+  color: var(--kr-fog);
+  font-size: var(--text-caption);
+}
+
+/* 인원별 역할 풀 안내 — 전원 공개 정보 */
+.kr-pool-hint {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed var(--kr-exp);
+  color: var(--kr-fog);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .kr-waiting {
+    padding: var(--space-sm);
+  }
+
+  .kr-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* 입장·퇴장 토스트 (대기실 상단) */
+.kr-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.kr-waiting-toast {
+  background: var(--kr-bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+}
