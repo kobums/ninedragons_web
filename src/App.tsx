@@ -27,6 +27,8 @@ import { CoupApp } from './components/coup/CoupApp';
 import { NimmtApp } from './components/nimmt/NimmtApp';
 import { CiaoCiaoApp } from './components/ciaociao/CiaoCiaoApp';
 import { CockroachApp } from './components/cockroach/CockroachApp';
+import { InsiderApp } from './components/insider/InsiderApp';
+import { DalmutiApp } from './components/dalmuti/DalmutiApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -209,6 +211,14 @@ function App() {
 
   if (selectedGame === 'cockroach') {
     return <CockroachApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'insider') {
+    return <InsiderApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'dalmuti') {
+    return <DalmutiApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {

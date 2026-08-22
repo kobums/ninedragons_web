@@ -29,6 +29,8 @@ export type GameId =
   | 'nimmt'
   | 'ciaociao'
   | 'cockroach'
+  | 'insider'
+  | 'dalmuti'
   | 'avalon';
 
 export interface RuleSection {
@@ -931,6 +933,67 @@ export const GAMES: Record<GameId, GameMeta> = {
         items: [
           '같은 동물 4장이 자기 앞에 모이면 즉시 패배 — 나머지 전원 승리!',
           '자기 차례에 낼 손패가 없어도 패배합니다.',
+        ],
+      },
+    ],
+  },
+  insider: {
+    mood: 'dark',
+    title: '인사이더',
+    tag: '정체 은닉 · 스무고개',
+    description: '정답을 유도한 내부자를 찾아내는 협력 추리',
+    players: '4~8인',
+    duration: '10-15분',
+    cardTheme: 'dark',
+    wsPath: '/ws/insider',
+    logPrefix: '[Insider] WebSocket',
+    sessionKey: 'id_session_id',
+    rules: [
+      {
+        heading: '역할',
+        items: [
+          '마스터 1명(전원에게 공개), 인사이더 1명(비공개), 나머지는 시민입니다.',
+          '제시어는 마스터와 인사이더만 봅니다 — 인사이더는 아는 척하지 않으면서 정답을 유도해야 합니다.',
+          '질문과 대답은 같은 공간(또는 음성)에서 — 앱은 역할·제시어·타이머·투표를 진행합니다.',
+        ],
+      },
+      {
+        heading: '진행',
+        items: [
+          '질문 타임 5분 — 스무고개로 제시어를 맞힙니다. 마스터는 예/아니오로만 답하고, 정답이 나오면 [정답 나옴]을 누릅니다.',
+          '토론 타임 2분 — "정답을 맞힌 사람이 인사이더인가?"를 토론합니다.',
+          '투표 — 전원이 인사이더로 의심되는 1명을 지목합니다. 최다 득표자가 인사이더면 시민 승리, 아니면 인사이더 승리!',
+          '5분 안에 정답을 못 맞히면 인사이더 포함 전원 패배입니다.',
+        ],
+      },
+    ],
+  },
+  dalmuti: {
+    mood: 'cream',
+    title: '위대한 달무티',
+    tag: '클라이밍 · 계급',
+    description: '손패를 먼저 털어 계급의 정점에 오르기',
+    players: '4~8인',
+    duration: '15-25분',
+    cardTheme: 'cream',
+    wsPath: '/ws/dalmuti',
+    logPrefix: '[Dalmuti] WebSocket',
+    sessionKey: 'dm_session_id',
+    rules: [
+      {
+        heading: '진행',
+        items: [
+          '1~12 숫자 카드(숫자만큼의 장수)와 조커 2장을 전원이 나눠 갖습니다. 숫자가 낮을수록 강합니다.',
+          '리드는 같은 숫자 여러 장을 세트로 냅니다. 이후 사람은 같은 장수의 더 낮은 숫자만 낼 수 있고, 패스도 가능합니다.',
+          '전원이 연속으로 패스하면 마지막 제출자가 새 리드를 잡습니다.',
+        ],
+      },
+      {
+        heading: '조커와 점수',
+        items: [
+          '조커는 와일드 — 세트에 섞으면 그 숫자로 취급합니다 (7·7·조커 = 7 석 장).',
+          '손패를 먼저 턴 순서대로 순위가 정해지고, 1등부터 높은 점수를 받습니다.',
+          '3핸드를 마친 뒤 총점이 가장 높은 사람이 승리합니다.',
         ],
       },
     ],
