@@ -32,6 +32,8 @@ import { DalmutiApp } from './components/dalmuti/DalmutiApp';
 import { KrakenApp } from './components/kraken/KrakenApp';
 import { SkullKingApp } from './components/skullking/SkullKingApp';
 import { CrewApp } from './components/crew/CrewApp';
+import { JustOneApp } from './components/justone/JustOneApp';
+import { SetApp } from './components/set/SetApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -234,6 +236,14 @@ function App() {
 
   if (selectedGame === 'crew') {
     return <CrewApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'justone') {
+    return <JustOneApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'set') {
+    return <SetApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
