@@ -1,0 +1,505 @@
+/* 세트 보드 — 크림 캔버스 위 실물 카드 결 (tokens.css 토큰만 사용).
+   .se-scope 변수 정의는 SetWaitingRoom.css (같은 번들) 참조.
+   280px 까지 가로 오버플로 금지, 카드 터치 타깃은 넉넉히. */
+
+.se-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 96px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* 빗금 패턴 정의 전용 svg — 그림은 없고 defs 만 담는다 */
+.se-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.se-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.se-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 HUD ---------- */
+
+.se-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.se-hud-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+}
+
+.se-hud-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.se-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.se-stat-label {
+  color: var(--color-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.se-stat-value {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  font-variant-numeric: tabular-nums;
+}
+
+.se-stat-value.urgent {
+  color: var(--color-error);
+}
+
+/* ---------- 직전 판정 배너 ---------- */
+
+/* 결과가 떴다 사라져도 그리드가 위아래로 튀지 않게 자리를 늘 잡아 둔다 */
+.se-claim-slot {
+  min-height: 44px;
+  display: flex;
+}
+
+.se-claim-banner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  text-align: center;
+  border: 1px solid var(--color-hairline);
+  animation: se-claim-in 160ms ease-out;
+}
+
+.se-claim-banner.idle {
+  background: transparent;
+  border-style: dashed;
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+  animation: none;
+}
+
+.se-claim-banner.ok {
+  background: var(--color-surface-soft);
+  border-color: var(--se-ok);
+}
+
+.se-claim-banner.fail {
+  background: var(--color-surface-soft);
+  border-color: var(--se-fail);
+}
+
+.se-claim-headline {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.se-claim-banner.ok .se-claim-headline {
+  color: var(--se-ok);
+}
+
+.se-claim-banner.fail .se-claim-headline {
+  color: var(--se-fail);
+}
+
+.se-claim-sub {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+@keyframes se-claim-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 카드 그리드 ---------- */
+
+.se-grid-wrap {
+  position: relative;
+}
+
+.se-grid {
+  display: grid;
+  /* 기본 3열 — 280px 에서도 카드 한 장이 80px 이상 나온다 */
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xs);
+  transition: filter 120ms ease;
+}
+
+.se-grid.locked {
+  filter: grayscale(0.4);
+}
+
+.se-grid-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: var(--space-lg) 0;
+  text-align: center;
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+}
+
+/* 카드 한 장 — 상아빛 종이 몸통. 그림은 전부 인라인 SVG 다. */
+.se-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  min-height: 96px;
+  box-sizing: border-box;
+  padding: 8px 6px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  background: linear-gradient(
+    170deg,
+    var(--se-card-face) 0%,
+    var(--se-card-edge) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.14),
+    0 2px 6px rgba(20, 20, 19, 0.08);
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease,
+    border-color 90ms ease;
+}
+
+.se-card:disabled {
+  cursor: default;
+}
+
+.se-card:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* 선택 즉시 피드백 — 코랄 링 + 살짝 들림 */
+.se-card.selected {
+  border-color: var(--color-primary);
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 3px var(--color-primary-ring),
+    0 6px 14px rgba(20, 20, 19, 0.16);
+}
+
+.se-card.selected:not(:disabled):active {
+  transform: translateY(-3px) scale(0.97);
+}
+
+/* 제출 중 — 고른 3장이 판정을 기다리는 동안 맥동한다 */
+.se-grid.submitting .se-card.selected {
+  animation: se-pending 700ms ease-in-out infinite;
+}
+
+@keyframes se-pending {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px var(--color-primary-ring),
+      0 6px 14px rgba(20, 20, 19, 0.16);
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px var(--color-primary-ring),
+      0 6px 14px rgba(20, 20, 19, 0.16);
+  }
+}
+
+/* 선택 순번 뱃지 (1·2·3) */
+.se-pick {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 카드 그림 (인라인 SVG) ---------- */
+
+.se-card-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+}
+
+.se-symbol {
+  display: block;
+  width: 68%;
+  height: auto;
+  aspect-ratio: 44 / 22;
+  /* 외곽선이 뷰박스 가장자리에서 잘리지 않게 */
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+/* 채움 3종 공통 외곽선 — 색약 대비를 위해 비움도 또렷한 굵기를 유지한다 */
+.se-symbol-shape {
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.se-stripe-line {
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+/* 심볼 3색 — 색은 세 번째 단서일 뿐, 모양·채움이 흑백으로도 구분된다 */
+.se-c-red {
+  color: var(--se-red);
+}
+
+.se-c-green {
+  color: var(--se-green);
+}
+
+.se-c-purple {
+  color: var(--se-purple);
+}
+
+/* ---------- 잠금 오버레이 ---------- */
+
+.se-lock-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: var(--radius-lg);
+  background: var(--se-lock-scrim);
+  color: var(--color-on-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+  padding: var(--space-sm);
+  box-sizing: border-box;
+}
+
+.se-lock-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.se-lock-count {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: clamp(48px, 18vw, 76px);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.se-lock-text {
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark-soft);
+}
+
+/* ---------- 안내 문구 ---------- */
+
+.se-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.se-hint.busy {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.se-hint.spectator {
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+}
+
+.se-hint.muted {
+  color: var(--color-muted-soft);
+}
+
+/* ---------- 좌석 스트립 ---------- */
+
+.se-seats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+  gap: 6px;
+}
+
+.se-seat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+}
+
+.se-seat.me {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.se-seat.locked {
+  opacity: 0.6;
+}
+
+.se-seat-name {
+  color: var(--color-ink);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.se-seat-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.se-seat-score {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.se-seat-lock {
+  font-size: 10px;
+  color: var(--se-fail);
+  font-variant-numeric: tabular-nums;
+}
+
+.se-seat-off {
+  font-size: 10px;
+  color: var(--color-muted-soft);
+}
+
+/* ---------- 넓은 화면 — 4열 ---------- */
+
+@media (min-width: 460px) {
+  .se-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .se-board {
+    padding: var(--space-sm) var(--space-xs) 96px;
+  }
+
+  .se-hud-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 4px;
+  }
+
+  .se-card {
+    min-height: 84px;
+    padding: 6px 4px;
+  }
+
+  .se-card-face {
+    gap: 4px;
+  }
+
+  .se-symbol {
+    width: 74%;
+  }
+
+  .se-seats {
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .se-card,
+  .se-grid {
+    transition: none;
+  }
+
+  .se-claim-banner,
+  .se-grid.submitting .se-card.selected {
+    animation: none;
+  }
+}

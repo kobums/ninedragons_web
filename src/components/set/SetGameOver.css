@@ -1,0 +1,135 @@
+/* 세트 게임 종료 — 크림 종이 결, 점수 순위표 (tokens.css 토큰만 사용).
+   .se-scope 변수 정의는 SetWaitingRoom.css (같은 번들) 참조. */
+
+.se-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.se-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.se-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.se-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.se-over-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.se-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.se-over-verdict.win {
+  color: var(--color-primary);
+}
+
+.se-over-verdict.lose {
+  color: var(--color-muted);
+}
+
+/* ---------- 순위표 ---------- */
+
+.se-over-table-wrap {
+  overflow-x: auto;
+}
+
+.se-over-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  color: var(--color-ink);
+}
+
+.se-over-table th {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-hairline);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.se-over-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.se-over-table th.left,
+.se-over-table td.left {
+  text-align: left;
+}
+
+.se-over-table tr.winner td {
+  background: var(--color-primary-tint);
+  font-weight: 700;
+}
+
+.se-over-rank {
+  color: var(--color-muted);
+  width: 1%;
+}
+
+.se-over-score {
+  font-weight: 800;
+}
+
+.se-over-name {
+  display: inline-block;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-weight: 600;
+}
+
+@media (max-width: 360px) {
+  .se-game-over {
+    padding: var(--space-sm);
+  }
+
+  .se-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .se-over-name {
+    max-width: 110px;
+  }
+}
