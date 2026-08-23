@@ -1,0 +1,1017 @@
+/* 더 크루 보드 — 우주선 콕핏 다크. 임무 패널이 화면의 얼굴이다.
+   .cw-scope 변수 정의는 CrewWaitingRoom.css (같은 번들) 참조.
+   280px 오버플로 금지, 터치 타깃 44px+. */
+
+.cw-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--cw-bg-elevated) 0%,
+    var(--cw-bg) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 116px; /* 하단 확정 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.cw-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.cw-toast {
+  background: rgba(6, 10, 20, 0.92);
+  border: 1px solid var(--cw-line-strong);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: cw-fade-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: keep-all;
+}
+
+@keyframes cw-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cw-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ---------- 공통 패널 ---------- */
+
+.cw-status-bar,
+.cw-missions,
+.cw-trick-panel,
+.cw-my-hand,
+.cw-comm-bar,
+.cw-round-end,
+.cw-spectator-note {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+}
+
+.cw-missions,
+.cw-trick-panel,
+.cw-my-hand,
+.cw-comm-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--cw-panel);
+  border: 1px solid var(--cw-line);
+}
+
+.cw-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.cw-section-title {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+}
+
+.cw-section-note {
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  word-break: keep-all;
+}
+
+.cw-empty-note {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  word-break: keep-all;
+}
+
+/* ---------- 상단 상태 바 ---------- */
+
+.cw-status-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--cw-blue-tint);
+  border: 1px solid var(--cw-blue);
+}
+
+.cw-status-bar.round_end {
+  background: var(--cw-ok-tint);
+  border-color: var(--cw-ok);
+}
+
+.cw-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cw-status-chip {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--cw-well);
+  border: 1px solid var(--cw-line);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cw-status-chip.commander {
+  border-color: var(--cw-rocket);
+  color: var(--cw-rocket);
+}
+
+.cw-timer {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  white-space: nowrap;
+}
+
+.cw-timer.urgent {
+  color: var(--cw-danger);
+  animation: cw-pulse 1s ease infinite;
+}
+
+.cw-status-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  word-break: keep-all;
+}
+
+.cw-status-sub {
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  word-break: keep-all;
+}
+
+/* ---------- 카드 ---------- */
+
+.cw-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+  border: 1px solid currentColor;
+  background: rgba(0, 0, 0, 0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+.cw-card.size-sm {
+  min-width: 24px;
+  padding: 3px 4px;
+  gap: 1px;
+}
+
+.cw-card.size-md {
+  min-width: 34px;
+  padding: 5px 6px;
+  gap: 2px;
+}
+
+.cw-card.size-lg {
+  min-width: 44px;
+  padding: 8px 8px;
+  gap: 2px;
+}
+
+.cw-card-rank {
+  font-weight: 800;
+}
+
+.cw-card.size-sm .cw-card-rank {
+  font-size: var(--text-caption);
+}
+
+.cw-card.size-md .cw-card-rank {
+  font-size: var(--text-body-md);
+}
+
+.cw-card.size-lg .cw-card-rank {
+  font-size: var(--text-title-lg);
+}
+
+.cw-card-mark {
+  font-size: var(--text-caption-uppercase);
+  opacity: 0.85;
+}
+
+.cw-card.size-sm .cw-card-mark {
+  font-size: 10px;
+}
+
+/* 무늬 색 — 색 + 마크 문자로 이중 표기 */
+.suit-blue {
+  color: var(--cw-blue);
+}
+
+.suit-green {
+  color: var(--cw-green);
+}
+
+.suit-pink {
+  color: var(--cw-pink);
+}
+
+.suit-yellow {
+  color: var(--cw-yellow);
+}
+
+.suit-rocket {
+  color: var(--cw-rocket);
+}
+
+.cw-card.suit-blue {
+  background: var(--cw-blue-tint);
+}
+
+.cw-card.suit-green {
+  background: var(--cw-green-tint);
+}
+
+.cw-card.suit-pink {
+  background: var(--cw-pink-tint);
+}
+
+.cw-card.suit-yellow {
+  background: var(--cw-yellow-tint);
+}
+
+.cw-card.suit-rocket {
+  background: var(--cw-rocket-tint);
+}
+
+/* ---------- ★ 임무 패널 ---------- */
+
+.cw-missions {
+  border-color: var(--cw-gold);
+  background: linear-gradient(
+    160deg,
+    var(--cw-gold-tint) 0%,
+    rgba(255, 255, 255, 0.04) 60%
+  );
+}
+
+.cw-missions .cw-section-title {
+  color: var(--cw-gold);
+  font-size: var(--text-body-md);
+}
+
+.cw-mission-track {
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.cw-mission-fill {
+  height: 100%;
+  background: var(--cw-ok);
+  border-radius: var(--radius-pill);
+  transition: width 0.4s ease;
+}
+
+.cw-mission-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cw-mission-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 48px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--cw-well);
+  border: 1px solid var(--cw-line);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+/* 내 임무 — 가장 먼저 눈에 들어와야 한다 */
+.cw-mission-item.mine {
+  border-color: var(--cw-gold);
+  background: var(--cw-gold-tint);
+  box-shadow: inset 3px 0 0 var(--cw-gold);
+}
+
+/* 지금 이 트릭에 나와 있는 임무 카드 = 승패가 갈리는 순간 */
+.cw-mission-item.live {
+  border-color: var(--cw-danger);
+  background: var(--cw-danger-tint);
+  animation: cw-pulse 1.4s ease infinite;
+}
+
+.cw-mission-item.done {
+  border-color: var(--cw-ok);
+  background: var(--cw-ok-tint);
+  animation: none;
+  box-shadow: none;
+}
+
+.cw-mission-who {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.cw-mission-owner {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cw-mission-you {
+  color: var(--cw-gold);
+}
+
+.cw-mission-role {
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  word-break: keep-all;
+}
+
+.cw-mission-item.done .cw-mission-owner {
+  color: var(--cw-fog);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.cw-mission-state {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cw-fog);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cw-mission-state.ok {
+  background: var(--cw-ok-tint);
+  color: var(--cw-ok);
+}
+
+.cw-mission-state.warn {
+  background: var(--cw-danger-tint);
+  color: var(--cw-danger);
+}
+
+/* ---------- 트릭 ---------- */
+
+.cw-lead-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cw-trick-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  min-height: 68px;
+}
+
+.cw-trick-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  max-width: 92px;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  animation: cw-play-in 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes cw-play-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cw-trick-slot.task {
+  border-color: var(--cw-gold);
+  background: var(--cw-gold-tint);
+}
+
+.cw-trick-name {
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cw-trick-task-flag {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--cw-gold);
+  letter-spacing: var(--tracking-uppercase);
+}
+
+.cw-last-trick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px dashed var(--cw-line);
+}
+
+.cw-last-trick-label {
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  white-space: nowrap;
+}
+
+.cw-last-trick-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+/* ---------- 좌석 스트립 ---------- */
+
+.cw-seats {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+.cw-seat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 9px 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--cw-line);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.cw-seat.me {
+  border-color: var(--cw-line-strong);
+}
+
+.cw-seat.active {
+  border-color: var(--cw-blue);
+  background: var(--cw-blue-tint);
+}
+
+.cw-seat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cw-seat-name {
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cw-seat-badges,
+.cw-seat-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cw-seat-badges {
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+.cw-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: var(--text-caption-uppercase);
+  color: var(--cw-fog);
+  white-space: nowrap;
+}
+
+.cw-badge.off {
+  background: rgba(212, 160, 23, 0.18);
+  color: var(--color-warning);
+}
+
+.cw-badge.count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: var(--color-on-dark);
+}
+
+.cw-badge.token.on {
+  background: var(--cw-blue-tint);
+  color: var(--cw-blue);
+  font-weight: 700;
+}
+
+.cw-badge.task {
+  background: var(--cw-gold-tint);
+  color: var(--cw-gold);
+  font-weight: 700;
+}
+
+.cw-badge.task.ok {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cw-fog);
+  font-weight: 400;
+}
+
+/* 소통으로 공개된 카드 — 전원이 계속 본다 */
+.cw-reveal-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 3px 8px 3px 4px;
+  border-radius: var(--radius-pill);
+  border: 1px dashed currentColor;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.cw-reveal-hint {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- 라운드 종료 / 관전 ---------- */
+
+.cw-round-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--cw-ok-tint);
+  border: 1px dashed var(--cw-ok);
+  text-align: center;
+  animation: cw-fade-in 0.3s ease;
+}
+
+.cw-round-end.failed {
+  background: var(--cw-danger-tint);
+  border-color: var(--cw-danger);
+}
+
+.cw-round-end-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  color: var(--cw-ok);
+}
+
+.cw-round-end.failed .cw-round-end-title {
+  color: var(--cw-danger);
+}
+
+.cw-round-end-sub {
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  word-break: keep-all;
+}
+
+.cw-spectator-note {
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--cw-well);
+  border: 1px solid var(--cw-line);
+  color: var(--cw-fog);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 소통 바 ---------- */
+
+.cw-comm-bar.open {
+  border-color: var(--cw-blue);
+  background: var(--cw-blue-tint);
+}
+
+.cw-comm-open-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--cw-blue);
+  border-radius: var(--radius-md);
+  background: var(--cw-blue-tint);
+  color: var(--cw-blue);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cw-comm-open-button:disabled {
+  border-color: var(--cw-line);
+  background: transparent;
+  color: var(--cw-fog);
+  cursor: not-allowed;
+}
+
+.cw-comm-step {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  word-break: keep-all;
+}
+
+.cw-comm-picked {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.cw-comm-picked-text {
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+}
+
+.cw-hint-row {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.cw-hint-button {
+  flex: 1 1 72px;
+  min-width: 72px;
+  min-height: 44px;
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cw-line-strong);
+  background: var(--cw-well);
+  color: var(--color-on-dark);
+  font-size: var(--text-button);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cw-hint-button.on {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* 명백히 거짓이 되는 선언 — 서버에 보내기 전에 미리 흐림 */
+.cw-hint-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+  color: var(--cw-fog);
+}
+
+.cw-hint-button.false {
+  text-decoration: line-through;
+}
+
+.cw-comm-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.cw-comm-actions .cw-primary-button {
+  flex: 2 1 0;
+  min-width: 0;
+}
+
+.cw-comm-actions .cw-ghost-button {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* ---------- 내 손패 ---------- */
+
+.cw-my-hand.comm-mode {
+  border-color: var(--cw-blue);
+}
+
+.cw-hand-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.cw-hand-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 40px;
+  min-height: 56px;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid currentColor;
+  background: rgba(0, 0, 0, 0.45);
+  font-variant-numeric: tabular-nums;
+  cursor: default;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* 색 그룹이 바뀌는 지점에 숨 쉴 틈 */
+.cw-hand-card.suit-break {
+  margin-left: 10px;
+}
+
+.cw-hand-card.suit-blue {
+  background: var(--cw-blue-tint);
+}
+
+.cw-hand-card.suit-green {
+  background: var(--cw-green-tint);
+}
+
+.cw-hand-card.suit-pink {
+  background: var(--cw-pink-tint);
+}
+
+.cw-hand-card.suit-yellow {
+  background: var(--cw-yellow-tint);
+}
+
+.cw-hand-card.suit-rocket {
+  background: var(--cw-rocket-tint);
+}
+
+.cw-hand-rank {
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cw-hand-mark {
+  font-size: 10px;
+  opacity: 0.85;
+  line-height: 1;
+}
+
+.cw-hand-task-dot {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--cw-gold);
+}
+
+.cw-hand-card.is-task {
+  box-shadow: inset 0 -3px 0 var(--cw-gold);
+}
+
+.cw-hand-card.my-task {
+  border-width: 2px;
+}
+
+.cw-hand-card.clickable {
+  cursor: pointer;
+}
+
+.cw-hand-card.clickable:hover {
+  transform: translateY(-4px);
+}
+
+.cw-hand-card.active {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+  border-color: var(--color-primary);
+}
+
+/* 따라내기 의무로 낼 수 없거나 소통할 수 없는 카드 */
+.cw-hand-card.dim {
+  opacity: 0.3;
+}
+
+.cw-hand-card:disabled {
+  /* 버튼 기본 비활성 스타일 무력화 — 시각 상태는 클래스가 결정 */
+  color: currentColor;
+}
+
+.cw-hand-legend {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+}
+
+/* ---------- 하단 확정 바 ---------- */
+
+.cw-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 950;
+  width: calc(100% - 24px);
+  max-width: 480px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--cw-bg-elevated);
+  border: 1px solid var(--cw-line-strong);
+  box-shadow: var(--shadow-modal);
+  animation: cw-fade-in 0.2s ease;
+}
+
+.cw-confirm-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  min-width: 0;
+  word-break: keep-all;
+}
+
+.cw-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.cw-confirm-button {
+  min-height: 44px;
+  padding: 9px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cw-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.cw-cancel-button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--cw-line-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--cw-fog);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+/* ---------- 모바일 (280px 대응) ---------- */
+
+@media (max-width: 420px) {
+  .cw-board {
+    padding: var(--space-xs);
+    padding-bottom: 116px;
+  }
+
+  .cw-seat {
+    padding: 8px;
+  }
+
+  .cw-seat-name {
+    font-size: var(--text-caption);
+  }
+}
+
+@media (max-width: 340px) {
+  /* 280px 단일 컬럼 — 좌석·임무·손패가 가로로 넘치지 않게 */
+  .cw-seats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cw-missions,
+  .cw-trick-panel,
+  .cw-my-hand,
+  .cw-comm-bar {
+    padding: 10px;
+  }
+
+  .cw-mission-item {
+    gap: 6px;
+    padding: 8px 6px;
+  }
+
+  .cw-mission-role {
+    display: none; /* 담당자·상태만 남긴다 */
+  }
+
+  .cw-hand-card {
+    width: 34px;
+    min-height: 52px;
+  }
+
+  .cw-hand-card.suit-break {
+    margin-left: 6px;
+  }
+
+  .cw-hint-button {
+    flex: 1 1 60px;
+    min-width: 60px;
+  }
+
+  .cw-confirm-bar {
+    justify-content: center;
+    text-align: center;
+  }
+}

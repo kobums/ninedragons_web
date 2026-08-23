@@ -1,0 +1,248 @@
+/* 더 크루 결과 오버레이 — 협력 게임이라 승패는 전원 공동.
+   기록은 "몇 단계까지 클리어했는가".
+   .cw-scope 변수 정의는 CrewWaitingRoom.css (같은 번들) 참조. */
+
+.cw-game-over {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.cw-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: var(--cw-bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-modal);
+}
+
+.cw-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.cw-over-title.cleared {
+  color: var(--cw-ok);
+}
+
+.cw-over-title.failed {
+  color: var(--cw-danger);
+}
+
+.cw-over-message {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--cw-fog);
+  word-break: keep-all;
+}
+
+/* ---------- 기록 ---------- */
+
+.cw-over-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 12px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--cw-line);
+}
+
+.cw-over-score-value {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  color: var(--cw-gold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.cw-over-score-max {
+  font-size: var(--text-title-md);
+  color: var(--cw-fog);
+}
+
+.cw-over-score-label {
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+  letter-spacing: var(--tracking-uppercase);
+}
+
+.cw-over-track {
+  width: 100%;
+  height: 6px;
+  margin-top: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.cw-over-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--cw-gold);
+}
+
+.cw-over-fill.cleared {
+  background: var(--cw-ok);
+}
+
+.cw-over-reach {
+  font-size: var(--text-caption);
+  color: var(--cw-danger);
+}
+
+/* ---------- 마지막 라운드 임무 결과 ---------- */
+
+.cw-over-tasks,
+.cw-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.cw-over-task {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--cw-line);
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+  text-align: left;
+}
+
+.cw-over-task.done {
+  border-color: var(--cw-ok);
+  background: var(--cw-ok-tint);
+}
+
+.cw-over-task.fail {
+  border-color: var(--cw-danger);
+  background: var(--cw-danger-tint);
+}
+
+.cw-over-task-card {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  border: 1px solid currentColor;
+  background: rgba(0, 0, 0, 0.4);
+  font-size: var(--text-caption);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* 무늬 색 — 보드 번들과 같은 매핑 (여기서도 단독으로 성립하게 명시) */
+.cw-over-task-card.suit-blue {
+  color: var(--cw-blue);
+}
+
+.cw-over-task-card.suit-green {
+  color: var(--cw-green);
+}
+
+.cw-over-task-card.suit-pink {
+  color: var(--cw-pink);
+}
+
+.cw-over-task-card.suit-yellow {
+  color: var(--cw-yellow);
+}
+
+.cw-over-task-name {
+  font-weight: 700;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cw-over-task-state {
+  flex-shrink: 0;
+}
+
+.cw-over-task-suit {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  color: var(--cw-fog);
+}
+
+/* ---------- 대원 명단 ---------- */
+
+.cw-over-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.cw-over-name {
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cw-over-tag {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--cw-fog);
+  white-space: nowrap;
+}
+
+.cw-over-tag.ok {
+  background: var(--cw-ok-tint);
+  color: var(--cw-ok);
+}
+
+@media (max-width: 360px) {
+  .cw-game-over {
+    padding: var(--space-sm);
+  }
+
+  .cw-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .cw-over-task-suit {
+    display: none;
+  }
+}
