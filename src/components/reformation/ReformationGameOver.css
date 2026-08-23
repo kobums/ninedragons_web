@@ -1,0 +1,206 @@
+/* 리포메이션 결과 오버레이 — 진영 승리(동시 다수) / 최후 1인 승리 + 순위표.
+   진영 배지(.rf-faction)는 ReformationBoard.css 의 정의를 그대로 쓴다. */
+
+.rf-game-over {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.rf-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: var(--rf-ink-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-modal);
+}
+
+.rf-over-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.rf-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--rf-gold-strong);
+  overflow-wrap: anywhere;
+}
+
+/* 승리 형태 라벨 — 진영 동시 승리인지 최후 1인인지 */
+.rf-over-mode {
+  margin: 0;
+  align-self: center;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  font-weight: 800;
+  border: 1px solid currentColor;
+  word-break: keep-all;
+}
+
+.rf-over-mode.f-loyalist {
+  color: var(--rf-loyalist);
+  background: var(--rf-loyalist-tint);
+}
+
+.rf-over-mode.f-reformist {
+  color: var(--rf-reformist);
+  background: var(--rf-reformist-tint);
+}
+
+.rf-over-mode.solo {
+  color: var(--rf-gold-strong);
+  background: var(--rf-gold-tint);
+}
+
+.rf-over-winners {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  overflow-wrap: anywhere;
+}
+
+.rf-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.rf-over-verdict.win {
+  color: var(--color-success);
+}
+
+.rf-over-verdict.lose {
+  color: var(--rf-fog);
+}
+
+.rf-over-note {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--rf-fog);
+  word-break: keep-all;
+}
+
+.rf-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.rf-over-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid var(--rf-row-faction, rgba(255, 255, 255, 0.1));
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.rf-over-row.f-loyalist {
+  --rf-row-faction: var(--rf-loyalist);
+}
+
+.rf-over-row.f-reformist {
+  --rf-row-faction: var(--rf-reformist);
+}
+
+.rf-over-row.winner {
+  background: var(--rf-gold-tint);
+  border-color: rgba(232, 165, 90, 0.5);
+  border-left-color: var(--rf-row-faction, rgba(232, 165, 90, 0.5));
+}
+
+.rf-over-row.dead {
+  opacity: 0.55;
+}
+
+.rf-over-name {
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-over-rank {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: var(--text-caption-uppercase);
+  color: var(--rf-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.rf-over-info {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rf-over-lost {
+  font-size: var(--text-caption-uppercase);
+  color: var(--rf-fog);
+}
+
+.rf-over-coins {
+  font-weight: 800;
+  color: var(--rf-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.rf-game-over .rf-primary-button {
+  padding: 13px;
+  min-height: 44px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.rf-game-over .rf-primary-button:active {
+  background: var(--color-primary-active);
+}
+
+@media (max-width: 360px) {
+  .rf-game-over {
+    padding: var(--space-sm);
+  }
+
+  .rf-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .rf-over-info {
+    gap: 4px;
+  }
+}

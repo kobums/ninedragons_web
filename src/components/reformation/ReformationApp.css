@@ -1,0 +1,45 @@
+/* 쿠: 리포메이션 셸 — 잉크빛 "인쇄소·의회" 다크 무드.
+   tokens.css 에는 리포메이션 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 기존 토큰과
+   rgba/rgb 변주만 사용 — 컴포넌트에 새 hex 를 흘리지 않는 규칙 유지.
+   쿠의 와인빛 벨벳(cp)과 구분되는 차가운 잉크 결이고, 두 진영은
+   보라(충성파)·청록(개혁파)으로 나뉜다. */
+
+.rf-scope {
+  /* 배경 — 딥 잉크 (의사당 밤) */
+  --rf-ink: rgb(15, 19, 28);
+  --rf-ink-elevated: rgb(30, 37, 52);
+  --rf-ink-soft: rgb(21, 26, 38);
+  /* 보조 텍스트 — 잉크 위 차가운 그레이 */
+  --rf-fog: rgb(173, 182, 201);
+  /* 포인트 골드 (칩·국고·강조) */
+  --rf-gold: var(--color-accent-amber);
+  --rf-gold-strong: rgb(242, 184, 113);
+  --rf-gold-tint: rgba(232, 165, 90, 0.14);
+  --rf-gold-tint-strong: rgba(232, 165, 90, 0.24);
+  /* 라인 */
+  --rf-line: rgba(255, 255, 255, 0.12);
+  --rf-rail: rgba(232, 165, 90, 0.35);
+  /* 위험(도전·암살·임박 타이머) */
+  --rf-danger: rgb(217, 106, 106);
+  --rf-danger-tint: rgba(217, 106, 106, 0.14);
+  /* 허용(안전) — 골드·레드와 대비되는 차가운 톤 */
+  --rf-safe: rgb(125, 159, 209);
+  --rf-safe-tint: rgba(125, 159, 209, 0.14);
+
+  /* ---------- 진영 색 ----------
+     색만으로 구분되지 않게 항상 ⚜️/⚒️ 아이콘을 함께 그린다. */
+  --rf-loyalist: rgb(158, 130, 209); /* 충성파 purple (st-clan-4 밝힘) */
+  --rf-loyalist-tint: rgba(124, 92, 173, 0.2);
+  --rf-reformist: rgb(93, 184, 166); /* 개혁파 teal (accent-teal) */
+  --rf-reformist-tint: rgba(93, 184, 166, 0.18);
+
+  /* ---------- 역할 색 ----------
+     실물 카드 전면의 식별 색. 기존 저채도 팔레트의 변주 —
+     CTA·서피스에는 쓰지 않는다. */
+  --rf-duke: rgb(124, 92, 173); /* 공작 purple (st-clan-4) */
+  --rf-assassin: rgb(176, 58, 58); /* 암살자 crimson (tc-drg) */
+  --rf-captain: rgb(74, 109, 156); /* 사령관 blue (team-blue) */
+  --rf-ambassador: rgb(91, 158, 111); /* 대사 green (st-clan-2) */
+  --rf-contessa: rgb(199, 106, 140); /* 백작부인 rose */
+}

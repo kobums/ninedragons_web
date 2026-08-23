@@ -1,0 +1,1165 @@
+/* 리포메이션 보드 — 잉크 다크 + 골드 포인트, 진영은 보라/청록.
+   좌석 타일 그리드는 반응형 2열 (280px 오버플로 금지, 터치 44px+).
+   팔레트는 ReformationApp.css 의 rf-scope 변수만 사용한다. */
+
+.rf-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(
+      ellipse at 50% 20%,
+      var(--rf-ink-elevated) 0%,
+      var(--rf-ink) 72%
+    ),
+    var(--rf-ink);
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: var(--space-xl);
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* 하단 고정 응답 바가 떠 있을 때 내용이 가려지지 않게 */
+.rf-board.with-bar {
+  padding-bottom: 132px;
+}
+
+/* ---------- 이벤트 피드 (최근 3줄) ---------- */
+
+.rf-feed {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.rf-feed-line {
+  background: rgba(10, 13, 20, 0.92);
+  border: 1px solid var(--rf-rail);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: rf-feed-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes rf-feed-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 국고 (쌓일수록 강조 — 횡령의 유혹) ---------- */
+
+.rf-treasury {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rf-line);
+  background: rgba(0, 0, 0, 0.28);
+  text-align: center;
+}
+
+.rf-treasury-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rf-treasury-label {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--rf-fog);
+}
+
+.rf-treasury-amount {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  line-height: 1.1;
+  color: var(--rf-fog);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.2s ease;
+}
+
+.rf-treasury-hint {
+  font-size: var(--text-caption);
+  color: var(--rf-fog);
+  word-break: keep-all;
+}
+
+/* 단계별 강조 — 색 + 굵기 + 테두리로 함께 올린다 */
+.rf-treasury.lv-low {
+  border-color: var(--rf-rail);
+  background: var(--rf-gold-tint);
+}
+
+.rf-treasury.lv-low .rf-treasury-amount {
+  color: var(--rf-gold);
+}
+
+.rf-treasury.lv-rich {
+  border-color: var(--rf-gold);
+  background: var(--rf-gold-tint-strong);
+  box-shadow: 0 0 0 1px var(--rf-rail) inset;
+}
+
+.rf-treasury.lv-rich .rf-treasury-amount,
+.rf-treasury.lv-rich .rf-treasury-hint {
+  color: var(--rf-gold-strong);
+}
+
+.rf-treasury.lv-hoard {
+  border-color: var(--rf-gold-strong);
+  background: var(--rf-gold-tint-strong);
+  box-shadow:
+    0 0 0 1px var(--rf-gold) inset,
+    0 0 18px rgba(232, 165, 90, 0.25);
+}
+
+.rf-treasury.lv-hoard .rf-treasury-amount {
+  color: var(--rf-gold-strong);
+  font-size: var(--text-display-md);
+  animation: rf-hoard-pulse 1.8s ease-in-out infinite;
+}
+
+.rf-treasury.lv-hoard .rf-treasury-hint {
+  color: var(--rf-gold-strong);
+  font-weight: 700;
+}
+
+@keyframes rf-hoard-pulse {
+  50% {
+    text-shadow: 0 0 14px rgba(242, 184, 113, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rf-treasury.lv-hoard .rf-treasury-amount {
+    animation: none;
+  }
+}
+
+/* 진영 세력 집계 */
+.rf-tally {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+/* ---------- 진영 배지 (색 + 아이콘 병기) ---------- */
+
+.rf-faction {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
+.rf-faction.loyalist {
+  color: var(--rf-loyalist);
+  background: var(--rf-loyalist-tint);
+}
+
+.rf-faction.reformist {
+  color: var(--rf-reformist);
+  background: var(--rf-reformist-tint);
+}
+
+.rf-faction.unknown {
+  color: var(--rf-fog);
+  border-color: var(--rf-line);
+  background: transparent;
+}
+
+/* ---------- 단계 배너 ---------- */
+
+.rf-phase-banner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  text-align: center;
+  background: var(--rf-gold-tint);
+  border: 1px solid var(--rf-rail);
+}
+
+.rf-phase-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--rf-gold-strong);
+  word-break: keep-all;
+}
+
+.rf-phase-sub {
+  font-size: var(--text-caption);
+  color: var(--rf-fog);
+  word-break: keep-all;
+}
+
+.rf-last-action {
+  font-size: var(--text-caption-uppercase);
+  color: var(--rf-fog);
+  opacity: 0.85;
+  word-break: keep-all;
+}
+
+.rf-deadline {
+  margin-left: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--rf-fog);
+  font-size: var(--text-body-sm);
+}
+
+.rf-deadline.urgent {
+  color: var(--rf-danger);
+  animation: rf-deadline-pulse 1s ease infinite;
+}
+
+@keyframes rf-deadline-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- 좌석 타일 그리드 ---------- */
+
+.rf-grid {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+@media (min-width: 520px) {
+  .rf-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.rf-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 10px 10px 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rf-line);
+  /* 진영을 좌측 두꺼운 띠로도 표시 (배지와 이중 표기) */
+  border-left: 4px solid var(--rf-tile-faction, var(--rf-line));
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-on-dark);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.rf-tile.f-loyalist {
+  --rf-tile-faction: var(--rf-loyalist);
+}
+
+.rf-tile.f-reformist {
+  --rf-tile-faction: var(--rf-reformist);
+}
+
+.rf-tile.me {
+  border-color: var(--rf-rail);
+  border-left-color: var(--rf-tile-faction, var(--rf-rail));
+}
+
+.rf-tile.turn {
+  border-color: var(--rf-gold);
+  box-shadow: 0 0 0 1px var(--rf-gold) inset;
+  background: var(--rf-gold-tint);
+}
+
+.rf-tile.target {
+  border-color: rgba(217, 106, 106, 0.6);
+  box-shadow: 0 0 0 1px rgba(217, 106, 106, 0.6) inset;
+}
+
+/* 공격 대상 선택 중인데 같은 진영이라 고를 수 없는 좌석 */
+.rf-tile.locked {
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+.rf-tile.dead {
+  opacity: 0.45;
+}
+
+.rf-tile-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rf-tile-name {
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-turn-mark {
+  color: var(--rf-gold-strong);
+  margin-right: 4px;
+}
+
+.rf-tile-coins {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--rf-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.rf-tile-faction {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  max-width: 100%;
+}
+
+.rf-tile-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 40px;
+}
+
+/* 좌석 타일의 미니 카드 — 뒷면(비공개)·앞면(잃은 카드 공개) */
+.rf-mini-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 44px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: var(--text-caption-uppercase);
+  line-height: 1.05;
+  text-align: center;
+}
+
+.rf-mini-card.back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(232, 165, 90, 0.14) 0 4px,
+      rgba(232, 165, 90, 0) 4px 8px
+    ),
+    var(--rf-ink-elevated);
+  border: 1px solid var(--rf-rail);
+  color: var(--rf-rail);
+  font-size: 11px;
+}
+
+.rf-mini-card.face {
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.28);
+  border-top: 3px solid var(--rf-role, var(--color-muted));
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  padding: 2px;
+  word-break: keep-all;
+  /* 잃은 카드 — 살짝 바랜 결 */
+  filter: saturate(0.8) brightness(0.94);
+}
+
+.rf-mini-card.face.role-duke {
+  --rf-role: var(--rf-duke);
+}
+.rf-mini-card.face.role-assassin {
+  --rf-role: var(--rf-assassin);
+}
+.rf-mini-card.face.role-captain {
+  --rf-role: var(--rf-captain);
+}
+.rf-mini-card.face.role-ambassador {
+  --rf-role: var(--rf-ambassador);
+}
+.rf-mini-card.face.role-contessa {
+  --rf-role: var(--rf-contessa);
+}
+
+.rf-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.rf-badge {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-on-dark);
+  white-space: nowrap;
+}
+
+.rf-badge.act {
+  background: var(--rf-gold-tint);
+  color: var(--rf-gold-strong);
+  border: 1px solid var(--rf-rail);
+}
+
+.rf-badge.tgt {
+  background: var(--rf-danger-tint);
+  color: var(--rf-danger);
+  border: 1px solid rgba(217, 106, 106, 0.45);
+}
+
+.rf-badge.blk {
+  background: var(--rf-safe-tint);
+  color: var(--rf-safe);
+  border: 1px solid rgba(125, 159, 209, 0.45);
+}
+
+.rf-badge.lose {
+  background: var(--rf-danger-tint);
+  color: var(--rf-danger);
+}
+
+.rf-badge.off {
+  background: var(--rf-danger-tint);
+  color: var(--rf-danger);
+}
+
+/* 같은 진영(공격 불가) 표시 */
+.rf-badge.ally {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--rf-fog);
+  border: 1px dashed var(--rf-line);
+}
+
+.rf-tile-locked {
+  width: 100%;
+  font-size: var(--text-caption-uppercase);
+  font-weight: 700;
+  color: var(--rf-danger);
+  text-align: center;
+  word-break: keep-all;
+}
+
+.rf-tile-out {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- 내 비공개 카드 (실물 결) ---------- */
+
+.rf-hand {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 14px;
+  border-radius: var(--radius-xl);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--rf-rail);
+}
+
+.rf-hand-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--rf-gold-strong);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.rf-hand-faction {
+  display: inline-flex;
+}
+
+.rf-hand-row {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.rf-hand-card {
+  position: relative;
+  width: 128px;
+  height: 172px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px 10px 12px;
+  box-sizing: border-box;
+  text-align: center;
+  user-select: none;
+  background: linear-gradient(
+    170deg,
+    var(--card-face) 0%,
+    var(--card-face-edge) 100%
+  );
+  border: 1px solid rgba(20, 20, 19, 0.24);
+  box-shadow:
+    0 1px 2px rgba(20, 20, 19, 0.3),
+    0 3px 8px rgba(0, 0, 0, 0.35);
+  color: var(--color-ink);
+  overflow: hidden;
+}
+
+/* 역할 색 리본 — 카드 상단 띠 */
+.rf-hand-ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--rf-role, var(--color-muted));
+}
+
+.rf-hand-card.role-duke {
+  --rf-role: var(--rf-duke);
+}
+.rf-hand-card.role-assassin {
+  --rf-role: var(--rf-assassin);
+}
+.rf-hand-card.role-captain {
+  --rf-role: var(--rf-captain);
+}
+.rf-hand-card.role-ambassador {
+  --rf-role: var(--rf-ambassador);
+}
+.rf-hand-card.role-contessa {
+  --rf-role: var(--rf-contessa);
+}
+
+.rf-hand-en {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--rf-role, var(--color-muted));
+  font-weight: 700;
+}
+
+.rf-hand-name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-display-sm);
+  word-break: keep-all;
+}
+
+.rf-hand-ability {
+  font-size: var(--text-caption-uppercase);
+  line-height: 1.35;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+/* 탭 가능한 카드 (제거·교환 선택) */
+.rf-hand-card.tappable {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.rf-hand-card.tappable:not(:disabled):active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.rf-hand-card.selected {
+  outline: 3px solid var(--rf-gold-strong);
+  outline-offset: -3px;
+  box-shadow:
+    0 0 14px rgba(232, 165, 90, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+.rf-hand-card.dimmed {
+  opacity: 0.55;
+}
+
+/* ---------- 액션 그리드 ---------- */
+
+.rf-actions {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: var(--rf-gold-tint);
+  border: 1px solid var(--rf-rail);
+}
+
+.rf-actions-title {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--rf-gold-strong);
+  text-align: center;
+}
+
+/* 같은 진영 안내 — 왜 공격 버튼이 잠기는지 미리 설명한다 */
+.rf-actions-warn {
+  font-size: var(--text-caption);
+  color: var(--rf-danger);
+  text-align: center;
+  word-break: keep-all;
+}
+
+.rf-actions-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+
+@media (min-width: 440px) {
+  .rf-actions-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.rf-action-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 68px; /* 터치 44px+ */
+  padding: 8px 6px;
+  border: 1px solid var(--rf-line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--color-on-dark);
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.rf-action-button.claim {
+  border-color: var(--rf-rail);
+}
+
+/* 리포메이션 확장 액션 — 기본 7종과 구분되는 청록 테두리 */
+.rf-action-button.extra {
+  border-color: rgba(93, 184, 166, 0.45);
+  background: rgba(93, 184, 166, 0.08);
+}
+
+.rf-action-button:not(:disabled):active {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.rf-action-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 같은 진영이라 잠긴 공격 버튼 — 사유가 눈에 띄게 */
+.rf-action-button.ally-locked {
+  opacity: 0.75;
+  border-style: dashed;
+  border-color: rgba(217, 106, 106, 0.5);
+  background: var(--rf-danger-tint);
+}
+
+.rf-action-label {
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  word-break: keep-all;
+}
+
+.rf-action-cost {
+  color: var(--rf-danger);
+  font-variant-numeric: tabular-nums;
+}
+
+.rf-action-sub {
+  font-size: var(--text-caption-uppercase);
+  color: var(--rf-gold-strong);
+  word-break: keep-all;
+}
+
+.rf-action-note {
+  font-size: var(--text-caption-uppercase);
+  color: var(--rf-fog);
+  word-break: keep-all;
+}
+
+/* 비활성 사유는 경고색으로 — 왜 못 누르는지 바로 읽히게 */
+.rf-action-note.reason {
+  color: var(--rf-danger);
+  font-weight: 700;
+}
+
+.rf-observer-note {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--rf-fog);
+  text-align: center;
+  word-break: keep-all;
+}
+
+/* ---------- 하단 고정 응답 바 ---------- */
+
+.rf-response-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 950;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--space-sm) calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(10, 13, 20, 0.96);
+  border-top: 1px solid var(--rf-rail);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+  animation: rf-bar-up 0.25s ease;
+}
+
+@keyframes rf-bar-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.rf-bar-prompt {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  text-align: center;
+  max-width: 560px;
+  word-break: keep-all;
+}
+
+.rf-bar-passed {
+  color: var(--rf-fog);
+  font-weight: 400;
+}
+
+.rf-bar-timer {
+  margin-left: 8px;
+  color: var(--rf-gold-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.rf-bar-timer.urgent {
+  color: var(--rf-danger);
+  animation: rf-deadline-pulse 1s ease infinite;
+}
+
+.rf-bar-buttons {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.rf-challenge-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid rgba(217, 106, 106, 0.5);
+  border-radius: var(--radius-md);
+  background: var(--rf-danger-tint);
+  color: var(--rf-danger);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rf-challenge-button:not(:disabled):active {
+  background: rgba(217, 106, 106, 0.28);
+}
+
+.rf-block-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid rgba(125, 159, 209, 0.5);
+  border-radius: var(--radius-md);
+  background: var(--rf-safe-tint);
+  color: var(--rf-safe);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rf-block-button:not(:disabled):active {
+  background: rgba(125, 159, 209, 0.28);
+}
+
+.rf-allow-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rf-allow-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.rf-challenge-button:disabled,
+.rf-block-button:disabled,
+.rf-allow-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.rf-response-bar.passive .rf-bar-prompt {
+  color: var(--rf-fog);
+  font-weight: 400;
+}
+
+/* ---------- 오버레이 공통 (대상 선택·카드 제거·교환) ---------- */
+
+.rf-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-md);
+  overflow-y: auto;
+}
+
+.rf-overlay-panel {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: var(--rf-ink-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg) var(--space-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-modal);
+  animation: rf-panel-pop 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes rf-panel-pop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.rf-overlay-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--rf-gold-strong);
+  word-break: keep-all;
+}
+
+.rf-overlay-sub {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--rf-fog);
+  word-break: keep-all;
+}
+
+.rf-overlay-warn {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--rf-danger);
+  word-break: keep-all;
+}
+
+.rf-overlay-cards {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+}
+
+.rf-overlay-cards.wrap {
+  flex-wrap: wrap;
+}
+
+.rf-target-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.rf-target-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 1px solid var(--rf-line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.rf-target-button:not(:disabled):active {
+  background: var(--rf-gold-tint);
+  border-color: var(--rf-rail);
+}
+
+.rf-target-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 같은 진영이라 고를 수 없는 대상 — 사유를 그 자리에 적는다 */
+.rf-target-button.blocked {
+  border-style: dashed;
+  border-color: rgba(217, 106, 106, 0.45);
+  background: var(--rf-danger-tint);
+}
+
+.rf-target-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-target-info {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  color: var(--rf-gold-strong);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.rf-target-blocked {
+  color: var(--rf-danger);
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.rf-target-flip {
+  color: var(--rf-reformist);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rf-overlay-confirm {
+  min-height: 48px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.rf-overlay-confirm:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.rf-overlay-confirm:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--rf-fog);
+  cursor: not-allowed;
+}
+
+.rf-overlay-cancel {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--rf-fog);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+/* ---------- 초소형 화면 (280px) ---------- */
+
+@media (max-width: 340px) {
+  .rf-board {
+    padding: var(--space-xs);
+    padding-bottom: var(--space-lg);
+  }
+
+  .rf-board.with-bar {
+    padding-bottom: 128px;
+  }
+
+  .rf-treasury {
+    padding: 8px 10px;
+  }
+
+  .rf-grid {
+    gap: 6px;
+  }
+
+  .rf-tile {
+    padding: 8px 8px 8px 10px;
+  }
+
+  .rf-faction {
+    padding: 1px 6px;
+    font-size: 11px;
+  }
+
+  .rf-mini-card {
+    width: 28px;
+    height: 38px;
+  }
+
+  .rf-hand-card {
+    width: 106px;
+    height: 150px;
+    padding: 12px 8px 10px;
+  }
+
+  .rf-hand-name {
+    font-size: 23px;
+  }
+
+  .rf-actions-grid {
+    gap: 6px;
+  }
+
+  .rf-action-button {
+    min-height: 62px;
+    padding: 6px 4px;
+  }
+
+  .rf-target-button {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .rf-target-info {
+    text-align: left;
+  }
+
+  .rf-bar-buttons {
+    gap: 6px;
+  }
+
+  .rf-challenge-button,
+  .rf-block-button,
+  .rf-allow-button {
+    padding: 0 8px;
+    font-size: var(--text-caption);
+  }
+}
