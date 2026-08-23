@@ -36,6 +36,8 @@ import { JustOneApp } from './components/justone/JustOneApp';
 import { SetApp } from './components/set/SetApp';
 import { KittensApp } from './components/kittens/KittensApp';
 import { MindApp } from './components/mind/MindApp';
+import { ReformationApp } from './components/reformation/ReformationApp';
+import { SaboteurApp } from './components/saboteur/SaboteurApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -254,6 +256,14 @@ function App() {
 
   if (selectedGame === 'mind') {
     return <MindApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'reformation') {
+    return <ReformationApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'saboteur') {
+    return <SaboteurApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
