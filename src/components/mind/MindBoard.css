@@ -1,0 +1,794 @@
+/* 더 마인드 보드 — 고요한 밤하늘 위 숫자 하나 (tokens.css 토큰만 사용).
+   .mi-scope 변수 정의는 MindWaitingRoom.css (같은 번들) 참조.
+
+   설계 원칙: 이 화면은 단순할수록 좋다. 직전에 나온 수 하나가 주인공이고,
+   내가 낼 수 있는 카드도 최저 하나뿐이다. 나머지는 전부 뒤로 물린다.
+   리액션 바가 없으므로 하단 여백은 96px 이 아니라 32px 로 둔다.
+   280px 까지 가로 오버플로 금지, 터치 타깃은 44px 이상. */
+
+.mi-board {
+  min-height: 100vh;
+  background: linear-gradient(
+    170deg,
+    var(--mi-bg-elevated) 0%,
+    var(--mi-bg) 100%
+  );
+  padding: var(--space-md) var(--space-md) var(--space-xl);
+  max-width: 520px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.mi-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.mi-toast {
+  background: var(--mi-bg-elevated);
+  border: 1px solid var(--mi-line);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 HUD ---------- */
+
+.mi-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  background: var(--mi-panel);
+  border: 1px solid var(--mi-line);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+}
+
+.mi-hud-round {
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+  white-space: nowrap;
+}
+
+.mi-hud-round strong {
+  color: var(--color-on-dark);
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mi-hud-round-max {
+  color: var(--color-on-dark-soft);
+}
+
+.mi-hud-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mi-hud-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--mi-line);
+  white-space: nowrap;
+}
+
+.mi-hud-meter.life {
+  background: var(--mi-life-tint);
+  border-color: var(--mi-life);
+}
+
+.mi-hud-meter.star {
+  background: var(--mi-star-tint);
+  border-color: var(--mi-star-soft);
+}
+
+.mi-hud-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.mi-hud-count {
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mi-hud-meter.life .mi-hud-count {
+  color: var(--mi-life);
+}
+
+.mi-hud-meter.star .mi-hud-count {
+  color: var(--mi-star);
+}
+
+/* 생명 감소 — 실수가 뜨는 순간 눈에 띄게 흔들고 붉게 번진다 */
+.mi-hud-meter.life.hit {
+  animation: mi-life-hit 1.1s ease-out;
+}
+
+@keyframes mi-life-hit {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--mi-life-tint);
+  }
+  12% {
+    transform: scale(1.22) translateX(-3px);
+    box-shadow: 0 0 0 10px var(--mi-life-tint);
+  }
+  26% {
+    transform: scale(1.14) translateX(3px);
+  }
+  40% {
+    transform: scale(1.18) translateX(-2px);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+.mi-hud-clock {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- 중앙 무대 (화면의 주인공) ---------- */
+
+.mi-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 168px;
+  padding: var(--space-md) var(--space-sm);
+  border-radius: var(--radius-xl);
+  background: var(--mi-well);
+  border: 1px solid var(--mi-line);
+  text-align: center;
+}
+
+.mi-stage-label {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+}
+
+.mi-stage-number {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: clamp(72px, 26vw, 132px);
+  line-height: 1.02;
+  letter-spacing: var(--tracking-display-xl);
+  color: var(--color-on-dark);
+  font-variant-numeric: tabular-nums;
+  animation: mi-number-in 260ms ease-out;
+}
+
+.mi-stage-number.empty {
+  color: var(--color-on-dark-soft);
+  opacity: 0.5;
+}
+
+@keyframes mi-number-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mi-stage-sub {
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+/* 라운드 시작 3초 카운트다운 (phase 'ready') */
+.mi-ready {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mi-ready-label {
+  color: var(--mi-mist);
+  font-size: var(--text-body-sm);
+}
+
+.mi-ready-count {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: clamp(64px, 22vw, 112px);
+  line-height: 1.05;
+  color: var(--mi-star);
+  font-variant-numeric: tabular-nums;
+  animation: mi-tick 700ms ease-out;
+}
+
+@keyframes mi-tick {
+  from {
+    opacity: 0.2;
+    transform: scale(1.35);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mi-ready-soon {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  color: var(--mi-star);
+}
+
+.mi-ready-hint {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+/* ---------- 실수 연출 ---------- */
+
+.mi-mistake {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--mi-life-tint);
+  border: 1px solid var(--mi-life);
+  animation: mi-mistake-in 320ms ease-out;
+}
+
+@keyframes mi-mistake-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mi-mistake-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mi-mistake-mark {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mi-mistake-title {
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.mi-mistake-title strong {
+  color: var(--mi-life);
+  font-size: var(--text-title-md);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mi-mistake-sub {
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+}
+
+.mi-mistake-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* 터진 카드 — 소유자까지 공개된다 */
+.mi-burned {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 44px;
+  padding: 5px 8px;
+  border-radius: var(--radius-md);
+  background: var(--mi-well);
+  border: 1px solid var(--mi-life);
+  animation: mi-burn 420ms ease-out;
+}
+
+.mi-burned-num {
+  color: var(--mi-life);
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-decoration: line-through;
+}
+
+.mi-burned-owner {
+  color: var(--color-on-dark-soft);
+  font-size: 10px;
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes mi-burn {
+  0% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.96);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+.mi-mistake-note {
+  color: var(--color-on-dark-soft);
+  font-size: 11px;
+  word-break: keep-all;
+}
+
+/* ---------- 지나간 더미 ---------- */
+
+.mi-pile-wrap {
+  min-height: 28px;
+}
+
+.mi-pile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.mi-pile-card {
+  min-width: 26px;
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--mi-panel);
+  border: 1px solid var(--mi-line);
+  color: var(--color-on-dark-soft);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.mi-pile-card.last {
+  color: var(--mi-calm);
+  border-color: var(--mi-calm);
+  background: var(--mi-calm-tint);
+  font-weight: 700;
+}
+
+.mi-pile-more,
+.mi-pile-empty {
+  color: var(--color-on-dark-soft);
+  font-size: 11px;
+  align-self: center;
+}
+
+.mi-pile-empty {
+  display: block;
+  text-align: center;
+}
+
+/* ---------- 라운드 성공 ---------- */
+
+.mi-round-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--mi-ok-tint);
+  border: 1px solid var(--mi-ok);
+  text-align: center;
+  animation: mi-mistake-in 320ms ease-out;
+}
+
+.mi-round-end-title {
+  color: var(--color-on-dark);
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+}
+
+.mi-round-end-reward {
+  color: var(--mi-star);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+}
+
+.mi-round-end-sub {
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+/* ---------- 내 손패 ---------- */
+
+.mi-hand-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.mi-hand-label {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+  text-align: center;
+}
+
+.mi-hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+/* 카드 한 장 — 최저만 또렷하고 나머지는 흐리다 (낼 수 있는 건 하나뿐) */
+.mi-card {
+  min-width: 44px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--mi-panel);
+  border: 1px solid var(--mi-line);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.mi-card.lowest {
+  background: var(--mi-calm-tint);
+  border-color: var(--mi-calm);
+  color: var(--mi-calm);
+  font-size: var(--text-title-md);
+  font-weight: 800;
+  box-shadow: 0 0 0 3px var(--mi-calm-tint);
+}
+
+.mi-card.dim {
+  opacity: 0.42;
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.mi-hand-empty {
+  margin: 0;
+  color: var(--mi-mist);
+  font-size: var(--text-body-sm);
+  text-align: center;
+  word-break: keep-all;
+}
+
+/* ---------- 내기 버튼 ---------- */
+
+.mi-play-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 84px;
+  padding: 14px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--radius-xl);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 90ms ease;
+}
+
+.mi-play-button:not(:disabled):active {
+  background: var(--color-primary-active);
+  transform: scale(0.985);
+}
+
+.mi-play-button:disabled {
+  background: var(--mi-panel-strong);
+  color: var(--color-on-dark-soft);
+  cursor: not-allowed;
+}
+
+.mi-play-button.pending {
+  animation: mi-pending 700ms ease-in-out infinite;
+}
+
+@keyframes mi-pending {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.mi-play-num {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: clamp(40px, 12vw, 56px);
+  line-height: 1;
+  letter-spacing: var(--tracking-display-md);
+  font-variant-numeric: tabular-nums;
+}
+
+.mi-play-text {
+  font-size: var(--text-title-md);
+  font-weight: 800;
+}
+
+/* ---------- 수리검 ---------- */
+
+.mi-star-bar {
+  display: flex;
+  flex-direction: column;
+}
+
+.mi-star-button {
+  min-height: 44px;
+  padding: 11px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--mi-star-soft);
+  background: var(--mi-star-tint);
+  color: var(--mi-star);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mi-star-button:disabled {
+  border-color: var(--mi-line);
+  background: transparent;
+  color: var(--color-on-dark-soft);
+  cursor: not-allowed;
+}
+
+.mi-star-left {
+  font-weight: 600;
+  font-size: var(--text-caption);
+}
+
+.mi-vote {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--mi-star-tint);
+  border: 1px solid var(--mi-star-soft);
+}
+
+.mi-vote-head {
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.mi-vote-sec {
+  color: var(--mi-star);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.mi-vote-sub {
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.mi-vote-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+
+.mi-vote-button {
+  min-height: 44px;
+  padding: 11px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--mi-line-strong);
+  background: var(--mi-well);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.mi-vote-button.yes {
+  border-color: var(--mi-ok);
+  color: var(--mi-ok);
+}
+
+.mi-vote-button.no {
+  border-color: var(--mi-life);
+  color: var(--mi-life);
+}
+
+.mi-vote-waiting {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 안내 문구 ---------- */
+
+.mi-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.mi-hint.spectator {
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+}
+
+/* ---------- 좌석 스트립 ---------- */
+
+.mi-seats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+  gap: 6px;
+}
+
+.mi-seat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--mi-panel);
+  border: 1px solid var(--mi-line);
+}
+
+.mi-seat.me {
+  border-color: var(--mi-calm);
+  background: var(--mi-calm-tint);
+}
+
+.mi-seat.done {
+  opacity: 0.55;
+}
+
+.mi-seat-name {
+  color: var(--color-on-dark);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mi-seat-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.mi-seat-count {
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mi-seat-unit {
+  color: var(--color-on-dark-soft);
+  font-size: 10px;
+}
+
+.mi-seat-off {
+  font-size: 10px;
+  color: var(--mi-life);
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .mi-board {
+    padding: var(--space-sm) var(--space-xs) var(--space-lg);
+  }
+
+  .mi-hud {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .mi-hud-right {
+    justify-content: center;
+  }
+
+  .mi-stage {
+    min-height: 148px;
+  }
+
+  .mi-play-button {
+    min-height: 76px;
+    gap: 8px;
+  }
+
+  .mi-seats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mi-stage-number,
+  .mi-ready-count,
+  .mi-mistake,
+  .mi-round-end,
+  .mi-burned,
+  .mi-hud-meter.life.hit,
+  .mi-play-button.pending {
+    animation: none;
+  }
+
+  .mi-play-button {
+    transition: none;
+  }
+}

@@ -1,0 +1,189 @@
+/* 더 마인드 종료 — 밤하늘 다크 셸, 협력 기록판 (tokens.css 토큰만 사용).
+   .mi-scope 변수 정의는 MindWaitingRoom.css (같은 번들) 참조.
+   협력 게임이라 순위표가 없다 — 몇 라운드까지 갔는지가 전부다. */
+
+.mi-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--mi-bg-elevated) 0%,
+    var(--mi-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.mi-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--mi-panel);
+  border: 1px solid var(--mi-line);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.mi-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  word-break: keep-all;
+}
+
+.mi-over-title.cleared {
+  color: var(--mi-star);
+}
+
+.mi-over-title.failed {
+  color: var(--mi-life);
+}
+
+.mi-over-message {
+  margin: 0;
+  color: var(--mi-mist);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+/* ---------- 기록 ---------- */
+
+.mi-over-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-md) var(--space-sm);
+  border-radius: var(--radius-lg);
+  background: var(--mi-well);
+  border: 1px solid var(--mi-line);
+}
+
+.mi-over-score-value {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  line-height: 1.1;
+  color: var(--color-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.mi-over-score-max {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-title-md);
+}
+
+.mi-over-score-label {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+}
+
+.mi-over-track {
+  width: 100%;
+  height: 8px;
+  margin-top: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--mi-panel-strong);
+  overflow: hidden;
+}
+
+.mi-over-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--mi-calm);
+  transition: width 300ms ease-out;
+}
+
+.mi-over-fill.cleared {
+  background: var(--mi-star);
+}
+
+.mi-over-reach {
+  color: var(--mi-life);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 남은 자원 ---------- */
+
+.mi-over-meters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mi-over-meter {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--mi-line);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mi-over-meter.life {
+  background: var(--mi-life-tint);
+  border-color: var(--mi-life);
+  color: var(--mi-life);
+}
+
+.mi-over-meter.star {
+  background: var(--mi-star-tint);
+  border-color: var(--mi-star-soft);
+  color: var(--mi-star);
+}
+
+/* ---------- 함께한 사람들 ---------- */
+
+.mi-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mi-over-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--mi-panel-strong);
+}
+
+.mi-over-name {
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mi-over-tag {
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 360px) {
+  .mi-game-over {
+    padding: var(--space-sm);
+  }
+
+  .mi-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}

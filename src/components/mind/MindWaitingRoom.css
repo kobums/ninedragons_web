@@ -1,0 +1,284 @@
+/* 더 마인드 대기실 — 명상하는 밤하늘 다크 셸 (tokens.css 토큰만 사용).
+   .mi-scope: 더 마인드 전용 변수 오버라이드 — 값은 전부 tokens.css 토큰이거나
+   흑백 알파(패널·구분선)다. 신규 hex 없음.
+
+   아발론의 카멜롯 밤 네이비를 "고요한 별밤"으로 재매핑했다 —
+   배경은 깊은 인디고, 포인트는 별빛 골드(수리검)와 붉은 심장(생명).
+   숫자 카드는 차가운 별빛 블루로 두어 붉은 실수 연출과 최대한 멀리 둔다. */
+
+.mi-scope {
+  --mi-bg: var(--av-night);
+  --mi-bg-elevated: var(--av-night-elevated);
+  --mi-mist: var(--av-mist);
+
+  /* 별빛 골드 — 수리검 */
+  --mi-star: var(--av-gold-strong);
+  --mi-star-soft: var(--av-gold);
+  --mi-star-tint: var(--av-gold-tint);
+
+  /* 붉은 심장 — 생명·실수 */
+  --mi-life: var(--sp-danger);
+  --mi-life-tint: var(--sp-danger-tint);
+
+  /* 숫자 톤 — 차가운 별빛 블루 */
+  --mi-calm: var(--sp-citizen);
+  --mi-calm-tint: var(--sp-citizen-tint);
+
+  /* 성공 */
+  --mi-ok: var(--color-success);
+  --mi-ok-tint: rgba(93, 184, 114, 0.16);
+
+  /* 패널 공통 */
+  --mi-panel: rgba(255, 255, 255, 0.05);
+  --mi-panel-strong: rgba(255, 255, 255, 0.09);
+  --mi-line: rgba(255, 255, 255, 0.12);
+  --mi-line-strong: rgba(255, 255, 255, 0.24);
+  --mi-well: rgba(0, 0, 0, 0.35);
+}
+
+.mi-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--mi-bg-elevated) 0%,
+    var(--mi-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.mi-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--mi-panel);
+  border: 1px solid var(--mi-line);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.mi-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+}
+
+.mi-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--mi-mist);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.mi-join-form,
+.mi-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mi-form-group {
+  text-align: left;
+}
+
+.mi-form-group label {
+  display: block;
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.mi-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--mi-line);
+  background: var(--mi-well);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+.mi-form-group input::placeholder {
+  color: var(--color-on-dark-soft);
+}
+
+.mi-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mi-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.mi-primary-button:disabled {
+  background: var(--mi-panel-strong);
+  color: var(--color-on-dark-soft);
+  cursor: not-allowed;
+}
+
+.mi-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--mi-line-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--mi-mist);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.mi-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* 규칙 요약 카드 */
+.mi-rule-card {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--mi-well);
+  border: 1px solid var(--mi-line);
+  text-align: left;
+}
+
+.mi-rule-line {
+  margin: 0;
+  color: var(--mi-mist);
+  font-size: var(--text-caption);
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.mi-rule-line strong {
+  color: var(--color-on-dark);
+  font-weight: 800;
+}
+
+.mi-rule-line.danger {
+  color: var(--mi-star);
+}
+
+.mi-rule-line.muted {
+  color: var(--color-on-dark-soft);
+}
+
+.mi-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.mi-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--mi-panel-strong);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.mi-seat-item.empty {
+  color: var(--color-on-dark-soft);
+  font-weight: 400;
+  border: 1px dashed var(--mi-line);
+  background: transparent;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: var(--text-caption);
+}
+
+.mi-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mi-crown {
+  font-size: var(--text-body-sm);
+}
+
+.mi-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.mi-dot.on {
+  background: var(--mi-ok);
+}
+
+.mi-dot.off {
+  background: var(--color-on-dark-soft);
+}
+
+.mi-waiting-hint {
+  margin: 0;
+  color: var(--color-on-dark-soft);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .mi-waiting {
+    padding: var(--space-sm);
+  }
+
+  .mi-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* 입장·퇴장 토스트 (대기실 상단) */
+.mi-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.mi-waiting-toast {
+  background: var(--mi-bg-elevated);
+  border: 1px solid var(--mi-line);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
