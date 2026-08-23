@@ -1,0 +1,250 @@
+/* 익스플로딩 키튼 대기실 — 크림 종이 결 (se-waiting 결).
+   .ek-scope 변수 정의는 KittensApp.css 참조. tokens.css 토큰만 사용한다. */
+
+.ek-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.ek-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.ek-waiting-mark {
+  display: block;
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.ek-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.ek-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.ek-join-form,
+.ek-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ek-form-group {
+  text-align: left;
+}
+
+.ek-form-group label {
+  display: block;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.ek-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: var(--text-body-md);
+}
+
+/* ---------- 버튼 (44px 이상 터치 타깃) ---------- */
+
+.ek-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ek-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.ek-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.ek-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.ek-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ---------- 규칙 요약 ---------- */
+
+.ek-rule-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  text-align: left;
+}
+
+.ek-rule-line {
+  margin: 0;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.ek-rule-line strong {
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.ek-rule-line.muted {
+  color: var(--color-muted);
+}
+
+/* ---------- 좌석 목록 ---------- */
+
+.ek-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.ek-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.ek-seat-item.empty {
+  color: var(--color-muted-soft);
+  font-weight: 400;
+  border: 1px dashed var(--color-hairline);
+  background: transparent;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: var(--text-caption);
+}
+
+.ek-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ek-crown {
+  font-size: var(--text-body-sm);
+}
+
+.ek-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.ek-dot.on {
+  background: var(--color-success);
+}
+
+.ek-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.ek-waiting-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .ek-waiting {
+    padding: var(--space-sm);
+  }
+
+  .ek-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* ---------- 입장·퇴장 토스트 ---------- */
+
+.ek-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.ek-waiting-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}

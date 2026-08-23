@@ -1,0 +1,37 @@
+/* 익스플로딩 키튼 — 만화풍 크림 무드.
+   .ek-scope 는 셸 루트에 붙는 스코프 클래스로, 이 게임에서만 쓰는 변수를
+   전부 tokens.css 토큰으로 정의한다 (tokens.css 는 수정하지 않는다).
+
+   카드 13종의 색은 여기서 한 번만 정하고, 카드 컴포넌트는
+   .kind-* 클래스로 --ek-card-color 를 받아 쓴다. 색만으로는 구분되지
+   않으므로 카드에는 항상 이모지 + 한글 이름을 함께 그린다. */
+
+.ek-scope {
+  /* 기능 카드 8종 */
+  --ek-c-bomb: var(--color-error);
+  --ek-c-defuse: var(--st-clan-2);
+  --ek-c-attack: var(--tc-phx);
+  --ek-c-skip: var(--st-clan-1);
+  --ek-c-favor: var(--st-clan-4);
+  --ek-c-shuffle: var(--st-clan-5);
+  --ek-c-future: var(--tc-mah);
+  --ek-c-nope: var(--tc-drg);
+  /* 고양이 5종 */
+  --ek-c-taco: var(--color-accent-amber);
+  --ek-c-rainbow: var(--jh-hyde);
+  --ek-c-beard: var(--tc-dog);
+  --ek-c-potato: var(--st-clan-3);
+  --ek-c-melon: var(--color-accent-teal);
+  /* 알 수 없는 종류 폴백 */
+  --ek-c-unknown: var(--color-muted);
+
+  /* 카드 몸통 — 트럼프 공통 상아빛 종이 */
+  --ek-card-face: var(--card-face);
+  --ek-card-edge: var(--card-face-edge);
+  --ek-card-line: var(--color-hairline);
+
+  /* 긴장 요소 */
+  --ek-danger: var(--color-error);
+  --ek-ok: var(--color-success);
+  --ek-scrim: var(--scrim);
+}
