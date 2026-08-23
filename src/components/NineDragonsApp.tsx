@@ -48,7 +48,7 @@ export function NineDragonsApp({ onBack }: NineDragonsAppProps) {
     sendMessage({
       type: 'join_game',
       payload: {
-        playerName,
+        name: playerName,
         color,
         vsBot,
       },

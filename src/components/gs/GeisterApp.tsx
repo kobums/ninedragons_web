@@ -89,7 +89,7 @@ export function GeisterApp({ onBack }: GeisterAppProps) {
         <GSWaitingRoom
           hasJoined={hasJoined}
           onJoinGame={(playerName: string, vsBot?: boolean) =>
-            sendMessage({ type: 'gs_join_game', payload: { playerName, vsBot } })
+            sendMessage({ type: 'gs_join_game', payload: { name: playerName, vsBot } })
           }
           onBack={onBack}
         />

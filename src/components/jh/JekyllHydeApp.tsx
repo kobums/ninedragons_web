@@ -94,7 +94,7 @@ export function JekyllHydeApp({ onBack }: JekyllHydeAppProps) {
         <JHWaitingRoom
           hasJoined={hasJoined}
           onJoinGame={(playerName) =>
-            sendMessage({ type: 'jh_join_game', payload: { playerName } })
+            sendMessage({ type: 'jh_join_game', payload: { name: playerName } })
           }
           onBack={onBack}
         />

@@ -58,7 +58,7 @@ export function NumberChangeApp() {
     sendMessage({
       type: 'nc_join_game',
       payload: {
-        playerName,
+        name: playerName,
         team,
         vsBot,
       },

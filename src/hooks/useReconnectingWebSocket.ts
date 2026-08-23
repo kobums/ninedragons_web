@@ -70,7 +70,9 @@ export const useReconnectingWebSocket = <T,>(
         // 정리된(교체된) 소켓의 늦은 메시지는 무시한다
         if (disposed || wsRef.current !== ws) return;
         try {
-          // 개행으로 구분된 여러 JSON 메시지를 큐에 넣고 순서대로 소비
+          // 서버는 프레임 하나에 메시지 하나를 보내므로 보통 lines 는 1개다.
+          // 개행 분리는 메시지를 이어붙여 보내던 이전 버전 백엔드와 섞이는
+          // 배포 순간을 위한 방어로만 남겨 둔다.
           const lines = event.data
             .trim()
             .split('\n')

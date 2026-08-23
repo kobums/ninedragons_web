@@ -82,7 +82,7 @@ export function QuoridorApp({ onBack }: QuoridorAppProps) {
         <QDWaitingRoom
           hasJoined={hasJoined}
           onJoinGame={(playerName: string, vsBot?: boolean) =>
-            sendMessage({ type: 'qd_join_game', payload: { playerName, vsBot } })
+            sendMessage({ type: 'qd_join_game', payload: { name: playerName, vsBot } })
           }
           onBack={onBack}
         />

@@ -85,7 +85,7 @@ export function OmokApp({ onBack }: OmokAppProps) {
         <OmokWaitingRoom
           hasJoined={hasJoined}
           onJoinGame={(playerName: string, vsBot?: boolean) =>
-            sendMessage({ type: 'om_join_game', payload: { playerName, vsBot } })
+            sendMessage({ type: 'om_join_game', payload: { name: playerName, vsBot } })
           }
           onBack={onBack}
         />

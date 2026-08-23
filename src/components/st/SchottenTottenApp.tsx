@@ -97,7 +97,7 @@ export function SchottenTottenApp({ onBack }: SchottenTottenAppProps) {
         <STWaitingRoom
           hasJoined={hasJoined}
           onJoinGame={(playerName, mode) =>
-            sendMessage({ type: 'st_join_game', payload: { playerName, mode } })
+            sendMessage({ type: 'st_join_game', payload: { name: playerName, mode } })
           }
           onBack={onBack}
         />
