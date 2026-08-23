@@ -1,0 +1,26 @@
+/* 저스트 원 셸 — 크림 캔버스 위 "종이·연필" 결.
+   tokens.css 에는 저스트 원 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 값은 기존 토큰과
+   그 rgba 변주만 — 컴포넌트에 새 hex 를 흘리지 않는 규칙 유지. */
+
+.jo-scope {
+  /* 종이 — 단서 카드·제시어 카드 몸통 (트럼프 카드 공통 변수 재사용) */
+  --jo-paper: var(--card-face);
+  --jo-paper-edge: var(--card-face-edge);
+  --jo-paper-line: rgba(20, 20, 19, 0.22);
+  --jo-paper-shadow: rgba(20, 20, 19, 0.12);
+  /* 연필 흑연 — 손글씨 잉크 */
+  --jo-pencil: var(--color-body);
+  --jo-pencil-soft: var(--color-muted);
+  /* 지우개로 지운 단서 — 취소선·흐림 */
+  --jo-erased: var(--color-muted-soft);
+  --jo-erased-tint: rgba(142, 139, 130, 0.12);
+  /* 출제자 표시 ✏️ — 앰버 포인트 */
+  --jo-mark: var(--color-accent-amber);
+  --jo-mark-tint: rgba(232, 165, 90, 0.16);
+  /* 정오 판정 */
+  --jo-correct: var(--color-success);
+  --jo-correct-tint: rgba(93, 184, 114, 0.14);
+  --jo-wrong: var(--color-error);
+  --jo-wrong-tint: rgba(198, 69, 69, 0.12);
+}

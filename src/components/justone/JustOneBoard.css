@@ -1,0 +1,627 @@
+/* 저스트 원 보드 — 크림 캔버스 위 종이·연필 결.
+   팔레트는 JustOneApp.css 의 .jo-scope 변수 + tokens.css 토큰만 사용한다.
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상. */
+
+.jo-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 96px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.jo-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.jo-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 단계 배너 ---------- */
+
+.jo-phase-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.jo-phase-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.jo-round,
+.jo-score,
+.jo-deadline {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.jo-score {
+  color: var(--color-primary);
+}
+
+.jo-deadline {
+  color: var(--jo-pencil-soft);
+  font-weight: 600;
+}
+
+.jo-deadline.urgent {
+  color: var(--jo-wrong);
+}
+
+.jo-phase-sub {
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+/* ---------- 제시어 카드 ---------- */
+
+.jo-word-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* 종이 결 카드 — 상아빛 몸통 + 연필 괘선 */
+.jo-word-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-md) var(--space-sm);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    170deg,
+    var(--jo-paper) 0%,
+    var(--jo-paper-edge) 100%
+  );
+  border: 1px solid var(--jo-paper-line);
+  border-top: 3px solid var(--color-primary);
+  box-shadow: 0 1px 3px var(--jo-paper-shadow);
+  text-align: center;
+}
+
+.jo-word-card.secret {
+  border-top-color: var(--color-hairline);
+  background: var(--color-surface-soft);
+}
+
+.jo-word-label {
+  font-size: var(--text-caption-uppercase);
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+  color: var(--jo-pencil-soft);
+}
+
+.jo-word-text {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-ink);
+  line-height: 1.15;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.jo-word-text.secret {
+  font-family: var(--font-sans);
+  font-size: var(--text-title-md);
+  font-weight: 600;
+  color: var(--jo-erased);
+}
+
+.jo-word-hint {
+  font-size: var(--text-caption);
+  color: var(--jo-pencil-soft);
+  word-break: keep-all;
+}
+
+/* ---------- 공통 패널 ---------- */
+
+.jo-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  /* 키보드가 올라와도 scrollIntoView 가 여유를 두고 잡히도록 */
+  scroll-margin: 80px 0;
+}
+
+.jo-panel-title {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+}
+
+.jo-panel-note,
+.jo-empty {
+  margin: 0;
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.jo-wait-panel {
+  align-items: center;
+  text-align: center;
+}
+
+.jo-wait-title {
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+/* ---------- 텍스트 입력 ---------- */
+
+.jo-input-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  /* 포커스 시 화면 가운데로 끌어올릴 때의 여백 */
+  scroll-margin: 96px 0;
+}
+
+.jo-input-label {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  font-weight: 600;
+}
+
+.jo-input-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 밑줄 하나짜리 연필 입력 결 — 몸통은 종이 */
+.jo-text-input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  /* 카운터 자리를 오른쪽에 비워 둔다 */
+  padding: 12px 62px 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--jo-paper-line);
+  background: var(--jo-paper);
+  color: var(--color-ink);
+  /* 16px 미만이면 iOS 사파리가 포커스 시 화면을 확대해 버린다 */
+  font-size: var(--text-body-md);
+  font-weight: 600;
+}
+
+.jo-text-input::placeholder {
+  color: var(--jo-erased);
+  font-weight: 400;
+}
+
+.jo-text-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+/* 12자 제한 카운터 — 상한에 닿으면 코랄로 바뀐다 */
+.jo-counter {
+  position: absolute;
+  right: 12px;
+  color: var(--jo-erased);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.jo-counter.full {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.jo-input-note {
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.jo-input-warn {
+  color: var(--jo-wrong);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+/* ---------- 제출 후 잠금 ---------- */
+
+.jo-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px dashed var(--color-hairline);
+  text-align: center;
+}
+
+.jo-locked-label {
+  font-size: var(--text-caption);
+  color: var(--jo-pencil-soft);
+  font-weight: 700;
+}
+
+.jo-locked-value {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  color: var(--color-ink);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.jo-locked-note {
+  font-size: var(--text-caption);
+  color: var(--jo-erased);
+}
+
+/* ---------- 제출 진척 ---------- */
+
+.jo-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.jo-progress-text {
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+.jo-progress-bar {
+  display: block;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-cream-strong);
+  overflow: hidden;
+}
+
+.jo-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+/* ---------- 단서 목록 ---------- */
+
+.jo-clue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 단서 한 장 — 종이 쪽지 결 */
+.jo-clue-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    170deg,
+    var(--jo-paper) 0%,
+    var(--jo-paper-edge) 100%
+  );
+  border: 1px solid var(--jo-paper-line);
+  box-shadow: 0 1px 2px var(--jo-paper-shadow);
+  min-width: 0;
+}
+
+.jo-clue-text {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  color: var(--color-ink);
+  line-height: 1.2;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.jo-clue-by {
+  font-size: var(--text-caption);
+  color: var(--jo-pencil-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 소거된 단서 — 지워졌다는 걸 취소선으로 분명히 보여 준다 */
+.jo-clue-card.removed {
+  background: var(--jo-erased-tint);
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.jo-clue-card.removed .jo-clue-text {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--jo-wrong);
+  color: var(--jo-erased);
+}
+
+.jo-clue-card.removed .jo-clue-by {
+  color: var(--jo-erased);
+}
+
+/* ---------- 행동 버튼 ---------- */
+
+.jo-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+/* 보드 전용 버튼 — 대기실/종료 화면의 .jo-primary-button 과 이름을 나눠
+   같은 번들에서 규칙이 섞이지 않게 한다 (종료 화면은 세로 flex 라
+   flex-basis 가 높이로 잡히는 사고를 막는다) */
+.jo-submit-button {
+  min-height: 48px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+  flex: 1 1 140px;
+}
+
+.jo-submit-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.jo-submit-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.jo-skip-button {
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+  flex: 1 1 120px;
+}
+
+.jo-skip-button:active {
+  background: var(--color-surface-cream-strong);
+}
+
+/* ---------- 판정 · 인정 창 ---------- */
+
+.jo-verdict {
+  align-items: stretch;
+}
+
+.jo-verdict.correct {
+  border-color: var(--jo-correct);
+  background: var(--jo-correct-tint);
+}
+
+.jo-verdict.wrong {
+  border-color: var(--jo-wrong);
+  background: var(--jo-wrong-tint);
+}
+
+.jo-verdict-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.jo-verdict-label {
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+  flex-shrink: 0;
+}
+
+.jo-verdict-value {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-md);
+  text-align: right;
+  min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.jo-verdict-mark {
+  text-align: center;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  color: var(--color-ink);
+}
+
+.jo-verdict-note {
+  text-align: center;
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.jo-accept-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.jo-accept-hint {
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+  text-align: center;
+  word-break: keep-all;
+}
+
+.jo-accept-button {
+  min-height: 48px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--jo-correct);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.jo-accept-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+/* ---------- 좌석 스트립 ---------- */
+
+.jo-seat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 6px;
+}
+
+.jo-seat-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  font-size: var(--text-caption);
+}
+
+.jo-seat-chip.guesser {
+  border-color: var(--jo-mark);
+  background: var(--jo-mark-tint);
+}
+
+.jo-seat-chip.me {
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.jo-seat-chip.offline {
+  opacity: 0.55;
+}
+
+.jo-seat-mark {
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+  color: var(--jo-correct);
+  font-weight: 800;
+}
+
+.jo-seat-name {
+  color: var(--color-ink);
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jo-seat-state {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--jo-pencil-soft);
+  font-size: 11px;
+}
+
+.jo-spectator-note {
+  margin: var(--space-xs) 0 0;
+  text-align: center;
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 360px) {
+  .jo-board {
+    padding: var(--space-sm) var(--space-xs) 96px;
+  }
+
+  .jo-seat-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .jo-submit-button,
+  .jo-skip-button {
+    flex: 1 1 100%;
+  }
+
+  .jo-word-text {
+    font-size: var(--text-display-sm);
+  }
+
+  .jo-clue-text {
+    font-size: var(--text-title-md);
+  }
+}

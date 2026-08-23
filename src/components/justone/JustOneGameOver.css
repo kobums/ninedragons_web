@@ -1,0 +1,170 @@
+/* 저스트 원 게임 종료 — 크림 종이 결, 총점·등급·라운드별 기록.
+   팔레트는 JustOneApp.css 의 .jo-scope 변수 + tokens.css 토큰만 사용한다.
+   .jo-primary-button 은 JustOneWaitingRoom.css 정의를 그대로 쓴다. */
+
+.jo-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.jo-game-over-container {
+  width: 100%;
+  max-width: 460px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.jo-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.jo-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.jo-over-grade {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-title-md);
+  letter-spacing: var(--tracking-uppercase);
+}
+
+.jo-over-grade.perfect,
+.jo-over-grade.great {
+  color: var(--color-primary);
+}
+
+.jo-over-grade.good {
+  color: var(--jo-pencil);
+}
+
+.jo-over-grade.retry {
+  color: var(--jo-pencil-soft);
+}
+
+.jo-over-sub {
+  margin: 0;
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+/* 총점 게이지 */
+.jo-over-meter {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-cream-strong);
+  overflow: hidden;
+}
+
+.jo-over-meter-fill {
+  display: block;
+  height: 100%;
+  background: var(--color-primary);
+}
+
+.jo-over-count {
+  margin: 0;
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 라운드별 기록 ---------- */
+
+.jo-over-table-wrap {
+  overflow-x: auto;
+}
+
+.jo-over-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  color: var(--color-ink);
+}
+
+.jo-over-table th {
+  color: var(--jo-pencil-soft);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-hairline);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.jo-over-table td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.jo-over-table th.left,
+.jo-over-table td.left {
+  text-align: left;
+}
+
+.jo-over-table tr.correct td {
+  background: var(--jo-correct-tint);
+}
+
+.jo-over-word {
+  display: inline-block;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-weight: 700;
+}
+
+.jo-over-guess {
+  display: inline-block;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  color: var(--jo-pencil);
+}
+
+/* 틀린 답은 지워진 단서와 같은 결로 — 취소선 */
+.jo-over-guess.miss {
+  color: var(--jo-erased);
+  text-decoration: line-through;
+  text-decoration-color: var(--jo-wrong);
+}
+
+@media (max-width: 360px) {
+  .jo-game-over {
+    padding: var(--space-sm);
+  }
+
+  .jo-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .jo-over-word,
+  .jo-over-guess {
+    max-width: 68px;
+  }
+}
