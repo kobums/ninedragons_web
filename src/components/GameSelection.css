@@ -8,7 +8,9 @@
 .game-selection {
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  /* 위쪽 정렬 — 가운데 정렬이면 필터로 결과가 줄 때마다 화면 전체가 세로로
+     재정렬돼 검색창과 칩이 손가락 아래에서 튄다 */
+  align-items: flex-start;
   justify-content: center;
   background: var(--color-canvas);
   padding: var(--space-section) var(--space-lg);
@@ -220,5 +222,171 @@
   }
   50% {
     opacity: 0.65;
+  }
+}
+
+/* ---------- Filters (검색 · 갈래 · 인원) ----------
+   게임이 38종을 넘어가면서 훑어보기만으로는 못 찾는다. 검색은 제목·설명·
+   태그·카테고리를 함께 훑고, 칩은 한 번 더 누르면 해제된다. */
+
+.game-selection .game-filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.game-selection .game-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 0 var(--space-md);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.game-selection .game-search:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.game-selection .game-search-icon {
+  font-size: 15px;
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+.game-selection .game-search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  /* 16px 미만이면 iOS 가 입력 시 화면을 확대한다 */
+  font-size: 16px;
+  color: var(--color-ink);
+  padding: 14px var(--space-sm);
+  outline: none;
+}
+
+.game-selection .game-search-input::placeholder {
+  color: var(--color-muted-soft);
+}
+
+/* 검색 타입의 브라우저 기본 X 는 감추고 우리 버튼만 쓴다 */
+.game-selection .game-search-input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.game-selection .game-search-clear {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-cream-strong);
+  color: var(--color-body);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.game-selection .game-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.game-selection .game-chip-label {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  margin-right: 2px;
+}
+
+.game-selection .game-chip {
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.game-selection .game-chip.small {
+  padding: 7px 11px;
+}
+
+.game-selection .game-chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.game-selection .game-chip.on {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.game-selection .game-filter-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  padding-top: 2px;
+}
+
+.game-selection .game-filter-reset {
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 4px;
+}
+
+.game-selection .game-empty {
+  text-align: center;
+  padding: var(--space-xxl) var(--space-lg);
+  background: var(--color-surface-soft);
+  border: 1px dashed var(--color-hairline);
+  border-radius: var(--radius-xl);
+}
+
+.game-selection .game-empty-title {
+  font-weight: 600;
+  color: var(--color-body-strong);
+  margin: 0 0 6px;
+}
+
+.game-selection .game-empty-hint {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  margin: 0 0 var(--space-sm);
+}
+
+/* 좁은 화면에서는 칩 줄이 가로 스크롤되도록 — 세로로 계속 쌓이면
+   카드가 화면 아래로 밀려난다 */
+@media (max-width: 480px) {
+  .game-selection .game-chip-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .game-selection .game-chip-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .game-selection .game-chip {
+    flex-shrink: 0;
   }
 }
