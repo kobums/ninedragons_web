@@ -68,9 +68,8 @@ export function GameSelection({ onSelectGame, onOpenRecords }: GameSelectionProp
     <div className="game-selection">
       <div className="game-selection-container">
         <header className="game-selection-header">
-          <span className="game-selection-eyebrow">
-            함께 즐기는 보드게임 {GAME_IDS.length}종
-          </span>
+          {/* 머리말은 고정 문구다. 게임 수가 늘어도 절대 바꾸지 않는다. */}
+          <span className="game-selection-eyebrow">두 사람을 위한 보드게임</span>
           <h1 className="game-selection-title">게임 선택</h1>
           <p className="game-selection-lead">
             검색하거나 갈래·인원으로 좁혀서 골라보세요.
@@ -167,13 +166,16 @@ export function GameSelection({ onSelectGame, onOpenRecords }: GameSelectionProp
           </div>
         ) : (
           <div className="game-cards">
-            {visible.map((id) => {
+            {visible.map((id, index) => {
               const game = GAMES[id]
+              // 카드 색은 목록에서의 자리로 정한다. 게임마다 고정색을 박아 두면
+              // 게임이 늘거나 필터로 목록이 바뀔 때 검정·크림이 뒤죽박죽 섞인다.
+              const theme = index % 2 === 0 ? 'dark' : 'cream'
               return (
                 <button
                   key={id}
                   type="button"
-                  className={`game-card ${game.cardTheme}`}
+                  className={`game-card ${theme}`}
                   onClick={() => onSelectGame(id)}
                 >
                   <div className="game-card-content">

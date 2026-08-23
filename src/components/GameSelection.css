@@ -73,8 +73,9 @@
 }
 
 /* Cream card and dark product card alternate — the cream-to-dark
-   contrast is the system's pacing mechanism. 게임별 클래스 대신
-   레지스트리의 cardTheme('dark'|'cream')이 클래스를 결정한다. */
+   contrast is the system's pacing mechanism.
+   어느 카드가 어느 색인지는 목록에서의 자리가 정한다 (GameSelection.tsx).
+   게임마다 색을 박아 두면 필터로 목록이 바뀔 때 리듬이 깨진다. */
 .game-selection .game-card.dark {
   background: var(--color-surface-dark);
   color: var(--color-on-dark);
