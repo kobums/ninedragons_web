@@ -30,6 +30,8 @@ import { CockroachApp } from './components/cockroach/CockroachApp';
 import { InsiderApp } from './components/insider/InsiderApp';
 import { DalmutiApp } from './components/dalmuti/DalmutiApp';
 import { KrakenApp } from './components/kraken/KrakenApp';
+import { SkullKingApp } from './components/skullking/SkullKingApp';
+import { CrewApp } from './components/crew/CrewApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -224,6 +226,14 @@ function App() {
 
   if (selectedGame === 'kraken') {
     return <KrakenApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'skullking') {
+    return <SkullKingApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'crew') {
+    return <CrewApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
