@@ -34,6 +34,8 @@ import { SkullKingApp } from './components/skullking/SkullKingApp';
 import { CrewApp } from './components/crew/CrewApp';
 import { JustOneApp } from './components/justone/JustOneApp';
 import { SetApp } from './components/set/SetApp';
+import { KittensApp } from './components/kittens/KittensApp';
+import { MindApp } from './components/mind/MindApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -244,6 +246,14 @@ function App() {
 
   if (selectedGame === 'set') {
     return <SetApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'kittens') {
+    return <KittensApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'mind') {
+    return <MindApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
