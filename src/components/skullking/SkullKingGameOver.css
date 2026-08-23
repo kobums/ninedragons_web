@@ -1,0 +1,133 @@
+/* 스컬킹 결과 오버레이 — 총점 순위 + 같은 방 재대결.
+   .kg-scope 변수 정의는 SkullKingWaitingRoom.css (같은 번들) 참조. */
+
+.kg-game-over {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scrim);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.kg-game-over-container {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  background: var(--kg-bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-modal);
+}
+
+.kg-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--kg-gold);
+  word-break: keep-all;
+}
+
+.kg-over-message {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--kg-fog);
+  word-break: keep-all;
+}
+
+.kg-over-reason {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--kg-fog);
+}
+
+.kg-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 700;
+}
+
+.kg-over-verdict.win {
+  color: var(--color-success);
+}
+
+.kg-over-verdict.lose {
+  color: var(--kg-fog);
+}
+
+/* 총점 순위 */
+.kg-over-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.kg-over-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.kg-over-row.winner {
+  border-color: var(--kg-gold);
+  background: var(--kg-gold-tint);
+}
+
+.kg-over-rank {
+  flex-shrink: 0;
+  min-width: 34px;
+  text-align: left;
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  color: var(--kg-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.kg-over-row.winner .kg-over-rank {
+  color: var(--kg-gold);
+}
+
+.kg-over-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kg-over-score {
+  flex-shrink: 0;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 360px) {
+  .kg-game-over {
+    padding: var(--space-sm);
+  }
+
+  .kg-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}

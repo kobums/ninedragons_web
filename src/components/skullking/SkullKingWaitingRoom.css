@@ -1,0 +1,254 @@
+/* 스컬킹 대기실 — 해적선·밤바다 다크 셸 (tokens.css 토큰만 사용).
+   .kg-scope: 스컬킹 전용 변수 오버라이드 — 값은 대부분 tokens.css 토큰 참조.
+   스파이폴 다크 무드 토큰을 밤바다 결로 재매핑하고, 무늬 4색만
+   기존 저채도 색 토큰을 다크 배경 가독용으로 골라 쓴다. */
+
+.kg-scope {
+  --kg-bg: var(--sp-dark);
+  --kg-bg-elevated: var(--sp-dark-elevated);
+  --kg-bg-soft: var(--sp-dark-soft);
+  --kg-fog: var(--sp-fog);
+  /* 금화·강조 */
+  --kg-gold: var(--sp-amber-strong);
+  --kg-gold-tint: var(--sp-amber-tint);
+  /* 위험·타이머 임박 */
+  --kg-danger: var(--sp-danger);
+  --kg-danger-tint: var(--sp-danger-tint);
+  /* 밤바다 — 차분한 청색 포인트 */
+  --kg-sea: var(--sp-citizen);
+  --kg-sea-tint: var(--sp-citizen-tint);
+
+  /* ---- 무늬 4색 ---- */
+  /* 초록(앵무새) */
+  --kg-green: var(--color-success);
+  --kg-green-tint: rgba(93, 184, 114, 0.16);
+  /* 노랑(지도) */
+  --kg-yellow: var(--sp-amber-strong);
+  --kg-yellow-tint: var(--sp-amber-tint);
+  /* 보라(보물상자) — st-clan-4(#7c5cad)의 다크 배경 밝힘 변주 (신규 1색) */
+  --kg-purple: #a98ad6;
+  --kg-purple-tint: rgba(169, 138, 214, 0.18);
+  /* 검정(해적기) = 상시 트럼프 — 다크 배경에서는 뼈빛 은색으로 읽힌다 */
+  --kg-black: var(--color-on-dark);
+  --kg-black-tint: rgba(250, 249, 245, 0.1);
+}
+
+.kg-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--kg-bg-elevated) 0%,
+    var(--kg-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.kg-waiting-container {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.kg-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.kg-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--kg-fog);
+  font-size: var(--text-body-sm);
+}
+
+.kg-join-form,
+.kg-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kg-form-group {
+  text-align: left;
+}
+
+.kg-form-group label {
+  display: block;
+  color: var(--kg-fog);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.kg-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+.kg-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kg-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.kg-primary-button:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--kg-fog);
+  cursor: not-allowed;
+}
+
+.kg-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--kg-fog);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.kg-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.kg-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.kg-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.kg-seat-item.empty {
+  color: var(--kg-fog);
+  font-weight: 400;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: transparent;
+  justify-content: center;
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+}
+
+.kg-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kg-crown {
+  font-size: var(--text-body-sm);
+}
+
+.kg-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.kg-dot.on {
+  background: var(--color-success);
+}
+
+.kg-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.kg-waiting-hint {
+  margin: 0;
+  color: var(--kg-fog);
+  font-size: var(--text-caption);
+}
+
+/* 인원별 라운드 수 안내 */
+.kg-round-hint {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed var(--kg-gold);
+  color: var(--kg-fog);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .kg-waiting {
+    padding: var(--space-sm);
+  }
+
+  .kg-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* 입장·퇴장 토스트 (대기실 상단) */
+.kg-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.kg-waiting-toast {
+  background: var(--kg-bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+}

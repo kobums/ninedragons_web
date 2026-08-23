@@ -1,0 +1,835 @@
+/* 스컬킹 보드 — 밤바다 다크. 상단 라운드 바 + 비드 그리드 + 중앙 트릭 부채 +
+   좌석 스트립 + 내 손패.
+   .kg-scope 변수 정의는 SkullKingWaitingRoom.css (같은 번들) 참조.
+   280px 오버플로 금지, 터치 타깃 44px+. */
+
+.kg-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--kg-bg-elevated) 0%,
+    var(--kg-bg) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 108px; /* 하단 확정 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.kg-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.kg-toast {
+  background: rgba(8, 10, 14, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: kg-fade-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes kg-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 상단 상태 바 ---------- */
+
+.kg-status-bar {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--kg-sea-tint);
+  border: 1px solid var(--kg-sea);
+}
+
+.kg-status-bar.bidding {
+  background: var(--kg-gold-tint);
+  border-color: var(--kg-gold);
+}
+
+.kg-status-bar.round_end {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: var(--kg-fog);
+}
+
+.kg-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kg-status-chip {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  white-space: nowrap;
+}
+
+.kg-status-chip.lead.suit-green {
+  border-color: var(--kg-green);
+  color: var(--kg-green);
+}
+
+.kg-status-chip.lead.suit-yellow {
+  border-color: var(--kg-yellow);
+  color: var(--kg-yellow);
+}
+
+.kg-status-chip.lead.suit-purple {
+  border-color: var(--kg-purple);
+  color: var(--kg-purple);
+}
+
+.kg-status-chip.lead.suit-black {
+  border-color: var(--kg-black);
+  color: var(--kg-black);
+}
+
+.kg-timer {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  white-space: nowrap;
+}
+
+.kg-timer.urgent {
+  color: var(--kg-danger);
+  animation: kg-pulse 1s ease infinite;
+}
+
+@keyframes kg-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.kg-status-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-title-lg);
+  letter-spacing: var(--tracking-display-sm);
+  word-break: keep-all;
+}
+
+.kg-status-sub {
+  font-size: var(--text-caption);
+  color: var(--kg-fog);
+  word-break: keep-all;
+}
+
+.kg-spectator-note {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--kg-fog);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 공통 섹션 박스 ---------- */
+
+.kg-bid-box,
+.kg-trick-area,
+.kg-round-table,
+.kg-my-hand {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.kg-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.kg-section-title {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+}
+
+.kg-section-note {
+  font-size: var(--text-caption);
+  color: var(--kg-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 비드 그리드 ---------- */
+
+.kg-bid-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xxs);
+}
+
+.kg-bid-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kg-bid-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+}
+
+.kg-bid-button.picked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.kg-bid-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.kg-bid-button.picked:disabled {
+  /* 제출 확정된 내 비드는 흐려지지 않고 그대로 강조 유지 */
+  opacity: 1;
+}
+
+.kg-bid-hint {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--kg-fog);
+  word-break: keep-all;
+}
+
+/* ---------- 카드 ---------- */
+
+.kg-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 46px;
+  min-height: 62px;
+  padding: 6px 4px;
+  box-sizing: border-box;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(0, 0, 0, 0.45)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  line-height: 1.1;
+}
+
+.kg-card.sm {
+  min-width: 34px;
+  min-height: 44px;
+  padding: 4px 2px;
+}
+
+.kg-card-suit {
+  font-size: var(--text-caption);
+  line-height: 1;
+}
+
+.kg-card-rank {
+  font-size: var(--text-title-md);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.kg-card.sm .kg-card-rank {
+  font-size: var(--text-body-sm);
+}
+
+.kg-card-icon {
+  font-size: var(--text-title-md);
+  line-height: 1;
+}
+
+.kg-card.sm .kg-card-icon {
+  font-size: var(--text-body-sm);
+}
+
+.kg-card-name {
+  font-size: var(--text-caption-uppercase);
+  font-weight: 800;
+  color: var(--kg-fog);
+  white-space: nowrap;
+}
+
+.kg-card.sm .kg-card-name {
+  display: none;
+}
+
+/* 무늬별 색 */
+.kg-card.suit-green {
+  border-color: var(--kg-green);
+  background: var(--kg-green-tint);
+}
+
+.kg-card.suit-green .kg-card-rank {
+  color: var(--kg-green);
+}
+
+.kg-card.suit-yellow {
+  border-color: var(--kg-yellow);
+  background: var(--kg-yellow-tint);
+}
+
+.kg-card.suit-yellow .kg-card-rank {
+  color: var(--kg-yellow);
+}
+
+.kg-card.suit-purple {
+  border-color: var(--kg-purple);
+  background: var(--kg-purple-tint);
+}
+
+.kg-card.suit-purple .kg-card-rank {
+  color: var(--kg-purple);
+}
+
+/* 검정 = 상시 트럼프 — 뼈빛 테두리 + 가장 어두운 몸통 */
+.kg-card.suit-black {
+  border-color: var(--kg-black);
+  background: linear-gradient(150deg, var(--kg-black-tint), rgba(0, 0, 0, 0.7));
+}
+
+.kg-card.suit-black .kg-card-rank {
+  color: var(--kg-black);
+}
+
+/* 특수 카드 */
+.kg-card.kind-skullking {
+  border-color: var(--kg-gold);
+  background: var(--kg-gold-tint);
+}
+
+.kg-card.kind-skullking .kg-card-name {
+  color: var(--kg-gold);
+}
+
+.kg-card.kind-pirate {
+  border-color: var(--kg-danger);
+  background: var(--kg-danger-tint);
+}
+
+.kg-card.kind-pirate .kg-card-name {
+  color: var(--kg-danger);
+}
+
+.kg-card.kind-mermaid {
+  border-color: var(--kg-sea);
+  background: var(--kg-sea-tint);
+}
+
+.kg-card.kind-mermaid .kg-card-name {
+  color: var(--kg-sea);
+}
+
+.kg-card.kind-escape {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ---------- 중앙 트릭 (좌석별 카드 부채) ---------- */
+
+.kg-trick-fan {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2px;
+  min-height: 92px;
+  padding: 4px 0;
+}
+
+.kg-trick-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transform-origin: bottom center;
+  animation: kg-card-drop 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes kg-card-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.kg-trick-slot.mine .kg-card {
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.kg-trick-name {
+  max-width: 62px;
+  font-size: var(--text-caption-uppercase);
+  color: var(--kg-fog);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kg-trick-empty {
+  font-size: var(--text-caption);
+  color: var(--kg-fog);
+}
+
+/* ---------- 직전 트릭 승자 연출 ---------- */
+
+.kg-last-trick {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--kg-gold-tint);
+  border: 1px solid var(--kg-gold);
+  animation: kg-win-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes kg-win-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  60% {
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.kg-last-trick-title {
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  color: var(--kg-gold);
+  word-break: keep-all;
+  text-align: center;
+}
+
+.kg-last-trick-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.kg-last-trick-card {
+  display: inline-flex;
+  opacity: 0.62;
+}
+
+.kg-last-trick-card.won {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+/* ---------- 라운드 정산 표 ---------- */
+
+.kg-table {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kg-table-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px 38px 44px 46px;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: var(--text-caption);
+}
+
+.kg-table-row.head {
+  background: transparent;
+  color: var(--kg-fog);
+  font-size: var(--text-caption-uppercase);
+  padding-bottom: 2px;
+}
+
+.kg-table-row.me {
+  background: rgba(255, 255, 255, 0.12);
+  font-weight: 700;
+}
+
+.kg-col {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kg-col.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.kg-col.hit {
+  color: var(--kg-gold);
+  font-weight: 800;
+}
+
+.kg-col.miss {
+  color: var(--kg-fog);
+}
+
+.kg-col.plus {
+  color: var(--color-success);
+  font-weight: 800;
+}
+
+.kg-col.minus {
+  color: var(--kg-danger);
+  font-weight: 800;
+}
+
+.kg-col.total {
+  font-weight: 800;
+}
+
+/* ---------- 좌석 스트립 ---------- */
+
+.kg-seats {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xxs);
+}
+
+.kg-seat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kg-seat.me {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.kg-seat.active {
+  border-color: var(--kg-sea);
+  background: var(--kg-sea-tint);
+}
+
+.kg-seat.won {
+  border-color: var(--kg-gold);
+}
+
+.kg-seat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.kg-seat-name {
+  font-weight: 700;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kg-seat-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.kg-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: var(--text-caption-uppercase);
+  color: var(--kg-fog);
+  white-space: nowrap;
+}
+
+.kg-badge.off {
+  background: rgba(212, 160, 23, 0.18);
+  color: var(--color-warning);
+}
+
+.kg-seat-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: var(--text-caption);
+  color: var(--kg-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.kg-stat {
+  white-space: nowrap;
+}
+
+.kg-stat.hit {
+  color: var(--kg-gold);
+  font-weight: 800;
+}
+
+.kg-stat.score {
+  color: var(--color-on-dark);
+  font-weight: 800;
+}
+
+/* ---------- 내 손패 ---------- */
+
+.kg-hand-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xxs);
+}
+
+.kg-hand-card {
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: var(--radius-md);
+  min-height: 44px;
+  cursor: default;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.kg-hand-card.selectable {
+  cursor: pointer;
+}
+
+.kg-hand-card.selectable:hover {
+  transform: translateY(-4px);
+}
+
+.kg-hand-card.selected {
+  transform: translateY(-6px);
+}
+
+.kg-hand-card.selected .kg-card {
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+/* 낼 수 없는 카드 — 흐림 처리 (판정은 서버가 하고 이건 보조 표시) */
+.kg-hand-card.blocked {
+  filter: grayscale(0.8);
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.kg-hand-card:disabled {
+  /* 버튼 기본 비활성 스타일 무력화 — 시각 상태는 클래스가 결정 */
+  color: var(--color-on-dark);
+}
+
+.kg-hand-empty {
+  font-size: var(--text-caption);
+  color: var(--kg-fog);
+}
+
+/* ---------- 하단 확정 바 ---------- */
+
+.kg-confirm-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 950;
+  width: calc(100% - 24px);
+  max-width: 480px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--kg-bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-modal);
+  animation: kg-fade-in 0.2s ease;
+}
+
+.kg-confirm-text {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  min-width: 0;
+  word-break: keep-all;
+}
+
+.kg-confirm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.kg-confirm-button {
+  min-height: 44px;
+  padding: 9px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kg-confirm-button:active {
+  background: var(--color-primary-active);
+}
+
+.kg-cancel-button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--kg-fog);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+/* ---------- 모바일 (280px 대응) ---------- */
+
+@media (max-width: 420px) {
+  .kg-board {
+    padding: var(--space-xs);
+    padding-bottom: 108px;
+  }
+
+  .kg-seat-name {
+    font-size: var(--text-caption);
+  }
+}
+
+@media (max-width: 340px) {
+  /* 280px 단일 컬럼 — 좌석·표·손패가 가로로 넘치지 않게 */
+  .kg-seats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kg-bid-box,
+  .kg-trick-area,
+  .kg-round-table,
+  .kg-my-hand {
+    padding: 8px 10px;
+  }
+
+  .kg-table-row {
+    grid-template-columns: minmax(0, 1fr) 30px 30px 38px 40px;
+    padding: 6px 4px;
+    font-size: var(--text-caption-uppercase);
+  }
+
+  .kg-card {
+    min-width: 40px;
+    min-height: 56px;
+  }
+
+  .kg-card-rank {
+    font-size: var(--text-body-md);
+  }
+
+  .kg-confirm-bar {
+    justify-content: center;
+    text-align: center;
+  }
+}
