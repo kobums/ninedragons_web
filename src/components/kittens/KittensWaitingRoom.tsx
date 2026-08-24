@@ -118,7 +118,7 @@ export function KittensWaitingRoom({
           <div className="ek-seat-list-wrap">
             <RoomCodeBadge code={game.roomCode} />
 
-            {/* 규칙 요약 — 폭탄과 해체, 그리고 아뇨만 먼저 못 박는다 */}
+            {/* 규칙 요약 — 폭탄과 해체, 그리고 안돼만 먼저 못 박는다 */}
             <div className="ek-rule-card">
               <p className="ek-rule-line">
                 차례마다 카드를 원하는 만큼 내고 <strong>덱에서 1장을 뽑으면
@@ -129,7 +129,7 @@ export function KittensWaitingRoom({
                 입니다. 해체를 쓰면 폭탄을 덱 아무 곳에 몰래 되꽂습니다.
               </p>
               <p className="ek-rule-line muted">
-                🚫 아뇨는 남이 낸 기능 카드를 무효로 만듭니다. 아뇨 위에 아뇨를
+                🚫 안돼는 남이 낸 기능 카드를 무효로 만듭니다. 안돼 위에 안돼를
                 겹칠 수 있고, 겹친 수가 짝수면 원래 효과가 살아납니다.
               </p>
             </div>
