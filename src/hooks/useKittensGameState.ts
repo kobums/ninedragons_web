@@ -16,7 +16,7 @@ export interface EKToast {
   event: EKEvent;
 }
 
-// 예지 결과 — 나에게만 온 덱 맨 위 3장.
+// 미래 예측 결과 — 나에게만 온 덱 맨 위 3장.
 // ctx 는 이 결과가 유효한 스냅샷 컨텍스트다. 개인 이벤트가 스냅샷보다 먼저
 // 도착할 수도 있어, 스냅샷이 아직 없으면 null 로 두고 다음 스냅샷에서 고정한다.
 interface EKFutureState {
@@ -47,15 +47,15 @@ const initialState: EKState = {
 // react 는 셸의 useReactions 가 ReactionOverlay 로 따로 띄운다.
 const TOAST_SKIP: ReadonlySet<string> = new Set(['react']);
 
-// 예지 결과가 유효한 컨텍스트 키.
-// 예지 카드 자체는 덱 잔량·차례를 바꾸지 않으므로 이 둘만 본다 — 하나라도
+// 미래 예측 결과가 유효한 컨텍스트 키.
+// 미래 예측 카드 자체는 덱 잔량·차례를 바꾸지 않으므로 이 둘만 본다 — 하나라도
 // 바뀌면(누가 뽑았거나 차례가 넘어갔으면) 본 3장은 더 이상 덱 맨 위가 아니다.
-// phase 는 넣지 않는다. 노프 창처럼 잠깐 끼어드는 단계에서 지워지면 안 된다.
+// phase 는 넣지 않는다. 아뇨 창처럼 잠깐 끼어드는 단계에서 지워지면 안 된다.
 const futureCtxOf = (game: EKGameState): string =>
   `${game.currentSeat}|${game.deckLeft}`;
 
 // 서버가 상태 변경마다 개인화 전체 스냅샷(ek_game_state)을 보내므로
-// 이 훅은 스냅샷을 그대로 반영하고 토스트·에러·개인 예지만 따로 관리한다.
+// 이 훅은 스냅샷을 그대로 반영하고 토스트·에러·개인 미래 예측만 따로 관리한다.
 // (useKrakenGameState 결 — 다인 은닉 스냅샷형)
 export const useKittensGameState = (lastMessage: EKMessage | null) => {
   const [state, setState] = useState<EKState>(initialState);

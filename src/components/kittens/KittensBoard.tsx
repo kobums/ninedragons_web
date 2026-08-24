@@ -15,7 +15,7 @@ import './KittensBoard.css';
 interface KittensBoardProps {
   game: EKGameState;
   toasts: EKToast[];
-  // 나에게만 온 예지 결과 (덱 맨 위부터 3장). 없으면 null.
+  // 나에게만 온 미래 예측 결과 (덱 맨 위부터 3장). 없으면 null.
   futureCards: EKCard[] | null;
   onPlay: (index: number, targetSeat?: number) => void;
   onPlayPair: (indexes: number[], targetSeat: number) => void;
@@ -28,8 +28,8 @@ interface KittensBoardProps {
 
 const PHASE_LABEL: Record<string, string> = {
   turn: '차례',
-  nope_window: '노프 창',
-  favor_wait: '부탁 대기',
+  nope_window: '아뇨 창',
+  favor_wait: '호의 대기',
   defuse_place: '폭탄 되꽂기',
   game_over: '게임 종료',
 };
@@ -77,7 +77,7 @@ function EKCardFace({
   dimmed?: boolean;
   onClick?: () => void;
   disabled?: boolean;
-  // 카드 좌상단 배지 (예지 순번 등)
+  // 카드 좌상단 배지 (미래 예측 순번 등)
   corner?: string;
 }) {
   const meta = ekCardMeta(kind);
@@ -202,7 +202,7 @@ export function KittensBoard({
   const nameOf = (seat?: number) =>
     players.find((p) => p.seat === seat)?.name ?? '?';
 
-  // ----- 노프 창 -----
+  // ----- 아뇨 창 -----
   const pendingKind = pending?.kind ?? '';
   const pendingMeta = ekCardMeta(pendingKind);
   const nopeCount = pending?.nopeCount ?? 0;
@@ -212,7 +212,7 @@ export function KittensBoard({
   const isPendingOwner = pending !== null && game.yourSeat === pending.bySeat;
   const canRespond = isNopeWindow && canAct && !isPendingOwner;
 
-  // ----- 부탁 / 되꽂기 -----
+  // ----- 호의 / 되꽂기 -----
   const iAmGiver =
     isFavorWait && canAct && pending !== null && pending.targetSeat === game.yourSeat;
   const iAmPlacer = isDefusePlace && canAct && game.currentSeat === game.yourSeat;
@@ -305,7 +305,7 @@ export function KittensBoard({
       if (myTurn) return '카드를 내거나, 덱에서 1장 뽑아 차례를 끝내세요';
       return `${nameOf(game.currentSeat)}님의 차례입니다`;
     }
-    if (isNopeWindow) return pendingLine || '노프 응답을 기다리는 중…';
+    if (isNopeWindow) return pendingLine || '아뇨 응답을 기다리는 중…';
     if (isFavorWait) {
       return iAmGiver
         ? '🙏 줄 카드 1장을 고르세요'
@@ -451,11 +451,11 @@ export function KittensBoard({
         </div>
       </div>
 
-      {/* ---------- 예지 결과 (나만 보임) ---------- */}
+      {/* ---------- 미래 예측 결과 (나만 보임) ---------- */}
       {futureCards && futureCards.length > 0 && !isSpectator && (
         <div className="ek-future">
           <span className="ek-future-title">
-            🔮 예지 — 덱 맨 위 {futureCards.length}장 (나만 보입니다)
+            🔮 미래 예측 — 덱 맨 위 {futureCards.length}장 (나만 보입니다)
           </span>
           <div className="ek-future-row">
             {futureCards.map((card, i) => (
@@ -539,7 +539,7 @@ export function KittensBoard({
         </p>
       )}
 
-      {/* ---------- 노프 창 (이 게임의 긴장) ---------- */}
+      {/* ---------- 아뇨 창 (이 게임의 긴장) ---------- */}
       {showNopeBar && (
         <div className={`ek-nope-bar ${canRespond ? '' : 'passive'}`}>
           <div className="ek-nope-head">
@@ -558,7 +558,7 @@ export function KittensBoard({
                 )}
               </span>
               <span className="ek-nope-stack">
-                <span className="ek-nope-count">🚫 노프 {nopeCount}장 겹침</span>
+                <span className="ek-nope-count">🚫 아뇨 {nopeCount}장 겹침</span>
                 <span
                   className={`ek-nope-verdict ${effectAlive ? 'alive' : 'dead'}`}
                 >
@@ -581,7 +581,7 @@ export function KittensBoard({
                 onClick={() => respond(onNope)}
                 disabled={submitted || !hasNope}
               >
-                🚫 노프
+                🚫 아뇨
               </button>
               <button
                 type="button"
@@ -601,18 +601,18 @@ export function KittensBoard({
           )}
           {canRespond && !hasNope && (
             <p className="ek-nope-wait">
-              손패에 🚫 노프 카드가 없습니다 — 통과만 할 수 있습니다
+              손패에 🚫 아뇨 카드가 없습니다 — 통과만 할 수 있습니다
             </p>
           )}
         </div>
       )}
 
-      {/* ---------- 대상 선택 오버레이 (부탁 · 훔치기) ---------- */}
+      {/* ---------- 대상 선택 오버레이 (호의 · 훔치기) ---------- */}
       {targetMode && (
         <div className="ek-overlay" onClick={() => setTargetMode(null)}>
           <div className="ek-overlay-panel" onClick={(e) => e.stopPropagation()}>
             <h2 className="ek-overlay-title">
-              {targetMode === 'pair' ? '🐱 훔칠 상대 선택' : '🙏 부탁할 상대 선택'}
+              {targetMode === 'pair' ? '🐱 훔칠 상대 선택' : '🙏 호의할 상대 선택'}
             </h2>
             <p className="ek-overlay-sub">
               {targetMode === 'pair'
@@ -651,7 +651,7 @@ export function KittensBoard({
         </div>
       )}
 
-      {/* ---------- 부탁 — 줄 카드 선택 ---------- */}
+      {/* ---------- 호의 — 줄 카드 선택 ---------- */}
       {iAmGiver && hand.length > 0 && (
         <div className="ek-overlay">
           <div className="ek-overlay-panel">
@@ -690,13 +690,13 @@ export function KittensBoard({
         </div>
       )}
 
-      {/* ---------- 디퓨즈 — 폭탄 되꽂기 위치 선택 ---------- */}
+      {/* ---------- 해체 — 폭탄 되꽂기 위치 선택 ---------- */}
       {iAmPlacer && (
         <div className="ek-overlay">
           <div className="ek-overlay-panel">
             <h2 className="ek-overlay-title">🛡 폭탄 되꽂기</h2>
             <p className="ek-overlay-sub">
-              디퓨즈로 폭탄을 막았습니다. 덱 어디에 몰래 되꽂을지 고르세요 —
+              해체로 폭탄을 막았습니다. 덱 어디에 몰래 되꽂을지 고르세요 —
               아무도 위치를 모릅니다
               {game.endsAt > 0 && ` · ⏱ ${remainSec}초 (미선택 시 무작위)`}
             </p>

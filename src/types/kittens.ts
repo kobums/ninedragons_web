@@ -2,7 +2,7 @@
 // 메시지 타입명·payload 필드명은 백엔드와 공유하므로 변경 금지.
 //
 // 은닉 규칙: yourHand 는 본인 스냅샷에만 실리고 타인·관전자에게는 키 자체가
-// 없다. 덱 내용·폭탄 위치는 어디에도 오지 않으며, 예지 결과(ek_future)는
+// 없다. 덱 내용·폭탄 위치는 어디에도 오지 않으며, 미래 예측 결과(ek_future)는
 // 그 사람에게만 가는 개인 이벤트다.
 
 // 카드 13종 — 기능 8종 + 고양이 5종.
@@ -77,16 +77,16 @@ export interface EKPlayerView {
   alive: boolean;
 }
 
-// 노프 창의 대상 — 지금 판정을 기다리는 기능 카드 한 장.
+// 아뇨 창의 대상 — 지금 판정을 기다리는 기능 카드 한 장.
 // kind 는 서버가 카드 종류 문자열을 그대로 싣는다(고양이 짝은 'pair' 류가
 // 올 수 있어 열린 문자열로 둔다).
 export interface EKPending {
   kind: string;
-  // 낸 사람 (노프가 겹치면 마지막으로 낸 사람)
+  // 낸 사람 (아뇨가 겹치면 마지막으로 낸 사람)
   bySeat: number;
-  // 대상이 있는 카드(부탁·훔치기)면 대상 좌석, 없으면 -1
+  // 대상이 있는 카드(호의·훔치기)면 대상 좌석, 없으면 -1
   targetSeat: number;
-  // 지금까지 겹친 노프 장수 — 짝수면 원래 효과가 살아 있다
+  // 지금까지 겹친 아뇨 장수 — 짝수면 원래 효과가 살아 있다
   nopeCount: number;
 }
 
@@ -120,7 +120,7 @@ export interface EKGameState {
   deckLeft: number;
   // 버린 더미 맨 위 ('' 이면 비어 있음)
   discardTop: '' | EKCard | string;
-  // 노프 창 대상 (없으면 null)
+  // 아뇨 창 대상 (없으면 null)
   pending?: EKPending | null;
   // 본인 손패 — 타인·관전자에게는 키 자체가 없다
   yourHand?: EKHandCard[];
@@ -145,7 +145,7 @@ export interface EKGameOverPayload {
   message?: string;
 }
 
-// 개인 이벤트 — 예지(future)를 낸 사람에게만 덱 맨 위 3장이 온다
+// 개인 이벤트 — 미래 예측(future)를 낸 사람에게만 덱 맨 위 3장이 온다
 export interface EKFuturePayload {
   cards?: EKCard[];
 }
@@ -158,7 +158,7 @@ export const EK_MAX_PLAYERS = 5;
 // ek_fill_bots 는 4인까지 채우고 즉시 시작한다
 export const EK_BOT_FILL_TARGET = 4;
 
-// 예지로 보는 장수
+// 미래 예측로 보는 장수
 export const EK_FUTURE_COUNT = 3;
 
 // 카드 표현 — 외부 에셋 없이 이모지 + 색 블록으로 그린다.
@@ -179,12 +179,12 @@ export const EK_CARDS: Record<EKCard, EKCardMeta> = {
     emoji: '💣',
     short: '폭탄',
     name: '폭탄 고양이',
-    effect: '디퓨즈가 없으면 즉시 탈락',
+    effect: '해체 카드가 없으면 즉시 탈락',
   },
   defuse: {
     emoji: '🛡',
-    short: '디퓨즈',
-    name: '디퓨즈',
+    short: '해체',
+    name: '해체',
     effect: '폭탄을 막고 덱 아무 곳에 되꽂는다',
   },
   attack: {
@@ -201,56 +201,56 @@ export const EK_CARDS: Record<EKCard, EKCardMeta> = {
   },
   favor: {
     emoji: '🙏',
-    short: '부탁',
-    name: '부탁',
+    short: '호의',
+    name: '호의',
     effect: '고른 상대가 카드 1장을 골라 준다',
   },
   shuffle: {
     emoji: '🔀',
-    short: '셔플',
-    name: '셔플',
+    short: '섞기',
+    name: '섞기',
     effect: '덱을 섞는다',
   },
   future: {
     emoji: '🔮',
-    short: '예지',
-    name: '예지',
+    short: '미래',
+    name: '미래 예측',
     effect: '덱 맨 위 3장을 나만 본다',
   },
   nope: {
     emoji: '🚫',
-    short: '노프',
-    name: '노프',
+    short: '아뇨',
+    name: '아뇨',
     effect: '남이 낸 기능 카드를 무효화한다',
   },
   taco: {
     emoji: '🌮',
     short: '타코',
-    name: '타코 고양이',
+    name: '타코냥이',
     effect: '같은 고양이 2장으로 카드 훔치기',
   },
   rainbow: {
     emoji: '🌈',
     short: '무지개',
-    name: '무지개 고양이',
+    name: '무지개냥이',
     effect: '같은 고양이 2장으로 카드 훔치기',
   },
   beard: {
-    emoji: '🧔',
+    emoji: '😼',
     short: '수염',
-    name: '수염 고양이',
+    name: '수염냥이',
     effect: '같은 고양이 2장으로 카드 훔치기',
   },
   potato: {
     emoji: '🥔',
-    short: '감자',
-    name: '감자 고양이',
+    short: '털감자',
+    name: '털감자냥이',
     effect: '같은 고양이 2장으로 카드 훔치기',
   },
   melon: {
-    emoji: '🍈',
-    short: '멜론',
-    name: '멜론 고양이',
+    emoji: '🍉',
+    short: '수박',
+    name: '수박냥이',
     effect: '같은 고양이 2장으로 카드 훔치기',
   },
 };
@@ -264,8 +264,8 @@ export const EK_CAT_KINDS: readonly EKCard[] = [
   'melon',
 ];
 
-// 자기 차례에 한 장으로 낼 수 있는 카드 (노프는 노프 창에서만,
-// 폭탄·디퓨즈는 뽑기 처리에서 자동으로 쓰인다)
+// 자기 차례에 한 장으로 낼 수 있는 카드 (아뇨는 아뇨 창에서만,
+// 폭탄·해체는 뽑기 처리에서 자동으로 쓰인다)
 export const EK_SOLO_PLAYABLE: readonly EKCard[] = [
   'attack',
   'skip',
@@ -291,7 +291,7 @@ export const ekIsSoloPlayable = (kind: string): boolean =>
 // 대상 좌석이 필요한 카드
 export const ekNeedsTarget = (kind: string): boolean => kind === 'favor';
 
-// 노프 겹침 판정 — 짝수(0 포함)면 원래 효과가 살아 있다
+// 아뇨 겹침 판정 — 짝수(0 포함)면 원래 효과가 살아 있다
 export const ekEffectAlive = (nopeCount: number): boolean =>
   (nopeCount ?? 0) % 2 === 0;
 
@@ -305,8 +305,8 @@ export const ekPlaceLabel = (position: number, deckLeft: number): string => {
 // 한 장으로 낼 수 없는 이유 (없으면 null)
 export const ekSoloBlockReason = (kind: string): string | null => {
   if (ekIsSoloPlayable(kind)) return null;
-  if (kind === 'nope') return '노프는 노프 창에서만 낼 수 있습니다';
-  if (kind === 'defuse') return '디퓨즈는 폭탄을 뽑을 때 자동으로 쓰입니다';
+  if (kind === 'nope') return '아뇨는 아뇨 창에서만 낼 수 있습니다';
+  if (kind === 'defuse') return '해체는 폭탄을 뽑을 때 자동으로 쓰입니다';
   if (kind === 'bomb') return '폭탄은 낼 수 없습니다';
   if (ekIsCat(kind)) return '고양이는 같은 종류 2장을 모아야 합니다';
   return '낼 수 없는 카드입니다';

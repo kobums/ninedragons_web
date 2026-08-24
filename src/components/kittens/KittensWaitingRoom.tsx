@@ -118,18 +118,18 @@ export function KittensWaitingRoom({
           <div className="ek-seat-list-wrap">
             <RoomCodeBadge code={game.roomCode} />
 
-            {/* 규칙 요약 — 폭탄과 디퓨즈, 그리고 노프만 먼저 못 박는다 */}
+            {/* 규칙 요약 — 폭탄과 해체, 그리고 아뇨만 먼저 못 박는다 */}
             <div className="ek-rule-card">
               <p className="ek-rule-line">
                 차례마다 카드를 원하는 만큼 내고 <strong>덱에서 1장을 뽑으면
                 차례가 끝납니다</strong>
               </p>
               <p className="ek-rule-line">
-                💣 폭탄을 뽑았는데 🛡 디퓨즈가 없으면 <strong>탈락</strong>
-                입니다. 디퓨즈를 쓰면 폭탄을 덱 아무 곳에 몰래 되꽂습니다.
+                💣 폭탄을 뽑았는데 🛡 해체가 없으면 <strong>탈락</strong>
+                입니다. 해체를 쓰면 폭탄을 덱 아무 곳에 몰래 되꽂습니다.
               </p>
               <p className="ek-rule-line muted">
-                🚫 노프는 남이 낸 기능 카드를 무효로 만듭니다. 노프 위에 노프를
+                🚫 아뇨는 남이 낸 기능 카드를 무효로 만듭니다. 아뇨 위에 아뇨를
                 겹칠 수 있고, 겹친 수가 짝수면 원래 효과가 살아납니다.
               </p>
             </div>
