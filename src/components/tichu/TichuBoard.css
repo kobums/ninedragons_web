@@ -282,31 +282,43 @@
   padding: 0 var(--space-xs);
 }
 
+/* 트릭 더미 — 실제 탁자처럼 낸 패가 앞의 패 위에 포개진다.
+   예전에는 세로로 늘어놓고 220px 넘으면 스크롤이었는데, 트릭이 길어지면
+   방금 낸 패를 보려고 스크롤해야 해서 판이 안 읽혔다. 지금은 위쪽 가장자리만
+   내밀고 겹치므로 최신 패가 항상 맨 앞·전부 보인다. */
 .tc-trick {
   display: flex;
   flex-direction: column;
-  gap: 6px;
   width: 100%;
-  max-height: 220px;
-  overflow-y: auto;
   align-items: center;
+  padding-top: 4px;
 }
 
 .tc-trick-play {
+  /* position 이 있어야 뒤에 온 패가 앞의 패 위로 그려진다 (DOM 순서 = 쌓임 순서).
+     배경은 불투명해야 한다 — 비치면 아래 패의 카드가 위 패의 이름줄과 겹쳐
+     글자를 못 읽는다. */
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 4px 6px;
+  padding: 4px 8px;
   border-radius: var(--radius-sm);
-  opacity: 0.62;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+}
+
+/* 첫 장 빼고는 앞 패 위로 끌어올려 포갠다.
+   작은 카드 48px 을 덮고 이름줄만 내밀어, 지나간 패는 "누가 뭘 냈는지"만 남긴다. */
+.tc-trick-play:not(:first-child) {
+  margin-top: -52px;
 }
 
 .tc-trick-play.last {
-  opacity: 1;
   background: var(--color-canvas);
-  border: 1px solid var(--color-primary);
-  box-shadow: var(--shadow-subtle);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-modal);
 }
 
 .tc-trick-meta {
