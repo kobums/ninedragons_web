@@ -20,7 +20,7 @@ interface TichuBoardProps {
   onReady: () => void;
 }
 
-// 좌석 명패 — 이름·손패 수·티츄 배지·아웃 순위·봇/접속 표시
+// 좌석 명패 — 이름·손패 수·선언 배지·아웃 순위·봇/접속 표시
 function SeatPlate({
   player,
   isTurn,
@@ -55,7 +55,7 @@ function SeatPlate({
         <span className="tc-plate-count">카드 {player.handCount}</span>
         {player.tichu !== '' && (
           <span className={`tc-badge tc-badge-${player.tichu}`}>
-            {player.tichu === 'grand' ? '그랜드 티츄' : '티츄'}
+            {player.tichu === 'grand' ? '라지티츄' : '스몰티츄'}
           </span>
         )}
         {player.out && player.outRank > 0 && (
@@ -247,7 +247,7 @@ export function TichuBoard({
         <div className="tc-pos-center">
           {game.phase === 'grand' && game.grandAnswered && (
             <div className="tc-center-note">
-              다른 플레이어의 그랜드 선언을 기다리는 중...
+              다른 플레이어의 라지티츄 선언을 기다리는 중...
             </div>
           )}
 
@@ -425,7 +425,7 @@ export function TichuBoard({
                 className="tc-tichu-button"
                 onClick={onCallTichu}
               >
-                티츄 선언
+                스몰티츄 선언
               </button>
             )}
             <button
@@ -456,17 +456,17 @@ export function TichuBoard({
               className="tc-tichu-button"
               onClick={onCallTichu}
             >
-              티츄 선언
+              스몰티츄 선언
             </button>
           </div>
         </div>
       )}
 
-      {/* 그랜드 티츄 오버레이 — 관전자는 선언 대상이 아니다 */}
+      {/* 라지티츄 오버레이 — 관전자는 선언 대상이 아니다 */}
       {!isSpectator && game.phase === 'grand' && !game.grandAnswered && (
         <div className="tc-overlay">
           <div className="tc-overlay-panel">
-            <h2 className="tc-overlay-title">그랜드 티츄?</h2>
+            <h2 className="tc-overlay-title">라지티츄?</h2>
             <p className="tc-overlay-desc">
               처음 8장을 보고 선언하세요 (성공 +200 / 실패 -200)
             </p>
@@ -481,7 +481,7 @@ export function TichuBoard({
                 className="tc-primary-button"
                 onClick={() => onCallGrand(true)}
               >
-                그랜드 티츄 선언
+                라지티츄 선언
               </button>
               <button
                 type="button"
