@@ -95,7 +95,7 @@ export function ReformationWaitingRoom({
           <span className="rf-primer-vs">vs</span>
           <span className="rf-primer-chip reformist">⚒️ 개혁파</span>
           <p className="rf-primer-note">
-            진영은 전원 공개입니다. 칩을 국고에 넣어 진영을 바꾸거나, 쌓인 국고를
+            진영은 전원 공개입니다. 은화를 피난처에 놓아 개종하거나, 쌓인 피난처 은화를
             횡령할 수 있습니다.
           </p>
         </div>

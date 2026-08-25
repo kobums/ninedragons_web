@@ -143,10 +143,10 @@ export function CrewWaitingRoom({
             </p>
 
             <p className="cw-brief">
-              임무 1개짜리 1라운드부터 {maxMission}개짜리 {maxMission}라운드까지
-              차례로 돌파합니다. 담당자가 자기 임무 카드를 직접 따내야 하고, 한
+              과제 1개짜리 1라운드부터 {maxMission}개짜리 {maxMission}라운드까지
+              차례로 돌파합니다. 담당자가 자기 과제 카드를 직접 따내야 하고, 한
               장이라도 남의 손에 들어가면 그 자리에서 실패입니다. 게임 중 말을
-              맞출 수 있는 기회는 <strong>1인 1회 소통</strong>뿐입니다.
+              맞출 수 있는 기회는 <strong>1인 1회 통신</strong>뿐입니다.
             </p>
 
             {isHost ? (

@@ -147,7 +147,7 @@ export function SaboteurWaitingRoom({
 
             {filled >= SB_MIN_PLAYERS && saboteurs > 0 && (
               <p className="sb-pool-hint">
-                {filled}인 구성 — 💣 파괴꾼 {saboteurs}명 · ⛏ 광부{' '}
+                {filled}인 구성 — 💣 방해꾼 {saboteurs}명 · ⛏ 광부{' '}
                 {filled - saboteurs}명 (역할 풀에서 인원수만큼만 뽑으므로 실제
                 구성은 아무도 모릅니다)
               </p>

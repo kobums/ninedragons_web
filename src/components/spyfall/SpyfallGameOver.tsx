@@ -24,7 +24,7 @@ export function SpyfallGameOver({ game, roomCode, onFindNewGame }: SpyfallGameOv
     winner === 'spy'
       ? '🕵️ 스파이 승리'
       : winner === 'citizen'
-        ? '🏛️ 시민팀 승리'
+        ? '🏛️ 일반인 승리'
         : '게임 종료';
 
   // 사유 보조 설명 — 추리·최다 득표 디테일

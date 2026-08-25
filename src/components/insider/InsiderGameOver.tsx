@@ -26,7 +26,7 @@ export function InsiderGameOver({
 
   const title =
     winner === 'citizens'
-      ? '🙌 시민·마스터 승리'
+      ? '🙌 일반인·마스터 승리'
       : winner === 'insider'
         ? '🕵 인사이더 승리'
         : '⏳ 전원 패배';
@@ -63,7 +63,7 @@ export function InsiderGameOver({
         {/* 제시어 공개 */}
         {game.word && (
           <div className="id-over-word">
-            <span className="id-over-word-label">제시어</span>
+            <span className="id-over-word-label">테마</span>
             <span className="id-over-word-value">{game.word}</span>
           </div>
         )}

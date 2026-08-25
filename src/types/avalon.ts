@@ -130,9 +130,9 @@ export const AV_MAX_PLAYERS = 10;
 // 역할 한글 라벨 (빈 역할은 미공개) — 원시 코드 노출 금지
 export const AV_ROLE_LABEL: Record<Exclude<AVRole, ''>, string> = {
   merlin: '멀린',
-  good: '선의 기사',
+  good: '아서 왕의 충성스러운 신하',
   assassin: '암살자',
-  evil: '악의 하수인',
+  evil: '모드레드의 하수인',
 };
 
 export const AV_FACTION_LABEL: Record<Exclude<AVWinner, ''>, string> = {

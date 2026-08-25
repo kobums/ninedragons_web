@@ -58,7 +58,7 @@ export function NimmtGameOver({
           {winnerNames.length > 1 ? ' 공동 승리' : '님의 승리'}
         </h1>
         <p className="nm-over-sub">
-          {result?.message ?? '10트릭 종료 · 소머리 벌점 최소 승리'}
+          {result?.message ?? '10라운드 종료 · 소머리 벌점 최소 승리'}
         </p>
         {game.yourSeat >= 0 && (
           <p className={`nm-over-verdict ${youWon ? 'win' : 'lose'}`}>

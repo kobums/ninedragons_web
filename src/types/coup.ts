@@ -150,23 +150,23 @@ export interface CPRoleMeta {
 }
 
 export const CP_ROLES: Record<CPRole, CPRoleMeta> = {
-  duke: { name: '공작', en: 'Duke', ability: '세금 +3칩 · 해외원조 차단' },
+  duke: { name: '공작', en: 'Duke', ability: '세금 징수 +은화 3 · 외부 원조 저지' },
   assassin: {
     name: '암살자',
     en: 'Assassin',
-    ability: '3칩 지불로 카드 1장 암살',
+    ability: '은화 3개 지불로 카드 1장 암살',
   },
   captain: {
     name: '사령관',
     en: 'Captain',
-    ability: '최대 2칩 강탈 · 강탈 차단',
+    ability: '최대 은화 2개 갈취 · 갈취 저지',
   },
   ambassador: {
     name: '대사',
     en: 'Ambassador',
-    ability: '덱과 카드 교환 · 강탈 차단',
+    ability: '궁정 덱과 캐릭터 교환 · 갈취 저지',
   },
-  contessa: { name: '백작부인', en: 'Contessa', ability: '암살 차단' },
+  contessa: { name: '백작 부인', en: 'Contessa', ability: '암살 저지' },
 };
 
 // ---------- 액션 메타 (표시 전용) ----------
@@ -186,39 +186,39 @@ export interface CPActionMeta {
 
 export const CP_ACTIONS: Record<CPActionKind, CPActionMeta> = {
   income: {
-    label: '수입',
+    label: '소득',
     icon: '🪙',
     cost: 0,
     needsTarget: false,
     claim: null,
-    effect: '+1칩',
+    effect: '+은화 1',
     counter: '항상 성공',
   },
   aid: {
-    label: '해외원조',
+    label: '외부 원조',
     icon: '💰',
     cost: 0,
     needsTarget: false,
     claim: null,
-    effect: '+2칩',
-    counter: '공작이 차단 가능',
+    effect: '+은화 2',
+    counter: '공작이 저지 가능',
   },
   coup: {
-    label: '쿠',
+    label: '쿠데타',
     icon: '💥',
     cost: CP_COUP_COST,
     needsTarget: true,
     claim: null,
     effect: '카드 1장 제거',
-    counter: '차단 불가',
+    counter: '저지 불가',
   },
   tax: {
-    label: '세금',
+    label: '세금 징수',
     icon: '🏛️',
     cost: 0,
     needsTarget: false,
     claim: 'duke',
-    effect: '+3칩',
+    effect: '+은화 3',
     counter: '도전만 가능',
   },
   assassinate: {
@@ -228,24 +228,24 @@ export const CP_ACTIONS: Record<CPActionKind, CPActionMeta> = {
     needsTarget: true,
     claim: 'assassin',
     effect: '카드 1장 제거',
-    counter: '백작부인이 차단',
+    counter: '백작 부인이 저지',
   },
   steal: {
-    label: '강탈',
+    label: '갈취',
     icon: '🪝',
     cost: 0,
     needsTarget: true,
     claim: 'captain',
-    effect: '최대 2칩 뺏기',
-    counter: '사령관·대사가 차단',
+    effect: '최대 은화 2개 뺏기',
+    counter: '사령관·대사가 저지',
   },
   exchange: {
-    label: '교환',
+    label: '캐릭터 교환',
     icon: '🔄',
     cost: 0,
     needsTarget: false,
     claim: 'ambassador',
-    effect: '덱에서 2장 교환',
+    effect: '궁정 덱에서 2장 교환',
     counter: '도전만 가능',
   },
 };

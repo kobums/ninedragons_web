@@ -117,7 +117,7 @@ export function SetWaitingRoom({
             {/* 규칙 요약 — 차례가 없다는 점을 먼저 못 박는다 */}
             <div className="se-rule-card">
               <p className="se-rule-line">
-                네 속성(모양·개수·채움·색)이 각각 <strong>전부 같거나 전부
+                네 속성(모양·색깔·개수·음영)이 각각 <strong>전부 같거나 전부
                 다른</strong> 카드 3장이 세트입니다
               </p>
               <p className="se-rule-line muted">

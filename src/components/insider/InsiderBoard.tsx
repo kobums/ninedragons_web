@@ -144,7 +144,7 @@ export function InsiderBoard({
     if (isQuestion) {
       if (isMaster)
         return '예/아니오로만 답하세요 — 누군가 정답을 말하면 [정답 나옴]을 누르세요';
-      return `음성으로 ${nameOf(game.masterSeat)}님에게 질문하며 제시어를 맞히세요`;
+      return `음성으로 ${nameOf(game.masterSeat)}님에게 질문하며 테마를 맞히세요`;
     }
     if (isDiscussion) {
       if (isMaster)
@@ -202,8 +202,8 @@ export function InsiderBoard({
             {role === 'master'
               ? '질문에 예/아니오로만 답하는 진행자입니다 — 정체가 모두에게 공개됩니다'
               : role === 'insider'
-                ? '제시어를 아는 내부자입니다 — 정체를 들키지 않고 정답이 나오게 유도하세요'
-                : '질문으로 제시어를 맞히고, 숨어 있는 인사이더를 찾아내세요'}
+                ? '테마를 아는 인사이더입니다 — 정체를 들키지 않고 정답이 나오게 유도하세요'
+                : '질문으로 테마를 맞히고, 숨어 있는 인사이더를 찾아내세요'}
           </p>
         </div>
       )}
@@ -214,7 +214,7 @@ export function InsiderBoard({
       {/* 제시어 카드 — 마스터·인사이더에게만 (은닉 스냅샷: 그 외에는 word 부재) */}
       {!isSpectator && game.word && (
         <div className="id-word-card">
-          <span className="id-word-label">제시어</span>
+          <span className="id-word-label">테마</span>
           <span className="id-word">{game.word}</span>
           <span className="id-word-hint">
             {role === 'insider'

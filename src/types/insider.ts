@@ -114,7 +114,7 @@ export const ID_BOT_FILL_TARGET = 5;
 export const ID_ROLE_LABEL: Record<Exclude<IDRole, ''>, string> = {
   master: '마스터',
   insider: '인사이더',
-  citizen: '시민',
+  citizen: '일반인',
 };
 
 // 역할 아이콘 — 마스터 👁 / 인사이더 🕵 / 시민 🙋

@@ -15,7 +15,7 @@ interface SkullBoardProps {
 
 const PHASE_LABEL: Record<string, string> = {
   placing: '배치',
-  bidding: '배팅',
+  bidding: '베팅',
   flipping: '뒤집기',
   round_end: '라운드 결과',
   game_over: '게임 종료',
@@ -87,12 +87,12 @@ export function SkullBoard({
     setTimeout(() => setSubmitted(false), ms);
   };
 
-  // 배팅 스테퍼 — 배치 중 첫 선언은 1부터, 배팅 중 레이즈는 현재+1부터
+  // 베팅 스테퍼 — 배치 중 첫 선언은 1부터, 베팅 중 레이즈는 현재+1부터
   const minBid = isBidding ? game.highBid + 1 : 1;
   const maxBid = Math.max(minBid, placedTotal);
   const [bidCount, setBidCount] = useState(minBid);
 
-  // 단계·차례·배팅이 바뀌면 로컬 입력을 리셋한다
+  // 단계·차례·베팅이 바뀌면 로컬 입력을 리셋한다
   useEffect(() => {
     setHandSelected(null);
     setSubmitted(false);
@@ -134,10 +134,10 @@ export function SkullBoard({
     hand.length > 0 &&
     !submitted &&
     ((me?.stackCount ?? 0) === 0 || myTurn);
-  // 배팅 선언(배치 종료 트리거): 내 차례 + 전원 첫 장 이후 + 내 더미 1장 이상
+  // 베팅 선언(배치 종료 트리거): 내 차례 + 전원 첫 장 이후 + 내 더미 1장 이상
   const canDeclare =
     isPlacing && myTurn && allPlacedFirst && (me?.stackCount ?? 0) > 0 && !submitted;
-  // 배팅 단계의 레이즈/패스
+  // 베팅 단계의 레이즈/패스
   const canRaise =
     isBidding && myTurn && !(me?.passed ?? false) && placedTotal > game.highBid && !submitted;
   const canPassBid = isBidding && myTurn && !(me?.passed ?? false) && !submitted;
@@ -188,17 +188,17 @@ export function SkullBoard({
           return '첫 카드 1장을 비공개로 내려놓으세요 (의무)';
         return `전원이 첫 카드를 내려놓는 중… (${placedCount}/${alivePlayers.length})`;
       }
-      if (myTurn) return '카드를 더 내려놓거나, 배팅을 선언해 배치를 끝내세요';
+      if (myTurn) return '카드를 더 내려놓거나, 베팅을 선언해 배치를 끝내세요';
       if (game.currentSeat >= 0)
-        return `${nameOf(game.currentSeat)}님이 배치 또는 배팅을 고르는 중…`;
+        return `${nameOf(game.currentSeat)}님이 배치 또는 베팅을 고르는 중…`;
       return '배치가 진행 중입니다…';
     }
     if (isBidding) {
       if (canRaise || canPassBid)
-        return `현재 배팅 ${game.highBid} — 더 크게 부르거나 패스하세요`;
+        return `현재 베팅 ${game.highBid} — 더 크게 부르거나 패스하세요`;
       if (game.currentSeat >= 0)
-        return `현재 배팅 ${game.highBid} · ${nameOf(game.currentSeat)}님의 차례…`;
-      return `현재 배팅 ${game.highBid}`;
+        return `현재 베팅 ${game.highBid} · ${nameOf(game.currentSeat)}님의 차례…`;
+      return `현재 베팅 ${game.highBid}`;
     }
     if (isFlipping) {
       if (amChallenger)
@@ -313,7 +313,7 @@ export function SkullBoard({
                 {p.bot && <span className="sk-badge">🤖</span>}
                 {isChal && <span className="sk-badge challenger">⚔️ 도전자</span>}
                 {!isChal && p.bid > 0 && (
-                  <span className="sk-badge bid">배팅 {p.bid}</span>
+                  <span className="sk-badge bid">베팅 {p.bid}</span>
                 )}
                 {p.passed && (isBidding || isFlipping) && (
                   <span className="sk-badge passed">패스</span>
@@ -429,13 +429,13 @@ export function SkullBoard({
         </div>
       )}
 
-      {/* 배팅 컨트롤 — 숫자 스테퍼 + 선언/패스 */}
+      {/* 베팅 컨트롤 — 숫자 스테퍼 + 선언/패스 */}
       {showBidPanel && (
         <div className="sk-bid-panel">
           <span className="sk-bid-title">
             {isBidding
-              ? `현재 배팅 ${game.highBid} — 레이즈 또는 패스`
-              : '배팅을 선언하면 배치가 끝나고 배팅 단계로 넘어갑니다'}
+              ? `현재 베팅 ${game.highBid} — 레이즈 또는 패스`
+              : '베팅을 선언하면 배치가 끝나고 베팅 단계로 넘어갑니다'}
           </span>
           {(canDeclare || canRaise) && (
             <>
@@ -443,7 +443,7 @@ export function SkullBoard({
                 <button
                   type="button"
                   className="sk-step-button"
-                  aria-label="배팅 수 줄이기"
+                  aria-label="베팅 수 줄이기"
                   onClick={() => setBidCount((v) => Math.max(minBid, v - 1))}
                   disabled={bidCount <= minBid}
                 >
@@ -453,7 +453,7 @@ export function SkullBoard({
                 <button
                   type="button"
                   className="sk-step-button"
-                  aria-label="배팅 수 늘리기"
+                  aria-label="베팅 수 늘리기"
                   onClick={() => setBidCount((v) => Math.min(maxBid, v + 1))}
                   disabled={bidCount >= maxBid}
                 >
@@ -473,7 +473,7 @@ export function SkullBoard({
                 className="sk-bid-declare"
                 onClick={handleDeclare}
               >
-                배팅 선언 · {bidCount}
+                베팅 선언 · {bidCount}
               </button>
             )}
             {canPassBid && (

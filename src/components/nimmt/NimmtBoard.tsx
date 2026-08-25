@@ -160,7 +160,7 @@ export function NimmtBoard({ game, toasts, onPick, onChooseRow }: NimmtBoardProp
       {/* 상단 단계 배너 */}
       <div className="nm-phase-banner">
         <span className="nm-phase-title">
-          🐮 6 님트! · 트릭 {Math.min(Math.max(game.trick, 1), NM_TRICKS)}/
+          🐮 6 님트! · 라운드 {Math.min(Math.max(game.trick, 1), NM_TRICKS)}/
           {NM_TRICKS}
           {game.endsAt > 0 && (
             <span

@@ -28,7 +28,7 @@ interface CrewBoardProps {
   toasts: CWToast[];
   // 카드 내기 — index 는 서버 yourHand 기준 인덱스
   onPlay: (index: number) => void;
-  // 소통 — 손패의 색 카드 1장을 공개하며 그 색 안에서의 위치를 선언한다
+  // 통신 — 손패의 색 카드 1장을 공개하며 그 색 안에서의 위치를 선언한다
   onCommunicate: (index: number, hint: CWHint) => void;
 }
 
@@ -72,11 +72,11 @@ function toastText(event: CWEvent, game: CWGameState): string {
     case 'round_start':
       return `임무 ${game.mission}단계 시작 — 카드를 나눕니다`;
     case 'round_end':
-      return '✅ 이번 라운드의 임무를 모두 완수했습니다';
+      return '✅ 이번 라운드의 과제를 모두 완수했습니다';
     case 'communicate':
       return `${name(event.seat)}님이 카드를 공개했습니다`;
     case 'task_done':
-      return '✅ 임무 하나를 완수했습니다';
+      return '✅ 과제 하나를 완수했습니다';
     case 'trick_won':
       return `${name(event.seat)}님이 트릭을 가져갔습니다`;
     case 'auto_play':
@@ -101,11 +101,11 @@ export function CrewBoard({
 }: CrewBoardProps) {
   // 낼 카드 선택 (서버 yourHand 인덱스)
   const [selected, setSelected] = useState<number | null>(null);
-  // 소통 모드 — 켜면 손패 탭이 "공개할 카드 고르기"로 바뀐다
+  // 통신 모드 — 켜면 손패 탭이 "공개할 카드 고르기"로 바뀐다
   const [commOpen, setCommOpen] = useState(false);
   const [commIndex, setCommIndex] = useState<number | null>(null);
   const [commHint, setCommHint] = useState<CWHint | null>(null);
-  // 제출 직후 ~ 다음 스냅샷 사이의 연타 방지 (내기·소통 공용).
+  // 제출 직후 ~ 다음 스냅샷 사이의 연타 방지 (내기·통신 공용).
   // 서버가 거부(cw_error)해도 잠깐 뒤 풀려 재시도할 수 있다 —
   // 진짜 진행 여부는 스냅샷(currentSeat·trick)이 결정한다.
   const [submitted, setSubmitted] = useState(false);
@@ -119,7 +119,7 @@ export function CrewBoard({
   const tasks = game.tasks ?? [];
   const yourHand = game.yourHand ?? [];
   const me = players.find((p) => p.seat === game.yourSeat);
-  // 관전자(yourSeat -1)는 손패·내기·소통 UI 전부 숨김
+  // 관전자(yourSeat -1)는 손패·내기·통신 UI 전부 숨김
   const isSpectator = game.yourSeat < 0 || !me;
   const maxMission = game.maxMission || CW_DEFAULT_MAX_MISSION;
 
@@ -134,11 +134,11 @@ export function CrewBoard({
 
   const tokenLeft = me?.tokenLeft ?? 0;
   const trickEmpty = trick.length === 0;
-  // 소통은 토큰이 남아 있고 트릭이 비어 있을 때만 (트릭 시작 시점에만)
+  // 통신은 토큰이 남아 있고 트릭이 비어 있을 때만 (트릭 시작 시점에만)
   const commAvailable =
     !isSpectator && game.phase === 'playing' && tokenLeft > 0 && trickEmpty;
 
-  // 쓸 수 없게 된 순간 소통 모드를 닫는다 — 열린 채로 남아 손패 탭이
+  // 쓸 수 없게 된 순간 통신 모드를 닫는다 — 열린 채로 남아 손패 탭이
   // "내기"로 돌아가지 못하는 상태를 막는다
   useEffect(() => {
     if (!commAvailable) {
@@ -222,7 +222,7 @@ export function CrewBoard({
   // ---------- 임무 ----------
   const doneCount = tasks.filter((t) => t.done).length;
   const taskPct = tasks.length > 0 ? (doneCount / tasks.length) * 100 : 0;
-  // 이번 트릭에 나와 있는 임무 카드 = 지금 이 순간 승패가 갈리는 카드
+  // 이번 트릭에 나와 있는 과제 카드 = 지금 이 순간 승패가 갈리는 카드
   const liveTaskKeys = new Set(
     trick
       .map((t) => cwCardKey(t.card))
@@ -294,11 +294,11 @@ export function CrewBoard({
       <div className="cw-missions">
         <div className="cw-section-head">
           <span className="cw-section-title">
-            🛰 임무 {doneCount}/{tasks.length}
+            🛰 과제 {doneCount}/{tasks.length}
           </span>
           <span className="cw-section-note">
             {tasks.length === 0
-              ? '임무 배정을 기다리는 중'
+              ? '과제 배정을 기다리는 중'
               : doneCount === tasks.length
                 ? '전부 완수'
                 : '담당자가 직접 따내야 합니다'}
@@ -412,7 +412,7 @@ export function CrewBoard({
         )}
       </div>
 
-      {/* 좌석 스트립 — 남은 장수 · 소통 토큰 · 공개 카드 */}
+      {/* 좌석 스트립 — 남은 장수 · 통신 토큰 · 공개 카드 */}
       <div className="cw-seats">
         {players.map((p) => {
           const isMe = !isSpectator && p.seat === game.yourSeat;
@@ -448,10 +448,10 @@ export function CrewBoard({
                 <span
                   className={`cw-badge token ${p.tokenLeft > 0 ? 'on' : ''}`}
                 >
-                  🛰 {p.tokenLeft > 0 ? '소통 가능' : '소통 완료'}
+                  🛰 {p.tokenLeft > 0 ? '통신 가능' : '통신 완료'}
                 </span>
                 <span className={`cw-badge task ${left === 0 ? 'ok' : ''}`}>
-                  {left === 0 ? '✅ 임무 없음' : `임무 ${left}개`}
+                  {left === 0 ? '✅ 과제 없음' : `과제 ${left}개`}
                 </span>
               </div>
 
@@ -483,7 +483,7 @@ export function CrewBoard({
             {roundFailed
               ? (game.result?.message ?? CW_FAIL_TEXT[failedReason])
               : game.mission < maxMission
-                ? `다음은 ${game.mission + 1}단계 — 소통 토큰이 다시 채워집니다`
+                ? `다음은 ${game.mission + 1}단계 — 통신 토큰이 다시 채워집니다`
                 : '전 단계를 통과했습니다'}
           </span>
         </div>
@@ -491,15 +491,15 @@ export function CrewBoard({
 
       {isSpectator ? (
         <div className="cw-spectator-note">
-          👀 관전 중 — 손패와 소통은 보이지 않습니다
+          👀 관전 중 — 손패와 통신은 보이지 않습니다
         </div>
       ) : (
         <>
-          {/* 소통 바 — 토큰이 남아 있고 트릭이 비어 있을 때만 */}
+          {/* 통신 바 — 토큰이 남아 있고 트릭이 비어 있을 때만 */}
           {isPlaying && tokenLeft > 0 && (
             <div className={`cw-comm-bar ${commOpen ? 'open' : ''}`}>
               <div className="cw-section-head">
-                <span className="cw-section-title">🛰 소통 (라운드 1회)</span>
+                <span className="cw-section-title">🛰 통신 (라운드 1회)</span>
                 <span className="cw-section-note">
                   {trickEmpty
                     ? '카드 → 위치 → 공개'
@@ -645,7 +645,7 @@ export function CrewBoard({
                     onClick={() => handleHandTap(index)}
                     disabled={!clickable}
                     aria-label={`${CW_SUIT_LABEL[card.suit]} ${card.rank}${
-                      isTask ? ' (임무 카드)' : ''
+                      isTask ? ' (과제 카드)' : ''
                     }`}
                   >
                     <span className="cw-hand-rank">{card.rank}</span>
@@ -666,7 +666,7 @@ export function CrewBoard({
             </div>
             {tasks.length > 0 && yourHand.length > 0 && (
               <p className="cw-hand-legend">
-                ★ 내 임무 카드 · • 다른 대원의 임무 카드
+                ★ 내 과제 카드 · • 다른 대원의 과제 카드
               </p>
             )}
           </div>

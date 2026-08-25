@@ -1,7 +1,7 @@
 // 더 크루 메시지·상태 타입 — 와이어 계약(spec-crew.md)과 1:1 대응.
 // 메시지 타입명·payload 필드명·카드 표기는 백엔드와 공유하므로 변경 금지.
 
-// 색 무늬 4종 — 임무 카드는 반드시 이 중 하나다 (로켓은 임무가 되지 않는다)
+// 색 무늬 4종 — 과제 카드는 반드시 이 중 하나다 (로켓은 과제가 되지 않는다)
 export type CWColorSuit = 'blue' | 'green' | 'pink' | 'yellow';
 // 로켓은 상시 트럼프 (1~4)
 export type CWSuit = CWColorSuit | 'rocket';
@@ -12,7 +12,7 @@ export interface CWCard {
   rank: number;
 }
 
-// 소통 선언 — 그 색 안에서 이 카드의 위치. 반드시 진실이어야 하고 서버가 검증한다.
+// 통신 선언 — 그 색 안에서 이 카드의 위치. 반드시 진실이어야 하고 서버가 검증한다.
 export type CWHint = 'highest' | 'lowest' | 'only';
 
 export type CWPhase = 'waiting' | 'playing' | 'round_end' | 'game_over';
@@ -45,7 +45,7 @@ export interface CWMessage {
   payload?: unknown;
 }
 
-// 소통으로 공개된 카드 — 손에 남아 있고 전원이 계속 본다
+// 통신으로 공개된 카드 — 손에 남아 있고 전원이 계속 본다
 export interface CWRevealed {
   card: CWCard;
   hint: CWHint;
@@ -58,13 +58,13 @@ export interface CWPlayerView {
   bot: boolean;
   // 남은 손패 장수 (내용은 본인만 안다)
   handCount: number;
-  // 남은 소통 토큰 (라운드마다 1로 초기화 — 서버가 boolean 을 보내도 truthy 판정)
+  // 남은 통신 토큰 (라운드마다 1로 초기화 — 서버가 boolean 을 보내도 truthy 판정)
   tokenLeft: number;
-  // 아직 소통하지 않았으면 null
+  // 아직 통신하지 않았으면 null
   revealed?: CWRevealed | null;
 }
 
-// 임무 — 배정받은 좌석이 이 카드가 들어 있는 트릭을 이겨야 한다. 전원 공개.
+// 과제 — 배정받은 좌석이 이 카드가 들어 있는 트릭을 이겨야 한다. 전원 공개.
 export interface CWTask {
   suit: CWColorSuit;
   rank: number;
@@ -103,7 +103,7 @@ export interface CWGameState {
   spectators?: number;
   // 단계 마감 시각 (unixMillis, 없으면 0) — 플레이 45초 / round_end 대기
   endsAt: number;
-  // 현재 라운드 = 임무 개수 (1 ~ maxMission)
+  // 현재 라운드 = 과제 개수 (1 ~ maxMission)
   mission: number;
   maxMission: number;
   // 로켓 4를 가진 좌석 — 라운드 첫 리드
@@ -188,7 +188,7 @@ export const CW_HINT_LABEL: Record<CWHint, string> = {
   only: '유일',
 };
 
-// 좌석 스트립·소통 pill 문구
+// 좌석 스트립·통신 pill 문구
 export const CW_HINT_DESC: Record<CWHint, string> = {
   highest: '이 색에서 가장 큼',
   lowest: '이 색에서 가장 작음',
@@ -196,8 +196,8 @@ export const CW_HINT_DESC: Record<CWHint, string> = {
 };
 
 export const CW_FAIL_TEXT: Record<Exclude<CWFailedReason, ''>, string> = {
-  wrong_winner: '임무 카드를 담당자가 아닌 사람이 가져갔습니다',
-  out_of_cards: '카드가 다 떨어졌는데 임무가 남았습니다',
+  wrong_winner: '과제 카드를 담당자가 아닌 사람이 가져갔습니다',
+  out_of_cards: '카드가 다 떨어졌는데 과제가 남았습니다',
 };
 
 export const cwCardKey = (card: CWCard): string => `${card.suit}-${card.rank}`;
@@ -235,7 +235,7 @@ export const cwLegalIndexes = (
   return follow.size > 0 ? follow : all;
 };
 
-// 소통 선언의 진실성 — 내 손패만으로 계산할 수 있다.
+// 통신 선언의 진실성 — 내 손패만으로 계산할 수 있다.
 // 서버가 최종 검증하므로, 프론트는 명백히 거짓인 선택을 미리 잠그는 용도로만 쓴다.
 export const cwHintTruthful = (
   hand: CWCard[],

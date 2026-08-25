@@ -36,7 +36,7 @@ export function SaboteurGameOver({
     winner === 'miner'
       ? '⛏ 광부 승리'
       : winner === 'saboteur'
-        ? '💣 파괴꾼 승리'
+        ? '💣 방해꾼 승리'
         : '게임 종료';
 
   const youWon =
@@ -80,7 +80,7 @@ export function SaboteurGameOver({
             </span>
           ))}
         </div>
-        <p className="sb-over-stat">놓인 길 타일 {pathCount}장</p>
+        <p className="sb-over-stat">놓인 굴 카드 {pathCount}장</p>
 
         {/* 전원 역할 공개 */}
         <ul className="sb-over-roster">

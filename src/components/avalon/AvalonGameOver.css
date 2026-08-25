@@ -145,6 +145,7 @@
 
 .av-over-role {
   flex-shrink: 0;
+  white-space: nowrap;
   padding: 2px 10px;
   border-radius: var(--radius-pill);
   font-size: var(--text-caption-uppercase);

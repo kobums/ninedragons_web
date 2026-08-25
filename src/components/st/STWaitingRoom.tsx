@@ -87,7 +87,7 @@ export function STWaitingRoom({ hasJoined, onJoinGame, onBack }: STWaitingRoomPr
             <li>6가지 색, 1~9 숫자의 클랜 카드로 아홉 개의 돌을 두고 겨룹니다</li>
             <li>매 턴 카드 한 장을 돌 옆 내 쪽에 놓고 한 장을 뽑습니다 (돌마다 최대 3장)</li>
             <li>
-              족보 순위: 컬러런(같은 색 연속) &gt; 트리플(같은 숫자) &gt; 컬러(같은 색)
+              진형 서열: 컬러런(같은 색 연속) &gt; 트리플(같은 숫자) &gt; 컬러(같은 색)
               &gt; 런(연속) &gt; 합계
             </li>
             <li>동점이면 합이 큰 쪽, 그것도 같으면 먼저 3장을 완성한 쪽이 이깁니다</li>

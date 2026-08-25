@@ -105,7 +105,8 @@ export const VG_ROUNDS = 4;
 export const VG_DICE_PER_PLAYER = 8;
 export const VG_CASINO_COUNT = 6;
 
-// 만 단위 int → 화면 표기 ("8만")
+// 만 단위 int → 화면 표기 ("8만 달러").
+// 한국어판 구성물은 1만~9만 "달러" 지폐라 단위를 붙여야 원판과 맞는다.
 export function vgMoney(amount: number): string {
-  return `${amount}만`;
+  return `${amount}만 달러`;
 }

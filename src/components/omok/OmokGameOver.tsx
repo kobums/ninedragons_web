@@ -6,7 +6,7 @@ import './OmokGameOver.css';
 
 const REASON_LABEL: Record<OmokGameOverPayload['reason'], string> = {
   five: '오목 완성',
-  draw: '만패 (225수 소진)',
+  draw: '판이 가득 참 (225수 소진)',
   forfeit: '상대 이탈',
 };
 

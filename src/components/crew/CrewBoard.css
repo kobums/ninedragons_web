@@ -354,7 +354,7 @@
   box-shadow: inset 3px 0 0 var(--cw-gold);
 }
 
-/* 지금 이 트릭에 나와 있는 임무 카드 = 승패가 갈리는 순간 */
+/* 지금 이 트릭에 나와 있는 과제 카드 = 승패가 갈리는 순간 */
 .cw-mission-item.live {
   border-color: var(--cw-danger);
   background: var(--cw-danger-tint);
@@ -609,7 +609,7 @@
   font-weight: 400;
 }
 
-/* 소통으로 공개된 카드 — 전원이 계속 본다 */
+/* 통신으로 공개된 카드 — 전원이 계속 본다 */
 .cw-reveal-pill {
   display: inline-flex;
   align-items: center;
@@ -675,7 +675,7 @@
   font-size: var(--text-caption);
 }
 
-/* ---------- 소통 바 ---------- */
+/* ---------- 통신 바 ---------- */
 
 .cw-comm-bar.open {
   border-color: var(--cw-blue);
@@ -873,7 +873,7 @@
   border-color: var(--color-primary);
 }
 
-/* 따라내기 의무로 낼 수 없거나 소통할 수 없는 카드 */
+/* 따라내기 의무로 낼 수 없거나 통신할 수 없는 카드 */
 .cw-hand-card.dim {
   opacity: 0.3;
 }

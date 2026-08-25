@@ -71,7 +71,7 @@ export function SkullWaitingRoom({
       )}
       <div className="sk-waiting-container">
         <h1 className="sk-title">스컬</h1>
-        <p className="sk-subtitle">🌹 장미와 해골 · 배팅 심리전 · 3~6인</p>
+        <p className="sk-subtitle">🌹 장미와 해골 · 베팅 심리전 · 3~6인</p>
 
         {!hasJoined ? (
           <form onSubmit={handleSubmit} className="sk-join-form">

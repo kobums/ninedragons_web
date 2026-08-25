@@ -69,21 +69,21 @@ function toastText(event: SBEvent, game: SBGameState): string {
     case 'started':
       return '게임이 시작되었습니다 — 갱도를 파 내려갑니다';
     case 'place':
-      return `${name(event.seat)}님이 길 타일을 놓았습니다`;
+      return `${name(event.seat)}님이 굴 카드를 놓았습니다`;
     case 'rockfall':
-      return `🪨 ${name(event.seat)}님이 낙석으로 타일을 걷어냈습니다`;
+      return `🪨 ${name(event.seat)}님이 낙석으로 카드를 걷어냈습니다`;
     case 'break':
-      return `🔨 ${name(event.seat)}님이 장비를 망가뜨렸습니다`;
+      return `🔨 ${name(event.seat)}님이 도구를 망가뜨렸습니다`;
     case 'repair':
-      return `🔧 ${name(event.seat)}님이 장비를 고쳤습니다`;
+      return `🔧 ${name(event.seat)}님이 도구를 고쳤습니다`;
     case 'map':
-      return `🗺 ${name(event.seat)}님이 목표를 몰래 확인했습니다`;
+      return `🗺 ${name(event.seat)}님이 목적지를 몰래 확인했습니다`;
     case 'discard':
       return `${name(event.seat)}님이 카드를 버렸습니다`;
     case 'auto_discard':
       return '⏳ 시간 초과 — 카드가 자동으로 버려졌습니다';
     case 'reveal':
-      return '🔎 목표 타일이 공개되었습니다';
+      return '🔎 목적지 카드가 공개되었습니다';
     case 'timeout':
       return '⏳ 시간이 초과되었습니다';
     case 'bot_takeover':
@@ -329,16 +329,16 @@ export function SaboteurBoard({
     if (!toolsOk)
       return `${broken
         .map((t) => SB_TOOL_LABEL[t])
-        .join('·')}이(가) 망가져 길 타일을 놓을 수 없습니다`;
+        .join('·')}이(가) 부서져 굴 카드를 놓을 수 없습니다`;
     if (!card) return '손패에서 카드를 고르세요';
     if (sbIsPathCard(card))
       return placeable.size > 0
         ? '초록으로 표시된 칸에 놓을 수 있습니다'
         : '이 모양으로 놓을 칸이 없습니다 — 회전하거나 버리세요';
-    if (card.kind === 'rockfall') return '걷어낼 길 타일을 고르세요';
-    if (card.kind === 'map') return '몰래 확인할 목표 타일을 고르세요';
-    if (card.kind === 'break') return '망가뜨릴 상대의 장비를 고르세요';
-    if (card.kind === 'repair') return '고칠 장비를 고르세요';
+    if (card.kind === 'rockfall') return '걷어낼 굴 카드를 고르세요';
+    if (card.kind === 'map') return '몰래 확인할 목적지 카드를 고르세요';
+    if (card.kind === 'break') return '망가뜨릴 상대의 도구를 고르세요';
+    if (card.kind === 'repair') return '고칠 도구를 고르세요';
     return '';
   })();
 
@@ -351,8 +351,8 @@ export function SaboteurBoard({
     }
     const col = (target.col ?? 0) + 1;
     const row = (target.row ?? 0) + 1;
-    if (card.kind === 'rockfall') return `${col}열 ${row}행 타일을 걷어낼까요?`;
-    if (card.kind === 'map') return `${col}열 ${row}행 목표를 확인할까요?`;
+    if (card.kind === 'rockfall') return `${col}열 ${row}행 카드를 걷어낼까요?`;
+    if (card.kind === 'map') return `${col}열 ${row}행 목적지를 확인할까요?`;
     return `${col}열 ${row}행에 ${SB_CARD_LABEL[card.kind]}을(를) 놓을까요?`;
   })();
 
@@ -394,7 +394,7 @@ export function SaboteurBoard({
           )}
         </>
       );
-      label = `${SB_GOAL_LABEL[goalIdx] ?? '목표'} ${
+      label = `${SB_GOAL_LABEL[goalIdx] ?? '목적지'} ${
         revealed ? (tile.gold ? '금덩이' : '돌') : '뒷면'
       }`;
     } else if (tile) {
@@ -405,7 +405,7 @@ export function SaboteurBoard({
         </>
       );
       label = `${col + 1}열 ${row + 1}행 ${
-        tile.kind === 'start' ? '시작 타일' : '길 타일'
+        tile.kind === 'start' ? '시작 카드' : '굴 카드'
       }`;
     } else if (isPlaceable && cardEdges) {
       // 놓을 수 있는 빈 칸 — 지금 고른 모양을 미리 얹어 보여준다
@@ -458,7 +458,7 @@ export function SaboteurBoard({
         <div className="sb-status-row">
           <span className="sb-status-chip">덱 {game.deckLeft}장</span>
           <span className="sb-status-chip">
-            놓인 타일 {board.filter((t) => t.kind === 'path').length}장
+            놓인 카드 {board.filter((t) => t.kind === 'path').length}장
           </span>
           {game.endsAt > 0 && (
             <span className={`sb-timer ${remaining <= 10_000 ? 'urgent' : ''}`}>
@@ -485,12 +485,12 @@ export function SaboteurBoard({
           </div>
           <p className="sb-role-desc">
             {role === 'miner'
-              ? '금덩이까지 길을 이으면 이깁니다 — 파괴꾼을 찾아내세요'
+              ? '금덩이까지 길을 이으면 이깁니다 — 방해꾼을 찾아내세요'
               : '길이 금에 닿지 못하게 막으세요 — 들키지 않는 게 관건입니다'}
           </p>
           {saboteurCount > 0 && (
             <p className="sb-role-pool">
-              {players.length}인 구성 — 💣 파괴꾼 {saboteurCount}명 (역할 풀에서
+              {players.length}인 구성 — 💣 방해꾼 {saboteurCount}명 (역할 풀에서
               인원수만큼만 뽑아 실제 구성은 아무도 모릅니다)
             </p>
           )}
@@ -504,7 +504,7 @@ export function SaboteurBoard({
       {!isSpectator && maps.length > 0 && (
         <div className="sb-map-panel">
           <div className="sb-section-head">
-            <span className="sb-section-title">🗺 내가 확인한 목표</span>
+            <span className="sb-section-title">🗺 내가 확인한 목적지</span>
             <span className="sb-section-note">나만 볼 수 있습니다</span>
           </div>
           <div className="sb-map-rows">
@@ -513,7 +513,7 @@ export function SaboteurBoard({
                 key={m.index}
                 className={`sb-map-row ${m.gold ? 'gold' : 'rock'}`}
               >
-                {SB_GOAL_LABEL[m.index] ?? `목표 ${m.index + 1}`} —{' '}
+                {SB_GOAL_LABEL[m.index] ?? `목적지 ${m.index + 1}`} —{' '}
                 {m.gold ? '💰 금덩이' : '🪨 돌'}
               </span>
             ))}
@@ -535,7 +535,7 @@ export function SaboteurBoard({
       {/* 내 장비 — 하나라도 망가지면 길 타일을 못 놓는다 */}
       {!isSpectator && (
         <div className={`sb-tools-bar ${toolsOk ? '' : 'broken'}`}>
-          <span className="sb-tools-label">내 장비</span>
+          <span className="sb-tools-label">내 도구</span>
           <div className="sb-tools-row">
             {SB_TOOLS.map((tool) => {
               const ok = myTools ? myTools[tool] : true;
@@ -554,8 +554,8 @@ export function SaboteurBoard({
           </div>
           <span className="sb-tools-note">
             {toolsOk
-              ? '장비 정상 — 길 타일을 놓을 수 있습니다'
-              : '장비가 망가져 길 타일을 놓을 수 없습니다 (행동 카드는 가능)'}
+              ? '도구 정상 — 굴 카드를 놓을 수 있습니다'
+              : '도구가 부서져 굴 카드를 놓을 수 없습니다 (행동 카드는 가능)'}
           </span>
         </div>
       )}
@@ -646,7 +646,7 @@ export function SaboteurBoard({
         <div className="sb-target-panel">
           <div className="sb-section-head">
             <span className="sb-section-title">
-              {card?.kind === 'break' ? '🔨 망가뜨릴 장비' : '🔧 고칠 장비'}
+              {card?.kind === 'break' ? '🔨 망가뜨릴 도구' : '🔧 고칠 도구'}
             </span>
           </div>
           <div className="sb-target-list">

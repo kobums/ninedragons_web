@@ -30,10 +30,10 @@ interface CoupBoardProps {
 const PHASE_LABEL: Record<string, string> = {
   action: '액션',
   challenge_window: '도전 창',
-  block_window: '차단 창',
-  block_challenge_window: '차단 도전 창',
+  block_window: '저지 창',
+  block_challenge_window: '저지 도전 창',
   lose_card: '카드 제거',
-  exchange_pick: '교환',
+  exchange_pick: '캐릭터 교환',
   game_over: '게임 종료',
 };
 
@@ -248,8 +248,8 @@ export function CoupBoard({
   );
   const actionDisabledReason = (kind: CPActionKind): string | null => {
     const meta = CP_ACTIONS[kind];
-    if (mustCoup && kind !== 'coup') return '쿠 강제';
-    if (meta.cost > myChips) return `${meta.cost}칩 필요`;
+    if (mustCoup && kind !== 'coup') return '쿠데타 강제';
+    if (meta.cost > myChips) return `은화 ${meta.cost}개 필요`;
     if (meta.needsTarget && aliveOpponents.length === 0) return '대상 없음';
     return null;
   };
@@ -301,7 +301,7 @@ export function CoupBoard({
     if (isAction) {
       if (myTurn)
         return mustCoup
-          ? `칩 ${CP_FORCED_COUP_CHIPS}개 이상 — 이번 차례는 쿠만 가능합니다`
+          ? `은화 ${CP_FORCED_COUP_CHIPS}개 이상 — 이번 차례는 쿠데타만 가능합니다`
           : '액션을 선택하세요';
       if (game.currentSeat >= 0)
         return `${nameOf(game.currentSeat)}님이 액션을 고르는 중…`;
@@ -313,10 +313,10 @@ export function CoupBoard({
         : '역할 주장에 도전할 수 있습니다';
     if (isBlockWin)
       return pendingLine
-        ? `${pendingLine} — 차단하거나 허용하세요`
-        : '차단을 선언할 수 있습니다';
+        ? `${pendingLine} — 저지하거나 허용하세요`
+        : '저지를 선언할 수 있습니다';
     if (isBlockChallengeWin)
-      return `${nameOf(blockerSeat)}의 차단(${blockRoleMeta?.name ?? '?'}) — 도전하거나 허용하세요`;
+      return `${nameOf(blockerSeat)}의 저지(${blockRoleMeta?.name ?? '?'}) — 도전하거나 허용하세요`;
     if (isLose)
       return game.loseSeat === game.yourSeat
         ? '잃을 카드를 선택하세요'
@@ -324,7 +324,7 @@ export function CoupBoard({
     if (isExchange)
       return inExchangePick
         ? `유지할 카드 ${keepCount}장을 선택하세요`
-        : `${nameOf(actorSeat)}님이 교환 중…`;
+        : `${nameOf(actorSeat)}님이 캐릭터 교환 중…`;
     return '';
   })();
 
@@ -394,7 +394,7 @@ export function CoupBoard({
                   {p.name}
                   {isMe && ' (나)'}
                 </span>
-                <span className="cp-tile-chips" title="보유 칩">
+                <span className="cp-tile-chips" title="보유 은화">
                   🪙 {p.chips}
                 </span>
               </span>
@@ -420,7 +420,7 @@ export function CoupBoard({
               <span className="cp-tile-badges">
                 {isActor && <span className="cp-badge act">⚡ 액션</span>}
                 {isTarget && <span className="cp-badge tgt">🎯 대상</span>}
-                {isBlocker && <span className="cp-badge blk">🛡 차단</span>}
+                {isBlocker && <span className="cp-badge blk">🛡 저지</span>}
                 {isChoosing && (
                   <span className="cp-badge lose">카드 선택 중…</span>
                 )}
@@ -461,7 +461,7 @@ export function CoupBoard({
         <div className="cp-actions">
           <span className="cp-actions-title">
             {mustCoup
-              ? `💥 칩 ${CP_FORCED_COUP_CHIPS}개 이상 — 쿠 강제`
+              ? `💥 은화 ${CP_FORCED_COUP_CHIPS}개 이상 — 쿠데타 강제`
               : '내 차례 — 액션 선택'}
           </span>
           <div className="cp-actions-grid">
@@ -480,7 +480,7 @@ export function CoupBoard({
                   <span className="cp-action-label">
                     {meta.icon} {meta.label}
                     {meta.cost > 0 && (
-                      <span className="cp-action-cost"> −{meta.cost}칩</span>
+                      <span className="cp-action-cost"> −은화 {meta.cost}</span>
                     )}
                   </span>
                   <span className="cp-action-sub">
@@ -509,7 +509,7 @@ export function CoupBoard({
         <div className="cp-response-bar">
           <span className="cp-bar-prompt">
             {isBlockChallengeWin
-              ? `🛡 ${nameOf(blockerSeat)}의 차단(${blockRoleMeta?.name ?? '?'})`
+              ? `🛡 ${nameOf(blockerSeat)}의 저지(${blockRoleMeta?.name ?? '?'})`
               : pendingLine || '응답을 선택하세요'}
             {game.endsAt > 0 && (
               <span
@@ -538,7 +538,7 @@ export function CoupBoard({
                 onClick={() => respond(() => onBlock(role))}
                 disabled={submitted}
               >
-                🛡 차단: {CP_ROLES[role].name}
+                🛡 저지: {CP_ROLES[role].name}
               </button>
             ))}
             <button
@@ -637,7 +637,7 @@ export function CoupBoard({
       {inExchangePick && (
         <div className="cp-overlay">
           <div className="cp-overlay-panel">
-            <h2 className="cp-overlay-title">🔄 교환 — 유지할 카드 선택</h2>
+            <h2 className="cp-overlay-title">🔄 캐릭터 교환 — 유지할 카드 선택</h2>
             <p className="cp-overlay-sub">
               {yourExchange.length}장 중 {keepCount}장을 남기고 나머지는 덱으로
               반납합니다

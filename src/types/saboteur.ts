@@ -202,7 +202,7 @@ export const SB_GOALS: ReadonlyArray<{ col: number; row: number }> = [
   { col: 8, row: 4 },
 ];
 
-export const SB_GOAL_LABEL = ['위쪽 목표', '가운데 목표', '아래쪽 목표'];
+export const SB_GOAL_LABEL = ['위쪽 목적지', '가운데 목적지', '아래쪽 목적지'];
 
 // 인원별 파괴꾼 수 — 역할 풀에서 인원수만큼만 뽑으므로 실제 구성은 확정되지 않는다
 export const SB_SABOTEUR_COUNT: Record<number, number> = {
@@ -218,7 +218,7 @@ export const SB_SABOTEUR_COUNT: Record<number, number> = {
 
 export const SB_ROLE_LABEL: Record<Exclude<SBRole, ''>, string> = {
   miner: '광부',
-  saboteur: '파괴꾼',
+  saboteur: '방해꾼',
 };
 
 export const SB_ROLE_ICON: Record<Exclude<SBRole, ''>, string> = {
@@ -241,11 +241,11 @@ export const SB_TOOL_ICON: Record<SBTool, string> = {
 export const SB_TOOLS: ReadonlyArray<SBTool> = ['pick', 'cart', 'lamp'];
 
 export const SB_CARD_LABEL: Record<SBCardKind, string> = {
-  path: '길 타일',
-  deadend: '막다른 타일',
+  path: '굴 카드',
+  deadend: '막다른 길',
   map: '지도',
   rockfall: '낙석',
-  break: '장비 파괴',
+  break: '부서진 도구',
   repair: '수리',
 };
 
@@ -260,11 +260,11 @@ export const SB_CARD_ICON: Record<SBCardKind, string> = {
 
 export const SB_CARD_DESC: Record<SBCardKind, string> = {
   path: '이어진 길 끝에 놓습니다 — 모든 인접 변이 맞아야 합니다',
-  deadend: '중앙이 끊긴 타일 — 놓을 수는 있지만 길이 이어지지 않습니다',
-  map: '목표 타일 1장을 나만 몰래 확인합니다',
-  rockfall: '이미 놓인 길 타일 1장을 걷어냅니다 (시작·목표는 불가)',
-  break: '상대의 장비 하나를 망가뜨립니다',
-  repair: '망가진 장비 하나를 고칩니다 (자신도 가능)',
+  deadend: '중앙이 끊긴 굴 카드 — 놓을 수는 있지만 길이 이어지지 않습니다',
+  map: '목적지 카드 1장을 나만 몰래 확인합니다',
+  rockfall: '이미 놓인 굴 카드 1장을 걷어냅니다 (시작·목적지는 불가)',
+  break: '상대의 도구 하나를 망가뜨립니다',
+  repair: '부서진 도구 하나를 고칩니다 (자신도 가능)',
 };
 
 // 길 카드인지 (판에 놓는 카드)

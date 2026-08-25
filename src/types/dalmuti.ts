@@ -115,7 +115,7 @@ export const DM_JOKER = 13;
 const DM_RANK_NAMES: Record<number, string> = {
   1: '달무티',
   2: '대주교',
-  3: '총리대신',
+  3: '시종장',
   4: '남작부인',
   5: '수녀원장',
   6: '기사',
@@ -123,9 +123,9 @@ const DM_RANK_NAMES: Record<number, string> = {
   8: '석공',
   9: '요리사',
   10: '양치기',
-  11: '석수',
+  11: '광부',
   12: '농노',
-  13: '광대',
+  13: '어릿광대',
 };
 
 export function dmRankName(rank: number): string {

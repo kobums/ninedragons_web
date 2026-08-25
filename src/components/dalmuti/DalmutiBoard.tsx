@@ -388,7 +388,7 @@ export function DalmutiBoard({ game, toasts, onPlay, onPass }: DalmutiBoardProps
                     disabled={!myTurn || submitted || disabledByRule}
                     onClick={() => selectGroup(g.rank)}
                     aria-label={`${g.rank}번 카드 ${g.count}장${
-                      g.rank === DM_JOKER ? ' (조커)' : ''
+                      g.rank === DM_JOKER ? ' (어릿광대)' : ''
                     }`}
                   >
                     <span className="dm-group-stack">
@@ -415,7 +415,7 @@ export function DalmutiBoard({ game, toasts, onPlay, onPass }: DalmutiBoardProps
           {jokerPanelOpen && myTurn && (
             <div className="dm-joker-panel">
               <span className="dm-joker-title">
-                ★ 조커 {jokerCount}장 — 어떤 숫자로 낼까요?
+                ★ 어릿광대 {jokerCount}장 — 어떤 숫자로 낼까요?
               </span>
               <div className="dm-joker-options">
                 {jokerTargets.map((rank) => (
@@ -442,7 +442,7 @@ export function DalmutiBoard({ game, toasts, onPlay, onPass }: DalmutiBoardProps
               </div>
               {jokerTargets.length === 0 && tableSet && (
                 <span className="dm-joker-none">
-                  조커를 섞어도 이길 수 있는 세트가 없습니다
+                  어릿광대를 섞어도 이길 수 있는 세트가 없습니다
                 </span>
               )}
               <button
@@ -489,7 +489,7 @@ export function DalmutiBoard({ game, toasts, onPlay, onPass }: DalmutiBoardProps
                   </div>
                   {jokersUsed > 0 && (
                     <span className="dm-joker-note">
-                      ★ 조커 {jokersUsed}장을{' '}
+                      ★ 어릿광대 {jokersUsed}장을{' '}
                       {selection.rank === DM_JOKER
                         ? '13 단독으로'
                         : `${selection.rank}(으)로`}{' '}
@@ -515,7 +515,7 @@ export function DalmutiBoard({ game, toasts, onPlay, onPass }: DalmutiBoardProps
                 >
                   {selection
                     ? `${
-                        selection.rank === DM_JOKER ? '조커' : selection.rank
+                        selection.rank === DM_JOKER ? '어릿광대' : selection.rank
                       } ${selection.count}장 내기`
                     : '카드를 선택하세요'}
                 </button>

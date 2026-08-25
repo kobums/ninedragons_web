@@ -23,7 +23,7 @@ export function JHWaitingRoom({ hasJoined, onJoinGame, onBack }: JHWaitingRoomPr
     <div className="jh-waiting-room">
       <div className="jh-waiting-container">
         <span className="jh-eyebrow">두 개의 인격, 하나의 몸</span>
-        <h1 className="jh-title">지킬 앤 하이드</h1>
+        <h1 className="jh-title">지킬 대 하이드</h1>
         <p className="jh-subtitle">인격을 건 2인 트릭테이킹 심리전</p>
 
         {!hasJoined ? (

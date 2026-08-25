@@ -143,11 +143,11 @@ export function CodenamesBoard({
   const bannerSub = isCluePhase
     ? canClue
       ? '힌트를 음성으로 말하고 아래에 기록하세요'
-      : `${turnLabel} 스파이마스터가 힌트를 고민하는 중…`
+      : `${turnLabel} 팀장이 힌트를 고민하는 중…`
     : isGuessPhase
       ? canPick
         ? '힌트에 맞는 단어 카드를 탭해 지목하세요'
-        : `${turnLabel} 요원들이 추리하는 중…`
+        : `${turnLabel} 팀원들이 추리하는 중…`
       : '';
 
   const selectedWord = selected !== null ? board[selected]?.word : '';
@@ -182,15 +182,15 @@ export function CodenamesBoard({
 
       {/* 남은 단어 배지 + 내 팀·역할 */}
       <div className="cn-score-row">
-        <span className="cn-left-badge red">🔴 적 {game.redLeft}</span>
-        <span className="cn-left-badge blue">🔵 청 {game.blueLeft}</span>
+        <span className="cn-left-badge red">🔴 빨강 {game.redLeft}</span>
+        <span className="cn-left-badge blue">🔵 파랑 {game.blueLeft}</span>
         {isSpectator ? (
           <span className="cn-me-badge">👀 관전</span>
         ) : (
           game.yourTeam !== '' && (
             <span className={`cn-me-badge ${game.yourTeam}`}>
               {CN_TEAM_MARK[game.yourTeam]}{' '}
-              {game.yourRole === 'spymaster' ? '🕵️ 스파이마스터' : '요원'} (나)
+              {game.yourRole === 'spymaster' ? '🕵️ 팀장' : '팀원'} (나)
             </span>
           )
         )}
@@ -328,7 +328,7 @@ export function CodenamesBoard({
 
       {isSpectator && (
         <p className="cn-spectator-note">
-          👀 관전 중 — 키 카드 없이 공개 보드만 표시됩니다
+          👀 관전 중 — 열쇠 카드 없이 공개 보드만 표시됩니다
         </p>
       )}
 

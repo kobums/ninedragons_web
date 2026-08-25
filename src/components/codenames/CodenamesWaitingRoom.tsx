@@ -83,7 +83,7 @@ export function CodenamesWaitingRoom({
                   <span
                     className={`cn-role-chip ${p.seat === spymasterSeat ? 'spymaster' : ''}`}
                   >
-                    {p.seat === spymasterSeat ? '🕵️ 스파이마스터' : '요원'}
+                    {p.seat === spymasterSeat ? '🕵️ 팀장' : '팀원'}
                   </span>
                   <span className={`cn-dot ${p.connected ? 'on' : 'off'}`} />
                 </span>
@@ -152,7 +152,7 @@ export function CodenamesWaitingRoom({
               {renderTeam('blue', preview.blue)}
             </div>
             <p className="cn-preview-note">
-              입장 순서대로 적·청 번갈아 배정 — 팀의 첫 사람이 스파이마스터가
+              입장 순서대로 빨강·파랑 번갈아 배정 — 팀의 첫 사람이 팀장이
               됩니다
             </p>
 

@@ -123,8 +123,8 @@ export const CN_BOT_FILL_TARGET = 6;
 export const CN_CLUE_COUNTS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export const CN_TEAM_LABEL: Record<CNTeam, string> = {
-  red: '적팀',
-  blue: '청팀',
+  red: '빨간 팀',
+  blue: '파란 팀',
 };
 
 export const CN_TEAM_MARK: Record<CNTeam, string> = {
@@ -133,8 +133,8 @@ export const CN_TEAM_MARK: Record<CNTeam, string> = {
 };
 
 export const CN_ROLE_LABEL: Record<CNRole, string> = {
-  spymaster: '스파이마스터',
-  agent: '요원',
+  spymaster: '팀장',
+  agent: '팀원',
 };
 
 export function cnTeamLabel(team: CNTeam | ''): string {

@@ -103,7 +103,7 @@ export function CrewGameOver({
           </ul>
         )}
 
-        {/* 탑승 대원 — 마지막 라운드에 맡았던 임무 성적 */}
+        {/* 탑승 대원 — 마지막 라운드에 맡았던 과제 성적 */}
         <ul className="cw-over-roster">
           {players.map((p) => {
             const mine = tasks.filter((t) => t.seat === p.seat);
@@ -119,8 +119,8 @@ export function CrewGameOver({
                 </span>
                 <span className={`cw-over-tag ${allDone ? 'ok' : ''}`}>
                   {mine.length === 0
-                    ? '임무 없음'
-                    : `임무 ${mineDone}/${mine.length}`}
+                    ? '과제 없음'
+                    : `과제 ${mineDone}/${mine.length}`}
                 </span>
               </li>
             );

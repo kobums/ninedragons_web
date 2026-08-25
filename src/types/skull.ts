@@ -38,7 +38,7 @@ export interface SKMessage {
   payload?: unknown;
 }
 
-// 공개 좌석 뷰 — 카드 내용은 절대 없다 (장수·점수·배팅 상태만)
+// 공개 좌석 뷰 — 카드 내용은 절대 없다 (장수·점수·베팅 상태만)
 export interface SKPlayerView {
   seat: number;
   name: string;
@@ -48,9 +48,9 @@ export interface SKPlayerView {
   handCount: number;
   stackCount: number;
   points: number;
-  // 이번 배팅 라운드에서 빠졌는지
+  // 이번 베팅 라운드에서 빠졌는지
   passed: boolean;
-  // 현재 선언한 배팅 수 (없으면 0)
+  // 현재 선언한 베팅 수 (없으면 0)
   bid: number;
 }
 
@@ -81,7 +81,7 @@ export interface SKGameState {
   yourHand?: SKCard[];
   yourStack?: SKCard[];
   players: SKPlayerView[];
-  // 현재 최고 배팅 (없으면 0)
+  // 현재 최고 베팅 (없으면 0)
   highBid: number;
   // 도전자 좌석 (-1 없음)
   challengerSeat: number;

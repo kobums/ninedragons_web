@@ -45,9 +45,9 @@ interface ReformationBoardProps {
 const PHASE_LABEL: Record<string, string> = {
   action: '액션',
   challenge_window: '도전 창',
-  block_window: '차단 창',
+  block_window: '저지 창',
   lose_card: '카드 제거',
-  exchange: '교환',
+  exchange: '캐릭터 교환',
   game_over: '게임 종료',
 };
 
@@ -296,8 +296,8 @@ export function ReformationBoard({
   // ----- 액션 버튼 판정 -----
   const actionDisabledReason = (kind: RFMenuKind): string | null => {
     const meta = RF_ACTIONS[kind];
-    if (mustCoup && kind !== 'coup') return '쿠 강제';
-    if (meta.cost > myCoins) return `${meta.cost}칩 필요`;
+    if (mustCoup && kind !== 'coup') return '쿠데타 강제';
+    if (meta.cost > myCoins) return `은화 ${meta.cost}개 필요`;
     if (meta.needsTarget && aliveOpponents.length === 0) return '대상 없음';
     if (meta.attack && attackTargets.length === 0) {
       return RF_SAME_FACTION_REASON;
@@ -365,7 +365,7 @@ export function ReformationBoard({
     if (isAction) {
       if (myTurn)
         return mustCoup
-          ? `칩 ${RF_FORCED_COUP_COINS}개 이상 — 이번 차례는 쿠만 가능합니다`
+          ? `은화 ${RF_FORCED_COUP_COINS}개 이상 — 이번 차례는 쿠데타만 가능합니다`
           : '액션을 선택하세요';
       if (game.currentSeat >= 0)
         return `${nameOf(game.currentSeat)}님이 액션을 고르는 중…`;
@@ -373,14 +373,14 @@ export function ReformationBoard({
     }
     if (isChallengeWin)
       return isBlockClaim
-        ? `${nameOf(blockerSeat)}의 차단(${rfRoleName(pending?.blockRole)}) — 도전하거나 허용하세요`
+        ? `${nameOf(blockerSeat)}의 저지(${rfRoleName(pending?.blockRole)}) — 도전하거나 허용하세요`
         : pendingLine
           ? `${pendingLine} — 도전하거나 허용하세요`
           : '역할 주장에 도전할 수 있습니다';
     if (isBlockWin)
       return pendingLine
-        ? `${pendingLine} — 차단하거나 허용하세요`
-        : '차단을 선언할 수 있습니다';
+        ? `${pendingLine} — 저지하거나 허용하세요`
+        : '저지를 선언할 수 있습니다';
     if (isLose)
       return loseSeat === game.yourSeat
         ? '잃을 카드를 선택하세요'
@@ -388,7 +388,7 @@ export function ReformationBoard({
     if (isExchange)
       return inExchangePick
         ? `유지할 카드 ${keepCount}장을 선택하세요`
-        : `${nameOf(actorSeat)}님이 교환 중…`;
+        : `${nameOf(actorSeat)}님이 캐릭터 교환 중…`;
     return '';
   })();
 
@@ -414,12 +414,12 @@ export function ReformationBoard({
       {/* ----- 상단 국고 + 진영 세력 ----- */}
       <div className={`rf-treasury lv-${treasuryLevel}`}>
         <span className="rf-treasury-main">
-          <span className="rf-treasury-label">🏦 국고</span>
+          <span className="rf-treasury-label">🏦 피난처</span>
           <span className="rf-treasury-amount">🪙 {treasury}</span>
         </span>
         <span className="rf-treasury-hint">
           {treasury > 0
-            ? `횡령하면 ${treasury}칩을 통째로 가져갑니다`
+            ? `횡령하면 은화 ${treasury}개를 통째로 가져갑니다`
             : '아직 비어 있습니다 — 진영을 바꿀 때마다 쌓입니다'}
         </span>
         <span className="rf-tally">
@@ -489,7 +489,7 @@ export function ReformationBoard({
                   {p.name}
                   {isMe && ' (나)'}
                 </span>
-                <span className="rf-tile-coins" title="보유 칩">
+                <span className="rf-tile-coins" title="보유 은화">
                   🪙 {p.coins}
                 </span>
               </span>
@@ -525,7 +525,7 @@ export function ReformationBoard({
               <span className="rf-tile-badges">
                 {isActor && <span className="rf-badge act">⚡ 액션</span>}
                 {isTarget && <span className="rf-badge tgt">🎯 대상</span>}
-                {isBlocker && <span className="rf-badge blk">🛡 차단</span>}
+                {isBlocker && <span className="rf-badge blk">🛡 저지</span>}
                 {isChoosing && (
                   <span className="rf-badge lose">카드 선택 중…</span>
                 )}
@@ -572,7 +572,7 @@ export function ReformationBoard({
         <div className="rf-actions">
           <span className="rf-actions-title">
             {mustCoup
-              ? `💥 칩 ${RF_FORCED_COUP_COINS}개 이상 — 쿠 강제`
+              ? `💥 은화 ${RF_FORCED_COUP_COINS}개 이상 — 쿠데타 강제`
               : '내 차례 — 액션 선택'}
           </span>
           {allyNames.length > 0 && (
@@ -605,12 +605,12 @@ export function ReformationBoard({
                   <span className="rf-action-label">
                     {meta.icon} {meta.label}
                     {meta.cost > 0 && (
-                      <span className="rf-action-cost"> −{meta.cost}칩</span>
+                      <span className="rf-action-cost"> −은화 {meta.cost}</span>
                     )}
                   </span>
                   <span className="rf-action-sub">
                     {kind === 'embezzle'
-                      ? `국고 ${treasury}칩 획득`
+                      ? `피난처 은화 ${treasury}개 획득`
                       : meta.effect}
                     {claim ? ` · ${claim.name} 주장` : ''}
                     {meta.claimText ? ` · "${meta.claimText}"` : ''}
@@ -640,7 +640,7 @@ export function ReformationBoard({
         <div className="rf-response-bar">
           <span className="rf-bar-prompt">
             {isBlockClaim
-              ? `🛡 ${nameOf(blockerSeat)}의 차단(${rfRoleName(pending?.blockRole)})`
+              ? `🛡 ${nameOf(blockerSeat)}의 저지(${rfRoleName(pending?.blockRole)})`
               : pendingLine || '응답을 선택하세요'}
             {passed.length > 0 && (
               <span className="rf-bar-passed"> · {passed.length}명 허용</span>
@@ -672,7 +672,7 @@ export function ReformationBoard({
                 onClick={() => respond(() => onBlock(role))}
                 disabled={submitted}
               >
-                🛡 차단: {RF_ROLES[role].name}
+                🛡 저지: {RF_ROLES[role].name}
               </button>
             ))}
             <button
@@ -798,7 +798,7 @@ export function ReformationBoard({
       {inExchangePick && (
         <div className="rf-overlay">
           <div className="rf-overlay-panel">
-            <h2 className="rf-overlay-title">🔄 교환 — 유지할 카드 선택</h2>
+            <h2 className="rf-overlay-title">🔄 캐릭터 교환 — 유지할 카드 선택</h2>
             <p className="rf-overlay-sub">
               {yourExchange.length}장 중 {keepCount}장을 남기고 나머지는 덱으로
               반납합니다

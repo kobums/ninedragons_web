@@ -228,7 +228,7 @@ export function JustOneBoard({
     if (isSpectator) {
       return phase === 'clue'
         ? `👀 관전 중 — 단서를 적는 중입니다 (${submittedCount}/${totalCluePlayers}명)`
-        : `👀 관전 중 — 출제자는 ${guesserName}님입니다`;
+        : `👀 관전 중 — 맞히는 사람은 ${guesserName}님입니다`;
     }
     switch (phase) {
       case 'clue':
@@ -304,7 +304,7 @@ export function JustOneBoard({
             <span className="jo-word-hint">
               {isGuesser
                 ? '당신이 맞혀야 하는 단어입니다'
-                : '출제자에게는 공개되지 않습니다'}
+                : '맞히는 사람에게는 공개되지 않습니다'}
             </span>
           </div>
         )}
@@ -573,7 +573,7 @@ export function JustOneBoard({
         </div>
       )}
 
-      {/* 좌석 스트립 — 제출 여부 ✓ · 출제자 ✏️ */}
+      {/* 좌석 스트립 — 제출 여부 ✓ · 맞히는 사람 ✏️ */}
       <div className="jo-seat-strip">
         {players.map((p) => {
           const isMe = p.seat === game.yourSeat;
@@ -600,7 +600,7 @@ export function JustOneBoard({
               </span>
               <span className="jo-seat-state">
                 {p.isGuesser
-                  ? '출제자'
+                  ? '추리 중'
                   : offline
                     ? '끊김'
                     : p.submitted

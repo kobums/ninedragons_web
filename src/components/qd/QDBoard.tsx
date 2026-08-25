@@ -220,7 +220,7 @@ export function QDBoard({ game, lastEvent, onMove, onPlaceWall }: QDBoardProps) 
             className={`qd-mode-button${mode === 'move' ? ' active' : ''}`}
             onClick={() => setMode('move')}
           >
-            폰 이동
+            말 이동
           </button>
           <button
             type="button"
