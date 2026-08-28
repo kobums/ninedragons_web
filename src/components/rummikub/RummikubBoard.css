@@ -1,0 +1,616 @@
+/* 루미큐브 보드 — 크림 캔버스 위 상아빛 타일 결.
+   팔레트는 RummikubApp.css 의 ru-scope 변수 + tokens.css 토큰만 사용한다.
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상.
+
+   화면을 지배하는 두 축:
+     1) 테이블 — 세트 경계가 한눈에 보여야 한다(세트마다 카드 한 장).
+        유효하지 않은 세트는 확정 전에 붉게 알린다.
+     2) 받침대 — 내 타일. 탭해서 고르고 세트에 얹는다. */
+
+/* 280px 에서도 가로 스크롤이 생기지 않게 — 긴 한글 문장은 어디서든 접힌다 */
+.ru-board,
+.ru-board * {
+  overflow-wrap: anywhere;
+}
+
+.ru-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 260px;
+  max-width: 760px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.ru-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.ru-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 상태 띠 ---------- */
+
+.ru-status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.ru-status-bar.mine {
+  border-color: var(--color-primary);
+}
+
+.ru-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ru-status-chip,
+.ru-timer {
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ru-status-chip.meld.done {
+  background: var(--ru-valid-tint);
+  border-color: var(--ru-valid);
+  color: var(--color-body-strong);
+}
+
+.ru-status-chip.meld.todo {
+  background: var(--ru-meld-tint);
+  border-color: var(--ru-meld);
+  color: var(--color-body-strong);
+}
+
+.ru-timer.urgent {
+  background: var(--ru-invalid-tint);
+  border-color: var(--ru-invalid);
+  color: var(--ru-invalid);
+  font-weight: 700;
+}
+
+.ru-status-title {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  word-break: keep-all;
+}
+
+.ru-status-sub,
+.ru-last-action {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.ru-last-action {
+  color: var(--color-muted-soft);
+}
+
+.ru-spectator-note {
+  background: var(--color-surface-soft);
+  border: 1px dashed var(--color-hairline);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  text-align: center;
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+/* ---------- 참가자 띠 ---------- */
+
+.ru-score-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 6px;
+}
+
+.ru-score-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 7px 10px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  min-width: 0;
+}
+
+.ru-score-pill.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.ru-score-pill.me {
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+}
+
+.ru-score-name {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ru-score-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ru-score-meld.done {
+  color: var(--ru-valid);
+  font-weight: 700;
+}
+
+.ru-score-value {
+  margin-left: auto;
+  color: var(--color-body);
+  font-weight: 700;
+}
+
+/* ---------- 섹션 ---------- */
+
+.ru-section {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.ru-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ru-section-title {
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+  color: var(--color-ink);
+}
+
+.ru-section-note {
+  font-size: 11px;
+  color: var(--color-muted-soft);
+  word-break: keep-all;
+}
+
+.ru-row-empty {
+  font-size: var(--text-caption);
+  color: var(--color-muted-soft);
+  padding: 10px;
+  text-align: center;
+}
+
+/* ---------- 타일 ---------- */
+
+.ru-tile {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 44px;
+  min-height: 56px;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--ru-tile-face);
+  border: 1px solid var(--ru-tile-edge);
+  border-bottom: 3px solid var(--ru-tile-edge);
+  color: var(--ru-tone, var(--color-ink));
+  box-shadow: 0 1px 2px var(--ru-tile-shadow);
+  box-sizing: border-box;
+  font-variant-numeric: tabular-nums;
+}
+
+.ru-tile.size-sm {
+  min-width: 34px;
+  min-height: 42px;
+  padding: 2px 4px;
+}
+
+.ru-tile.tappable {
+  cursor: pointer;
+}
+
+.ru-tile.tappable:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+.ru-tile-mark {
+  font-size: 10px;
+  line-height: 1.1;
+}
+
+.ru-tile-num {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.ru-tile.size-sm .ru-tile-num {
+  font-size: 15px;
+}
+
+.ru-tile-sub {
+  font-size: 8px;
+  color: var(--ru-joker);
+  line-height: 1;
+}
+
+/* 조커는 숫자 대신 글자가 들어가 좁아 보이지 않게 살짝 줄인다 */
+.ru-tile.ru-c-joker .ru-tile-num {
+  font-size: 13px;
+}
+
+.ru-tile.selected {
+  border-color: var(--ru-select);
+  box-shadow: 0 0 0 2px var(--ru-select);
+  background: var(--ru-select-tint);
+  transform: translateY(-2px);
+}
+
+/* 이번 차례에 내가 새로 낸 타일 — 되돌리기 대상이 어떤 것인지 보인다 */
+.ru-tile.fresh {
+  border-bottom-color: var(--ru-new);
+  background: var(--ru-new-tint);
+}
+
+/* ---------- 테이블 ---------- */
+
+.ru-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.ru-set {
+  border: 2px solid var(--ru-valid);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ru-set.valid {
+  border-color: var(--ru-valid);
+  background: var(--ru-valid-tint);
+}
+
+/* 유효하지 않은 세트 — 확정 전에 붉게 알린다 */
+.ru-set.invalid {
+  border-color: var(--ru-invalid);
+  background: var(--ru-invalid-tint);
+  border-style: dashed;
+}
+
+.ru-set.new,
+.ru-set.changed {
+  box-shadow: inset 0 0 0 2px var(--ru-touched-tint);
+}
+
+.ru-set-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ru-set-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.ru-set-state {
+  font-size: 11px;
+  word-break: keep-all;
+  flex: 1 1 120px;
+  min-width: 0;
+}
+
+.ru-set-state.ok {
+  color: var(--color-muted);
+}
+
+.ru-set-state.bad {
+  color: var(--ru-invalid);
+  font-weight: 700;
+}
+
+.ru-drop-button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+  color: var(--color-body-strong);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ru-new-set-button {
+  min-height: 44px;
+  padding: 10px;
+  border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-body-strong);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ru-new-set-button:disabled {
+  border-color: var(--color-hairline);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+/* ---------- 받침대 ---------- */
+
+.ru-rack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-cream-strong);
+  border: 1px solid var(--color-hairline);
+  min-height: 60px;
+  align-content: flex-start;
+}
+
+.ru-rack-sort {
+  display: flex;
+  gap: 4px;
+}
+
+.ru-sort-option {
+  flex: 1;
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  cursor: pointer;
+}
+
+.ru-sort-option.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  color: var(--color-body-strong);
+  font-weight: 700;
+}
+
+.ru-rack-hint {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-muted);
+  word-break: keep-all;
+  line-height: 1.6;
+}
+
+/* ---------- 선택 상태 띠 ---------- */
+
+.ru-select-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 196px;
+  z-index: 190;
+  width: min(92vw, 720px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-subtle);
+  box-sizing: border-box;
+}
+
+.ru-select-text {
+  flex: 1 1 140px;
+  font-size: var(--text-caption);
+  color: var(--color-ink);
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.ru-select-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* ---------- 하단 행동 바 ---------- */
+
+.ru-action-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 12px;
+  z-index: 200;
+  width: min(92vw, 720px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  box-shadow: var(--shadow-modal);
+  box-sizing: border-box;
+}
+
+.ru-action-text {
+  font-size: var(--text-caption);
+  color: var(--color-ink);
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.ru-blockers {
+  margin: 0;
+  padding: 6px 8px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border: 1px solid var(--ru-invalid);
+  border-radius: var(--radius-md);
+  background: var(--ru-invalid-tint);
+  color: var(--ru-invalid);
+  font-size: 11px;
+  word-break: keep-all;
+}
+
+.ru-action-warn {
+  font-size: 11px;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+.ru-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ru-board .ru-primary-button {
+  flex: 1 1 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ru-board .ru-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.ru-board .ru-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.ru-ghost-button {
+  flex: 1 1 88px;
+  min-height: 44px;
+  padding: 11px 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  cursor: pointer;
+}
+
+.ru-ghost-button:disabled {
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.ru-ghost-button.danger:not(:disabled) {
+  border-color: var(--ru-invalid);
+  color: var(--ru-invalid);
+  font-weight: 700;
+}
+
+/* ---------- 좁은 화면 (280px 대응) ---------- */
+
+@media (max-width: 460px) {
+  .ru-board {
+    padding: var(--space-xs) var(--space-xs) 280px;
+  }
+
+  .ru-score-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ru-select-bar {
+    bottom: 216px;
+  }
+}
+
+@media (max-width: 330px) {
+  .ru-score-strip {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .ru-tile {
+    min-width: 44px;
+    min-height: 52px;
+    padding: 2px 3px;
+  }
+
+  .ru-tile-num {
+    font-size: 18px;
+  }
+
+  .ru-set-tiles,
+  .ru-rack {
+    gap: 3px;
+  }
+}

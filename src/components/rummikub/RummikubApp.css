@@ -1,0 +1,82 @@
+/* 루미큐브 셸 — 크림 캔버스 위 상아빛 타일 결.
+   tokens.css 에는 루미큐브 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 기존 토큰과
+   rgba 변주만 사용 — 컴포넌트에 새 hex 를 흘리지 않는 규칙 유지.
+
+   타일 4색은 "색으로만" 구분되지 않는다. 어디서든
+     ① 숫자 글꼴 색 = 타일 색   ② 색마다 다른 기호(◆ ● ■ ▲)
+     ③ 스크린리더용 한글 색 이름
+   을 함께 싣는다. 특히 검정·주황은 명도로도 갈리게 잡았다.
+
+   | 색   | 표기 | 기호 | 토큰        | 명도       |
+   |------|------|------|-------------|-----------|
+   | red  | 빨강 | ◆    | --st-clan-0 | 중간       |
+   | blue | 파랑 | ●    | --st-clan-1 | 중간·차가움 |
+   | black| 검정 | ■    | --color-ink | 가장 어둡다 |
+   | orange| 주황| ▲    | --tc-phx    | 가장 밝다  | */
+
+.ru-scope {
+  /* 타일 4색 */
+  --ru-red: var(--st-clan-0);
+  --ru-red-tint: rgba(198, 69, 69, 0.12);
+  --ru-blue: var(--st-clan-1);
+  --ru-blue-tint: rgba(74, 109, 156, 0.12);
+  --ru-black: var(--color-ink);
+  --ru-black-tint: rgba(20, 20, 19, 0.1);
+  --ru-orange: var(--tc-phx);
+  --ru-orange-tint: rgba(208, 90, 46, 0.12);
+  /* 조커 — 색이 없다. 보라로 "무색 만능"을 표시한다 */
+  --ru-joker: var(--st-clan-4);
+  --ru-joker-tint: rgba(124, 92, 173, 0.14);
+
+  /* 타일 몸통 — 상아빛 타일 결 (공용 카드 변수 재사용) */
+  --ru-tile-face: var(--card-face);
+  --ru-tile-edge: var(--card-face-edge);
+  --ru-tile-shadow: rgba(20, 20, 19, 0.14);
+
+  /* 세트 상태 — 유효 / 유효하지 않음 / 이번 차례에 손댄 세트 */
+  --ru-valid: var(--color-success);
+  --ru-valid-tint: rgba(93, 184, 114, 0.1);
+  --ru-invalid: var(--color-error);
+  --ru-invalid-tint: rgba(198, 69, 69, 0.1);
+  --ru-touched: var(--color-accent-teal);
+  --ru-touched-tint: rgba(93, 184, 166, 0.14);
+
+  /* 선택 / 이번 차례에 내가 새로 낸 타일 */
+  --ru-select: var(--color-primary);
+  --ru-select-tint: var(--color-primary-tint);
+  --ru-new: var(--color-accent-teal);
+  --ru-new-tint: rgba(93, 184, 166, 0.16);
+
+  /* 등록(30점) 진행 표시 */
+  --ru-meld: var(--color-warning);
+  --ru-meld-tint: rgba(212, 160, 23, 0.16);
+}
+
+/* 색 슬롯 — .ru-c-red 류를 붙인 요소는 --ru-tone / --ru-tone-tint 로
+   자기 색을 받는다. 화면 어디서나(테이블·받침대·범례) 같은 규칙. */
+.ru-c-red {
+  --ru-tone: var(--ru-red);
+  --ru-tone-tint: var(--ru-red-tint);
+}
+.ru-c-blue {
+  --ru-tone: var(--ru-blue);
+  --ru-tone-tint: var(--ru-blue-tint);
+}
+.ru-c-black {
+  --ru-tone: var(--ru-black);
+  --ru-tone-tint: var(--ru-black-tint);
+}
+.ru-c-orange {
+  --ru-tone: var(--ru-orange);
+  --ru-tone-tint: var(--ru-orange-tint);
+}
+.ru-c-joker {
+  --ru-tone: var(--ru-joker);
+  --ru-tone-tint: var(--ru-joker-tint);
+}
+/* 서버가 모르는 색을 보내와도 무채색으로 안전하게 떨어진다 */
+.ru-c-unknown {
+  --ru-tone: var(--color-muted);
+  --ru-tone-tint: rgba(108, 106, 100, 0.1);
+}
