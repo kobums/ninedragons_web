@@ -40,6 +40,8 @@ import { ReformationApp } from './components/reformation/ReformationApp';
 import { SaboteurApp } from './components/saboteur/SaboteurApp';
 import { SplendorApp } from './components/splendor/SplendorApp';
 import { AzulApp } from './components/azul/AzulApp';
+import { CitadelsApp } from './components/citadels/CitadelsApp';
+import { StartupsApp } from './components/startups/StartupsApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -274,6 +276,14 @@ function App() {
 
   if (selectedGame === 'azul') {
     return <AzulApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'citadels') {
+    return <CitadelsApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'startups') {
+    return <StartupsApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
