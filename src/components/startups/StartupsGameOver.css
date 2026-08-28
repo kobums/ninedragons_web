@@ -1,0 +1,270 @@
+/* 스타트업스 게임 종료 — 크림 종이 결, 정산 내역 표
+   (tokens.css 토큰 + su-scope 변수만 사용) */
+
+.su-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.su-game-over-container {
+  width: 100%;
+  max-width: 500px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.su-game-over,
+.su-game-over * {
+  overflow-wrap: anywhere;
+}
+
+/* 보드의 버튼 규칙이 세로 스택에서 늘어나지 않게 되돌린다 */
+.su-game-over .su-primary-button {
+  flex: none;
+  width: 100%;
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.su-game-over .su-primary-button:active {
+  background: var(--color-primary-active);
+}
+
+.su-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.su-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.su-over-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.su-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.su-over-verdict.win {
+  color: var(--color-primary);
+}
+
+.su-over-verdict.lose {
+  color: var(--color-muted);
+}
+
+/* ---------- 정산 내역 표 ---------- */
+
+.su-over-table-wrap {
+  overflow-x: auto;
+}
+
+.su-over-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  color: var(--color-ink);
+}
+
+.su-over-table th {
+  color: var(--color-muted);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-hairline);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.su-over-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  vertical-align: top;
+}
+
+.su-over-table th.left,
+.su-over-table td.left {
+  text-align: left;
+}
+
+.su-over-table tr.winner td {
+  background: var(--su-crown-tint);
+  font-weight: 700;
+}
+
+.su-over-place {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.su-over-money {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.su-over-name {
+  display: block;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 서버가 준 정산 문장 — "대주주 오션 ×2 = +10원" 같은 것 */
+.su-over-detail {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+/* ---------- 회사별 대주주 ---------- */
+
+.su-over-companies {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.su-over-section-title {
+  font-size: var(--text-caption);
+  font-weight: 800;
+  color: var(--color-ink);
+}
+
+.su-over-company {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px;
+  border: 1px solid var(--color-hairline);
+  border-left: 5px solid var(--su-tone, var(--color-hairline));
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  min-width: 0;
+}
+
+.su-over-company-major {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--color-ink);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.su-over-company-value {
+  font-size: 10px;
+  color: var(--color-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 최종 보유 ---------- */
+
+.su-over-holdings {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.su-over-holding-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  min-width: 0;
+}
+
+.su-over-holding-name {
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.su-over-holding-chips {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.su-over-holding-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--su-tone, var(--color-hairline));
+  background: var(--su-tone-tint, var(--color-canvas));
+  font-size: 10px;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.su-over-holding-chip b {
+  font-variant-numeric: tabular-nums;
+}
+
+.su-over-holding-empty {
+  font-size: 10px;
+  color: var(--color-muted-soft);
+}
+
+@media (max-width: 360px) {
+  .su-game-over {
+    padding: var(--space-sm);
+  }
+
+  .su-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .su-over-holding-name {
+    max-width: 70px;
+  }
+}

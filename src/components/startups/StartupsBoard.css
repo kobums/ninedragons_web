@@ -1,0 +1,953 @@
+/* 스타트업스 보드 — 크림 캔버스 위 투자 라운드 결.
+   팔레트는 StartupsApp.css 의 su-scope 변수 + tokens.css 토큰만 사용한다.
+   280px 까지 가로 오버플로 금지, 터치 타깃 44px 이상.
+
+   두 축이 화면을 지배한다:
+     1) 회사 현황판 — 가치·각자 앞면 보유·대주주를 한 판에.
+     2) 안티 — 쌓일수록 강조가 세진다 (ante-lv-0 → ante-lv-3). */
+
+/* 280px 에서도 가로 스크롤이 생기지 않게 — 긴 한글 문장은 어디서든 접힌다 */
+.su-board,
+.su-board * {
+  overflow-wrap: anywhere;
+}
+
+.su-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-md) 150px;
+  max-width: 760px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.su-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.su-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 상태 띠 ---------- */
+
+.su-status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.su-status-bar.play {
+  border-color: var(--color-primary);
+}
+
+.su-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.su-status-chip {
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.su-timer {
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-body);
+}
+
+.su-timer.urgent {
+  background: var(--su-block-tint);
+  border-color: var(--su-block);
+  color: var(--su-block);
+  font-weight: 700;
+}
+
+.su-status-title {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  word-break: keep-all;
+}
+
+.su-status-sub,
+.su-last-action {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.su-last-action {
+  color: var(--color-muted-soft);
+}
+
+.su-spectator-note {
+  background: var(--color-surface-soft);
+  border: 1px dashed var(--color-hairline);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 안티 (판돈) ----------
+   이 게임의 긴장은 전부 여기 쌓인다. 0 이면 조용하고,
+   쌓일수록 테두리·배경·굵기가 세진다. */
+
+.su-ante {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-soft);
+  color: var(--color-muted);
+  font-size: 11px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.su-ante-icon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.su-ante.ante-lv-0 {
+  border-style: dashed;
+  border-color: var(--su-ante-0);
+  color: var(--color-muted-soft);
+}
+
+.su-ante.ante-lv-1 {
+  border-color: var(--su-ante-1);
+  background: var(--su-ante-1-tint);
+  color: var(--color-body-strong);
+  font-weight: 700;
+}
+
+.su-ante.ante-lv-2 {
+  border-color: var(--su-ante-2);
+  border-width: 2px;
+  background: var(--su-ante-2-tint);
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-caption);
+}
+
+.su-ante.ante-lv-3 {
+  border-color: var(--su-ante-3);
+  border-width: 2px;
+  background: var(--su-ante-3-tint);
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.su-ante.ante-lv-3 .su-ante-icon {
+  font-size: var(--text-body-sm);
+}
+
+/* 상단 판돈 칩도 같은 단계 규칙을 쓴다 */
+.su-status-chip.ante.ante-lv-1 {
+  border-color: var(--su-ante-1);
+  background: var(--su-ante-1-tint);
+  color: var(--color-ink);
+}
+.su-status-chip.ante.ante-lv-2 {
+  border-color: var(--su-ante-2);
+  background: var(--su-ante-2-tint);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.su-status-chip.ante.ante-lv-3 {
+  border-color: var(--su-ante-3);
+  background: var(--su-ante-3-tint);
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+/* ---------- 돈 순위 띠 ---------- */
+
+.su-score-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.su-score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 5px 10px;
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  min-width: 0;
+}
+
+.su-score-pill.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.su-score-pill.me {
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.su-score-pill.top .su-score-value {
+  color: var(--color-ink);
+  background: var(--su-money-tint);
+  border-radius: var(--radius-pill);
+  padding: 0 6px;
+}
+
+.su-score-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.su-score-value {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+/* ---------- 섹션 공통 ---------- */
+
+.su-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm);
+}
+
+.su-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.su-section-title {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+}
+
+.su-section-note {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.su-row-empty {
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+  padding: var(--space-xs);
+}
+
+/* ---------- 회사 배지 (이모지 + 이름 + 가치) ----------
+   색은 보조 신호일 뿐이라 이모지와 이름을 늘 함께 적는다. */
+
+.su-co-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.su-co-emoji {
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.su-co-name {
+  color: var(--color-ink);
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.su-co-value {
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--su-tone, var(--color-hairline));
+  background: var(--su-tone-tint, var(--color-surface-soft));
+  color: var(--color-ink);
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.su-co-badge.size-sm .su-co-emoji {
+  font-size: 13px;
+}
+.su-co-badge.size-sm .su-co-name {
+  font-size: 11px;
+}
+
+.su-co-badge.size-md .su-co-emoji {
+  font-size: 17px;
+}
+.su-co-badge.size-md .su-co-name {
+  font-size: var(--text-caption);
+}
+
+.su-co-badge.size-lg .su-co-emoji {
+  font-size: 22px;
+}
+.su-co-badge.size-lg .su-co-name {
+  font-size: var(--text-body-md);
+}
+
+/* ---------- 덱 + 시장 ---------- */
+
+.su-take-area {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: stretch;
+}
+
+.su-deck {
+  flex: 0 0 168px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 10px;
+  min-height: 44px;
+  border: 2px dashed var(--color-muted-soft);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-cream-strong);
+  color: var(--color-body);
+  text-align: left;
+  cursor: default;
+  box-sizing: border-box;
+}
+
+.su-deck.selectable {
+  cursor: pointer;
+}
+
+.su-deck.selected {
+  border-style: solid;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.su-deck:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 덱 위에 안티가 쌓이면 더미 자체가 뜨거워진다 */
+.su-deck.ante-lv-1 {
+  border-color: var(--su-ante-1);
+}
+.su-deck.ante-lv-2 {
+  border-style: solid;
+  border-color: var(--su-ante-2);
+  background: var(--su-ante-2-tint);
+}
+.su-deck.ante-lv-3 {
+  border-style: solid;
+  border-color: var(--su-ante-3);
+  background: var(--su-ante-3-tint);
+}
+
+.su-deck-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.su-deck-face {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.su-deck-count {
+  font-weight: 800;
+  font-size: var(--text-body-md);
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.su-deck-action {
+  font-size: 11px;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+/* 뽑기 제약 사유 — "왜 못 가져오는지"를 뽑기 전에 알린다 */
+.su-deck-reason {
+  font-size: 10px;
+  line-height: 1.4;
+  word-break: keep-all;
+  border-top: 1px solid var(--color-hairline);
+  padding-top: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.su-deck-reason.ok {
+  color: var(--color-muted);
+}
+
+.su-deck-reason.warn {
+  color: var(--color-warning);
+  font-weight: 700;
+}
+
+.su-deck-reason.block {
+  color: var(--su-block);
+  font-weight: 800;
+}
+
+.su-market {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+  align-content: start;
+}
+
+.su-market-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 9px;
+  min-height: 88px;
+  border: 1px solid var(--su-card-edge);
+  border-left: 5px solid var(--su-tone, var(--color-hairline));
+  border-radius: var(--radius-md);
+  background: var(--su-card-face);
+  box-shadow: 0 1px 2px var(--su-card-shadow);
+  text-align: left;
+  cursor: default;
+  box-sizing: border-box;
+}
+
+.su-market-card.selectable {
+  cursor: pointer;
+}
+
+.su-market-card.selectable:active {
+  background: var(--su-tone-tint, var(--color-surface-soft));
+}
+
+.su-market-card.selected {
+  border-color: var(--color-primary);
+  border-left-color: var(--su-tone, var(--color-primary));
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+/* 안티를 잔뜩 인 카드는 멀리서도 보인다 */
+.su-market-card.ante-lv-2 {
+  background: var(--su-ante-2-tint);
+}
+.su-market-card.ante-lv-3 {
+  background: var(--su-ante-3-tint);
+  border-color: var(--su-ante-3);
+}
+
+.su-market-hint {
+  font-size: 10px;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+/* ---------- ★ 회사 현황판 ★ ----------
+   이 게임 판단의 전부. 회사마다 가치·공개 장수·대주주·각자 앞면 보유를
+   한 덩어리로 묶는다. */
+
+.su-standings {
+  border-color: var(--color-primary);
+  border-width: 2px;
+}
+
+.su-standings-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-xs);
+}
+
+.su-standing {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid var(--color-hairline);
+  border-left: 6px solid var(--su-tone, var(--color-hairline));
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.su-standing.mine {
+  background: var(--su-tone-tint, var(--color-surface-soft));
+  border-color: var(--su-crown);
+}
+
+.su-standing-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.su-standing-value {
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--su-money);
+  background: var(--su-money-tint);
+  color: var(--color-ink);
+  padding: 2px 9px;
+  font-size: var(--text-caption);
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.su-standing-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.su-standing-hand {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.su-standing-major {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  word-break: keep-all;
+}
+
+.su-standing-major.none {
+  background: var(--color-surface-soft);
+  color: var(--color-muted);
+}
+
+.su-standing-major.other {
+  background: var(--su-crown-tint);
+  color: var(--color-ink);
+}
+
+.su-standing-major.me {
+  background: var(--su-crown-tint);
+  border: 1px solid var(--su-crown);
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+/* 각자 앞면 보유 — 이름 + 장수 + 최댓값 대비 막대 */
+.su-holders {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.su-holder {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-soft);
+  font-size: 11px;
+  color: var(--color-body);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.su-holder-name {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.su-holder-count {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  flex-shrink: 0;
+}
+
+/* 막대는 배경 레이어 — 장수 비교가 눈으로 바로 되게 */
+.su-holder-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--su-tone-tint, var(--color-primary-tint));
+  border-right: 2px solid var(--su-tone, var(--color-hairline));
+  z-index: 0;
+  pointer-events: none;
+}
+
+.su-holder.zero {
+  color: var(--color-muted-soft);
+}
+
+.su-holder.zero .su-holder-count {
+  color: var(--color-muted-soft);
+  font-weight: 400;
+}
+
+.su-holder.major {
+  background: var(--su-crown-tint);
+}
+
+.su-holder.major .su-holder-name {
+  font-weight: 800;
+  color: var(--color-ink);
+}
+
+.su-holder.me .su-holder-name {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.su-standings-legend {
+  margin: 0;
+  font-size: 10px;
+  color: var(--color-muted-soft);
+  word-break: keep-all;
+}
+
+/* ---------- 내 손패 ---------- */
+
+.su-my-hand {
+  border-color: var(--color-primary);
+}
+
+.su-hand-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 6px;
+}
+
+.su-hand-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 10px;
+  min-height: 66px;
+  border: 1px solid var(--su-card-edge);
+  border-left: 5px solid var(--su-tone, var(--color-hairline));
+  border-radius: var(--radius-md);
+  background: var(--su-card-face);
+  box-shadow: 0 1px 2px var(--su-card-shadow);
+  text-align: left;
+  cursor: default;
+  box-sizing: border-box;
+}
+
+.su-hand-card.selectable {
+  cursor: pointer;
+}
+
+.su-hand-card.selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.su-hand-note {
+  font-size: 10px;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+/* ---------- 참가자 요약 ---------- */
+
+.su-players {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 6px;
+}
+
+.su-player {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.su-player.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.su-player.me {
+  border-color: var(--color-primary);
+}
+
+.su-player-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.su-player-name {
+  font-weight: 700;
+  font-size: var(--text-caption);
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.su-player-badges {
+  display: inline-flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.su-badge {
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  padding: 1px 6px;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  white-space: nowrap;
+}
+
+.su-badge.money {
+  font-weight: 800;
+  color: var(--color-ink);
+  border-color: var(--su-money);
+  background: var(--su-money-tint);
+  font-variant-numeric: tabular-nums;
+}
+
+.su-badge.off {
+  border-color: var(--su-block);
+  color: var(--su-block);
+}
+
+.su-player-faceup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.su-face-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--su-tone, var(--color-hairline));
+  background: var(--su-tone-tint, var(--color-canvas));
+  font-size: 10px;
+  color: var(--color-ink);
+}
+
+.su-face-name {
+  white-space: nowrap;
+}
+
+.su-face-count {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.su-face-empty,
+.su-player-foot {
+  font-size: 10px;
+  color: var(--color-muted);
+}
+
+.su-player-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---------- 하단 행동 바 ---------- */
+
+.su-action-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: min(94vw, 680px);
+  z-index: 250;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-modal);
+  box-sizing: border-box;
+}
+
+.su-action-text {
+  font-size: var(--text-caption);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.su-action-buttons {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.su-board .su-primary-button {
+  min-height: 44px;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.su-board .su-action-buttons .su-primary-button,
+.su-board .su-action-buttons .su-ghost-button {
+  flex: 1;
+}
+
+.su-board .su-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.su-board .su-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.su-board .su-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+/* ---------- 좁은 화면 (280px 대응) ---------- */
+
+@media (max-width: 460px) {
+  .su-board {
+    padding: var(--space-xs) var(--space-xs) 160px;
+  }
+
+  .su-take-area {
+    flex-direction: column;
+  }
+
+  .su-deck {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .su-market,
+  .su-hand-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .su-standings-list,
+  .su-players {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .su-score-name {
+    max-width: 84px;
+  }
+}
+
+@media (max-width: 330px) {
+  .su-market,
+  .su-hand-row {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
