@@ -1,0 +1,264 @@
+/* 스플렌더 대기실 — 크림 종이 결 (tokens.css 토큰 + sl-scope 변수만 사용) */
+
+.sl-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.sl-waiting-container {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.sl-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-ink);
+}
+
+.sl-subtitle {
+  margin: 0 0 var(--space-md);
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+/* 보석 6종 범례 — 색만이 아니라 모양으로도 구분된다는 것을 먼저 보여준다 */
+.sl-gem-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 6px;
+  margin-bottom: var(--space-lg);
+}
+
+.sl-gem-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.sl-gem-legend-name {
+  font-size: 11px;
+  color: var(--color-ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sl-gem-legend-shape {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--color-muted-soft);
+  white-space: nowrap;
+}
+
+.sl-join-form,
+.sl-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sl-form-group {
+  text-align: left;
+}
+
+.sl-form-group label {
+  display: block;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.sl-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: var(--text-body-md);
+}
+
+/* 보드의 버튼 규칙(flex: 1)이 세로 스택에서 늘어나지 않게 여기서 되돌린다 */
+.sl-waiting .sl-primary-button,
+.sl-waiting .sl-ghost-button {
+  flex: none;
+  width: 100%;
+}
+
+.sl-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sl-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.sl-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.sl-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.sl-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sl-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sl-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.sl-seat-item.empty {
+  color: var(--color-muted-soft);
+  font-weight: 400;
+  border: 1px dashed var(--color-hairline);
+  background: transparent;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: var(--text-caption);
+}
+
+.sl-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sl-crown {
+  font-size: var(--text-body-sm);
+}
+
+.sl-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.sl-dot.on {
+  background: var(--color-success);
+}
+
+.sl-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.sl-waiting-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+}
+
+.sl-rule-hint {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  line-height: 1.6;
+  text-align: left;
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .sl-waiting {
+    padding: var(--space-sm);
+  }
+
+  .sl-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .sl-gem-legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 입장·퇴장 토스트 (대기실 상단) */
+.sl-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.sl-waiting-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}

@@ -1,0 +1,60 @@
+/* 스플렌더 셸 — 크림 캔버스 위 르네상스 보석상 결.
+   tokens.css 에는 스플렌더 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 기존 토큰과
+   rgba 변주만 사용 — 컴포넌트에 새 hex 를 흘리지 않는 규칙 유지.
+
+   보석 5색 + 황금은 "색으로만" 구분되지 않는다. 각 보석은 SVG 모양이
+   다르고(마름모·원·팔각·육각·삼각·별) 한글 이름을 늘 함께 적는다. */
+
+.sl-scope {
+  /* 보석 공통 외곽선 — 잉크 반투명이라 어떤 보석 위에도 얹힌다 */
+  --sl-gem-line: rgba(20, 20, 19, 0.45);
+
+  /* 다이아몬드 — 크림 캔버스 위에서 '무색'으로 읽히게 밝은 상아 + 진한 외곽선 */
+  --sl-diamond: var(--card-face);
+  --sl-diamond-line: var(--color-muted);
+  --sl-diamond-ink: var(--color-body);
+  --sl-diamond-tint: rgba(140, 137, 128, 0.14);
+
+  /* 사파이어 */
+  --sl-sapphire: var(--st-clan-1);
+  --sl-sapphire-line: var(--sl-gem-line);
+  --sl-sapphire-ink: var(--color-on-primary);
+  --sl-sapphire-tint: rgba(74, 109, 156, 0.14);
+
+  /* 에메랄드 */
+  --sl-emerald: var(--st-clan-2);
+  --sl-emerald-line: var(--sl-gem-line);
+  --sl-emerald-ink: var(--color-on-primary);
+  --sl-emerald-tint: rgba(91, 158, 111, 0.14);
+
+  /* 루비 */
+  --sl-ruby: var(--st-clan-0);
+  --sl-ruby-line: var(--sl-gem-line);
+  --sl-ruby-ink: var(--color-on-primary);
+  --sl-ruby-tint: rgba(198, 69, 69, 0.14);
+
+  /* 줄마노 (오닉스 아님) */
+  --sl-onyx: var(--color-ink);
+  --sl-onyx-line: var(--sl-gem-line);
+  --sl-onyx-ink: var(--color-on-dark);
+  --sl-onyx-tint: rgba(20, 20, 19, 0.12);
+
+  /* 황금 — 만능 토큰 */
+  --sl-gold: var(--st-clan-3);
+  --sl-gold-line: var(--sl-gem-line);
+  --sl-gold-ink: var(--color-ink);
+  --sl-gold-tint: rgba(207, 156, 46, 0.18);
+
+  /* 카드 몸통 — 상아빛 종이 결 (공용 카드 변수 재사용) */
+  --sl-card-face: var(--card-face);
+  --sl-card-edge: var(--card-face-edge);
+  --sl-card-shadow: rgba(20, 20, 19, 0.12);
+
+  /* 구매 가능 강조 / 부족 경고 / 귀족 */
+  --sl-buyable: var(--color-accent-teal);
+  --sl-buyable-tint: rgba(93, 184, 166, 0.16);
+  --sl-lack: var(--color-error);
+  --sl-lack-tint: rgba(198, 69, 69, 0.1);
+  --sl-noble-tint: rgba(207, 156, 46, 0.14);
+}

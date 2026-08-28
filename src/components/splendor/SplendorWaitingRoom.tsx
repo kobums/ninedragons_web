@@ -1,0 +1,204 @@
+import { useState } from 'react';
+import type { SLGameState } from '../../types/splendor';
+import {
+  SL_BOT_FILL_TARGET,
+  SL_MAX_PLAYERS,
+  SL_MIN_PLAYERS,
+  SL_TARGET_POINTS,
+  SL_TOKENS,
+  SL_TOKEN_LABEL,
+  SL_TOKEN_SHAPE,
+} from '../../types/splendor';
+import type { SLToast } from '../../hooks/useSplendorGameState';
+import {
+  RoomCodeBadge,
+  RoomJoinControls,
+  useRoomJoin,
+} from '../RoomCodeControls';
+import { loadNickname, saveNickname } from '../../utils/nickname';
+import { SplendorGemIcon } from './SplendorBoard';
+import './SplendorWaitingRoom.css';
+
+interface SplendorWaitingRoomProps {
+  // 입장 전이면 null (hasJoined 가 false 일 수도 있다)
+  game: SLGameState | null;
+  hasJoined: boolean;
+  toasts?: SLToast[];
+  onJoin: (name: string, room: string) => void;
+  onStart: () => void;
+  onFillBots: () => void;
+  onBack: () => void;
+}
+
+export function SplendorWaitingRoom({
+  game,
+  hasJoined,
+  toasts = [],
+  onJoin,
+  onStart,
+  onFillBots,
+  onBack,
+}: SplendorWaitingRoomProps) {
+  const [name, setName] = useState(loadNickname);
+  // 연타로 join 이 두 번 나가는 것을 막는다
+  const [joining, setJoining] = useState(false);
+  const roomJoin = useRoomJoin();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (joining || !name.trim() || !roomJoin.roomReady) return;
+    setJoining(true);
+    saveNickname(name);
+    onJoin(name.trim(), roomJoin.room);
+    // 응답이 늦거나 실패해도 다시 시도할 수 있게 잠깐만 잠근다
+    setTimeout(() => setJoining(false), 2000);
+  };
+
+  // 좌석 번호 → 참가자. 이름 없는 항목은 빈 좌석으로 취급한다.
+  const seatOf = (seat: number) => {
+    const p = (game?.players ?? []).find((pl) => pl.seat === seat);
+    return p && p.name ? p : null;
+  };
+  const filled = game
+    ? Array.from({ length: SL_MAX_PLAYERS }).filter((_, i) => seatOf(i)).length
+    : 0;
+  const hostSeat = game?.hostSeat ?? 0;
+  const isHost = game !== null && game.yourSeat === hostSeat;
+  const needMore = Math.max(0, SL_MIN_PLAYERS - filled);
+
+  return (
+    <div className="sl-waiting">
+      {toasts.length > 0 && (
+        <div className="sl-waiting-toasts">
+          {toasts.map((t) => (
+            <div key={t.id} className="sl-waiting-toast">
+              {t.event.message ??
+                (t.event.kind === 'left'
+                  ? `${t.event.name ?? '?'}님이 나갔습니다`
+                  : t.event.kind === 'joined'
+                    ? `${t.event.name ?? '?'}님이 입장했습니다`
+                    : '')}
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="sl-waiting-container">
+        <h1 className="sl-title">스플렌더</h1>
+        <p className="sl-subtitle">
+          💎 개발 카드를 사 모아 명성 점수 {SL_TARGET_POINTS}점 · 2~4인
+        </p>
+
+        {/* 보석 6종 — 색만이 아니라 모양으로도 구분된다 */}
+        <div className="sl-gem-legend">
+          {SL_TOKENS.map((t) => (
+            <span key={t} className="sl-gem-legend-item">
+              <SplendorGemIcon gem={t} size={22} />
+              <span className="sl-gem-legend-name">{SL_TOKEN_LABEL[t]}</span>
+              <span className="sl-gem-legend-shape">
+                {SL_TOKEN_SHAPE[t]}
+              </span>
+            </span>
+          ))}
+        </div>
+
+        {!hasJoined ? (
+          <form onSubmit={handleSubmit} className="sl-join-form">
+            <div className="sl-form-group">
+              <label htmlFor="slPlayerName">플레이어 이름</label>
+              <input
+                type="text"
+                id="slPlayerName"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="이름을 입력하세요"
+                maxLength={20}
+                required
+              />
+            </div>
+            <RoomJoinControls join={roomJoin} idPrefix="sl" />
+            <button
+              type="submit"
+              className="sl-primary-button"
+              disabled={joining || !roomJoin.roomReady}
+            >
+              {joining ? '입장 중...' : '입장하기'}
+            </button>
+            <button type="button" className="sl-ghost-button" onClick={onBack}>
+              게임 선택으로
+            </button>
+          </form>
+        ) : !game ? (
+          <p className="sl-waiting-hint">입장 중...</p>
+        ) : (
+          <div className="sl-seat-list-wrap">
+            <RoomCodeBadge code={game.roomCode} />
+            <ul className="sl-seat-list">
+              {Array.from({ length: SL_MAX_PLAYERS }).map((_, seat) => {
+                const p = seatOf(seat);
+                return p ? (
+                  <li key={seat} className="sl-seat-item">
+                    <span className="sl-seat-item-name">
+                      {seat === hostSeat && <span className="sl-crown">👑</span>}
+                      {p.name}
+                      {p.bot && ' 🤖'}
+                      {seat === game.yourSeat && ' (나)'}
+                    </span>
+                    <span className={`sl-dot ${p.connected ? 'on' : 'off'}`} />
+                  </li>
+                ) : (
+                  <li key={seat} className="sl-seat-item empty">
+                    {seat + 1}번 좌석 — 대기 중...
+                  </li>
+                );
+              })}
+            </ul>
+
+            <p className="sl-waiting-hint">
+              {filled}/{SL_MAX_PLAYERS}명
+              {needMore > 0
+                ? ` · 시작까지 ${needMore}명 더 필요합니다`
+                : ' · 호스트가 시작할 수 있습니다'}
+            </p>
+
+            <p className="sl-rule-hint">
+              차례마다 <b>하나만</b> 합니다 — 서로 다른 색 토큰 3개 가져오기 ·
+              같은 색 토큰 2개 가져오기(공동 창고에 4개 이상일 때) · 개발 카드
+              예약(+황금 1) · 개발 카드 구매. 보유 토큰은 10개까지이고, 구매한
+              개발 카드는 그 색 보너스가 되어 이후 비용을 깎습니다. 귀족 타일은
+              요구 보너스를 모두 채우면 차례 끝에 자동으로 옵니다.
+            </p>
+
+            {isHost ? (
+              <div className="sl-host-actions">
+                <button
+                  type="button"
+                  className="sl-primary-button"
+                  onClick={onStart}
+                  disabled={filled < SL_MIN_PLAYERS}
+                >
+                  {filled < SL_MIN_PLAYERS
+                    ? `${SL_MIN_PLAYERS}명 이상 모여야 합니다`
+                    : '게임 시작'}
+                </button>
+                {filled < SL_BOT_FILL_TARGET && (
+                  <button
+                    type="button"
+                    className="sl-ghost-button"
+                    onClick={onFillBots}
+                  >
+                    🤖 봇으로 채우고 시작 ({SL_BOT_FILL_TARGET}인)
+                  </button>
+                )}
+              </div>
+            ) : (
+              <p className="sl-waiting-hint">
+                👑 {seatOf(hostSeat)?.name ?? '호스트'}님이 시작 버튼을 누르면
+                게임이 시작됩니다
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
