@@ -42,6 +42,8 @@ import { SplendorApp } from './components/splendor/SplendorApp';
 import { AzulApp } from './components/azul/AzulApp';
 import { CitadelsApp } from './components/citadels/CitadelsApp';
 import { StartupsApp } from './components/startups/StartupsApp';
+import { BangApp } from './components/bang/BangApp';
+import { RicochetApp } from './components/ricochet/RicochetApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -284,6 +286,14 @@ function App() {
 
   if (selectedGame === 'startups') {
     return <StartupsApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'bang') {
+    return <BangApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'ricochet') {
+    return <RicochetApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
