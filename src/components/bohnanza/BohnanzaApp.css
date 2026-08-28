@@ -1,0 +1,150 @@
+/* 보난자 셸 — 크림 캔버스 위 밭고랑 결.
+   tokens.css 에는 보난자 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 기존 토큰과
+   rgba 변주만 사용 — 컴포넌트에 새 hex 를 흘리지 않는 규칙 유지.
+
+   콩 8종은 "색으로만" 구분되지 않는다. 어디서든 이모지 + 한글 이름 +
+   콩미터를 함께 적고, 색은 보조 신호로만 쓴다.
+
+   | 콩       | 와이어    | 장수 | 이모지 | tone | 색       |
+   |----------|-----------|------|--------|------|----------|
+   | 푸르대콩 | blue      | 20   | 🫐     | 0    | 파랑     |
+   | 칠리콩   | chili     | 18   | 🌶️     | 1    | 빨강     |
+   | 메주콩   | stink     | 16   | 🧆     | 2    | 흙갈색   |
+   | 완두콩   | green     | 14   | 🫛     | 3    | 초록     |
+   | 대두     | soy       | 12   | 🫘     | 4    | 금       |
+   | 동부     | blackeyed | 10   | 🌰     | 5    | 보라     |
+   | 팥       | red       | 8    | 🥮     | 6    | 적갈     |
+   | 강낭콩   | garden    | 6    | 🥜     | 7    | 청록     | */
+
+.bz-scope {
+  /* 콩 8색 — 클랜 색 + 기존 토큰 재사용 (저채도, CTA 와 싸우지 않는다) */
+  --bz-tone-0: var(--st-clan-1);
+  --bz-tone-0-tint: rgba(74, 109, 156, 0.12);
+  --bz-tone-1: var(--st-clan-0);
+  --bz-tone-1-tint: rgba(198, 69, 69, 0.12);
+  --bz-tone-2: var(--color-muted);
+  --bz-tone-2-tint: rgba(108, 106, 100, 0.14);
+  --bz-tone-3: var(--st-clan-2);
+  --bz-tone-3-tint: rgba(91, 158, 111, 0.14);
+  --bz-tone-4: var(--st-clan-3);
+  --bz-tone-4-tint: rgba(207, 156, 46, 0.16);
+  --bz-tone-5: var(--st-clan-4);
+  --bz-tone-5-tint: rgba(124, 92, 173, 0.12);
+  --bz-tone-6: var(--color-primary-active);
+  --bz-tone-6-tint: rgba(169, 88, 62, 0.12);
+  --bz-tone-7: var(--st-clan-5);
+  --bz-tone-7-tint: rgba(79, 163, 154, 0.14);
+
+  /* 카드 몸통 — 상아빛 종이 결 (공용 카드 변수 재사용) */
+  --bz-card-face: var(--card-face);
+  --bz-card-edge: var(--card-face-edge);
+  --bz-card-shadow: rgba(20, 20, 19, 0.12);
+
+  /* 금화 — 콩미터가 가리키는 목적지 */
+  --bz-coin: var(--st-clan-3);
+  --bz-coin-tint: rgba(207, 156, 46, 0.18);
+
+  /* 밭 흙바닥 / 빈 밭 */
+  --bz-soil: var(--color-surface-cream-strong);
+  --bz-soil-line: var(--color-hairline);
+
+  /* 반드시 심어야 하는 맨 앞 카드 — 화면에서 가장 뜨거운 신호 */
+  --bz-front: var(--color-primary);
+  --bz-front-tint: var(--color-primary-tint);
+  --bz-front-ring: var(--color-primary-ring);
+
+  /* 거래 */
+  --bz-trade: var(--color-accent-teal);
+  --bz-trade-tint: rgba(93, 184, 166, 0.16);
+  --bz-give: var(--color-accent-amber);
+  --bz-give-tint: rgba(232, 165, 90, 0.16);
+
+  /* 경고 · 막힘 */
+  --bz-block: var(--color-error);
+  --bz-block-tint: rgba(198, 69, 69, 0.1);
+  --bz-warn: var(--color-warning);
+  --bz-warn-tint: rgba(212, 160, 23, 0.16);
+  --bz-ok: var(--color-success);
+  --bz-ok-tint: rgba(93, 184, 114, 0.14);
+}
+
+/* 콩 색 슬롯 — .bz-tone-N 을 붙인 요소는 --bz-tone / --bz-tone-tint 로
+   자기 색을 받는다. 화면 어디서나(범례·손패·밭·거래) 같은 규칙. */
+.bz-tone-0 {
+  --bz-tone: var(--bz-tone-0);
+  --bz-tone-tint: var(--bz-tone-0-tint);
+}
+.bz-tone-1 {
+  --bz-tone: var(--bz-tone-1);
+  --bz-tone-tint: var(--bz-tone-1-tint);
+}
+.bz-tone-2 {
+  --bz-tone: var(--bz-tone-2);
+  --bz-tone-tint: var(--bz-tone-2-tint);
+}
+.bz-tone-3 {
+  --bz-tone: var(--bz-tone-3);
+  --bz-tone-tint: var(--bz-tone-3-tint);
+}
+.bz-tone-4 {
+  --bz-tone: var(--bz-tone-4);
+  --bz-tone-tint: var(--bz-tone-4-tint);
+}
+.bz-tone-5 {
+  --bz-tone: var(--bz-tone-5);
+  --bz-tone-tint: var(--bz-tone-5-tint);
+}
+.bz-tone-6 {
+  --bz-tone: var(--bz-tone-6);
+  --bz-tone-tint: var(--bz-tone-6-tint);
+}
+.bz-tone-7 {
+  --bz-tone: var(--bz-tone-7);
+  --bz-tone-tint: var(--bz-tone-7-tint);
+}
+
+/* 공용 버튼 — 스코프 안에서만 쓰는 최소 세트 (터치 목표 44px 이상) */
+.bz-scope .bz-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bz-scope .bz-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.bz-scope .bz-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.bz-scope .bz-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bz-scope .bz-ghost-button:not(:disabled):active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.bz-scope .bz-ghost-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

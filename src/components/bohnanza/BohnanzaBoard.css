@@ -1,0 +1,1299 @@
+/* 보난자 보드 — 크림 캔버스 위 밭고랑 결.
+   tokens.css 토큰 + bz-scope 변수만 사용한다 (새 hex 금지).
+
+   레이아웃 원칙
+   - 280px 화면까지 가로 스크롤 없이 동작한다. 넘칠 수 있는 줄(손패·공개
+     카드·밭)은 그 줄 안에서만 가로 스크롤한다.
+   - 모든 터치 목표는 44px 이상.
+   - 맨 앞 손패 카드가 화면에서 가장 강한 신호다 (반드시 심어야 하므로). */
+
+.bz-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-sm) 120px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-sizing: border-box;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ---------- 토스트 ---------- */
+.bz-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.bz-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+  word-break: keep-all;
+}
+
+/* ---------- 상단 상태 ---------- */
+.bz-status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+}
+
+.bz-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.bz-status-chip {
+  padding: 4px 9px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  font-size: 11px;
+  color: var(--color-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bz-status-chip.cycle.final {
+  border-color: var(--bz-warn);
+  background: var(--bz-warn-tint);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.bz-timer {
+  margin-left: auto;
+  padding: 4px 9px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-soft);
+  font-size: 11px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bz-timer.urgent {
+  background: var(--bz-block-tint);
+  color: var(--bz-block);
+  font-weight: 700;
+}
+
+/* 차례 4단계 스텝퍼 — 지금 어디인지 늘 보인다 */
+.bz-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 4px;
+}
+
+.bz-step {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-soft);
+  border: 1px solid transparent;
+  font-size: 10px;
+  color: var(--color-muted-soft);
+  overflow: hidden;
+}
+
+.bz-step.done {
+  color: var(--color-muted);
+}
+
+.bz-step.now {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.bz-step-index {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--color-hairline);
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.bz-step.now .bz-step-index {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.bz-step.done .bz-step-index {
+  background: var(--bz-ok-tint);
+  color: var(--bz-ok);
+}
+
+.bz-step-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bz-status-title {
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.bz-status-sub {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  word-break: keep-all;
+  line-height: 1.5;
+}
+
+.bz-last-action {
+  font-size: 11px;
+  color: var(--color-muted-soft);
+  border-top: 1px solid var(--color-hairline-soft);
+  padding-top: 5px;
+  word-break: keep-all;
+}
+
+.bz-spectator-note {
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px dashed var(--color-hairline);
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+/* ---------- 금화 순위 띠 ---------- */
+.bz-score-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.bz-score-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-soft);
+  font-size: 11px;
+  min-width: 0;
+}
+
+.bz-score-pill.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.bz-score-pill.me {
+  font-weight: 700;
+}
+
+.bz-score-pill.top .bz-score-value {
+  color: var(--bz-coin);
+  font-weight: 700;
+}
+
+.bz-score-name {
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 110px;
+}
+
+.bz-score-value {
+  color: var(--color-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- 섹션 공통 ---------- */
+.bz-section {
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.bz-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bz-section-title {
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.bz-section-note {
+  font-size: 11px;
+  color: var(--color-muted-soft);
+  word-break: keep-all;
+  line-height: 1.5;
+}
+
+.bz-row-empty {
+  font-size: var(--text-caption);
+  color: var(--color-muted-soft);
+  padding: 8px;
+}
+
+/* ---------- 콩 칩 ---------- */
+.bz-bean-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-hairline);
+  border-left: 3px solid var(--bz-tone, var(--color-hairline));
+  background: var(--bz-tone-tint, var(--color-surface-soft));
+  font-size: 11px;
+  color: var(--color-ink);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.bz-bean-chip.pickable {
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.bz-bean-chip.size-lg,
+.bz-bean-chip.size-xl {
+  font-size: var(--text-body-sm);
+  padding: 8px 12px;
+  min-height: 44px;
+}
+
+.bz-bean-emoji {
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.bz-bean-name {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.bz-bean-count {
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 콩미터 ---------- */
+.bz-meter {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.bz-meter-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 3px 5px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  font-size: 9px;
+  color: var(--color-muted-soft);
+  font-variant-numeric: tabular-nums;
+  min-width: 30px;
+}
+
+.bz-meter.compact .bz-meter-cell {
+  padding: 2px 4px;
+  min-width: 26px;
+}
+
+.bz-meter-cell.reached {
+  border-color: var(--bz-tone, var(--color-hairline));
+  background: var(--bz-tone-tint, var(--color-surface-soft));
+  color: var(--color-body);
+}
+
+.bz-meter-cell.current {
+  border-color: var(--bz-coin);
+  background: var(--bz-coin-tint);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.bz-meter-cell-need {
+  white-space: nowrap;
+}
+
+.bz-meter-cell-coin {
+  white-space: nowrap;
+}
+
+.bz-meter-unknown {
+  font-size: 10px;
+  color: var(--color-muted-soft);
+}
+
+/* ---------- 3단계 · 받은 콩 ---------- */
+.bz-pending {
+  border-color: var(--bz-trade);
+  background: var(--bz-trade-tint);
+}
+
+.bz-pending-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bz-pending-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 56px;
+  min-width: 64px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--bz-tone, var(--color-hairline));
+  background: var(--bz-card-face);
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-ink);
+}
+
+.bz-pending-card.selected {
+  background: var(--bz-tone-tint, var(--color-surface-soft));
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.bz-pending-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.bz-pending-name {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.bz-pending-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+}
+
+.bz-pending-guide-text {
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  word-break: keep-all;
+  line-height: 1.5;
+}
+
+.bz-pending-fields {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bz-pending-field {
+  flex: 1 1 90px;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-soft);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.bz-pending-field.ok {
+  border-color: var(--bz-ok);
+  background: var(--bz-ok-tint);
+}
+
+.bz-pending-field:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.bz-pending-field-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* ---------- 내 콩밭 ---------- */
+.bz-fields-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bz-field {
+  flex: 1 1 150px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 9px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  border-top: 4px solid var(--bz-tone, var(--color-hairline));
+  background: var(--bz-soil);
+  box-sizing: border-box;
+}
+
+.bz-field.empty {
+  border: 1px dashed var(--color-hairline);
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+}
+
+.bz-field.ripe {
+  background: var(--bz-tone-tint, var(--bz-soil));
+}
+
+.bz-field-no {
+  font-size: 10px;
+  color: var(--color-muted-soft);
+  font-weight: 700;
+}
+
+.bz-field-empty-text {
+  font-size: var(--text-caption);
+  color: var(--color-muted-soft);
+}
+
+.bz-field-bean {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 4px 6px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--bz-card-face);
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+}
+
+.bz-field-emoji {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.bz-field-name {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bz-field-count {
+  margin-left: auto;
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* 밭의 값어치 — 이 화면에서 가장 자주 읽는 숫자 */
+.bz-field-coins {
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas);
+  white-space: nowrap;
+}
+
+.bz-field-coins b {
+  font-size: var(--text-body-sm);
+}
+
+.bz-field-coins.has {
+  background: var(--bz-coin-tint);
+  color: var(--color-ink);
+}
+
+.bz-field-coins.none {
+  color: var(--color-muted);
+}
+
+.bz-field-next {
+  font-size: 10px;
+  color: var(--color-muted);
+  word-break: keep-all;
+}
+
+.bz-harvest-btn {
+  width: 100%;
+  padding: 9px;
+  font-size: var(--text-caption);
+}
+
+.bz-field-block {
+  font-size: 10px;
+  color: var(--bz-block);
+  word-break: keep-all;
+  line-height: 1.4;
+}
+
+.bz-field-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.bz-field-total {
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bz-coin-tint);
+  white-space: nowrap;
+}
+
+.bz-buy-field {
+  flex: 1 1 200px;
+  font-size: 11px;
+  padding: 9px;
+}
+
+/* ---------- 내 손패 ---------- */
+/* 순서가 곧 진실이다. 정렬·드래그 UI 는 존재하지 않는다. */
+.bz-hand-strip {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.bz-front-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.bz-front-flag {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--bz-front);
+  white-space: nowrap;
+}
+
+/* 맨 앞 카드 — 크게, 뜨겁게. 반드시 심어야 하는 카드다. */
+.bz-front-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 132px;
+  max-width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 3px solid var(--bz-front);
+  background: var(--bz-card-face);
+  box-shadow: 0 0 0 4px var(--bz-front-ring);
+  cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.bz-front-card.blocked {
+  border-color: var(--bz-block);
+  box-shadow: 0 0 0 4px var(--bz-block-tint);
+}
+
+.bz-front-emoji {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.bz-front-name {
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.bz-front-where {
+  font-size: 10px;
+  color: var(--color-muted);
+  word-break: keep-all;
+  line-height: 1.4;
+}
+
+.bz-front-card.blocked .bz-front-where {
+  color: var(--bz-block);
+  font-weight: 700;
+}
+
+/* 나머지 손패 — 받은 순서 그대로. 넘치면 이 줄 안에서만 가로 스크롤. */
+.bz-hand-rest {
+  flex: 1 1 140px;
+  min-width: 0;
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+
+.bz-hand-card {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 58px;
+  min-height: 72px;
+  padding: 6px 5px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-hairline);
+  border-top: 3px solid var(--bz-tone, var(--color-hairline));
+  background: var(--bz-card-face);
+  cursor: pointer;
+  position: relative;
+}
+
+.bz-hand-card.second {
+  border-color: var(--bz-warn);
+  background: var(--bz-warn-tint);
+}
+
+.bz-hand-card.giving {
+  box-shadow: 0 0 0 2px var(--bz-give);
+}
+
+.bz-hand-pos {
+  font-size: 9px;
+  color: var(--color-muted-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.bz-hand-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.bz-hand-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.bz-hand-tag {
+  font-size: 8px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.bz-hand-legend {
+  margin: 0;
+  font-size: 10px;
+  color: var(--color-muted-soft);
+  word-break: keep-all;
+  line-height: 1.5;
+}
+
+/* ---------- 2단계 공개 카드 ---------- */
+.bz-flipped-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bz-flipped-card {
+  flex: 1 1 130px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 44px;
+  padding: 9px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--bz-tone, var(--color-hairline));
+  background: var(--bz-card-face);
+  cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.bz-flipped-card.giving {
+  box-shadow: 0 0 0 3px var(--bz-give);
+}
+
+.bz-flipped-emoji {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.bz-flipped-name {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+/* ---------- 거래 ---------- */
+.bz-offer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+}
+
+.bz-offer-group.incoming {
+  border-color: var(--bz-trade);
+  background: var(--bz-trade-tint);
+}
+
+.bz-offer-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.bz-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+}
+
+.bz-offer-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.bz-offer-who {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.bz-offer-kind {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.bz-offer-kind.trade {
+  background: var(--bz-trade-tint);
+  color: var(--color-ink);
+}
+
+.bz-offer-kind.donate {
+  background: var(--bz-give-tint);
+  color: var(--color-ink);
+}
+
+.bz-offer-side {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.bz-offer-label {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--color-muted);
+  padding-top: 6px;
+  min-width: 40px;
+}
+
+.bz-offer-beans {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bz-offer-none {
+  font-size: 10px;
+  color: var(--color-muted-soft);
+  padding-top: 6px;
+  word-break: keep-all;
+}
+
+.bz-offer-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.bz-offer-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: var(--text-caption);
+}
+
+.bz-offer-brief {
+  font-size: 10px;
+  color: var(--color-muted);
+  padding: 5px 0;
+  word-break: keep-all;
+}
+
+.bz-offer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+}
+
+.bz-offer-form-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-top: 3px;
+}
+
+.bz-offer-form-note {
+  margin: 0;
+  font-size: 10px;
+  color: var(--color-muted);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.bz-target-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.bz-target {
+  flex: 1 1 110px;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-soft);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+  cursor: pointer;
+  min-width: 0;
+}
+
+.bz-target.on {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.bz-target-sub {
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.bz-pick-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.bz-pick {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 6px 9px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  border-left: 3px solid var(--bz-tone, var(--color-hairline));
+  background: var(--color-surface-soft);
+  font-size: 11px;
+  color: var(--color-ink);
+  cursor: pointer;
+  min-width: 0;
+}
+
+.bz-pick.on {
+  border-color: var(--bz-give);
+  background: var(--bz-give-tint);
+  font-weight: 700;
+}
+
+.bz-pick.want.on {
+  border-color: var(--bz-trade);
+  background: var(--bz-trade-tint);
+}
+
+.bz-pick.front {
+  box-shadow: inset 2px 0 0 var(--bz-front);
+}
+
+.bz-pick-pos {
+  font-size: 9px;
+  color: var(--color-muted-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.bz-pick-name {
+  white-space: nowrap;
+}
+
+.bz-open-trade,
+.bz-end-phase {
+  width: 100%;
+  font-size: var(--text-caption);
+}
+
+/* ---------- 남의 밭 ---------- */
+.bz-others-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bz-other {
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bz-other.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.bz-other-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.bz-other-name {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bz-other-meta {
+  font-size: 10px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bz-badge.off {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  background: var(--bz-block-tint);
+  color: var(--bz-block);
+}
+
+.bz-other-fields {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.bz-other-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-hairline);
+  border-left: 3px solid var(--bz-tone, var(--color-hairline));
+  background: var(--bz-tone-tint, var(--color-canvas));
+  font-size: 10px;
+  color: var(--color-ink);
+  min-width: 0;
+}
+
+.bz-other-field.empty {
+  border-style: dashed;
+  border-left-style: dashed;
+  background: transparent;
+  color: var(--color-muted-soft);
+}
+
+.bz-other-field-name {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.bz-other-field-count,
+.bz-other-field-coin {
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bz-other-empty-text {
+  white-space: nowrap;
+}
+
+/* ---------- 하단 행동 바 ---------- */
+.bz-action-bar {
+  position: sticky;
+  bottom: 8px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-primary);
+  background: var(--color-surface-card);
+  box-shadow: var(--shadow-subtle);
+}
+
+.bz-action-text {
+  font-size: var(--text-caption);
+  color: var(--color-body);
+  word-break: keep-all;
+  line-height: 1.5;
+}
+
+.bz-action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.bz-action-buttons .bz-primary-button,
+.bz-action-buttons .bz-ghost-button {
+  flex: 1;
+}
+
+/* ---------- 콩미터 팝업 ---------- */
+.bz-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(20, 20, 19, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.bz-sheet {
+  width: 100%;
+  max-width: 340px;
+  max-height: 88vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  border-top: 5px solid var(--bz-tone, var(--color-hairline));
+  box-sizing: border-box;
+}
+
+.bz-sheet-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bz-sheet-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.bz-sheet-name {
+  font-size: var(--text-body-lg);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.bz-sheet-total {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.bz-sheet-now {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--bz-coin-tint);
+  font-size: var(--text-caption);
+  color: var(--color-body);
+}
+
+.bz-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+.bz-sheet-table th {
+  padding: 5px 4px;
+  color: var(--color-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.bz-sheet-table td {
+  padding: 6px 4px;
+  text-align: center;
+  color: var(--color-body);
+  border-bottom: 1px solid var(--color-hairline-soft);
+}
+
+.bz-sheet-table tr.reached td {
+  color: var(--color-ink);
+  font-weight: 700;
+  background: var(--bz-tone-tint, transparent);
+}
+
+.bz-sheet-note {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-muted);
+  word-break: keep-all;
+  line-height: 1.5;
+}
+
+/* ---------- 좁은 화면 (280px 대응) ---------- */
+@media (max-width: 380px) {
+  .bz-board {
+    padding: var(--space-sm) 6px 120px;
+  }
+
+  .bz-section {
+    padding: 9px 8px;
+  }
+
+  .bz-field {
+    flex: 1 1 100%;
+  }
+
+  .bz-front-card {
+    min-width: 118px;
+  }
+
+  .bz-hand-strip {
+    flex-direction: column;
+  }
+
+  .bz-hand-rest {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .bz-flipped-card {
+    flex: 1 1 100%;
+  }
+
+  .bz-step-name {
+    display: none;
+  }
+
+  .bz-score-name {
+    max-width: 74px;
+  }
+}
