@@ -1,0 +1,1035 @@
+/* 뱅! 보드 — 해질녘 서부 다크.
+   .bg-scope 변수 정의는 BangApp.css (같은 번들에서 함께 로드된다).
+   이 게임의 핵심은 "거리"라 원탁 좌석의 거리 숫자(.bg-seat-dist)와
+   대응 창(.bg-respond)이 시각 위계의 1순위다.
+   280px 오버플로 금지, 터치 타깃 44px+. */
+
+.bg-board {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+    170deg,
+    var(--bg-bg-elevated) 0%,
+    var(--bg-bg) 100%
+  );
+  color: var(--color-on-dark);
+  padding: var(--space-sm);
+  padding-bottom: 116px; /* 하단 행동 바 자리 */
+  box-sizing: border-box;
+  gap: var(--space-sm);
+}
+
+/* ---------- 토스트 ---------- */
+
+.bg-toasts {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: 92vw;
+}
+
+.bg-toast {
+  background: var(--bg-bg-elevated);
+  border: 1px solid var(--bg-line-strong);
+  color: var(--color-on-dark);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  animation: bg-fade-in 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: keep-all;
+}
+
+@keyframes bg-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 상단 상태 바 ---------- */
+
+.bg-status-bar {
+  width: 100%;
+  max-width: 620px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-line);
+}
+
+.bg-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-bg-soft);
+  border: 1px solid var(--bg-line);
+  color: var(--bg-fog);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bg-timer {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-bg-soft);
+  border: 1px solid var(--bg-line);
+  color: var(--bg-fog);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bg-timer.urgent {
+  color: var(--bg-lack);
+  border-color: var(--bg-lack);
+  background: var(--bg-lack-tint);
+}
+
+/* 무늬 + 숫자 인라인 표기 (버린 카드·장비) */
+.bg-inline-face {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bg-inline-face.red {
+  color: var(--bg-suit-red);
+}
+
+.bg-inline-face.black {
+  color: var(--bg-suit-black);
+}
+
+/* ---------- 지금 할 일 ---------- */
+
+.bg-headline {
+  width: 100%;
+  max-width: 620px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 14px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-line);
+}
+
+.bg-headline.mine {
+  background: var(--bg-sun-tint);
+  border-color: var(--bg-sun-dim);
+}
+
+.bg-headline.respond {
+  background: var(--bg-lack-tint);
+  border-color: var(--bg-lack);
+}
+
+.bg-headline-title {
+  font-size: var(--text-title-md);
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.bg-headline.mine .bg-headline-title {
+  color: var(--bg-sun);
+}
+
+.bg-headline.respond .bg-headline-title {
+  color: var(--bg-lack);
+}
+
+.bg-headline-sub {
+  font-size: var(--text-caption);
+  color: var(--bg-fog);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* ---------- 알림 줄 ---------- */
+
+.bg-note,
+.bg-last-action {
+  width: 100%;
+  max-width: 620px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+  text-align: center;
+  word-break: keep-all;
+}
+
+.bg-note {
+  background: var(--bg-panel-strong);
+  border: 1px solid var(--bg-line);
+  color: var(--bg-fog);
+}
+
+.bg-note.danger {
+  background: var(--bg-lack-tint);
+  border-color: var(--bg-lack);
+  color: var(--bg-lack);
+  font-weight: 700;
+}
+
+.bg-last-action {
+  background: var(--bg-bg-soft);
+  border: 1px solid var(--bg-line);
+  color: var(--bg-fog);
+}
+
+/* ---------- 공통 섹션 ---------- */
+
+.bg-section {
+  width: 100%;
+  max-width: 620px;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* 지금 조작해야 하는 패널은 석양빛 테두리로 끌어올린다 */
+.bg-section.bg-focus {
+  border-color: var(--bg-sun-dim);
+  background: var(--bg-sun-tint);
+}
+
+/* 대응 창은 시간이 걸린 상황이라 더 강하게 */
+.bg-section.bg-respond {
+  border-color: var(--bg-lack);
+  background: var(--bg-lack-tint);
+}
+
+.bg-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.bg-section-title {
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.bg-section-note {
+  font-size: 11px;
+  color: var(--bg-fog);
+  word-break: keep-all;
+}
+
+.bg-section-foot {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--bg-fog);
+  word-break: keep-all;
+}
+
+.bg-section-foot.ok {
+  color: var(--bg-ok);
+}
+
+.bg-section-foot.lack {
+  color: var(--bg-lack);
+}
+
+.bg-row-empty {
+  font-size: var(--text-caption);
+  color: var(--bg-fog);
+  padding: 10px;
+}
+
+.bg-step {
+  margin: 4px 0 0;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.bg-effect-desc {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg-bg-soft);
+  border: 1px solid var(--bg-line);
+  color: var(--color-on-dark);
+  font-size: var(--text-caption);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* ---------- 대응 창 ---------- */
+
+.bg-respond-title {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.bg-respond-demand {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--bg-lack);
+  word-break: keep-all;
+}
+
+.bg-big-timer {
+  align-self: center;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--bg-sun);
+  font-variant-numeric: tabular-nums;
+}
+
+.bg-big-timer.urgent {
+  color: var(--bg-lack);
+}
+
+.bg-big-timer-unit {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--bg-fog);
+}
+
+/* ---------- 카드 ---------- */
+
+.bg-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(146px, 1fr));
+  gap: var(--space-xs);
+}
+
+.bg-card-grid.compact {
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+}
+
+.bg-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  padding: 9px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--bg-line);
+  background: var(--bg-bg-soft);
+  color: var(--color-on-dark);
+  text-align: left;
+  min-width: 0;
+  min-height: 88px;
+  box-sizing: border-box;
+}
+
+.bg-card.compact {
+  min-height: 64px;
+}
+
+button.bg-card {
+  cursor: pointer;
+}
+
+button.bg-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.bg-card.c-brown {
+  background: var(--bg-brown-tint);
+  border-color: var(--bg-brown);
+}
+
+.bg-card.c-blue {
+  background: var(--bg-blue-tint);
+  border-color: var(--bg-blue);
+}
+
+.bg-card.back {
+  background: var(--bg-panel-strong);
+  border-style: dashed;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.bg-card.actionable.ok {
+  box-shadow: inset 0 0 0 1px var(--bg-ok);
+}
+
+.bg-card.selected {
+  border-color: var(--bg-sun);
+  box-shadow: inset 0 0 0 2px var(--bg-sun);
+}
+
+/* 무늬 + 숫자 — 뒤집기 판정의 근거라 카드에서 가장 먼저 읽힌다 */
+.bg-card-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  align-self: flex-start;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--card-face);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+}
+
+.bg-card-face.red {
+  color: var(--color-error);
+}
+
+.bg-card-face.black {
+  color: var(--color-ink);
+}
+
+.bg-card-suit {
+  font-size: 15px;
+}
+
+.bg-card-rank {
+  font-size: 13px;
+}
+
+.bg-card-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.bg-card-back-mark {
+  font-size: 24px;
+  line-height: 1;
+  color: var(--bg-fog);
+}
+
+.bg-card-name {
+  font-size: var(--text-caption);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.bg-card-tag {
+  font-size: 10px;
+  color: var(--bg-fog);
+  word-break: keep-all;
+}
+
+.bg-card-reason {
+  font-size: 10px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.bg-card-reason.ok {
+  color: var(--bg-ok);
+}
+
+.bg-card-reason.lack {
+  color: var(--bg-lack);
+}
+
+.bg-card-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-bg);
+  border: 1px solid var(--bg-line-strong);
+  color: var(--bg-fog);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* ---------- 체력 ---------- */
+
+.bg-hearts {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.bg-heart.on {
+  color: var(--bg-hp);
+}
+
+.bg-heart.off {
+  opacity: 0.35;
+}
+
+.bg-hearts-num {
+  margin-left: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--bg-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 내 정체 ---------- */
+
+.bg-me-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.bg-role-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  font-size: var(--text-caption);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.bg-me-stat {
+  font-size: 11px;
+  color: var(--bg-fog);
+  white-space: nowrap;
+}
+
+/* ---------- 원탁 ---------- */
+
+.bg-table {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+  align-self: center;
+  border-radius: var(--radius-full);
+  border: 1px dashed var(--bg-line-strong);
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--bg-panel-strong) 0%,
+    transparent 62%
+  );
+}
+
+.bg-table-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--bg-fog);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bg-table-center-line {
+  font-variant-numeric: tabular-nums;
+}
+
+.bg-seat {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  width: 104px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 5px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--bg-line);
+  background: var(--bg-bg-elevated);
+  text-align: center;
+  min-width: 0;
+}
+
+.bg-seat.active {
+  border-color: var(--bg-sun);
+  background: var(--bg-sun-tint);
+}
+
+.bg-seat.me {
+  box-shadow: inset 0 0 0 1px var(--bg-ok);
+}
+
+.bg-seat.in-range {
+  border-color: var(--bg-lack);
+}
+
+.bg-seat.dead {
+  opacity: 0.5;
+  border-style: dashed;
+}
+
+.bg-seat-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--color-on-dark);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 거리 — 이 게임의 핵심이라 좌석에서 가장 크게 */
+.bg-seat-dist {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-dark);
+}
+
+.bg-seat-dist.in {
+  color: var(--bg-lack);
+}
+
+.bg-seat-dist.out {
+  color: var(--bg-fog);
+}
+
+.bg-seat-dist.self,
+.bg-seat-dist.dead {
+  font-size: var(--text-caption);
+  color: var(--bg-fog);
+}
+
+.bg-seat-dist-label {
+  font-size: 9px;
+  color: var(--bg-fog);
+  line-height: 1;
+}
+
+.bg-seat-equip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+}
+
+.bg-seat-equip-icon {
+  line-height: 1;
+}
+
+.bg-seat-hand {
+  font-size: 10px;
+  color: var(--bg-fog);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bg-seat-role {
+  font-size: 9px;
+  font-weight: 800;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- 참가자 상세 ---------- */
+
+.bg-players {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-xs);
+}
+
+.bg-player {
+  padding: 9px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--bg-line);
+  background: var(--bg-bg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.bg-player.active {
+  border-color: var(--bg-sun);
+  background: var(--bg-sun-tint);
+}
+
+.bg-player.me {
+  box-shadow: inset 0 0 0 1px var(--bg-ok);
+}
+
+.bg-player.dead {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+.bg-player-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.bg-player-name {
+  font-size: var(--text-caption);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bg-player-badges {
+  display: inline-flex;
+  gap: 4px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.bg-badge {
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  font-size: 9px;
+  font-weight: 800;
+  border: 1px solid var(--bg-line);
+  color: var(--bg-fog);
+  white-space: nowrap;
+}
+
+.bg-badge.off,
+.bg-badge.dead {
+  color: var(--bg-lack);
+  border-color: var(--bg-lack);
+  background: var(--bg-lack-tint);
+}
+
+.bg-badge.role {
+  border-color: currentColor;
+}
+
+.bg-player-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 10px;
+  color: var(--bg-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.bg-player-dist {
+  font-weight: 800;
+  color: var(--color-on-dark);
+}
+
+.bg-player-reason {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.bg-player-reason.ok {
+  color: var(--bg-ok);
+}
+
+.bg-player-reason.lack {
+  color: var(--bg-lack);
+}
+
+.bg-player-equip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.bg-mini-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--bg-line);
+  font-size: 10px;
+  color: var(--color-on-dark);
+  max-width: 100%;
+  min-width: 0;
+}
+
+.bg-mini-card.c-brown {
+  background: var(--bg-brown-tint);
+}
+
+.bg-mini-card.c-blue {
+  background: var(--bg-blue-tint);
+}
+
+.bg-mini-name {
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bg-mini-empty {
+  font-size: 10px;
+  color: var(--bg-fog);
+}
+
+/* ---------- 대상 고르기 ---------- */
+
+.bg-target-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+  gap: 6px;
+}
+
+.bg-target {
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 9px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--bg-line);
+  background: var(--bg-bg-soft);
+  color: var(--color-on-dark);
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.bg-target.ok {
+  border-color: var(--bg-ok);
+}
+
+.bg-target.blocked {
+  opacity: 0.62;
+  cursor: not-allowed;
+}
+
+.bg-target.selected {
+  border-color: var(--bg-sun);
+  background: var(--bg-sun-tint);
+  box-shadow: inset 0 0 0 1px var(--bg-sun);
+}
+
+.bg-target-title {
+  font-size: var(--text-caption);
+  font-weight: 800;
+  word-break: keep-all;
+}
+
+.bg-target-reason {
+  font-size: 10px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.bg-target-reason.ok {
+  color: var(--bg-ok);
+}
+
+.bg-target-reason.lack {
+  color: var(--bg-lack);
+}
+
+.bg-confirm-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ---------- 버튼 ---------- */
+
+.bg-board .bg-primary-button,
+.bg-board .bg-ghost-button {
+  width: 100%;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.bg-board .bg-primary-button {
+  border: none;
+  padding: 12px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.bg-board .bg-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.bg-board .bg-primary-button:disabled {
+  background: var(--bg-panel-strong);
+  color: var(--bg-fog);
+  cursor: not-allowed;
+}
+
+.bg-board .bg-ghost-button {
+  border: 1px solid var(--bg-line);
+  padding: 11px;
+  background: transparent;
+  color: var(--bg-fog);
+  font-weight: 600;
+}
+
+/* ---------- 하단 행동 바 ---------- */
+
+.bg-action-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 800;
+  width: min(94vw, 560px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-bg-elevated);
+  border: 1px solid var(--bg-line-strong);
+  box-shadow: var(--shadow-modal);
+}
+
+.bg-action-text {
+  font-size: var(--text-caption);
+  color: var(--bg-fog);
+  text-align: center;
+  word-break: keep-all;
+}
+
+.bg-action-buttons {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.bg-action-buttons .bg-primary-button,
+.bg-action-buttons .bg-ghost-button {
+  flex: 1;
+}
+
+/* ---------- 좁은 화면 (280px 대응) ----------
+   원탁은 좌석 카드가 겹치기 시작하므로 세로 목록으로 되돌린다.
+   좌석 위치는 인라인 커스텀 프로퍼티(--x/--y)로만 주므로
+   position 만 바꿔도 배치가 풀린다. */
+
+@media (max-width: 420px) {
+  .bg-table {
+    aspect-ratio: auto;
+    border: none;
+    background: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: 6px;
+  }
+
+  .bg-table-center {
+    position: static;
+    transform: none;
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding: 6px;
+    border: 1px dashed var(--bg-line-strong);
+    border-radius: var(--radius-md);
+  }
+
+  .bg-seat {
+    position: static;
+    transform: none;
+    width: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .bg-board {
+    padding: var(--space-xs);
+    padding-bottom: 120px;
+  }
+
+  .bg-card-grid,
+  .bg-card-grid.compact,
+  .bg-target-grid,
+  .bg-players,
+  .bg-table {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bg-headline-title {
+    font-size: var(--text-body-md);
+  }
+
+  .bg-mini-name {
+    max-width: 72px;
+  }
+}

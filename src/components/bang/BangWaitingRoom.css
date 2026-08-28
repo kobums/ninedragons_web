@@ -1,0 +1,371 @@
+/* 뱅! 대기실 — 해질녘 서부 다크 셸.
+   .bg-scope 변수 정의는 BangApp.css 참조 (같은 번들).
+   280px 오버플로 금지, 터치 타깃 44px+. */
+
+.bg-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--bg-bg-elevated) 0%,
+    var(--bg-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.bg-waiting-container {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-line);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.bg-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.bg-subtitle {
+  margin: 0 0 var(--space-md);
+  color: var(--bg-fog);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+/* ---------- 역할 4종 ---------- */
+
+.bg-role-legend {
+  list-style: none;
+  margin: 0 0 var(--space-lg);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.bg-role-legend-item {
+  padding: 8px 10px;
+  border: 1px solid var(--bg-line);
+  border-radius: var(--radius-md);
+  background: var(--bg-bg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.bg-role-legend-item.side-sheriff {
+  border-color: var(--bg-sheriff);
+  background: var(--bg-sheriff-tint);
+}
+.bg-role-legend-item.side-deputy {
+  background: var(--bg-deputy-tint);
+}
+.bg-role-legend-item.side-outlaw {
+  background: var(--bg-outlaw-tint);
+}
+.bg-role-legend-item.side-renegade {
+  background: var(--bg-renegade-tint);
+}
+
+.bg-role-legend-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.bg-role-legend-name {
+  font-size: var(--text-caption);
+  font-weight: 800;
+  word-break: keep-all;
+}
+
+.bg-role-legend-desc {
+  font-size: 11px;
+  color: var(--bg-fog);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* ---------- 입장 폼 ---------- */
+
+.bg-join-form,
+.bg-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bg-form-group {
+  text-align: left;
+}
+
+.bg-form-group label {
+  display: block;
+  color: var(--bg-fog);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.bg-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--bg-line);
+  background: var(--bg-bg-soft);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+/* 보드의 버튼 규칙(flex: 1)이 세로 스택에서 늘어나지 않게 여기서 되돌린다 */
+.bg-waiting .bg-primary-button,
+.bg-waiting .bg-ghost-button {
+  flex: none;
+  width: 100%;
+}
+
+.bg-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bg-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.bg-primary-button:disabled {
+  background: var(--bg-panel-strong);
+  color: var(--bg-fog);
+  cursor: not-allowed;
+}
+
+.bg-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--bg-line);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.bg-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ---------- 좌석 목록 ---------- */
+
+.bg-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.bg-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-panel-strong);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.bg-seat-item.empty {
+  color: var(--bg-fog);
+  font-weight: 400;
+  border: 1px dashed var(--bg-line);
+  background: transparent;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: var(--text-caption);
+}
+
+.bg-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bg-star {
+  font-size: var(--text-body-sm);
+}
+
+.bg-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.bg-dot.on {
+  background: var(--color-success);
+}
+
+.bg-dot.off {
+  background: var(--bg-fog);
+}
+
+.bg-waiting-hint {
+  margin: 0;
+  color: var(--bg-fog);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.bg-rule-hint {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--bg-line);
+  border-radius: var(--radius-md);
+  background: var(--bg-bg-soft);
+  color: var(--color-on-dark);
+  font-size: var(--text-caption);
+  line-height: 1.7;
+  text-align: left;
+  word-break: keep-all;
+}
+
+.bg-cards-toggle {
+  font-size: var(--text-caption);
+}
+
+/* ---------- 카드 22종 ---------- */
+
+.bg-card-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.bg-card-legend-head {
+  margin: 4px 0 0;
+  font-size: var(--text-caption);
+  font-weight: 800;
+  color: var(--color-on-dark);
+}
+
+.bg-card-legend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bg-card-legend-item {
+  padding: 7px 9px;
+  border: 1px solid var(--bg-line);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bg-card-legend-item.c-brown {
+  background: var(--bg-brown-tint);
+  border-color: var(--bg-brown);
+}
+
+.bg-card-legend-item.c-blue {
+  background: var(--bg-blue-tint);
+  border-color: var(--bg-blue);
+}
+
+.bg-card-legend-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-caption);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.bg-card-legend-count {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--bg-fog);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bg-card-legend-desc {
+  font-size: 11px;
+  color: var(--bg-fog);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .bg-waiting {
+    padding: var(--space-sm);
+  }
+
+  .bg-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* ---------- 입장·퇴장 토스트 ---------- */
+
+.bg-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.bg-waiting-toast {
+  background: var(--bg-bg-elevated);
+  border: 1px solid var(--bg-line);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}

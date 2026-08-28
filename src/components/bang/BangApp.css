@@ -1,0 +1,72 @@
+/* 뱅! 셸 — 해질녘 서부 다크 무드 (석양 앰버 + 그을린 사막 차콜).
+   tokens.css 에는 뱅! 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 값은 전부 기존
+   토큰 참조 또는 그 토큰의 rgba 변주다 — 컴포넌트에 새 hex 를 흘리지 않는다.
+
+   카드는 "색으로만" 구분되지 않는다. 갈색(즉시 사용)·파란색(장비)에 더해
+   카드마다 다른 이모지와 한글 이름(뱅! · 빗나감! · 맥주 …)이 늘 함께 붙고,
+   무늬(♠♥♦♣)와 숫자는 술통·감옥·다이너마이트의 "뒤집기" 판정에 쓰이므로
+   어느 화면에서도 지우지 않는다. */
+
+.bg-scope {
+  /* 사막 밤 — 스파이폴 웜 차콜 재사용 (등불 앰버와 어울린다) */
+  --bg-bg: var(--sp-dark);
+  --bg-bg-elevated: var(--sp-dark-elevated);
+  --bg-bg-soft: var(--sp-dark-soft);
+  --bg-fog: var(--sp-fog);
+
+  /* 패널·경계선 — 판자벽 위 얕은 부조 */
+  --bg-panel: rgba(255, 255, 255, 0.05);
+  --bg-panel-strong: rgba(255, 255, 255, 0.09);
+  --bg-line: rgba(255, 255, 255, 0.12);
+  --bg-line-strong: rgba(255, 255, 255, 0.22);
+
+  /* 석양 앰버 — 지금 조작해야 하는 곳의 강조색 */
+  --bg-sun: var(--sp-amber-strong);
+  --bg-sun-dim: var(--sp-amber);
+  --bg-sun-tint: var(--sp-amber-tint);
+
+  /* 가능/불가 판정 */
+  --bg-ok: var(--color-accent-teal);
+  --bg-ok-tint: rgba(93, 184, 166, 0.16);
+  --bg-lack: var(--sp-danger);
+  --bg-lack-tint: var(--sp-danger-tint);
+
+  /* 체력 — 남은 하트는 붉게, 잃은 하트는 흐리게 */
+  --bg-hp: var(--sp-danger);
+  --bg-hp-lost: rgba(255, 255, 255, 0.18);
+
+  /* 카드 두 색 (갈색 = 즉시 사용, 파란색 = 장비) */
+  --bg-brown: var(--tc-dog); /* 갈색 — 웜 탠 */
+  --bg-brown-tint: rgba(154, 106, 63, 0.2);
+  --bg-blue: var(--sp-citizen); /* 파란색 — 차가운 톤 */
+  --bg-blue-tint: rgba(125, 159, 209, 0.16);
+
+  /* 트럼프 무늬 — 다크 배경에서 ♠♣ 는 검정 대신 밝은 잉크로 읽힌다 */
+  --bg-suit-red: var(--sp-danger);
+  --bg-suit-black: var(--color-on-dark);
+
+  /* 역할 4종 — 진영이 한눈에 갈리도록 색을 나눈다 */
+  --bg-sheriff: var(--av-gold-strong);
+  --bg-sheriff-tint: var(--av-gold-tint);
+  --bg-deputy: var(--sp-citizen);
+  --bg-deputy-tint: var(--sp-citizen-tint);
+  --bg-outlaw: var(--sp-danger);
+  --bg-outlaw-tint: var(--sp-danger-tint);
+  --bg-renegade: var(--tc-special);
+  --bg-renegade-tint: rgba(124, 92, 173, 0.2);
+}
+
+/* 역할 색 — 배지·좌석·종료 화면이 함께 쓴다 */
+.bg-scope .r-sheriff {
+  color: var(--bg-sheriff);
+}
+.bg-scope .r-deputy {
+  color: var(--bg-deputy);
+}
+.bg-scope .r-outlaw {
+  color: var(--bg-outlaw);
+}
+.bg-scope .r-renegade {
+  color: var(--bg-renegade);
+}

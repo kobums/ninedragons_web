@@ -1,0 +1,235 @@
+/* 뱅! 게임 종료 — 서부 다크, 전원 역할 공개.
+   .bg-scope 변수 정의는 BangApp.css 참조 (같은 번들). */
+
+.bg-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--bg-bg-elevated) 0%,
+    var(--bg-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.bg-game-over-container {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-line);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+/* 보드의 버튼 규칙이 세로 스택에서 늘어나지 않게 되돌린다 */
+.bg-game-over .bg-primary-button {
+  flex: none;
+  width: 100%;
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.bg-game-over .bg-primary-button:active {
+  background: var(--color-primary-active);
+}
+
+.bg-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.bg-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.bg-over-sub {
+  margin: 0;
+  color: var(--bg-fog);
+  font-size: var(--text-body-sm);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.bg-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.bg-over-verdict.win {
+  color: var(--bg-sun);
+}
+
+.bg-over-verdict.lose {
+  color: var(--bg-fog);
+}
+
+.bg-over-myrole {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--bg-fog);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* ---------- 진영 요약 ---------- */
+
+.bg-over-sides {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.bg-over-side {
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- 전원 역할 공개 ---------- */
+
+.bg-over-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bg-over-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 9px 10px;
+  border: 1px solid var(--bg-line);
+  border-radius: var(--radius-md);
+  background: var(--bg-bg-soft);
+  text-align: left;
+  min-width: 0;
+}
+
+.bg-over-row.winner {
+  border-color: var(--bg-sun);
+  background: var(--bg-sun-tint);
+}
+
+.bg-over-row.dead {
+  opacity: 0.7;
+}
+
+.bg-over-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.bg-over-row-name {
+  font-size: var(--text-caption);
+  font-weight: 800;
+  color: var(--color-on-dark);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bg-over-row-role {
+  font-size: var(--text-caption);
+  font-weight: 800;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bg-over-row-stats {
+  font-size: 11px;
+  color: var(--bg-fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.bg-over-row-equip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.bg-over-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--bg-line);
+  font-size: 10px;
+  color: var(--color-on-dark);
+  white-space: nowrap;
+}
+
+.bg-over-card.c-brown {
+  background: var(--bg-brown-tint);
+}
+
+.bg-over-card.c-blue {
+  background: var(--bg-blue-tint);
+}
+
+.bg-over-face {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.bg-over-face.red {
+  color: var(--bg-suit-red);
+}
+
+.bg-over-face.black {
+  color: var(--bg-suit-black);
+}
+
+.bg-over-legend {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--bg-fog);
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .bg-game-over {
+    padding: var(--space-sm);
+  }
+
+  .bg-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .bg-over-row-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}
