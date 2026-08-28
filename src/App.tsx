@@ -38,6 +38,8 @@ import { KittensApp } from './components/kittens/KittensApp';
 import { MindApp } from './components/mind/MindApp';
 import { ReformationApp } from './components/reformation/ReformationApp';
 import { SaboteurApp } from './components/saboteur/SaboteurApp';
+import { SplendorApp } from './components/splendor/SplendorApp';
+import { AzulApp } from './components/azul/AzulApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -264,6 +266,14 @@ function App() {
 
   if (selectedGame === 'saboteur') {
     return <SaboteurApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'splendor') {
+    return <SplendorApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'azul') {
+    return <AzulApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
