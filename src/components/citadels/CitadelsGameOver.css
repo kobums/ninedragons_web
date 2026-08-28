@@ -1,0 +1,231 @@
+/* 시타델 게임 종료 — 성벽 다크, 승점 내역 표.
+   .ct-scope 변수 정의는 CitadelsApp.css 참조 (같은 번들). */
+
+.ct-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--ct-bg-elevated) 0%,
+    var(--ct-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.ct-game-over-container {
+  width: 100%;
+  max-width: 520px;
+  background: var(--ct-panel);
+  border: 1px solid var(--ct-line);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+/* 보드의 버튼 규칙이 세로 스택에서 늘어나지 않게 되돌린다 */
+.ct-game-over .ct-primary-button {
+  flex: none;
+  width: 100%;
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.ct-game-over .ct-primary-button:active {
+  background: var(--color-primary-active);
+}
+
+.ct-over-mark {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.ct-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-sm);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.ct-over-sub {
+  margin: 0;
+  color: var(--ct-fog);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.ct-over-verdict {
+  margin: 0;
+  font-weight: 800;
+  font-size: var(--text-body-md);
+}
+
+.ct-over-verdict.win {
+  color: var(--ct-gold);
+}
+
+.ct-over-verdict.lose {
+  color: var(--ct-fog);
+}
+
+/* ---------- 승점 순위 표 ---------- */
+
+.ct-over-table-wrap {
+  overflow-x: auto;
+}
+
+.ct-over-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  color: var(--color-on-dark);
+}
+
+.ct-over-table th {
+  color: var(--ct-fog);
+  font-size: var(--text-caption-uppercase);
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ct-line-strong);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ct-over-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--ct-line);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ct-over-table th.left,
+.ct-over-table td.left {
+  text-align: left;
+}
+
+.ct-over-table tr.winner td {
+  background: var(--ct-gold-tint);
+  font-weight: 700;
+}
+
+.ct-over-place {
+  font-weight: 700;
+}
+
+.ct-over-score {
+  font-weight: 800;
+  color: var(--ct-gold);
+}
+
+.ct-over-name {
+  display: inline-block;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-weight: 600;
+}
+
+/* ---------- 점수 내역 ---------- */
+
+.ct-over-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ct-over-detail-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  border: 1px solid var(--ct-line);
+  border-radius: var(--radius-md);
+  background: var(--ct-bg-soft);
+  min-width: 0;
+  text-align: left;
+}
+
+.ct-over-detail-name {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct-over-detail-text {
+  font-size: 11px;
+  color: var(--ct-fog);
+  word-break: keep-all;
+  flex: 1;
+  min-width: 0;
+}
+
+.ct-over-detail-colors {
+  display: inline-flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ct-over-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-over-color.none {
+  opacity: 0.45;
+}
+
+.ct-over-legend {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ct-fog);
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .ct-game-over {
+    padding: var(--space-sm);
+  }
+
+  .ct-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .ct-over-name {
+    max-width: 90px;
+  }
+
+  .ct-over-detail-name {
+    max-width: 72px;
+  }
+}

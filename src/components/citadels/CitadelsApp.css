@@ -1,0 +1,55 @@
+/* 시타델 셸 — 횃불 밝힌 중세 성벽 결의 다크 무드.
+   tokens.css 에는 시타델 슬롯이 없어 (병렬 작업 충돌 방지로 토큰 파일은
+   건드리지 않는다) 게임 스코프 변수로 팔레트를 묶는다. 값은 전부 기존
+   토큰 참조 또는 그 토큰의 rgba 변주다 — 컴포넌트에 새 hex 를 흘리지 않는다.
+
+   건물 5색은 "색으로만" 구분되지 않는다. 색 블록 안에 색마다 다른 아이콘이
+   들어가고(귀족 👑 · 종교 ⛪ · 상업 💰 · 군사 ⚔️ · 특수 ✨) 화면에는 늘
+   한글 이름(귀족·종교·상업·군사·특수)과 색 이름(노랑·파랑·초록·빨강·보라)을
+   함께 적는다. */
+
+.ct-scope {
+  /* 성벽 돌 — 스파이폴 웜 차콜을 그대로 재사용 (횃불빛과 어울린다) */
+  --ct-bg: var(--sp-dark);
+  --ct-bg-elevated: var(--sp-dark-elevated);
+  --ct-bg-soft: var(--sp-dark-soft);
+  --ct-fog: var(--sp-fog);
+
+  /* 패널·경계선 — 돌벽 위 얕은 부조 */
+  --ct-panel: rgba(255, 255, 255, 0.05);
+  --ct-panel-strong: rgba(255, 255, 255, 0.09);
+  --ct-line: rgba(255, 255, 255, 0.12);
+  --ct-line-strong: rgba(255, 255, 255, 0.22);
+
+  /* 금화·왕관 — 횃불 금빛 */
+  --ct-gold: var(--av-gold-strong);
+  --ct-gold-dim: var(--av-gold);
+  --ct-gold-tint: var(--av-gold-tint);
+
+  /* 가능/불가 판정 */
+  --ct-ok: var(--color-accent-teal);
+  --ct-ok-tint: rgba(93, 184, 166, 0.16);
+  --ct-lack: var(--sp-danger);
+  --ct-lack-tint: var(--sp-danger-tint);
+
+  /* 건물 5색 — 다크 배경 위 가독을 위해 밝은 쪽 토큰을 쓴다 */
+  --ct-noble: var(--av-gold); /* 노랑(귀족) */
+  --ct-noble-ink: var(--color-ink);
+  --ct-noble-tint: rgba(212, 175, 90, 0.14);
+
+  --ct-religion: var(--sp-citizen); /* 파랑(종교) */
+  --ct-religion-ink: var(--color-ink);
+  --ct-religion-tint: rgba(125, 159, 209, 0.14);
+
+  --ct-trade: var(--color-success); /* 초록(상업) */
+  --ct-trade-ink: var(--color-ink);
+  --ct-trade-tint: rgba(93, 184, 114, 0.14);
+
+  --ct-military: var(--sp-danger); /* 빨강(군사) */
+  --ct-military-ink: var(--color-ink);
+  --ct-military-tint: rgba(217, 106, 106, 0.14);
+
+  --ct-unique: var(--tc-special); /* 보라(특수) */
+  --ct-unique-ink: var(--color-on-primary);
+  --ct-unique-tint: rgba(124, 92, 173, 0.18);
+}

@@ -1,0 +1,382 @@
+/* 시타델 대기실 — 횃불 밝힌 성벽 다크 셸.
+   .ct-scope 변수 정의는 CitadelsApp.css 참조 (같은 번들).
+   280px 오버플로 금지, 터치 타깃 44px+. */
+
+.ct-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    170deg,
+    var(--ct-bg-elevated) 0%,
+    var(--ct-bg) 100%
+  );
+  padding: var(--space-lg);
+}
+
+.ct-waiting-container {
+  width: 100%;
+  max-width: 440px;
+  background: var(--ct-panel);
+  border: 1px solid var(--ct-line);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.ct-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.ct-subtitle {
+  margin: 0 0 var(--space-md);
+  color: var(--ct-fog);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+/* ---------- 건물 5색 범례 ---------- */
+
+.ct-color-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: 6px;
+  margin-bottom: var(--space-lg);
+}
+
+.ct-color-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--ct-line);
+  border-radius: var(--radius-md);
+  background: var(--ct-bg-soft);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ct-color-legend-block {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: var(--radius-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.ct-color-legend-name {
+  font-size: 11px;
+  color: var(--color-on-dark);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ct-color-legend-tone {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--ct-fog);
+  white-space: nowrap;
+}
+
+/* 색 블록 5종 — 아이콘이 얹히므로 잉크 색을 색마다 따로 잡는다 */
+.ct-color-legend-item.c-noble .ct-color-legend-block,
+.ct-swatch.c-noble {
+  background: var(--ct-noble);
+  color: var(--ct-noble-ink);
+}
+
+.ct-color-legend-item.c-religion .ct-color-legend-block,
+.ct-swatch.c-religion {
+  background: var(--ct-religion);
+  color: var(--ct-religion-ink);
+}
+
+.ct-color-legend-item.c-trade .ct-color-legend-block,
+.ct-swatch.c-trade {
+  background: var(--ct-trade);
+  color: var(--ct-trade-ink);
+}
+
+.ct-color-legend-item.c-military .ct-color-legend-block,
+.ct-swatch.c-military {
+  background: var(--ct-military);
+  color: var(--ct-military-ink);
+}
+
+.ct-color-legend-item.c-unique .ct-color-legend-block,
+.ct-swatch.c-unique {
+  background: var(--ct-unique);
+  color: var(--ct-unique-ink);
+}
+
+/* ---------- 입장 폼 ---------- */
+
+.ct-join-form,
+.ct-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ct-form-group {
+  text-align: left;
+}
+
+.ct-form-group label {
+  display: block;
+  color: var(--ct-fog);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.ct-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--ct-line);
+  background: var(--ct-bg-soft);
+  color: var(--color-on-dark);
+  font-size: var(--text-body-md);
+}
+
+/* 보드의 버튼 규칙(flex: 1)이 세로 스택에서 늘어나지 않게 여기서 되돌린다 */
+.ct-waiting .ct-primary-button,
+.ct-waiting .ct-ghost-button {
+  flex: none;
+  width: 100%;
+}
+
+.ct-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ct-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.ct-primary-button:disabled {
+  background: var(--ct-panel-strong);
+  color: var(--ct-fog);
+  cursor: not-allowed;
+}
+
+.ct-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--ct-line);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-on-dark);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.ct-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ---------- 좌석 목록 ---------- */
+
+.ct-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.ct-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--ct-panel-strong);
+  color: var(--color-on-dark);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.ct-seat-item.empty {
+  color: var(--ct-fog);
+  font-weight: 400;
+  border: 1px dashed var(--ct-line);
+  background: transparent;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: var(--text-caption);
+}
+
+.ct-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct-crown {
+  font-size: var(--text-body-sm);
+}
+
+.ct-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.ct-dot.on {
+  background: var(--color-success);
+}
+
+.ct-dot.off {
+  background: var(--ct-fog);
+}
+
+.ct-waiting-hint {
+  margin: 0;
+  color: var(--ct-fog);
+  font-size: var(--text-caption);
+}
+
+.ct-rule-hint {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--ct-line);
+  border-radius: var(--radius-md);
+  background: var(--ct-bg-soft);
+  color: var(--color-on-dark);
+  font-size: var(--text-caption);
+  line-height: 1.7;
+  text-align: left;
+  word-break: keep-all;
+}
+
+.ct-roles-toggle {
+  font-size: var(--text-caption);
+}
+
+/* ---------- 직업 8종 설명 ---------- */
+
+.ct-role-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.ct-role-legend-item {
+  padding: 8px 10px;
+  border: 1px solid var(--ct-line);
+  border-radius: var(--radius-md);
+  background: var(--ct-bg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ct-role-legend-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ct-role-legend-num {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background: var(--ct-gold-tint);
+  color: var(--ct-gold);
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ct-role-legend-name {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-on-dark);
+  word-break: keep-all;
+}
+
+.ct-role-legend-desc {
+  font-size: 11px;
+  color: var(--ct-fog);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .ct-waiting {
+    padding: var(--space-sm);
+  }
+
+  .ct-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .ct-color-legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------- 입장·퇴장 토스트 ---------- */
+
+.ct-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.ct-waiting-toast {
+  background: var(--ct-bg-elevated);
+  border: 1px solid var(--ct-line);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
