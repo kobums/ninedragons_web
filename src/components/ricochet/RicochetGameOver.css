@@ -1,0 +1,129 @@
+/* 리코셰 로봇 종료 화면 — 크림 결. 획득한 목표 카드 수로 줄을 세운다.
+   .rr-scope 변수와 버튼은 RicochetWaitingRoom.css (같은 번들) 참조. */
+
+.rr-game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg) var(--space-md);
+  box-sizing: border-box;
+}
+
+.rr-game-over-container {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 24px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rr-over-mark {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.rr-over-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-sm);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-ink);
+  word-break: keep-all;
+}
+
+.rr-over-sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.rr-over-verdict {
+  margin: 0;
+  font-size: var(--text-body-md);
+  font-weight: 800;
+}
+
+.rr-over-verdict.win {
+  color: var(--color-success);
+}
+
+.rr-over-verdict.lose {
+  color: var(--color-muted);
+}
+
+.rr-over-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rr-over-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  border: 1px solid transparent;
+}
+
+.rr-over-card.winner {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.rr-over-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-ink);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+}
+
+.rr-over-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-canvas);
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.rr-over-score {
+  color: var(--color-body-strong);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+@media (max-width: 360px) {
+  .rr-game-over {
+    padding: var(--space-md) var(--space-sm);
+  }
+
+  .rr-game-over-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
