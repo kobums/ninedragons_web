@@ -1,0 +1,399 @@
+/* 아줄 대기실 — 크림 종이 결 (se-waiting 결, tokens.css 토큰만 사용).
+   .az-scope: 아줄 전용 변수 오버라이드 — 값은 전부 tokens.css 토큰 참조.
+   타일 5색은 저채도 팔레트를 재매핑한다 (크림 캔버스 위 식별용이지
+   CTA·서피스로는 쓰지 않는다). 색약 대비는 색이 아니라 무늬 기호가 진다.
+
+   타일 프리미티브(.az-tile / .az-slot / .az-wall)도 여기서 정의한다 —
+   보드·종료 화면이 함께 쓰는 공통 도형이라서다. */
+
+.az-scope {
+  /* 타일 5색 (와이어 값 blue/yellow/red/black/cyan = 파랑·노랑·빨강·검정·하늘색) */
+  --az-blue: var(--color-team-blue);
+  --az-yellow: var(--st-clan-3);
+  --az-red: var(--st-clan-0);
+  --az-black: var(--color-ink);
+  --az-cyan: var(--st-clan-5);
+  /* 선 플레이어 마커 */
+  --az-first: var(--color-primary);
+  /* 타일 위 무늬 기호 색 */
+  --az-glyph: var(--color-on-primary);
+  /* 빈 칸 */
+  --az-slot-bg: var(--color-surface-soft);
+  --az-slot-line: var(--color-hairline);
+  /* 정산 색 */
+  --az-gain: var(--color-success);
+  --az-loss: var(--color-error);
+  /* 타일 크기 4단 */
+  --az-size-xs: 11px;
+  --az-size-sm: 18px;
+  --az-size-md: 24px;
+  --az-size-lg: 32px;
+}
+
+/* ---------- 타일 프리미티브 ---------- */
+
+/* 아줄레주 타일 한 장 — CSS 도형(둥근 사각형) + 색 + 무늬 기호.
+   색을 못 가려도 ◆ ● ▲ ■ ✦ 다섯 기호로 구분된다. */
+.az-tile {
+  --az-tile-size: var(--az-size-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--az-tile-size);
+  height: var(--az-tile-size);
+  box-sizing: border-box;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: var(--az-tile-bg, var(--color-muted-soft));
+  border: 1px solid rgba(20, 20, 19, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  color: var(--az-glyph);
+  line-height: 1;
+  user-select: none;
+}
+
+.az-glyph {
+  font-size: calc(var(--az-tile-size) * 0.56);
+  line-height: 1;
+  font-weight: 700;
+}
+
+/* 미리보기 타일 — 아직 놓이지 않았음을 반투명 + 점선으로 알린다 */
+.az-tile.ghost {
+  opacity: 0.42;
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.az-t-blue {
+  --az-tile-bg: var(--az-blue);
+}
+
+.az-t-yellow {
+  --az-tile-bg: var(--az-yellow);
+}
+
+.az-t-red {
+  --az-tile-bg: var(--az-red);
+}
+
+.az-t-black {
+  --az-tile-bg: var(--az-black);
+}
+
+.az-t-cyan {
+  --az-tile-bg: var(--az-cyan);
+}
+
+.az-t-first {
+  --az-tile-bg: var(--az-first);
+}
+
+.az-s-xs {
+  --az-tile-size: var(--az-size-xs);
+}
+
+.az-s-sm {
+  --az-tile-size: var(--az-size-sm);
+}
+
+.az-s-md {
+  --az-tile-size: var(--az-size-md);
+}
+
+.az-s-lg {
+  --az-tile-size: var(--az-size-lg);
+}
+
+/* 빈 칸 — 타일과 같은 크기의 자리만 잡는다 */
+.az-slot {
+  --az-tile-size: var(--az-size-md);
+  display: inline-block;
+  width: var(--az-tile-size);
+  height: var(--az-tile-size);
+  box-sizing: border-box;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: var(--az-slot-bg);
+  border: 1px dashed var(--az-slot-line);
+}
+
+/* 벽 5×5 — 빈 칸에도 그 자리 색을 흐릿하게 새겨 둔다 */
+.az-wall {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.az-wall .az-wall-row {
+  display: flex;
+  gap: 2px;
+}
+
+.az-wall-cell {
+  display: inline-flex;
+  border-radius: 4px;
+}
+
+.az-wall-cell.target {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+/* ---------- 대기실 ---------- */
+
+.az-waiting {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-canvas);
+  padding: var(--space-lg);
+}
+
+.az-waiting-container {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) 28px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.az-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-display-md);
+  letter-spacing: var(--tracking-display-md);
+  color: var(--color-ink);
+}
+
+.az-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--color-muted);
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.az-join-form,
+.az-seat-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.az-form-group {
+  text-align: left;
+}
+
+.az-form-group label {
+  display: block;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  margin-bottom: 6px;
+}
+
+.az-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: var(--text-body-md);
+}
+
+.az-primary-button {
+  min-height: 44px;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.az-primary-button:not(:disabled):active {
+  background: var(--color-primary-active);
+}
+
+.az-primary-button:disabled {
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  cursor: not-allowed;
+}
+
+.az-ghost-button {
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-body);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.az-host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* 규칙 요약 카드 */
+.az-rule-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  text-align: left;
+}
+
+.az-rule-line {
+  margin: 0;
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.az-rule-line strong {
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.az-rule-line.muted {
+  color: var(--color-muted);
+}
+
+/* 색 범례 — 색약 대비 기호를 미리 익히게 한다 */
+.az-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.az-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.az-legend-label {
+  color: var(--color-body);
+  font-size: var(--text-caption);
+}
+
+.az-seat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.az-seat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+}
+
+.az-seat-item.empty {
+  color: var(--color-muted-soft);
+  font-weight: 400;
+  border: 1px dashed var(--color-hairline);
+  background: transparent;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: var(--text-caption);
+}
+
+.az-seat-item-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.az-crown {
+  font-size: var(--text-body-sm);
+}
+
+.az-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.az-dot.on {
+  background: var(--color-success);
+}
+
+.az-dot.off {
+  background: var(--color-muted-soft);
+}
+
+.az-waiting-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .az-waiting {
+    padding: var(--space-sm);
+  }
+
+  .az-waiting-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* 입장·퇴장 토스트 (대기실 상단) */
+.az-waiting-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.az-waiting-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}

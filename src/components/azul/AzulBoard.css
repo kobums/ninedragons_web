@@ -1,0 +1,833 @@
+/* 아줄 보드 — 크림 캔버스 위 아줄레주 타일 (tokens.css 토큰만 사용).
+   .az-scope 변수와 타일 프리미티브(.az-tile/.az-slot/.az-wall)는
+   AzulWaitingRoom.css (같은 번들) 참조.
+
+   이 게임은 보드가 전부다. 배치 우선순위:
+     1) 내 개인 보드 (패턴 라인 5줄 + 벽 5×5 + 바닥 라인) — 가장 크게
+     2) 진열대·중앙 — 고를 대상
+     3) 남의 보드 — 축소 나열
+   280px 까지 가로 오버플로 금지, 조작 요소는 44px 이상. */
+
+.az-board {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  padding: var(--space-md) var(--space-sm) 96px;
+  max-width: 640px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ---------- 이벤트 토스트 ---------- */
+
+.az-toasts {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.az-toast {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: var(--text-caption);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ---------- 상단 상태 바 ---------- */
+
+.az-status-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.az-status-bar.tiling {
+  border-color: var(--color-primary);
+}
+
+.az-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.az-status-chip {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.az-timer {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.az-timer.urgent {
+  background: var(--color-primary-tint);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.az-status-title {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.az-status-sub {
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.az-status-first {
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ---------- 직전 수 ---------- */
+
+.az-last-slot {
+  min-height: 34px;
+  display: flex;
+}
+
+.az-last {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  color: var(--color-body);
+  font-size: var(--text-caption);
+  text-align: center;
+  word-break: keep-all;
+}
+
+.az-last strong {
+  color: var(--color-ink);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.az-last.idle {
+  background: transparent;
+  border: 1px dashed var(--color-hairline);
+  color: var(--color-muted-soft);
+}
+
+/* ---------- 라운드 정산 ---------- */
+
+.az-round-result {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-primary);
+  animation: az-pop-in 180ms ease-out;
+}
+
+.az-round-result-title {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  word-break: keep-all;
+}
+
+.az-round-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-caption);
+  color: var(--color-ink);
+}
+
+.az-round-table th {
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--color-hairline);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.az-round-table td {
+  padding: 6px;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.az-round-table th.left,
+.az-round-table td.left {
+  text-align: left;
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.az-round-table tr.me td {
+  background: var(--color-primary-tint);
+  font-weight: 700;
+}
+
+.az-round-table .gain {
+  color: var(--az-gain);
+  font-weight: 700;
+}
+
+.az-round-table .loss {
+  color: var(--az-loss);
+  font-weight: 700;
+}
+
+.az-round-table .total {
+  font-weight: 800;
+}
+
+@keyframes az-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 섹션 제목 ---------- */
+
+.az-section-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  margin: 4px 0 0;
+  color: var(--color-ink);
+  font-size: var(--text-caption);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.az-first-note {
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.az-empty-note {
+  margin: 0;
+  color: var(--color-muted-soft);
+  font-size: var(--text-caption);
+}
+
+/* ---------- 진열대 ---------- */
+
+.az-supply {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.az-factories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 8px;
+}
+
+/* 진열대 하나 — 원형 받침 위에 타일 4장 */
+.az-factory {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  box-shadow: var(--shadow-subtle);
+  box-sizing: border-box;
+  padding: 6px;
+}
+
+.az-factory.empty {
+  background: transparent;
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.az-factory-no {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-muted-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.az-factory-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  max-width: 48px;
+}
+
+.az-factory-empty {
+  color: var(--color-muted-soft);
+  font-size: 10px;
+}
+
+/* 같은 색 묶음 = 한 번의 수. 통째로 하나의 버튼이다. */
+.az-take {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  max-width: 48px;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease;
+}
+
+.az-take:disabled,
+.az-take.static {
+  cursor: default;
+}
+
+.az-take:not(:disabled):active {
+  transform: scale(0.94);
+}
+
+.az-take.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+/* ---------- 중앙 ---------- */
+
+.az-center {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 8px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  box-sizing: border-box;
+}
+
+.az-center .az-take {
+  max-width: 140px;
+}
+
+.az-center-first {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary);
+}
+
+.az-center-first-label {
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------- 내 개인 보드 ---------- */
+
+.az-self {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.az-self-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.az-self-name {
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: var(--text-body-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.az-self-score {
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: var(--text-title-sm);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* 고른 타일 안내 바 */
+.az-pick-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary);
+}
+
+.az-pick-what {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-ink);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.az-pick-best {
+  color: var(--color-body);
+  font-size: 11px;
+  word-break: keep-all;
+}
+
+.az-cancel {
+  margin-left: auto;
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-size: 11px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.az-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  box-sizing: border-box;
+}
+
+.az-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.az-rows-head {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-muted);
+  font-size: 10px;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+}
+
+/* 한 행 = 패턴 라인 한 줄 + 벽 한 줄 (좌우가 서로 대응한다) */
+.az-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.az-line {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 4px 6px;
+  box-sizing: border-box;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  text-align: right;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.az-line.static {
+  cursor: default;
+}
+
+/* 놓을 수 있는 줄만 또렷하게 — 이 하이라이트가 조작 보조의 핵심이다 */
+.az-line.ok {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.az-line.ok.preview {
+  box-shadow: 0 0 0 2px var(--color-primary-ring);
+}
+
+.az-line.blocked {
+  border-style: dashed;
+  border-color: var(--color-hairline);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.az-line-no {
+  color: var(--color-muted-soft);
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* 패턴 라인은 오른쪽부터 채워진다 (원작과 같은 방향) */
+.az-line-slots {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.az-line-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.25;
+  flex-shrink: 0;
+  max-width: 96px;
+}
+
+.az-line-badge strong {
+  color: var(--color-ink);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.az-line-badge small {
+  color: var(--color-muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+/* 바닥으로 넘치는 장수 — 빨강. 이 게임의 판단은 여기서 갈린다. */
+.az-line-badge small.warn {
+  color: var(--az-loss);
+  font-weight: 700;
+}
+
+.az-line-badge small.done {
+  color: var(--az-gain);
+  font-weight: 700;
+}
+
+.az-row-wall {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* ---------- 바닥 라인 ---------- */
+
+.az-floor-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.az-floor-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  color: var(--color-muted);
+  font-size: 10px;
+  letter-spacing: var(--tracking-uppercase);
+  text-transform: uppercase;
+}
+
+.az-floor-now {
+  color: var(--color-body);
+  font-size: 11px;
+  letter-spacing: normal;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.az-floor-now .warn {
+  color: var(--az-loss);
+  font-style: normal;
+  font-weight: 800;
+}
+
+.az-floor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.az-floor-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.az-floor-penalty {
+  color: var(--color-muted-soft);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.az-floor-over {
+  margin: 0;
+  color: var(--az-loss);
+  font-size: 10px;
+}
+
+/* 전부 바닥에 버리는 선택 — 늘 명시적으로 노출한다 */
+.az-dump {
+  min-height: 44px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--az-loss);
+  background: transparent;
+  color: var(--az-loss);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.az-dump:active {
+  background: var(--color-surface-soft);
+}
+
+.az-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-caption);
+  word-break: keep-all;
+}
+
+.az-hint.spectator {
+  color: var(--color-body);
+}
+
+/* ---------- 남의 보드 (축소) ---------- */
+
+.az-others {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.az-others-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 8px;
+}
+
+.az-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.az-mini.current {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+
+.az-mini-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.az-mini-name {
+  color: var(--color-ink);
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.az-mini-off {
+  margin-left: 4px;
+  color: var(--color-muted-soft);
+  font-weight: 400;
+}
+
+.az-mini-score {
+  color: var(--color-primary);
+  font-size: var(--text-body-sm);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.az-mini-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.az-mini-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.az-mini-line {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.az-mini-floor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+}
+
+.az-mini-floor-label,
+.az-mini-floor-none {
+  color: var(--color-muted-soft);
+  font-size: 10px;
+}
+
+/* ---------- 좁은 화면 (280px 오버플로 금지) ---------- */
+
+@media (max-width: 420px) {
+  .az-scope.az-board {
+    --az-size-md: 21px;
+  }
+}
+
+@media (max-width: 340px) {
+  .az-board {
+    padding: var(--space-sm) var(--space-xxs) 96px;
+    gap: var(--space-xs);
+  }
+
+  .az-scope.az-board {
+    --az-size-md: 17px;
+    --az-size-sm: 15px;
+  }
+
+  .az-panel {
+    padding: 8px 6px;
+  }
+
+  .az-factories {
+    grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+  }
+
+  .az-factory {
+    min-height: 68px;
+  }
+
+  .az-factory-tiles,
+  .az-take {
+    max-width: 40px;
+  }
+
+  .az-line-badge {
+    max-width: 72px;
+  }
+
+  .az-others-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .az-take,
+  .az-round-result {
+    transition: none;
+    animation: none;
+  }
+}
