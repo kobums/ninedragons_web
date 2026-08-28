@@ -44,6 +44,8 @@ import { CitadelsApp } from './components/citadels/CitadelsApp';
 import { StartupsApp } from './components/startups/StartupsApp';
 import { BangApp } from './components/bang/BangApp';
 import { RicochetApp } from './components/ricochet/RicochetApp';
+import { RummikubApp } from './components/rummikub/RummikubApp';
+import { BohnanzaApp } from './components/bohnanza/BohnanzaApp';
 import { RecordsPage } from './components/records/RecordsPage';
 import type { GameId } from './config/games';
 import { GAMES } from './config/games';
@@ -294,6 +296,14 @@ function App() {
 
   if (selectedGame === 'ricochet') {
     return <RicochetApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'rummikub') {
+    return <RummikubApp onBack={handleBackToSelection} />;
+  }
+
+  if (selectedGame === 'bohnanza') {
+    return <BohnanzaApp onBack={handleBackToSelection} />;
   }
 
   if (selectedGame === 'avalon') {
