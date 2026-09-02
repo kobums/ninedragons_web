@@ -11,7 +11,6 @@ import { ConnectionBanner } from '../ConnectionBanner';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { ErrorToast } from '../ErrorToast';
 import { GameInfoButton } from '../GameInfoButton';
-import type { GameId } from '../../config/games';
 import { ReactionBar } from '../ReactionBar';
 import { ReactionOverlay } from '../ReactionOverlay';
 import { SpectatorBadge, SpectatorCount } from '../SpectatorBadge';
@@ -86,9 +85,7 @@ export function CockroachApp({ onBack }: CockroachAppProps) {
         }님의 연결이 끊겼습니다 — 90초 내 미복귀 시 봇이 이어받습니다`}
       />
       <ErrorToast error={error} onClear={clearError} />
-      {/* 통합자가 games.ts 에 등록하기 전까지의 임시 캐스팅 — 등록되면 자연
-          해소. 미등록 상태에서 열면 meta 가 없으므로 등록 여부로 렌더를 막는다. */}
-      <GameInfoButton game={'cockroach' as GameId} />
+      <GameInfoButton game="cockroach" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
       <ReactionOverlay pops={reactions} />

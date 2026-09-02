@@ -8,7 +8,6 @@ import { ConnectionBanner } from '../ConnectionBanner';
 import { ConnectingScreen } from '../ConnectingScreen';
 import { GameInfoButton } from '../GameInfoButton';
 import { ErrorToast } from '../ErrorToast';
-import type { GameId } from '../../config/games';
 import type { OmokMessage } from '../../types/omok';
 import { OMOK_LOG_PREFIX, OMOK_SESSION_KEY, OMOK_WS_PATH } from '../../types/omok';
 import { getSessionId } from '../../utils/session';
@@ -62,8 +61,7 @@ export function OmokApp({ onBack }: OmokAppProps) {
         isGameActive={Boolean(game) && !gameOver}
       />
       <ErrorToast error={error} onClear={clearError} />
-      {/* games.ts 등록은 통합자 담당 — 등록 전까지 임시 캐스팅 */}
-      <GameInfoButton game={'omok' as GameId} />
+      <GameInfoButton game="omok" />
 
       {gameOver ? (
         <OmokGameOver

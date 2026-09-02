@@ -4,7 +4,6 @@ import { useIndianPokerGameState } from '../../hooks/useIndianPokerGameState';
 import type { IPMessage } from '../../types/indianpoker';
 import { IP_SESSION_KEY } from '../../types/indianpoker';
 import { getSessionId } from '../../utils/session';
-import type { GameId } from '../../config/games';
 import { IndianPokerWaitingRoom } from './IndianPokerWaitingRoom';
 import { IndianPokerBoard } from './IndianPokerBoard';
 import { IndianPokerGameOver } from './IndianPokerGameOver';
@@ -87,7 +86,7 @@ export function IndianPokerApp({ onBack }: IndianPokerAppProps) {
       />
       <ErrorToast error={error} onClear={clearError} />
       {/* indianpoker 는 games.ts 등록 전 — 통합 시 캐스팅 제거 */}
-      <GameInfoButton game={'indianpoker' as GameId} />
+      <GameInfoButton game="indianpoker" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
       <ReactionOverlay pops={reactions} />

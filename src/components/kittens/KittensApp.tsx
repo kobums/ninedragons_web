@@ -4,7 +4,6 @@ import { useKittensGameState } from '../../hooks/useKittensGameState';
 import type { EKMessage } from '../../types/kittens';
 import { EK_SESSION_KEY } from '../../types/kittens';
 import { getSessionId } from '../../utils/session';
-import type { GameId } from '../../config/games';
 import { KittensWaitingRoom } from './KittensWaitingRoom';
 import { KittensBoard } from './KittensBoard';
 import { KittensGameOver } from './KittensGameOver';
@@ -86,7 +85,7 @@ export function KittensApp({ onBack }: KittensAppProps) {
         }님의 연결이 끊겼습니다 — 90초 내 미복귀 시 봇이 이어받습니다`}
       />
       <ErrorToast error={error} onClear={clearError} />
-      <GameInfoButton game={'kittens' as GameId} />
+      <GameInfoButton game="kittens" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
       <ReactionOverlay pops={reactions} />

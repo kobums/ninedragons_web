@@ -4,7 +4,6 @@ import { useLasVegasGameState } from '../../hooks/useLasVegasGameState';
 import type { VGMessage } from '../../types/lasvegas';
 import { VG_SESSION_KEY } from '../../types/lasvegas';
 import { getSessionId } from '../../utils/session';
-import type { GameId } from '../../config/games';
 import { LasVegasWaitingRoom } from './LasVegasWaitingRoom';
 import { LasVegasBoard } from './LasVegasBoard';
 import { LasVegasGameOver } from './LasVegasGameOver';
@@ -87,7 +86,7 @@ export function LasVegasApp({ onBack }: LasVegasAppProps) {
       />
       <ErrorToast error={error} onClear={clearError} />
       {/* lasvegas 는 games.ts 등록 전 — 통합 시 캐스팅 제거 */}
-      <GameInfoButton game={'lasvegas' as GameId} />
+      <GameInfoButton game="lasvegas" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
       <ReactionOverlay pops={reactions} />

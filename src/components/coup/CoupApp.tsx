@@ -4,7 +4,6 @@ import { useCoupGameState } from '../../hooks/useCoupGameState';
 import type { CPMessage } from '../../types/coup';
 import { CP_SESSION_KEY } from '../../types/coup';
 import { getSessionId } from '../../utils/session';
-import type { GameId } from '../../config/games';
 import { CoupWaitingRoom } from './CoupWaitingRoom';
 import { CoupBoard } from './CoupBoard';
 import { CoupGameOver } from './CoupGameOver';
@@ -87,7 +86,7 @@ export function CoupApp({ onBack }: CoupAppProps) {
       />
       <ErrorToast error={error} onClear={clearError} />
       {/* coup 는 games.ts 등록 전 — 통합 시 캐스팅 제거 */}
-      <GameInfoButton game={'coup' as GameId} />
+      <GameInfoButton game="coup" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
       <ReactionOverlay pops={reactions} />

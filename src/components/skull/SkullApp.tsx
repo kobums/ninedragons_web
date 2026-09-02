@@ -4,7 +4,6 @@ import { useSkullGameState } from '../../hooks/useSkullGameState';
 import type { SKMessage } from '../../types/skull';
 import { SK_SESSION_KEY } from '../../types/skull';
 import { getSessionId } from '../../utils/session';
-import type { GameId } from '../../config/games';
 import { SkullWaitingRoom } from './SkullWaitingRoom';
 import { SkullBoard } from './SkullBoard';
 import { SkullGameOver } from './SkullGameOver';
@@ -86,7 +85,7 @@ export function SkullApp({ onBack }: SkullAppProps) {
       />
       <ErrorToast error={error} onClear={clearError} />
       {/* skull 은 games.ts 등록 전 — 통합 시 캐스팅 제거 */}
-      <GameInfoButton game={'skull' as GameId} />
+      <GameInfoButton game="skull" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
       <ReactionOverlay pops={reactions} />

@@ -4,7 +4,6 @@ import { useReformationGameState } from '../../hooks/useReformationGameState';
 import type { RFMessage } from '../../types/reformation';
 import { RF_SESSION_KEY } from '../../types/reformation';
 import { getSessionId } from '../../utils/session';
-import type { GameId } from '../../config/games';
 import { ReformationWaitingRoom } from './ReformationWaitingRoom';
 import { ReformationBoard } from './ReformationBoard';
 import { ReformationGameOver } from './ReformationGameOver';
@@ -86,7 +85,7 @@ export function ReformationApp({ onBack }: ReformationAppProps) {
         }님의 연결이 끊겼습니다 — 90초 내 미복귀 시 봇이 이어받습니다`}
       />
       <ErrorToast error={error} onClear={clearError} />
-      <GameInfoButton game={'reformation' as GameId} />
+      <GameInfoButton game="reformation" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
       <ReactionOverlay pops={reactions} />

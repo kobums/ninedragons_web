@@ -86,7 +86,6 @@ export function RummikubApp({ onBack }: RummikubAppProps) {
         }님의 연결이 끊겼습니다 — 90초 내 미복귀 시 봇이 이어받습니다`}
       />
       <ErrorToast error={error} onClear={clearError} />
-      {/* 통합자가 games.ts 에 등록하기 전까지의 임시 캐스팅 — 등록되면 자연 해소 */}
       <GameInfoButton game="rummikub" />
       {isSpectating && <SpectatorBadge roomCode={spectate.roomCode} />}
       {!isSpectating && <SpectatorCount count={game?.spectators ?? 0} />}
