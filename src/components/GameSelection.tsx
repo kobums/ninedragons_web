@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { GAME_CATEGORIES, GAME_IDS, GAMES } from '../config/games'
 import type { GameCategory, GameId } from '../config/games'
 import { StatsBar } from './StatsBar'
+import { LegalLinks } from './LegalLinks'
 import { buildLobbyUrl } from '../utils/ws'
 import './GameSelection.css'
 
@@ -197,6 +198,7 @@ export function GameSelection({ onSelectGame, onOpenRecords }: GameSelectionProp
         )}
 
         <StatsBar onOpen={onOpenRecords} />
+        <LegalLinks />
       </div>
     </div>
   )

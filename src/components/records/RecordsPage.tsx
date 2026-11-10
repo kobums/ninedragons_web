@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { GAMES } from '../../config/games';
 import type { GameId } from '../../config/games';
+import { LegalLinks } from '../LegalLinks';
 import { fetchStats, formatDuration, formatRelativeTime, winRate } from './stats';
 import type { MatchRecord, PlayerDetail, PlayerRow, StatsResponse } from './stats';
 import './RecordsPage.css';
@@ -116,6 +117,8 @@ export function RecordsPage({ onBack }: RecordsPageProps) {
               ))}
           </>
         )}
+
+        <LegalLinks onDark />
       </div>
     </div>
   );
